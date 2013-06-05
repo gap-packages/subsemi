@@ -88,8 +88,8 @@ $\cS_n$ denotes the symmetric group, $\cT_n$ the full transformation group on $n
 A \emph{cut} is a subset of the semigroup, $K\subseteq S$ a set elements that we cut from the $M$.  A cut is \emph{closed} if the table spanned by $S\setminus K$ is a multiplication table, i.e.\ it is closed under multiplication.
 \end{definition}
 
-\begin{definition}[\textbf{completion of a cut}]
-$$C(K)=\{i\in S\setminus K \mid\ \exists j\in S\setminus K \text{ such that } M_{i,j}\in K \text{ or } M_{j,i}\in K\} $$
+\begin{definition}[\textbf{Forbidden Elements}]
+$$F(K)=\{i\in S\setminus K \mid\ \exists j\in S\setminus K \text{ such that } M_{i,j}\in K \text{ or } M_{j,i}\in K\} $$
 \noindent i.e.\ those elements not in the cut, whose column or row contains an element in the cut.
 \end{definition}
 
@@ -101,7 +101,7 @@ $$D(K)=\{i\in S\setminus K \mid\ M_{i,i}\in K \} $$
 \end{definition}
 
 
-Note that $K\mapsto K\cup C(K)$ is not a closure operator, since defined this way it is not an idempotent (during completion we may add elements that needs another completion).
+Note that $K\mapsto K\cup D(K)$ is not a closure operator, since defined this way it is not an idempotent (during completion we may add elements that needs another completion).
 
  Starting from singleton cuts a basic recursive algorithm (Algorithm \ref{alg:basicrecursive}) can enumerate all closed cuts. The underlying idea is very simple: given a cut we calculate the extension of the cut and extend the cut by the elements of of the extension, one at a time. 
 
@@ -163,14 +163,16 @@ But cutting the whole extension would give only the trivial subgroup while cuts 
 \SetKwFunction{Reduce}{Reduce}
 \Input{$M$ multiplication table, $K$ a cut}
 \Output{closed cuts added to the collection \Subs}
+\SetKwInOut{Name}{\Reduce($M,K$)}
 \BlankLine
+\Name{}
 
 \Visited $\leftarrow$ \Visited$\cup \{K\}$\;
-\If{$C(K)=\varnothing$}{\Subs$\leftarrow$\Subs$\cup\{K\}$\;}
-\For{$i\in C(K)$}{
-    $K\leftarrow$ $\Delta(K\cup\{i\})$\;
-    \If{$K\notin$ \Visited}{
-      \Reduce($M,K$)\;
+\If{$F(K)=\varnothing$}{\Subs$\leftarrow$\Subs$\cup\{K\}$\;}
+\For{$i\in F(K)$}{
+    $K'\leftarrow$ $\Delta(K\cup\{i\})$\;
+    \If{$K'\notin$ \Visited}{
+      \Reduce($M,K'$)\;
     }
 }
 \caption{\texttt{Reduce}($M,K$), the recursive reduction algorithm.  Diagonal closure applied.}
@@ -451,6 +453,6 @@ $T_n\setminus S_n$ & 1,1 & 1,1 & 4,3 & 600,123& \\
 \hline
 \end{tabular}
 
-\bibliographystyle{splncs03}
-\bibliography{../full}
+\bibliographystyle{plain}
+\bibliography{subsemicut}
 \end{document}
