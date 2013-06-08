@@ -50,8 +50,9 @@
 \begin{document}
 
 \title[Subsemigroup Enumeration]{On Enumerating Subsemigroups of the Full Transformation Semigroup }
-\author[e-n@]{Attila Egri-Nagy\\\ \\joint work with James East (UWS) and James D. Mitchell (University of St. Andrews, Scotland)}
-\institute[UWS]{School of Computing, Engineering and Mathematics\\ University of Western Sydney}
+\author[e-n@]{Attila Egri-Nagy\\\ \\joint work with James East (Univ. of Western Sydney) and James D. Mitchell (University of St. Andrews, Scotland)}
+\institute[UWS]{\includegraphics[width=.22\textwidth]{Logo1.jpg}}
+%\institute[UWS]{School of Computing, Engineering and Mathematics\\ University of Western Sydney}
 \date[NSAC 2013]{2013.06.08. Novi Sad Algebra Conference}
 
 \begin{frame}
@@ -197,11 +198,6 @@ $$F(K)=\{i\in S\setminus K \mid\ \exists j\in S\setminus K \text{ such that } M_
 \noindent i.e.\ those elements not in the cut, whose column or row contains an element in the cut.
 \end{definition}
 
-
-\begin{definition}[\textbf{diagonal completion of a cut}]
-$$D(K)=\{i\in S\setminus K \mid\ M_{i,i}\in K \} $$
-\noindent i.e.\ those elements not in the cut, whose diagonal contains an element in the cut.
-\end{definition}
 \end{frame}
 
 \begin{frame}\frametitle{Example: $\cS_3$}
@@ -276,6 +272,19 @@ This means that we have to extend the cut one by one with the elements from the 
 \end{frame}
 
 \begin{frame}[fragile]
+\begin{definition}[\textbf{diagonal completion of a cut}]
+$$D(K)=\{i\in S\setminus K \mid\ M_{i,i}\in K \} $$
+\noindent i.e.\ those elements not in the cut, whose diagonal contains an element in the cut.
+\end{definition}
+
+%\jump
+%Is it possible to have overlapping diagonal closures?
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{The diagonal closure of a cut}
+Iterating 
+$$ \Delta(K):=K\cup D(K)$$
+Since cutting an element from a diagonal can be done only one way, we can extend the cut by its diagonal completion.
 \begin{algorithm}[H]
 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 \SetKwData{finished}{finished}
@@ -295,15 +304,9 @@ This means that we have to extend the cut one by one with the elements from the 
 \caption{Calculating the diagonal closure of a cut.}
 \label{alg:diagonalclosure}
 \end{algorithm}
-%\jump
-%Is it possible to have overlapping diagonal closures?
 \end{frame}
 
-\begin{frame}\frametitle{The diagonal closure of a cut}
-Iterating 
-$$ \Delta(K):=K\cup D(K)$$
-Since cutting an element from a diagonal can be done only one way, we can extend the cut by its diagonal completion.
-
+\begin{frame}
 Again using the multiplication table of $\cS_3$ if we cut by $K=\{5\}$ we get the following table:
 \begin{center}
 \begin{tabular}{@{}c@{}c@{}c@{}c@{}c@{}c@{}}
@@ -338,7 +341,10 @@ Ways to use conjugacy:
 \begin{frame}\frametitle{``Rescuing elements''}
 Observation: There is a problem with trying to cut the identity from groups. After the diagonal closure the algorithm reverts back to full enumeration of the subsets of $S\setminus \Delta(K)$.
 \jump
+The ``rescue'' set of $s$ relative to cut $K$:
 $$ R(K,F(K),s):=\{i\in S\setminus K\mid M_{s,i}\in F(K) \text{ or } M_{i,s}\in F(K)\}$$
+
+What shall I remoe if I want to keep $s$?
 
 \end{frame}
 
@@ -346,7 +352,48 @@ $$ R(K,F(K),s):=\{i\in S\setminus K\mid M_{s,i}\in F(K) \text{ or } M_{i,s}\in F
 The number of visited cuts - the space complexity.
 \jump
 The number of visited cuts and the number of revisits.
+\jump
+\begin{tabular}{c|cc}
+$\cS_3$ & \#Cuts & \#Dups \\
+\hline
+basic  & 63,63 & 103,41\\
+$R$ &36,36 & 46,25\\
+$\Delta$ & 17,17 & 31,17 \\
+$\Delta R$ & 14,14 & 19,13
+\end{tabular}
+\jump
+
+\begin{tabular}{c|cc}
+$\cT_2$ & \#Cuts & \#Dups \\
+\hline
+basic  & 13,13 & 11,9\\
+$R$ &13,13 & 11,9\\
+$\Delta$ & 11,11 & 11,9 \\
+$\Delta R$ & 11,11 & 11,9
+\end{tabular}
 \end{frame}
+
+\begin{frame}
+\begin{tabular}{c|cc}
+$\text{Sing}_3$ & \#Cuts & \#Dups \\
+\hline
+basic  & ? & ?\\
+$\Delta$ & 88555,88555 & 691298,116767 \\
+$R$ &6782,6782 & 20608,3672\\
+$\Delta R$ & 3764,3764 & 11764,2166
+\end{tabular}
+\jump
+\begin{tabular}{c|cc}
+$\cT_3$ & \#Cuts & \#Dups \\
+\hline
+basic  & ? & ?\\
+$\Delta$ & 1505328,1505328 & 15670601,2629323 \\
+$R$ & 44291,44291 & 206865,35713\\
+$\Delta R$ &15664,15664 & 65104,11724
+\end{tabular}
+
+\end{frame}
+
 
 
 \begin{frame}\frametitle{Easy test cases: Cyclic Groups}
@@ -357,19 +404,19 @@ Cyclic groups of prime order - just 2 subgroups, but there is a bit of surprise.
 \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c|}
 $n$ & 2 & 3 & 5 & 7 & 11 & 13 & 17 & 19 & 23 & 29 & 31 & 37  \\
 \hline
-\#visited & 2 & 3&  3& 7& 3& 3& 7& 3& 7& 3& 127 & 3 
+\#cuts & 2 & 3&  3& 7& 3& 3& 7& 3& 7& 3& 48 & 3 
 \end{tabular}
 \jump
 \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c|}
 $n$ & 41 & 43 & 47 & 53 & 59 & 61 & 67 & 71 & 73 & 79 & 83 & 89  \\
 \hline
-\#visited & 7 & 15 &  7& 3& 3& 3& 3& 7& 511& 7& 3 & 511 
+\#cuts & 7 & 9 &  7& 3& 3& 3& 3& 7& 83 & 7& 3 & 51 
 \end{tabular}
 \jump
 \begin{tabular}{c|c|c|c|c|c|c|c|c|c|}
 $n$ & 97 & 101 & 103 & 107 & 109 & 113 & 127 & 131 & 137   \\
 \hline
-\#visited & 7 & 3 &  7& 3& 15 & 31 & 524287 & 3& 7
+\#cuts & 7 & 3 &  7& 3& 9 & 11 & 786 & 3& 7
 \end{tabular}
 
 
@@ -611,8 +658,9 @@ $1\mapsto[1,1]$, $2\mapsto[1,2]$, $3\mapsto[2,1]$, $4\mapsto[2,2]$
 
 \begin{frame}\frametitle{$\cT_3$ data, the sizes of subsemigroups}
 
-\begin{tabular}{cc}
+\begin{tabular}{ccccc}
 \begin{tabular}{r|r}
+Order&\#occurences\\
 1&3\\
 2&10\\
 3&19\\
@@ -625,7 +673,8 @@ $1\mapsto[1,1]$, $2\mapsto[1,2]$, $3\mapsto[2,1]$, $4\mapsto[2,2]$
 10&14\\
 11&12
 \end{tabular}
-&\begin{tabular}{r|r}
+&&&&\begin{tabular}{r|r}
+Order&\#occurences\\
 12&7\\
 13&3\\
 14&1\\
@@ -661,11 +710,83 @@ A215650, A215651 \url{http://oeis.org}
 
 \begin{frame}
 \frametitle{Distribution of elements in multiplication tables}
+$\cT_{1}$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+1 & 1\\
+\end{tabular}
+\jump
+$\cT_{2}$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+2 & 2\\
+6 & 2\\
+\end{tabular}
+\jump
+$\cT_{3}$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+6 & 6\\
+24 & 18\\
+87 & 3\\
+\end{tabular}
+\jump
+$\cT_{4}$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+24 & 24\\
+120 & 144\\
+408 & 36\\
+504 & 48\\
+2200 & 4\\
+\end{tabular}
+
+
 \end{frame}
 
 
 \begin{frame}
+$\cT_5$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+120 & 120\\
+720 & 1200\\
+2820 & 900\\
+3420 & 600\\
+11020 & 200\\
+16720 & 100\\
+84245 & 5\\
+\end{tabular}
+\jump
+$\cT_6$
+\begin{tabular}{r|r}
+%Frequency & \#elements\\
+\hline
+720 & 720\\
+5040 & 10800\\
+22320 & 16200\\
+26640 & 7200\\
+78480 & 1800\\
+95760 & 7200\\
+143280 & 1800\\
+363600 & 300\\
+445680 & 450\\
+795600 & 180\\
+4492656 & 6\\
+\end{tabular}
+
+
+\end{frame}
+
+\begin{frame}
 \frametitle{Non-synchronising transformation semigroups}
+\begin{tabular}{c|r|r}
+& \#subsemigroups & \#conjugacy classes\\
+\hline
+$\cT_2$ & 2 & 2\\
+$\cT_3$ & 64 & 20\\
+$\cT_4$ & 58610 & 3085
+\end{tabular}
 \end{frame}
 
 \begin{frame}\frametitle{What to expect?}
@@ -683,9 +804,14 @@ A database of all transformation semigroups on $n$ points.
 \begin{center}\Huge Thank You!\end{center}
 \normalsize
 
+Transformation (and other type) semigroups software
+\begin{center}
+\textsc{Semigroups}
+\end{center}
+
 Group \& semigroup decomposition software:
 \begin{center}
-\url{http://sgpdec.sf.net}
+\SgpDec\ \ \url{http://sgpdec.sf.net}
 \end{center}
 
 On computational semigroup theory:
