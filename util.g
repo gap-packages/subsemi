@@ -8,3 +8,9 @@ end;
 IsSG := function(transformations)
   return Size(transformations) = Size(Semigroup(transformations));
 end;
+
+InvertedCutAsList := function(mt, cut)
+  return mt.sortedts{Difference(mt.rn,
+                 ListBlist(mt.rn,cut))
+                 };
+end;
