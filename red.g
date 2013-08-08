@@ -1,18 +1,14 @@
 # finding subsemigroups by recursively deleting entries from
 # multiplication tables
-ReduceMulTab := function(arg)
-local log,cargo,processor,i,duplicates,cclasses,ccl,startcut,waiting,cut,
-      cutpoints,counter,mt,ext,tab,kut,rn, newcut,completion,extensions;
-  mt := arg[1]; #the mulitplication table data structure
+MTCutter := function(mt,log, waiting, cutpoints)
+local cargo,processor,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,rn, newcut,completion,extensions;
+
   tab := mt.mt; #shortcut to the actual table
   rn := mt.rn; #shortcut to full encoded set
-  #the log keeps track of visited cuts, n sorted lists for each size of cut
-  log := MultiGradedSet([SizeBlist,FirstEntryPlusOne]);
   cargo := [];
   duplicates := 0;
   cclasses := [];
   counter := 0;
-  waiting := Stack();#new cuts waiting to be examined
   Info(MulTabInfoClass,1, AlgorithmIDString(mt));
   #-----------------------------------------------------------------------------
   #tells what to do when a new complete cut is found
@@ -29,21 +25,6 @@ local log,cargo,processor,i,duplicates,cclasses,ccl,startcut,waiting,cut,
     fi;
   end;
   #-----------------------------------------------------------------------------
-  ### the main function starts here ############################################
-  if IsBound(arg[2]) then
-    startcut := BlistList(rn,arg[2]);
-    cutpoints := DifferenceBlist(BlistList(rn,rn), startcut);
-  else
-    cutpoints := BlistList(rn,rn);
-    startcut := BlistList(rn,[]);
-  fi;
-  Info(MulTabInfoClass,2, "Starting from ", startcut);
-  for i in ListBlist(rn,cutpoints) do
-    kut := UnionBlist([startcut, BlistList(rn,[i])]);
-    if MTROptions.DIAGONAL then CloseDiagonally(tab, rn, kut);fi;
-    #Info(MulTabInfoClass,2, "Fresh cut with ", i);
-    Store(waiting, kut);
-  od;
   while not IsEmpty(waiting) do
     cut := Retrieve(waiting);
     ### Progress and memoryinfo output #########################################
@@ -103,21 +84,42 @@ local log,cargo,processor,i,duplicates,cclasses,ccl,startcut,waiting,cut,
       Store(waiting, UnionBlist(cut,ext));
     od;
   od;
-
   if InfoLevel(MulTabInfoClass) > 0 then
-    Print("\n#Log:", Size(log),"=",
+    Print("\n#FINAL Log:", Size(log),"=",
           FormattedMemoryString(MemoryUsage(log)),
           " Dups:", duplicates, " submts:", Size(cargo));
     if mt.CONJUGACY then Print(" ConjugacyClasses:",Size(cclasses) ); fi;
     Print("\n");
   fi;
-  #returning the result
-  if mt.CONJUGACY then
-    return cclasses;
+  return [cargo, cclasses];
+end;
+
+# this is the main function to call when reducing a multiplication table
+# taking care of setting up the startcuts
+# pretty administrative
+ReduceMulTab := function(arg)
+local mt,log,waiting,startcut, cutpoints,i,kut;
+  mt := arg[1]; #the mulitplication table data structure
+  #the log keeps track of visited cuts, n sorted lists for each size of cut
+  log := MultiGradedSet([SizeBlist,FirstEntryPlusOne]);
+  waiting := Stack(); #new cuts waiting to be examined
+
+  ### the main function starts here ############################################
+  if IsBound(arg[2]) then
+    startcut := BlistList(mt.rn,arg[2]);
+    cutpoints := DifferenceBlist(BlistList(mt.rn,mt.rn), startcut);
   else
-    return rec(cuts:=cargo,
-               logsize:=Size(log),
-               dups:=duplicates,
-               log:=log);
+    cutpoints := BlistList(mt.rn,mt.rn);
+    startcut := BlistList(mt.rn,[]);
   fi;
+  Info(MulTabInfoClass,2, "Starting from ", startcut);
+  for i in ListBlist(mt.rn,cutpoints) do
+    kut := UnionBlist([startcut, BlistList(mt.rn,[i])]);
+    if MTROptions.DIAGONAL then CloseDiagonally(mt.mt, mt.rn, kut);fi;
+    #Info(MulTabInfoClass,2, "Fresh cut with ", i);
+    Store(waiting, kut);
+  od;
+  #MTCutter called here
+    #returning the result
+  return MTCutter(mt,log, waiting, cutpoints);
 end;
