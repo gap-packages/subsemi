@@ -1,7 +1,8 @@
 # finding subsemigroups by recursively deleting entries from
 # multiplication tables
 MTCutter := function(mt,log, waiting, cutpoints)
-local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,rn, newcut,completion,extensions;
+  local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,rn,
+        completion,extensions;
 
   # EMBEDDED FUNCTIONS
   #-----------------------------------------------------------------------------
@@ -97,29 +98,29 @@ end;
 # this is the main function to call when reducing a multiplication table
 # taking care of setting up the startcuts
 # pretty administrative
+# arguments:
+# 1 - multiplication table
+# 2 - start cut
 ReduceMulTab := function(arg)
-local mt,log,waiting,startcut, cutpoints,i,kut;
+local mt,log,waiting,startcut, cutpoints,i,cut;
   mt := arg[1]; #the mulitplication table data structure
-  #the log keeps track of visited cuts, n sorted lists for each size of cut
+  #the log keeps track of visited cuts, anything that can do AddSet and in
   log := MultiGradedSet([SizeBlist,FirstEntryPlusOne]);
-  waiting := Stack(); #new cuts waiting to be examined
-
+  waiting := Stack(); #new cuts waiting to be examined, queue is worse
   ### the main function starts here ############################################
   if IsBound(arg[2]) then
     startcut := BlistList(mt.rn,arg[2]);
     cutpoints := DifferenceBlist(BlistList(mt.rn,mt.rn), startcut);
   else
-    cutpoints := BlistList(mt.rn,mt.rn);
     startcut := BlistList(mt.rn,[]);
+    cutpoints := BlistList(mt.rn,mt.rn);
   fi;
   Info(MulTabInfoClass,2, "Starting from ", startcut);
   for i in ListBlist(mt.rn,cutpoints) do
-    kut := UnionBlist([startcut, BlistList(mt.rn,[i])]);
-    if MTROptions.DIAGONAL then CloseDiagonally(mt.mt, mt.rn, kut);fi;
-    #Info(MulTabInfoClass,2, "Fresh cut with ", i);
-    Store(waiting, kut);
+    cut := UnionBlist([startcut, BlistList(mt.rn,[i])]);
+    if MTROptions.DIAGONAL then CloseDiagonally(mt.mt, mt.rn, cut);fi;
+    Store(waiting, cut);
   od;
-  #MTCutter called here
-    #returning the result
+  #when everything is prepared, we just call MTCutter
   return MTCutter(mt,log, waiting, cutpoints);
 end;
