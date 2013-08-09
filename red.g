@@ -1,7 +1,7 @@
 # finding subsemigroups by recursively deleting entries from
 # multiplication tables
 MTCutter := function(mt,log, waiting, cutpoints)
-local cargo,processor,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,rn, newcut,completion,extensions;
+local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,rn, newcut,completion,extensions;
 
   tab := mt.mt; #shortcut to the actual table
   rn := mt.rn; #shortcut to full encoded set
@@ -25,17 +25,21 @@ local cargo,processor,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,rn, newc
     fi;
   end;
   #-----------------------------------------------------------------------------
+  logger := function()
+    Print("#Log:", Size(log),"=",
+          FormattedMemoryString(MemoryUsage(log)),
+          " Dups:", duplicates, " Waiting:", Size(waiting),
+          " submts:", Size(cargo));
+    if mt.CONJUGACY then Print(" conjcls:",Size(cclasses)); fi;
+    Print("\n");
+  end;
+  #-----------------------------------------------------------------------------
   while not IsEmpty(waiting) do
     cut := Retrieve(waiting);
     ### Progress and memoryinfo output #########################################
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
-      Print("#Log:", Size(log),"=",
-            FormattedMemoryString(MemoryUsage(log)),
-            " Dups:", duplicates, " Waiting:", Size(waiting),
-            " submts:", Size(cargo));
-      if mt.CONJUGACY then Print(" conjcls:",Size(cclasses)); fi;
-      Print("\n");
+      logger();
     fi;
     ############################################################################
 
@@ -84,13 +88,7 @@ local cargo,processor,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,rn, newc
       Store(waiting, UnionBlist(cut,ext));
     od;
   od;
-  if InfoLevel(MulTabInfoClass) > 0 then
-    Print("\n#FINAL Log:", Size(log),"=",
-          FormattedMemoryString(MemoryUsage(log)),
-          " Dups:", duplicates, " submts:", Size(cargo));
-    if mt.CONJUGACY then Print(" ConjugacyClasses:",Size(cclasses) ); fi;
-    Print("\n");
-  fi;
+  if InfoLevel(MulTabInfoClass) > 0 then Print("\n#FINAL");logger();fi;
   return [cargo, cclasses];
 end;
 
