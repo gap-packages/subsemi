@@ -14,3 +14,10 @@ InvertedCutAsList := function(mt, cut)
                  ListBlist(mt.rn,cut))
                  };
 end;
+
+RandomizeBySystemClock := function()
+  local SEED;
+  SEED := IO_gettimeofday().tv_sec;
+  Reset(GlobalMersenneTwister, SEED);
+  Print("#Random seed:", SEED, "\n");
+end;
