@@ -3,13 +3,7 @@
 MTCutter := function(mt,log, waiting, cutpoints)
 local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,rn, newcut,completion,extensions;
 
-  tab := mt.mt; #shortcut to the actual table
-  rn := mt.rn; #shortcut to full encoded set
-  cargo := [];
-  duplicates := 0;
-  cclasses := [];
-  counter := 0;
-  Info(MulTabInfoClass,1, AlgorithmIDString(mt));
+# embedded functions
   #-----------------------------------------------------------------------------
   #tells what to do when a new complete cut is found
   processor := function(cut)
@@ -34,6 +28,15 @@ local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,r
     Print("\n");
   end;
   #-----------------------------------------------------------------------------
+
+  #initializing variables
+  tab := mt.mt; #shortcut to the actual table
+  rn := mt.rn; #shortcut to full encoded set
+  cargo := [];
+  duplicates := 0;
+  cclasses := [];
+  counter := 0;
+  Info(MulTabInfoClass,1, AlgorithmIDString(mt)); #tagging the used methods
   while not IsEmpty(waiting) do
     cut := Retrieve(waiting);
     ### Progress and memoryinfo output #########################################
