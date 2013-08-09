@@ -3,9 +3,9 @@
 MTCutter := function(mt,log, waiting, cutpoints)
 local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,rn, newcut,completion,extensions;
 
-# embedded functions
+  # EMBEDDED FUNCTIONS
   #-----------------------------------------------------------------------------
-  #tells what to do when a new complete cut is found
+  #tells what to do when a new complete cut is found ###########################
   processor := function(cut)
     local sub;
     if mt.CONJUGACY then
@@ -19,6 +19,7 @@ local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,r
     fi;
   end;
   #-----------------------------------------------------------------------------
+  ### Progress and memoryinfo output ###########################################
   logger := function()
     Print("#Log:", Size(log),"=",
           FormattedMemoryString(MemoryUsage(log)),
@@ -37,14 +38,13 @@ local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,r
   cclasses := [];
   counter := 0;
   Info(MulTabInfoClass,1, AlgorithmIDString(mt)); #tagging the used methods
+  # the main loop
   while not IsEmpty(waiting) do
-    cut := Retrieve(waiting);
-    ### Progress and memoryinfo output #########################################
-    counter := counter + 1;
+    cut := Retrieve(waiting); # next cut to be processed
+    counter := counter + 1; # increasing loop counter
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
       logger();
     fi;
-    ############################################################################
 
     ### Deciding whether we hit a new one or not ###############################
     if not(cut in log) then
@@ -57,9 +57,8 @@ local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,r
     else
       #we again hit something that is already in
       duplicates := duplicates+1;
-      continue;#return; #cut the search tree at this point
+      continue; #cut the search tree at this point, continue to next waiting cut
     fi;
-    ############################################################################
 
     ### extending the current cut ##############################################
     completion := Completion(tab,rn,cut);
@@ -73,7 +72,7 @@ local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,r
           AddSet(extensions, BlistList(rn,[i]));
         od;
       fi;
-    else
+    else # the cut does not give a semigroup
       if MTROptions.RESCUE then
         for i in ListBlist(rn,completion) do
           AddSet(extensions, ToRescue(tab,rn,cut,completion,i));
@@ -85,7 +84,7 @@ local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,kut,r
         od;
       fi;
     fi;
-    #recursion for new cuts
+    #making the extensions into cuts and putting them into waiting list
     for ext in extensions do
       if MTROptions.DIAGONAL then CloseDiagonally(tab,rn,ext); fi;
       Store(waiting, UnionBlist(cut,ext));
