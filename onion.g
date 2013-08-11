@@ -41,13 +41,15 @@ local f;
 end;
 
 
-OnionReduceSgp := function(S)
-  local gc,sgps,mts,i,res,log,sum,n;
+OnionReduceSgp := function(arg)
+  local gc,sgps,mts,i,res,log,sum,n,S,tag,writefiles,subs;
   Print("ONION PEELING#####################################################\n");
+  S := arg[1];
+  if IsBound(arg[2]) then tag:=arg[2]; writefiles:= true;fi;
   gc := GeneratorChain(S);
   n := Size(gc);
   sgps := List([1..n], x -> Semigroup(gc{[1..x]}));
-  Print(List(sgps,Size),"\n");
+  Print("#LAYERS", n, " ", List(sgps,Size),"\n");
   mts := List(sgps, MulTab);
   Print(mts[1].sortedts,"\n");
   res := ReduceMulTab(mts[1]);
@@ -56,10 +58,17 @@ OnionReduceSgp := function(S)
   sum := ConvertCutDataUp(mts[1],mts[n],res[1]);
   for i in [1..n-1] do
     Print(mts[i+1].sortedts,"\n");
+    Print("#JUMPING from ", Size(sgps[i]), " to ", Size(sgps[i+1]),"\n");
     res := ReduceMulTab(mts[i+1],[],sgps[i]);
     Add(res[1], BlistList(mts[i+1].rn,[]));
     sum := Concatenation(sum,ConvertCutDataUp(mts[i+1],mts[n],res[1]));
     Print("#################################SO FAR WE HAVE  ", Size(sum), "\n");
+    subs := ConvertToSgps(mts[n],sum);
+    if writefiles then
+      WriteSemigroups(
+              Concatenation(tag,"_S",String(Size(sgps[i+1])),".subs.gz")
+              ,subs);
+    fi;
   od;
   Display(sgps[n]);
   return sum;DuplicateFreeList(sum);

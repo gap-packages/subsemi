@@ -124,9 +124,9 @@ local mt,log,waiting,startcut, cutpoints,i,cut,blocker;
   if IsBound(arg[3]) then
     blocker := AsList(arg[3]);
     blocker := List(blocker, x->Position(mt.sortedts, x));
-    Print("Blocker as list:",String(AsList(blocker)),"\n");
+    #Print("Blocker as list:",String(AsList(blocker)),"\n");
     blocker := BlistList(mt.rn, Difference(mt.rn,blocker));
-    Print("Blocker:",DisplayString(blocker), " for ", String(mt.rn),String(mt.sortedts) ,"\n");
+    #Print("Blocker:",DisplayString(blocker), " for ", String(mt.rn),String(mt.sortedts) ,"\n");
     mt.BLOCKING := true;
   else
     blocker := false;

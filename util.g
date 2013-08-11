@@ -15,6 +15,13 @@ InvertedCutAsList := function(mt, cut)
                  };
 end;
 
+ConvertToSgps := function(mt,cuts)
+  local invcuts;
+  invcuts := List(cuts, x -> InvertedCutAsList(mt,x) );
+  Remove(invcuts,Position(invcuts,[]));#removing the empty set
+  return  List(invcuts, ic -> Semigroup(ic));
+end;
+
 RandomizeBySystemClock := function()
   local SEED;
   SEED := IO_gettimeofday().tv_sec;
