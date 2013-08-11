@@ -1,6 +1,6 @@
 # finding subsemigroups by recursively deleting entries from
 # multiplication tables
-MTCutter := function(mt,log, waiting, cutpoints)
+MTCutter := function(mt,log, waiting, cutpoints, blocker)
   local cargo,processor,logger,i,duplicates,cclasses,ccl,cut,counter,ext,tab,rn,
         completion,extensions;
 
@@ -42,11 +42,15 @@ MTCutter := function(mt,log, waiting, cutpoints)
   # the main loop
   while not IsEmpty(waiting) do
     cut := Retrieve(waiting); # next cut to be processed
-    counter := counter + 1; # increasing loop counter
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
       logger();
     fi;
-
+    counter := counter + 1; # increasing loop counter
+    
+    if mt.BLOCKING then
+      if IsSubsetBlist(cut,blocker) then continue; fi;#meaning cutting into what is done
+    fi;
+    
     ### Deciding whether we hit a new one or not ###############################
     if not(cut in log) then
       if mt.CONJUGACY then
@@ -91,7 +95,7 @@ MTCutter := function(mt,log, waiting, cutpoints)
       Store(waiting, UnionBlist(cut,ext));
     od;
   od;
-  if InfoLevel(MulTabInfoClass) > 0 then Print("\n#FINAL");logger();fi;
+  if InfoLevel(MulTabInfoClass)>0 then Print("#FINAL");logger();Print("\n");fi;
   return [cargo, cclasses];
 end;
 
@@ -101,8 +105,9 @@ end;
 # arguments:
 # 1 - multiplication table
 # 2 - start cut
+# 3 - prohibited sub
 ReduceMulTab := function(arg)
-local mt,log,waiting,startcut, cutpoints,i,cut;
+local mt,log,waiting,startcut, cutpoints,i,cut,blocker;
   mt := arg[1]; #the mulitplication table data structure
   #the log keeps track of visited cuts, anything that can do AddSet and in
   log := MultiGradedSet([SizeBlist,FirstEntryPlusOne]);
@@ -115,6 +120,17 @@ local mt,log,waiting,startcut, cutpoints,i,cut;
     startcut := BlistList(mt.rn,[]);
     cutpoints := BlistList(mt.rn,mt.rn);
   fi;
+  #blocking
+  if IsBound(arg[3]) then
+    blocker := AsList(arg[3]);
+    blocker := List(blocker, x->Position(mt.sortedts, x));
+    Print("Blocker as list:",String(AsList(blocker)),"\n");
+    blocker := BlistList(mt.rn, Difference(mt.rn,blocker));
+    Print("Blocker:",DisplayString(blocker), " for ", String(mt.rn),String(mt.sortedts) ,"\n");
+    mt.BLOCKING := true;
+  else
+    blocker := false;
+  fi;
   Info(MulTabInfoClass,2, "Starting from ", startcut);
   for i in ListBlist(mt.rn,cutpoints) do
     cut := UnionBlist([startcut, BlistList(mt.rn,[i])]);
@@ -122,5 +138,5 @@ local mt,log,waiting,startcut, cutpoints,i,cut;
     Store(waiting, cut);
   od;
   #when everything is prepared, we just call MTCutter
-  return MTCutter(mt,log, waiting, cutpoints);
+  return MTCutter(mt,log, waiting, cutpoints,blocker);
 end;

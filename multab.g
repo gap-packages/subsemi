@@ -22,7 +22,9 @@ local n,freqs,p,i,j,mt,sortedts,syms,ts,mtrecord;
                   n:=n,
                   rn := [1..n], #for reusing it in loops to avoid excess objects
                   sortedts:=sortedts,
-                  CONJUGACY:=false);
+                  CONJUGACY:=false,
+                  BLOCKING:=false
+                  );
   #arg[2] is an automorphism group of ts in case it is there
   if IsBound(arg[2]) then
     syms := List(arg[2], g -> AsPermutation(TransformationOp(g,sortedts,\^)));
