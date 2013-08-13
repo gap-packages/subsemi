@@ -8,5 +8,6 @@ Read("cut.g");
 Read("viz.g");
 Read("red.g");
 Read("ideals.g");
+Read("generatorchains.g");
 Read("onion.g");
 Read("harvesters.g");
