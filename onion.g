@@ -1,17 +1,30 @@
 GeneratorChain := function(S)
-  local gens,i,lS, diff, sizes,gS;
+  local genchain,pos,lS, diff, sizes,T, extend, id;
+  #-----------------------------------------------------------------------------
+  #extend a generator chain
+  extend := function(genchain)
+    T := Semigroup(genchain);
+    diff := Difference(lS, AsList(T));
+    if not IsEmpty(diff) then
+      sizes := List(diff, t->Size(ClosureSemigroup(T,t))-Size(T));
+      for pos in Positions(sizes, Minimum(sizes)) do
+        Add(genchain, diff[pos]);
+        extend(genchain);
+        Remove(genchain);
+      od;
+    else
+      #process
+      Display(List([1..Size(genchain)], x->Size(Semigroup(genchain{[1..x]}))));
+    fi;
+    
+  end;
+  #-----------------------------------------------------------------------------
   #list gives better random element
   lS := AsList(S);
-  gens := [Random(S)];
-  repeat;
-    gS := Semigroup(gens);
-    diff := Difference(lS, AsList(gS));
-    if not IsEmpty(diff) then
-      sizes := List(diff, t->Size(ClosureSemigroup(gS,t))-Size(gS));
-      Add(gens, diff[Position(sizes, Minimum(sizes))]);
-    fi;
-  until IsEmpty(diff);
-  return gens;
+  #starting from all idempotents - they are minimal subsemigroups
+  for id in Idempotents(S) do
+    extend([id]);
+  od;
 end;
 
 ConvertCutDataUp := function(mt1, mt2, dat1)
