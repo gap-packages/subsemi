@@ -1,5 +1,6 @@
+# type of the chain is the integer list containig the sizes of subsemigroups
 GeneratorChain := function(S)
-  local genchain,lS, extend, id, result, tmp;
+  local genchain,lS, extend, id, result, sgps,type, types;
   #-----------------------------------------------------------------------------
   #extend a generator chain
   extend := function(genchain)
@@ -15,14 +16,19 @@ GeneratorChain := function(S)
       od;
     else
       #process
-      tmp := List([1..Size(genchain)], x->Size(Semigroup(genchain{[1..x]})));
-      if not (tmp in result) then Display(tmp);fi; # for the impatient
-      AddSet(result, tmp);
+      sgps := List([1..Size(genchain)], x-> Semigroup(genchain{[1..x]}));
+      type := List(sgps, Size);
+      if not (type in types) then
+        Display(type); # for the impatient
+        Add(result, ShallowCopy(genchain));
+        AddSet(types, type);
+      fi;
     fi;
   end;
   #-----------------------------------------------------------------------------
   lS := AsList(S);
   result := [];
+  types := [];
   #starting from all idempotents - they are minimal subsemigroups
   for id in Idempotents(S) do
     extend([id]);
@@ -31,4 +37,7 @@ GeneratorChain := function(S)
 end;
 
 RandomMinimalGeneratorChain := function(S,T)
+end;
+
+AllGeneratorChainsOfDistinctType := function()
 end;
