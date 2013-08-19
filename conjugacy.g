@@ -36,7 +36,7 @@ local log, #every conjugates we found so far
       classes, #the result will be a list of conjugacy classes
       cl,
       t;
-  log := [];
+  log := [];classes := [];
   for t in T do
     if not (t in log) then
       cl := ConjugacyClassOfTransformation(t,G);
