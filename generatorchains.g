@@ -36,8 +36,33 @@ GeneratorChain := function(S)
   return result;
 end;
 
-RandomMinimalGeneratorChain := function(S,T)
+# returns an element t from T\<genset> such that <genset,t> is as small
+# as possible
+RandomMinimalGeneratorSetExtension := function(genset,T)
+local S, diff, sizes;
+  S := Semigroup(genset);
+  #sanity check: if not a proper subsemigroup then we cannot extend
+  if Size(S) = Size(T) then return fail; fi;
+  # calculating T minus S
+  diff := Difference(AsList(T), AsList(S));
+  # all possible one element extensions
+  sizes := List(diff, t->Size(ClosureSemigroup(S,[t]))-Size(S));
+  # returning a random one from the set of minimal extensions
+  return diff[Random(Positions(sizes, Minimum(sizes)))];
 end;
 
-AllGeneratorChainsOfDistinctType := function()
+RandomMinimalGeneratorSetChain := function(T)
+local gc, ext;
+  gc := [Random(Idempotents(T))];
+  ext := RandomMinimalGeneratorSetExtension(gc,T);
+  while ext <> fail do
+    Add(gc,ext);
+    ext := RandomMinimalGeneratorSetExtension(gc,T);
+  od;
+  return gc;
+end;
+
+MinimalSubsemigroupChain := function(gensetchain)
+  return List([1..Size(gensetchain)],
+              x->Semigroup(gensetchain{[1..x]}));
 end;
