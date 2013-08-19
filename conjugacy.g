@@ -25,3 +25,24 @@ local g, conjugate, conjclass;
   od;
   return conjclass;
 end;
+
+ConjugacyClassOfTransformation := function(t,G)
+  return DuplicateFreeList(List(G, g -> t^g));
+end;
+#example usage: you have all subsemigroups of T_n, but no idea about conjugacy
+#classes, this function finds those classes
+CalculateConjugacyClassesOfTransformations := function(T,G)
+local log, #every conjugates we found so far
+      classes, #the result will be a list of conjugacy classes
+      cl,
+      t;
+  log := [];
+  for t in T do
+    if not (t in log) then
+      cl := ConjugacyClassOfTransformation(t,G);
+      Add(classes,cl);
+      Perform(cl, function(x) AddSet(log,x);end);
+    fi;
+  od;
+  return classes;
+end;
