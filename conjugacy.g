@@ -11,4 +11,14 @@ ConjugateTransformationCollection := function(T, perm)
 end;
 
 # 
-#ConjugacyClassesFromCollection := function(C)
+ConjugacyClassOfTransformationCollection := function(C,G)
+local g, conjugate, conjclass;  
+  conjclass := [];
+  for g in G do
+    conjugate := ConjugateTransformationCollection(C,g);
+    #convert it to sorted list to make it comparable
+    conjugate := AsSortedList(conjugate);
+    AddSet(conjclass, conjugate);
+  od;
+  return conjclass;
+end;
