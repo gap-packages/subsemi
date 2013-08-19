@@ -26,11 +26,12 @@ end;
 
 
 OnionReduceSgp := function(arg)
-  local gc,sgps,mts,i,res,log,sum,n,S,tag,writefiles,subs;
+  local gc,sgps,mts,i,res,log,sum,n,tag,writefiles,subs;
   Print("ONION PEELING#####################################################\n");
-  S := arg[1];
+  gc := arg[1];
+  writefiles := false;
   if IsBound(arg[2]) then tag:=arg[2]; writefiles:= true;fi;
-  gc := GeneratorChain(S);
+  #gc := RandomMinimalGeneratorSetChain(S);
   n := Size(gc);
   sgps := List([1..n], x -> Semigroup(gc{[1..x]}));
   Print("#LAYERS", n, " ", List(sgps,Size),"\n");
