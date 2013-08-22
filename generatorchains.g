@@ -68,11 +68,19 @@ MinimalSubsemigroupChain := function(gensetchain)
 end;
 
 SubSgpsBy1Extensions := function(S)
-  local s, lS, extend, result, counter, logger, range;
+  local s, lS, extend, result, counter, logger, range, dumper;
   #-----------------------------------------------------------------------------
   logger := function()
     Print("#", counter, " subs:", Size(result), " in ",
           FormattedMemoryString(MemoryUsage(result)),"\c\n");
+  end;
+  #-----------------------------------------------------------------------------
+  dumper := function()
+    local r,filename;
+    filename := Concatenation(Name(S),"subs.gz");
+    for r in AsList(result) do
+      WriteSemigroups(filename, Semigroup(lS{ListBlist(range,r)}));
+    od;
   end;
   #-----------------------------------------------------------------------------
   extend := function(genchain)
@@ -94,6 +102,7 @@ SubSgpsBy1Extensions := function(S)
     od;
   end;
   #-----------------------------------------------------------------------------
+  if not HasName(S) then Print("#Semigroup has no name. Dumper will fail!"); fi;
   lS := AsList(S);
   range := [1..Size(lS)];
   result := MultiGradedSet([SizeBlist,FirstEntryPlusOne]);#[];
@@ -102,5 +111,6 @@ SubSgpsBy1Extensions := function(S)
     extend([s]);
   od;
   logger();
+  dumper();
   return result;
 end;
