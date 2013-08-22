@@ -19,5 +19,6 @@ local shapes, ggens,sgens,i,l,shp,c;
     od;
     Add(sgens, Transformation(l));
   od;
-  return Semigroup(Difference(Semigroup(Union(sgens,ggens)), Semigroup(ggens)));
+  return Semigroup(SmallGeneratingSet(Semigroup(
+                 Difference(Semigroup(Union(sgens,ggens)),Semigroup(ggens)))));
 end;
