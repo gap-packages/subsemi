@@ -66,3 +66,41 @@ MinimalSubsemigroupChain := function(gensetchain)
   return List([1..Size(gensetchain)],
               x->Semigroup(gensetchain{[1..x]}));
 end;
+
+SubSgpsByMinimalExtensions := function(S)
+  local genchain,lS, extend, id, result, sgps,type, types, counter;
+  #-----------------------------------------------------------------------------
+  #extend a generator chain
+  extend := function(genchain)
+    local T, diff, t;
+    counter := counter + 1;
+    if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
+      Print("#", counter, " subs:", Size(result), " in ",
+            FormattedMemoryString(MemoryUsage(result)),"\c\n");
+    fi;
+    T := AsSortedList(Semigroup(genchain));
+    #just stop if we already have it
+    if  T in result then
+      return;
+    else
+      AddSet(result, T);
+    fi;
+    diff := Difference(lS, T);
+    if not IsEmpty(diff) then
+      #sizes := List(diff, t->(ClosureSemigroup(T,[t]))-Size(T));
+      for t in diff do
+        Add(genchain, t);
+        extend(genchain);
+        Remove(genchain);
+      od;
+    fi;
+  end;
+  #-----------------------------------------------------------------------------
+  lS := AsList(S);
+  result := MultiGradedSet([Size, l->1^l[Size(l)]]);#[];
+  counter := 0;
+  for id in lS do
+    extend([id]);
+  od;
+  return result;
+end;
