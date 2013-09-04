@@ -42,8 +42,8 @@
 %School of Computing, Engineering and Mathematics\\
 %Locked Bag 1797, Penrith NSW 2751, Australia\\
 %\email{a.egri-nagy@uws.edu.au}}
-\title{Recursive Reduction of Multiplication Tables}
-
+%\title{Recursive Reduction of Multiplication Tables}
+\title{Enumerating Transformation Semigroups}
 
 %\subjclass{20B05, 20B40, 20M25, 20B07, 68Q70}\keywords{permutation groups, Frobenius-Lagrange coordinates, wreath product, puzzles, groupoid action, permutation puzzles}
 \begin{document}
@@ -51,19 +51,39 @@
 
 
 \begin{abstract}
-Motivated by the problem of enumerating finite transformation semigroups on $n$ points, here we present a recursive algorithm for the systematic reductions of multiplication tables by cutting elements (i.e.\ removing the corresponding row and column from the table).
-We can downsize the hopelessly huge search space even if we do not exploit properties of the underlying algebra. 
+%Motivated by the problem of enumerating finite transformation semigroups on $n$ points, here we present a recursive algorithm for the systematic reductions of multiplication tables by cutting elements (i.e.\ removing the corresponding row and column from the table).
+%We can downsize the hopelessly huge search space even if we do not exploit properties of the underlying algebra. 
 %By considering the elements appearing in the diagonal of the table we can define a closure operator on the cuts. 
-The combinatorial techniques can be used for any algebraic structure with one multiplication operation. If the symmetries of the algebraic structure are also known then we can use those to find new closed cuts and to find conjugacy classes of the substructures as well. 
-We use the method to enumerate the subsemigroups of $\cT_4$, the full transformation semigroups on 4 points. 
+%The combinatorial techniques can be used for any algebraic structure with one multiplication operation. If the symmetries of the algebraic structure are also known then we can use those to find new closed cuts and to find conjugacy classes of the substructures as well. 
+%We use the method to enumerate the subsemigroups of $\cT_4$, the full transformation semigroups on 4 points. 
 \end{abstract}
 
 \section{Introduction}
-Explicit enumeration of certain structures is often needed in studying the structures themselves, or for providing comprehensive test cases  for some algorithms working on them.
+Due to their large number, enumerating the subsemigroups of $\cT_n$ is not a trivial computational task.
+For $n=2$ pen and paper calculation is sufficient, for $n=3$ a brute-force algorithm is still feasible, but for $n=4$ we already have technical challenges.
+There is no single algorithm that is efficient enough to do the enumeration in one go, therefore we apply different methods, each of them exploiting some mathematical properties of (transformation) semigroups, a patchwork of different techniques and tricks. 
+Summary of methods:
+\begin{description}
+\item[Multiplication table reduction (top-down)] Recursively removing elements from the multiplication table of the semigroup.
+It works for any single operation algebra.
+The search visits non-solutions (and we have to store them), therefore without any heuristics it is less efficient than the brute-force. However, the following tricks make it faster:
+\begin{itemize}
+\item Diagonal closure:
+\item Greedy reduction:
+\end{itemize}
+\item[Closure search (bottom-up)] This search visits only subsemigroups but can visit the same one many times.
+\item[Conjugacy] For transformation semigroups and for full transformation semigroups and its ideals. Once we find a subsemigroup, then we can calculate its conjugacy class containing more subsemigroups. Same for nonsolutions.
+\item[Rees factors]
+\item[Maximal subsemigroups]
+\end{description}
+
+
+
+Explicit enumeration of certain structures is often needed in studying the structures themselves, or for providing comprehensive test cases for some algorithms working on them.
 The enumeration is usually done by increasing size and up to isomorphism or conjugacy. 
 
 For semigroups the enumeration by the order is an ongoing quest and currently it is done up to order 9 \cite{smallsemi}. The basic idea is to enumerate all multiplication tables that encode an associative operation. %The enumeration parameter is the size of the multiplication table, i.e.\ the order of the semigroup. 
-Most of the semigroups are 3-nilpotent \todo{cite Andreas-James arxiv paper, is it published?}. ``So, whereas groups are
+Most of the semigroups are 3-nilpotent \cite{smallsemi}. ``So, whereas groups are
 gems, all of them precious, the garden of semigroups is filled with weeds. One
 needs to yank out these weeds to find the interesting semigroups.'' \cite{QBook}.
 
