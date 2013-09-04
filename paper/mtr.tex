@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{amsart}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -19,10 +19,19 @@
 
 %\usepackage{texdraw}
 
+\newcommand{\cT}{{\mathcal T}}
+\newcommand{\cS}{{\mathcal S}}
+\newcommand{\Sub}{\mathbf{Sub}}
+\newcommand{\Max}{\mathbf{Max}}
+\newcommand{\compl}{\mathsf{c}}
+
+\newcommand{\todo}[1]{ \small \textsf{[TODO:  #1 ]} \normalsize}
+
 
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{fact}[theorem]{Fact}
 \newtheorem{Proposition}[theorem]{Proposition}
 \newtheorem{cor}[theorem]{Corollary}
 \theoremstyle{definition}
@@ -30,14 +39,8 @@
 \newtheorem{example}[theorem]{Example}
 
 
-\newcommand{\cT}{{\cal T}}
-\newcommand{\cS}{{\cal S}}
-
-\newcommand{\compl}{\mathsf{c}}
-
-\newcommand{\todo}[1]{ \small \textsf{[TODO:  #1 ]} \normalsize}
-
 \author{Attila Egri-Nagy}
+\address{}
 %\institute{University of Western Sydney\\
 %School of Computing, Engineering and Mathematics\\
 %Locked Bag 1797, Penrith NSW 2751, Australia\\
@@ -47,7 +50,7 @@
 
 %\subjclass{20B05, 20B40, 20M25, 20B07, 68Q70}\keywords{permutation groups, Frobenius-Lagrange coordinates, wreath product, puzzles, groupoid action, permutation puzzles}
 \begin{document}
-\maketitle
+
 
 
 \begin{abstract}
@@ -57,6 +60,8 @@
 %The combinatorial techniques can be used for any algebraic structure with one multiplication operation. If the symmetries of the algebraic structure are also known then we can use those to find new closed cuts and to find conjugacy classes of the substructures as well. 
 %We use the method to enumerate the subsemigroups of $\cT_4$, the full transformation semigroups on 4 points. 
 \end{abstract}
+
+\maketitle
 
 \section{Introduction}
 Due to their large number, enumerating the subsemigroups of $\cT_n$ is not a trivial computational task.
@@ -101,7 +106,18 @@ Then the  \emph{multiplication table} of $S$ is a $n\times n$ matrix $M$ with en
 
 $\cS_n$ denotes the symmetric group, $\cT_n$ the full transformation group on $n$ points.
 
+$\Sub(S)=\big\{T\mid T\leq S \big\}$, $\Max(S)$ the set of maximal proper subsemigroups
 
+\begin{fact}
+$\Sub(S)=\big( \bigcup_{T\in \Max(S)}\Sub(T)\big)\cup \{S\}$
+\end{fact}
+\proof
+It follows from the fact that $\Sub(S)$ is an algebraic lattice.
+\qed
+
+\begin{lemma}
+
+\end{lemma}
 
 \section{The algorithm}
 \begin{definition}[\textbf{cut, closed cut}]
