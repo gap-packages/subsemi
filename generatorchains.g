@@ -67,40 +67,50 @@ MinimalSubsemigroupChain := function(gensetchain)
               x->Semigroup(gensetchain{[1..x]}));
 end;
 
-SubSgpsByMinimalExtensions := function(S)
-  local genchain,lS, extend, id, result, sgps,type, types, counter;
+SubSgpsBy1Extensions := function(S)
+  local s, lS, extend, result, counter, logger, range, dumper;
   #-----------------------------------------------------------------------------
-  #extend a generator chain
-  extend := function(genchain)
-    local T, diff, t;
-    counter := counter + 1;
-    if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
-      Print("#", counter, " subs:", Size(result), " in ",
-            FormattedMemoryString(MemoryUsage(result)),"\c\n");
-    fi;
-    T := AsSortedList(Semigroup(genchain));
-    #just stop if we already have it
-    if  T in result then
-      return;
-    else
-      AddSet(result, T);
-    fi;
-    diff := Difference(lS, T);
-    if not IsEmpty(diff) then
-      #sizes := List(diff, t->(ClosureSemigroup(T,[t]))-Size(T));
-      for t in diff do
-        Add(genchain, t);
-        extend(genchain);
-        Remove(genchain);
-      od;
-    fi;
+  logger := function()
+    Print("#", counter, " subs:", Size(result), " in ",
+          FormattedMemoryString(MemoryUsage(result)),"\c\n");
   end;
   #-----------------------------------------------------------------------------
+  dumper := function()
+    local r,filename;
+    filename := Concatenation(Name(S),"subs.gz");
+    for r in AsList(result) do
+      WriteSemigroups(filename, Semigroup(lS{ListBlist(range,r)}));
+    od;
+  end;
+  #-----------------------------------------------------------------------------
+  extend := function(genchain)
+    local T, t, bl;
+    counter := counter + 1;
+    if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
+      logger();
+    fi;
+    T := AsList(Semigroup(genchain));
+    bl := BlistList(range, List(T,x->Position(lS,x)));
+    if  bl in result then
+      return; #just bail out if we already have it
+    fi;
+    AddSet(result, bl);
+    for t in Difference(lS, T) do
+      Add(genchain, t);
+      extend(genchain);
+      Remove(genchain);
+    od;
+  end;
+  #-----------------------------------------------------------------------------
+  if not HasName(S) then Print("#Semigroup has no name. Dumper will fail!"); fi;
   lS := AsList(S);
-  result := MultiGradedSet([Size, l->1^l[Size(l)]]);#[];
+  range := [1..Size(lS)];
+  result := MultiGradedSet([SizeBlist,FirstEntryPlusOne]);#[];
   counter := 0;
-  for id in lS do
-    extend([id]);
+  for s in lS do
+    extend([s]);
   od;
+  logger();
+  dumper();
   return result;
 end;
