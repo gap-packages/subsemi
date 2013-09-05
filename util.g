@@ -1,7 +1,18 @@
-FirstEntryPlusOne := function(blist)
-  if Size(blist) = 0 then return 1; fi;
-  return Position(blist,true)+1;
+# returns the position of the 1st entry, 1 if empty
+FirstEntry := function(blist)
+  if SizeBlist(blist) = 0 then return 1; fi;
+  return Position(blist,true);
 end;
+
+# returns the position of the last entry, 1 if empty
+LastEntry := function(blist)
+local i;
+  if SizeBlist(blist) = 0 then return 1; fi;
+  i := Size(blist);
+  while not blist[i] do i := i - 1; od;
+  return i;
+end;
+
 
 #the set of transformations  is a semigroup if they don't generate
 #new elements
