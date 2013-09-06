@@ -20,7 +20,7 @@ end;
 ConjugacyClassOfCut := function(mt, cut)
 local class, g;
   class := [cut];#since we don't have the identity in mt.syms
-  for g in mt.syms do
+  for g in mt.syms do #todo list blists conversions are a bit inefficient
     AddSet(class,BlistList([1..mt.n],List(ListBlist([1..mt.n],cut),x-> x^g)));
   od;
   return class;
