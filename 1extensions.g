@@ -1,8 +1,8 @@
 # S  - a semigroup
 SubSgpsBy1Extensions := function(S)
-  local s, L, extend, result, counter, log, range, 
-        dump, p_subs,p_counter;
-  p_subs := 0; p_counter := 0;
+  local s, L, extend, result,  range, 
+        counter, log, dump, p_subs, p_counter, dumpcounter;
+  p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     Print("#", FormattedBigNumberString(counter)," subs:",Size(result)," in ",
@@ -14,10 +14,11 @@ SubSgpsBy1Extensions := function(S)
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
     local r,filename;
-    filename := Concatenation(Name(S),"subs.gz");
+    filename := Concatenation(Name(S),"_", String(dumpcounter),"_subs.gz");
     for r in AsList(result) do
       WriteSemigroups(filename, Semigroup(L{ListBlist(range,r)}));
     od;
+    dumpcounter := dumpcounter + 1;
   end;
   #-----------------------------------------------------------------------------
   extend := function(genchain)
@@ -26,6 +27,7 @@ SubSgpsBy1Extensions := function(S)
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
       log();
     fi;
+    if (counter mod MTROptions.LOGFREQ)=0 then dump(); fi;
     T := AsList(Semigroup(genchain));
     bl := BlistList(range, List(T,x->Position(L,x)));
     if  bl in result then
