@@ -1,6 +1,6 @@
 # S  - a semigroup
-SubSgpsBy1Extensions := function(S)
-  local s, L, extend, result,  indices,
+SubSgpsBy1Extensions := function(S,G)
+  local s, L, extend, result,  indices, syms,
         counter, log, dump, p_subs, p_counter, dumpcounter;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
@@ -34,6 +34,8 @@ SubSgpsBy1Extensions := function(S)
       return; #just bail out if we already have it
     fi;
     AddSet(result, bl);
+    Perform(List(syms, g -> BlistList(indices,List(ListBlist(indices,bl), x->x^g))),
+            function(b)AddSet(result,b);end);
     for t in Difference(L, T) do
       Add(genchain, t);
       extend(genchain);
@@ -46,6 +48,7 @@ SubSgpsBy1Extensions := function(S)
     return fail;
   fi;
   L := AsSortedList(S);
+  syms := NonTrivialSymmetriesOfElementIndices(S,G);
   indices := [1..Size(L)];
   result := MultiGradedSet([SizeBlist,FirstEntry,LastEntry]);#[];
   counter := 0;
