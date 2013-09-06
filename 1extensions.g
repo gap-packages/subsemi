@@ -14,7 +14,7 @@ SubSgpsBy1Extensions := function(S,G)
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
     local r,filename;
-    filename := Concatenation(Name(S),"_", String(dumpcounter),"_subs.gz");
+    filename := Concatenation(Name(S),"_", String(dumpcounter),"subs");
     for r in AsList(result) do
       WriteSemigroups(filename, Semigroup(L{ListBlist(indices,r)}));
     od;
