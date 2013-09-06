@@ -1,9 +1,10 @@
+# S  - a semigroup
 SubSgpsBy1Extensions := function(S)
-  local s, lS, extend, result, counter, logger, range, 
-        dumper, p_subs,p_counter;
+  local s, L, extend, result, counter, log, range, 
+        dump, p_subs,p_counter;
   p_subs := 0; p_counter := 0;
   #-----------------------------------------------------------------------------
-  logger := function()
+  log := function() #put some information on the screen
     Print("#", FormattedBigNumberString(counter)," subs:",Size(result)," in ",
           FormattedMemoryString(MemoryUsage(result))," ",
           FormattedFloat(Float((100*(Size(result)-p_subs))/(counter-p_counter)))
@@ -11,11 +12,11 @@ SubSgpsBy1Extensions := function(S)
     p_subs := Size(result); p_counter := counter;
   end;
   #-----------------------------------------------------------------------------
-  dumper := function()
+  dump := function() #write all the subsemigroups into a file
     local r,filename;
     filename := Concatenation(Name(S),"subs.gz");
     for r in AsList(result) do
-      WriteSemigroups(filename, Semigroup(lS{ListBlist(range,r)}));
+      WriteSemigroups(filename, Semigroup(L{ListBlist(range,r)}));
     od;
   end;
   #-----------------------------------------------------------------------------
@@ -23,30 +24,33 @@ SubSgpsBy1Extensions := function(S)
     local T, t, bl;
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
-      logger();
+      log();
     fi;
     T := AsList(Semigroup(genchain));
-    bl := BlistList(range, List(T,x->Position(lS,x)));
+    bl := BlistList(range, List(T,x->Position(L,x)));
     if  bl in result then
       return; #just bail out if we already have it
     fi;
     AddSet(result, bl);
-    for t in Difference(lS, T) do
+    for t in Difference(L, T) do
       Add(genchain, t);
       extend(genchain);
       Remove(genchain);
     od;
   end;
   #-----------------------------------------------------------------------------
-  if not HasName(S) then Print("#Semigroup has no name. Dumper will fail!"); fi;
-  lS := AsList(S);
-  range := [1..Size(lS)];
+  if not HasName(S) then #enforcing proper naming of the semigroup
+    Print("#Semigroup has no name. Dump would fail!");
+    return fail;
+  fi;
+  L := AsList(S);
+  range := [1..Size(L)];
   result := MultiGradedSet([SizeBlist,FirstEntry,LastEntry]);#[];
   counter := 0;
-  for s in lS do
+  for s in L do
     extend([s]);
   od;
-  logger();
-  #dumper();
+  log();
+  dump();
   return result;
 end;
