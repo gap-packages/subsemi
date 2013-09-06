@@ -1,6 +1,6 @@
 # S  - a semigroup
 SubSgpsBy1Extensions := function(S)
-  local s, L, extend, result,  range, 
+  local s, L, extend, result,  indices,
         counter, log, dump, p_subs, p_counter, dumpcounter;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
@@ -16,7 +16,7 @@ SubSgpsBy1Extensions := function(S)
     local r,filename;
     filename := Concatenation(Name(S),"_", String(dumpcounter),"_subs.gz");
     for r in AsList(result) do
-      WriteSemigroups(filename, Semigroup(L{ListBlist(range,r)}));
+      WriteSemigroups(filename, Semigroup(L{ListBlist(indices,r)}));
     od;
     dumpcounter := dumpcounter + 1;
   end;
@@ -29,7 +29,7 @@ SubSgpsBy1Extensions := function(S)
     fi;
     if (counter mod MTROptions.LOGFREQ)=0 then dump(); fi;
     T := AsList(Semigroup(genchain));
-    bl := BlistList(range, List(T,x->Position(L,x)));
+    bl := BlistList(indices, List(T,x->Position(L,x)));
     if  bl in result then
       return; #just bail out if we already have it
     fi;
@@ -45,8 +45,8 @@ SubSgpsBy1Extensions := function(S)
     Print("#Semigroup has no name. Dump would fail!");
     return fail;
   fi;
-  L := AsList(S);
-  range := [1..Size(L)];
+  L := AsSortedList(S);
+  indices := [1..Size(L)];
   result := MultiGradedSet([SizeBlist,FirstEntry,LastEntry]);#[];
   counter := 0;
   for s in L do
