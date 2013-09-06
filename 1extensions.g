@@ -27,7 +27,7 @@ SubSgpsBy1Extensions := function(S,G)
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
       log();
     fi;
-    if (counter mod MTROptions.LOGFREQ)=0 then dump(); fi;
+    if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
     T := AsList(Semigroup(genchain));
     bl := BlistList(indices, List(T,x->Position(L,x)));
     if  bl in result then
