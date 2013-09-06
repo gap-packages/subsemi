@@ -27,13 +27,7 @@ local n,freqs,p,i,j,mt,sortedts,syms,ts,mtrecord;
                   );
   #arg[2] is an automorphism group of ts in case it is there
   if IsBound(arg[2]) then
-    syms := List(arg[2], g -> AsPermutation(TransformationOp(g,sortedts,\^)));
-    #just getting the conjugacy classes
-    mtrecord.conjclasses := DuplicateFreeList(
-                                    List([1..n],
-                                         x->AsSet(List(syms,g->x^g))));
-    Remove(syms, Position(syms,())); #remove the identity to save time later
-    mtrecord.syms := syms;
+    mtrecord.syms := NonTrivialSymmetriesOfElementIndices(ts,arg[2]);
     mtrecord.CONJUGACY:=true;
   fi;
   return mtrecord;

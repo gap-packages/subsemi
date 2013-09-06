@@ -46,3 +46,12 @@ local log, #every conjugates we found so far
   od;
   return classes;
 end;
+
+#getting conjugacy symmetries that act on the magma's elements' indices in the
+#sorted list
+NonTrivialSymmetriesOfElementIndices := function(M,G)
+  local syms;
+  syms := List(G, g -> AsPermutation(TransformationOp(g,AsSortedList(M),\^)));
+  Remove(syms, Position(syms,()));    #remove the identity to save time later
+  return syms;
+end;
