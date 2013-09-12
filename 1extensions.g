@@ -1,3 +1,21 @@
+ClosureByMulTab := function(tab, indexlist, set)
+local rowndx, columnndx, row, closure;
+  closure := BlistList(indexlist,[]);
+  for rowndx in rn do
+    if not (cut[rowndx]) then
+      row := tab[rowndx];
+      for columnndx in rn do
+        if (not (cut[columnndx])) and (cut[row[columnndx]]) then
+          #we found a conflicting element outside the cut
+          completion[rowndx] := true;#Add(completion, rowndx);
+          completion[columnndx] := true;#Add(completion, columnndx);
+        fi;
+      od;
+    fi;
+  od;
+  return completion;
+end;
+
 # S  - a semigroup
 SubSgpsBy1Extensions := function(S,G)
   local s, L, extend, result,  indices, syms,
