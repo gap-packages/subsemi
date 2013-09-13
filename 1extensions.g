@@ -47,18 +47,25 @@ TestGenerateSg := function(mt)
   return blT = BlistList(mt.rn, List(AsList(T), t->Position(mt.sortedts,t)));
 end;
 
-# S  - a semigroup
+# mt - MulTab, multiplication table
 SubSgpsBy1Extensions := function(mt)
   local s, L, extend, result,  indexlist, syms,
-        counter, log, dump, p_subs, p_counter, dumpcounter, tab;
+        counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
+    secs := IO_gettimeofday().tv_sec;
     Print("#", FormattedBigNumberString(counter)," subs:",Size(result)," in ",
           FormattedMemoryString(MemoryUsage(result))," ",
           FormattedFloat(Float((100*(Size(result)-p_subs))/(counter-p_counter)))
-          ," sgps/100 checks\c\n");
-    p_subs := Size(result); p_counter := counter;
+          ," sgps/100 checks ");
+    if (secs-p_secs) > 0 then
+      Print(FormattedFloat(Float((Size(result)-p_subs)/(secs-p_secs))),
+            " sgps/sec\c\n");
+    else
+      Print("\c\n");
+    fi;
+    p_subs := Size(result); p_counter := counter; p_secs := secs;
   end;
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
@@ -100,6 +107,7 @@ SubSgpsBy1Extensions := function(mt)
   tab := mt.mt;
   result := MultiGradedSet([SizeBlist,FirstEntry,LastEntry]);#[];
   counter := 0;
+  p_secs := IO_gettimeofday().tv_sec;
   for s in indexlist do
     extend(BlistList(indexlist, []),s);
   od;
