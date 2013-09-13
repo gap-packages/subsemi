@@ -50,7 +50,7 @@ end;
 # S  - a semigroup
 SubSgpsBy1Extensions := function(S,G)
   local s, L, extend, result,  indices, syms,
-        counter, log, dump, p_subs, p_counter, dumpcounter;
+        counter, log, dump, p_subs, p_counter, dumpcounter, mt;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -77,15 +77,15 @@ SubSgpsBy1Extensions := function(S,G)
       log();
     fi;
     if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
-    T := AsList(Semigroup(genchain));
-    bl := BlistList(indices, List(T,x->Position(L,x)));
+    #T := AsList(Semigroup(genchain));
+    bl := GenerateSg(mt.mt, mt.rn, genchain);#BlistList(indices, List(T,x->Position(L,x)));
     if  bl in result then
       return; #just bail out if we already have it
     fi;
     AddSet(result, bl);
     Perform(List(syms, g -> BlistList(indices,List(ListBlist(indices,bl), x->x^g))),
             function(b)AddSet(result,b);end);
-    for t in Difference(L, T) do
+    for t in Difference(mt.rn, ListBlist(mt.rn,bl)) do#Difference(L, T) do
       Add(genchain, t);
       extend(genchain);
       Remove(genchain);
@@ -96,12 +96,13 @@ SubSgpsBy1Extensions := function(S,G)
     Print("#Semigroup has no name. Dump would fail!");
     return fail;
   fi;
-  L := AsSortedList(S);
-  syms := NonTrivialSymmetriesOfElementIndices(S,G);
+  mt := MulTab(S,G);
+  L := mt.sortedts;
+  syms := mt.syms;
   indices := [1..Size(L)];
   result := MultiGradedSet([SizeBlist,FirstEntry,LastEntry]);#[];
   counter := 0;
-  for s in L do
+  for s in mt.rn do
     extend([s]);
   od;
   log();
