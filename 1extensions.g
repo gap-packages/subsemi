@@ -49,7 +49,7 @@ end;
 
 # S  - a semigroup
 SubSgpsBy1Extensions := function(S,G)
-  local s, L, extend, result,  indices, syms,
+  local s, L, extend, result,  indexlist, syms,
         counter, log, dump, p_subs, p_counter, dumpcounter, mt;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
@@ -65,7 +65,7 @@ SubSgpsBy1Extensions := function(S,G)
     local r,filename;
     filename := Concatenation(Name(S),"_", String(dumpcounter),"subs");
     for r in AsList(result) do
-      WriteSemigroups(filename, Semigroup(L{ListBlist(indices,r)}));
+      WriteSemigroups(filename, Semigroup(L{ListBlist(indexlist,r)}));
     od;
     dumpcounter := dumpcounter + 1;
   end;
@@ -78,14 +78,13 @@ SubSgpsBy1Extensions := function(S,G)
     fi;
     if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
     #T := AsList(Semigroup(genchain));
-    bl := GenerateSg(mt.mt, mt.rn, genchain);#BlistList(indices, List(T,x->Position(L,x)));
+    bl := GenerateSg(mt.mt, mt.rn, genchain);
     if  bl in result then
       return; #just bail out if we already have it
     fi;
     AddSet(result, bl);
-    Perform(List(syms, g -> BlistList(indices,List(ListBlist(indices,bl), x->x^g))),
-            function(b)AddSet(result,b);end);
-    for t in Difference(mt.rn, ListBlist(mt.rn,bl)) do#Difference(L, T) do
+    Perform(List(syms, g -> OnFiniteSet(bl,g)),function(b)AddSet(result,b);end);
+    for t in Difference(mt.rn, ListBlist(mt.rn,bl)) do
       Add(genchain, t);
       extend(genchain);
       Remove(genchain);
@@ -99,13 +98,13 @@ SubSgpsBy1Extensions := function(S,G)
   mt := MulTab(S,G);
   L := mt.sortedts;
   syms := mt.syms;
-  indices := [1..Size(L)];
+  indexlist := mt.rn;
   result := MultiGradedSet([SizeBlist,FirstEntry,LastEntry]);#[];
   counter := 0;
-  for s in mt.rn do
+  for s in indexlist do
     extend([s]);
   od;
   log();
-  dump();
+  #dump();
   return result;
 end;
