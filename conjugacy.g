@@ -59,7 +59,7 @@ end;
 #getting conjugacy symmetries that act on the magma's elements' indices in the
 #sorted list
 #through a homomorphism
-NonTrivialSymmetriesOfElementIndicesThroughHom := function(M,hom,G)
+NonTrivialSymmetriesOfElementIndicesThroughHom := function(M,G,hom)
   local syms,L;
   L := AsSortedList(M);
   syms := List(G, g ->
