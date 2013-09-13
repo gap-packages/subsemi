@@ -37,6 +37,16 @@ GenerateSg := function(tab, indexlist,gens)
   return ClosureByMulTab(tab, indexlist,BlistList(indexlist,[]),gens );
 end;
 
+
+TestGenerateSg := function(mt)
+  local gens,numofgens,blT,T;
+  numofgens := Random([1..7]);
+  gens := DuplicateFreeList(List([1..numofgens], x->Random(mt.rn)));
+  blT := GenerateSg(mt.mt, mt.rn, gens);
+  T := Semigroup(List(gens, x->mt.sortedts[x]));
+  return blT = BlistList(mt.rn, List(AsList(T), t->Position(mt.sortedts,t)));
+end;
+
 # S  - a semigroup
 SubSgpsBy1Extensions := function(S,G)
   local s, L, extend, result,  indices, syms,
