@@ -55,3 +55,19 @@ NonTrivialSymmetriesOfElementIndices := function(M,G)
   Remove(syms, Position(syms,()));    #remove the identity to save time later
   return syms;
 end;
+
+#getting conjugacy symmetries that act on the magma's elements' indices in the
+#sorted list
+#through a homomorphism
+NonTrivialSymmetriesOfElementIndicesThroughHom := function(M,hom,G)
+  local syms,L;
+  L := AsSortedList(M);
+  syms := List(G, g ->
+               AsPermutation(
+                       TransformationOp(g,L,
+                               function(p,t)
+                                 return Image(hom,PreImagesRepresentative(hom,p)^t);
+                               end)));
+  Remove(syms, Position(syms,()));    #remove the identity to save time later
+  return syms;
+end;
