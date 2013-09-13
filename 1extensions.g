@@ -50,7 +50,7 @@ end;
 # S  - a semigroup
 SubSgpsBy1Extensions := function(S,G)
   local s, L, extend, result,  indexlist, syms,
-        counter, log, dump, p_subs, p_counter, dumpcounter, mt;
+        counter, log, dump, p_subs, p_counter, dumpcounter, mt, tab;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -70,24 +70,21 @@ SubSgpsBy1Extensions := function(S,G)
     dumpcounter := dumpcounter + 1;
   end;
   #-----------------------------------------------------------------------------
-  extend := function(genchain)
+  extend := function(base,s)
     local T, t, bl;
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
       log();
     fi;
     if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
-    #T := AsList(Semigroup(genchain));
-    bl := GenerateSg(mt.mt, mt.rn, genchain);
+    bl := ClosureByMulTab(tab, indexlist, base, [s]);
     if  bl in result then
       return; #just bail out if we already have it
     fi;
     AddSet(result, bl);
     Perform(List(syms, g -> OnFiniteSet(bl,g)),function(b)AddSet(result,b);end);
-    for t in Difference(mt.rn, ListBlist(mt.rn,bl)) do
-      Add(genchain, t);
-      extend(genchain);
-      Remove(genchain);
+    for t in Difference(indexlist, ListBlist(indexlist,bl)) do
+      extend(bl,t);
     od;
   end;
   #-----------------------------------------------------------------------------
@@ -99,12 +96,13 @@ SubSgpsBy1Extensions := function(S,G)
   L := mt.sortedts;
   syms := mt.syms;
   indexlist := mt.rn;
+  tab := mt.mt;
   result := MultiGradedSet([SizeBlist,FirstEntry,LastEntry]);#[];
   counter := 0;
   for s in indexlist do
-    extend([s]);
+    extend(BlistList(indexlist, []),s);
   od;
   log();
-  #dump();
+  dump();
   return result;
 end;
