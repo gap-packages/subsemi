@@ -17,17 +17,23 @@ local n,freqs,p,i,j,mt,sortedts,syms,ts,mtrecord;
       freqs[p] := freqs[p] + 1;
     od;
   od;
-  mtrecord := rec(freqs:=freqs,
+  mtrecord := rec(ts:=ts,
+                  freqs:=freqs,
                   mt:=mt,
                   n:=n,
                   rn := [1..n], #for reusing it in loops to avoid excess objects
                   sortedts:=sortedts,
                   CONJUGACY:=false,
+                  syms:=[],
                   BLOCKING:=false
                   );
   #arg[2] is an automorphism group of ts in case it is there
   if IsBound(arg[2]) then
-    mtrecord.syms := NonTrivialSymmetriesOfElementIndices(ts,arg[2]);
+    if IsBound(arg[3]) then
+      mtrecord.syms := NonTrivialSymmetriesOfElementIndicesThroughHom(ts,arg[2],arg[3]);
+    else
+      mtrecord.syms := NonTrivialSymmetriesOfElementIndices(ts,arg[2]);
+    fi;
     mtrecord.CONJUGACY:=true;
   fi;
   return mtrecord;

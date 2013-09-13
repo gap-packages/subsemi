@@ -48,9 +48,9 @@ TestGenerateSg := function(mt)
 end;
 
 # S  - a semigroup
-SubSgpsBy1Extensions := function(S,G)
+SubSgpsBy1Extensions := function(mt)
   local s, L, extend, result,  indexlist, syms,
-        counter, log, dump, p_subs, p_counter, dumpcounter, mt, tab;
+        counter, log, dump, p_subs, p_counter, dumpcounter, tab;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -63,7 +63,7 @@ SubSgpsBy1Extensions := function(S,G)
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
     local r,filename;
-    filename := Concatenation(Name(S),"_", String(dumpcounter),"subs");
+    filename := Concatenation(Name(mt.ts),"_", String(dumpcounter),"subs");
     #for r in AsList(result) do
     #  WriteSemigroups(filename, Semigroup(L{ListBlist(indexlist,r)}));
     #od;
@@ -90,11 +90,10 @@ SubSgpsBy1Extensions := function(S,G)
     od;
   end;
   #-----------------------------------------------------------------------------
-  if not HasName(S) then #enforcing proper naming of the semigroup
+  if not HasName(mt.ts) then #enforcing proper naming of the semigroup
     Print("#Semigroup has no name. Dump would fail!");
     return fail;
   fi;
-  mt := MulTab(S,G);
   L := mt.sortedts;
   syms := mt.syms;
   indexlist := mt.rn;
