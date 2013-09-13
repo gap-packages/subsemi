@@ -1,19 +1,36 @@
-ClosureByMulTab := function(tab, indexlist, set)
-local rowndx, columnndx, row, closure;
-  closure := BlistList(indexlist,[]);
-  for rowndx in rn do
-    if not (cut[rowndx]) then
-      row := tab[rowndx];
-      for columnndx in rn do
-        if (not (cut[columnndx])) and (cut[row[columnndx]]) then
-          #we found a conflicting element outside the cut
-          completion[rowndx] := true;#Add(completion, rowndx);
-          completion[columnndx] := true;#Add(completion, columnndx);
-        fi;
-      od;
-    fi;
+#
+Diff1Step := function(tab, indexlist, base, extender)
+  local diff, rowndx,columnndx,i,val;
+  #if the extender is already in base then there is nothing to do
+  if base[extender] then
+    return BlistList(indexlist,[]);;
+  fi;
+  diff := BlistList(indexlist,[extender]);
+  for i in indexlist do
+    if base[i] then
+      val := tab[i][extender];
+      if not base[val] then diff[val] := true; fi;
+      val := tab[extender][i];
+      if not base[val] then diff[val] := true; fi;
+    fi;    
   od;
-  return completion;
+  diff[tab[extender][extender]] := true;
+  return diff;
+end;
+
+#the closure of the set (subsgp)
+ClosureByMulTab := function(tab, indexlist,base,extension)
+  local queue,diff1step, nbase,i;
+  queue := BlistList(indexlist,extension);
+  nbase := ShallowCopy(base);
+  while SizeBlist(queue) > 0 do
+    i := FirstEntry(queue);
+    diff1step := Diff1Step(tab, indexlist,nbase, i);
+    UniteBlist(queue, diff1step);
+    queue[i] := false;
+    nbase[i] := true;    
+  od;
+  return nbase;
 end;
 
 # S  - a semigroup
