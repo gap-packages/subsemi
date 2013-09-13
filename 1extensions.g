@@ -33,6 +33,10 @@ ClosureByMulTab := function(tab, indexlist,base,extension)
   return nbase;
 end;
 
+GenerateSg := function(tab, indexlist,gens)
+  return ClosureByMulTab(tab, indexlist,BlistList(indexlist,[]),gens );
+end;
+
 # S  - a semigroup
 SubSgpsBy1Extensions := function(S,G)
   local s, L, extend, result,  indices, syms,
