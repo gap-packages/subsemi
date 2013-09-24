@@ -122,6 +122,7 @@ SubSgpsBy1Extensions := function(mt)
   counter := 0;
   p_secs := IO_gettimeofday().tv_sec;
   for s in indexlist do
+    Print("# ", String(s),"/",String(Size(indexlist)),"\n");
     extend(BlistList(indexlist, []),s);
   od;
   log();
