@@ -89,23 +89,9 @@ SubSgpsBy1Extensions := function(mt)
     filename := Concatenation(Name(mt.ts),"_", String(dumpcounter),"subs");
     output := OutputTextFile(filename, false);
     for r in AsList(result) do
-      #WriteGenerators(filename, Semigroup(L{ListBlist(indexlist,r)}));
+      AppendTo(output, AsBitString(r),"\n");
     od;
     CloseStream(output);
-    #WriteSemigroups(filename, List(AsList(result),
-    #        r -> Semigroup(
-    #                SmallGeneratingSet(
-    #                        AsSemigroup(Semigroup(L{ListBlist(indexlist,r)}))))));
-    #l := AsList(result);
-    #ll := EmptyPlist(Size(l));
-    #for i in [1..Size(result)] do
-    #  S := Semigroup(L{ListBlist(indexlist,l[i])});
-    #  if Size(S) > 1 then
-    #    S := Semigroup(SmallGeneratingSet(S));
-    #  fi;
-    #  ll[i] := S;
-    #od;
-    #WriteSemigroups(filename,ll);
     dumpcounter := dumpcounter + 1;
     p_secs := secs; #resetting the timer no to mess up the speed gauge 
   end;
