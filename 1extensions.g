@@ -1,3 +1,19 @@
+#bitstring stuff
+AsBitString := function(blist)
+  return List(blist,
+              function(x)
+                if x then
+                  return '1';
+                else
+                  return '0';
+                fi;
+              end);
+end;
+            
+AsBlist := function(bitstr)
+  return BlistList([1..Size(bitstr)],Positions(bitstr,'1'));
+end;
+
 #
 Diff1Step := function(tab, indexlist, base, extender)
   local diff, rowndx,columnndx,i,val;
@@ -69,11 +85,13 @@ SubSgpsBy1Extensions := function(mt)
   end;
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
-    local r,filename,l,i, S,ll;
+    local r,filename,l,i, S,ll,output;
     filename := Concatenation(Name(mt.ts),"_", String(dumpcounter),"subs");
+    output := OutputTextFile(filename, false);
     for r in AsList(result) do
-      WriteGenerators(filename, Semigroup(L{ListBlist(indexlist,r)}));
+      #WriteGenerators(filename, Semigroup(L{ListBlist(indexlist,r)}));
     od;
+    CloseStream(output);
     #WriteSemigroups(filename, List(AsList(result),
     #        r -> Semigroup(
     #                SmallGeneratingSet(
@@ -97,6 +115,7 @@ SubSgpsBy1Extensions := function(mt)
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
       log();
+            Print("#",base);
     fi;
     if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
     bl := ClosureByMulTab(tab, indexlist, base, [s]);
