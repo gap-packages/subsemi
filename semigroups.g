@@ -3,3 +3,4 @@
 S42 := Semigroup([ Transformation( [ 2, 1, 2, 1 ] ),
                Transformation( [ 3, 1, 4, 3 ] ),
                Transformation( [ 3, 1, 4, 4 ] ) ]);
+SetName(S42,"Sgp42");
