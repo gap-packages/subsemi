@@ -1,4 +1,6 @@
 #bitstring stuff
+CODEKEY := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=";
+
 AsBitString := function(blist)
   return List(blist,
               function(x)
@@ -52,7 +54,6 @@ end;
 GenerateSg := function(tab, indexlist,gens)
   return ClosureByMulTab(tab, indexlist,BlistList(indexlist,[]),gens );
 end;
-
 
 TestGenerateSg := function(mt)
   local gens,numofgens,blT,T;
