@@ -14,40 +14,6 @@ AsBlist := function(bitstr)
   return BlistList([1..Size(bitstr)],Positions(bitstr,'1'));
 end;
 
-EncodeBitString := function(bitstr)
-local c,str,i,j;
-  c := '0'; #we assume starting with zero
-  str := "";
-  i := 1;
-  while (i<=Length(bitstr)) do
-    j := 0;
-    while i<=Length(bitstr) and (bitstr[i] = c) do
-      j := j + 1;
-      i := i + 1;
-    od;
-    Append(str, String(j));
-
-    if i <= Length(bitstr) then
-      c := bitstr[i];
-      Append(str, ",");  
-    fi;
-  od;
-  return str;
-end;
-
-DecodeBitString := function(str)
-  local bitstr,l, F, chars,i;
-  bitstr := "";
-  chars := "01";
-  F := 0;
-  l := EvalString(Concatenation("[", str, "]"));
-  for i in l do
-    Append(bitstr, ListWithIdenticalEntries(i,chars[F+1]));
-    F := (F+1) mod 2;
-  od;
-  return bitstr;
-end;
-
 #
 Diff1Step := function(tab, indexlist, base, extender)
   local diff, rowndx,columnndx,i,val;
