@@ -1,6 +1,41 @@
 #bitstring stuff
 CODEKEY := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=";
 
+EncodeBitString := function (bitstr)
+  local str,k,i,chunk;
+  k := Int(Length(bitstr)/6);
+  str := "";
+  for i in [1..k] do
+    chunk := List(bitstr{[(6*(i-1))+1..6*i]},
+                  function(x)if x='0' then return 0; else return 1;fi;end);
+    Add(str,CODEKEY[Sum(List([0..5],x->2^x*chunk[x+1]))+1]);
+  od;
+  return Concatenation(str,bitstr{[6*k+1..Length(bitstr)]});
+end;
+
+DecodeBitString := function(str)
+  local bitstr,c,p,i,l;
+  bitstr := "";
+  for c in str do
+    if c in "01" then
+      Add(bitstr, c);
+    else
+      p := Position(CODEKEY,c);
+      l := "";
+      for i in Reversed([0..5]) do
+        if p > 2^i then
+          Add(l,'1');
+          p := p - 2^i;
+        else
+          Add(l,'0');
+        fi;
+      od;
+      Append(bitstr, Reversed(l));
+    fi;
+  od;
+  return bitstr;
+end;
+
 AsBitString := function(blist)
   return List(blist,
               function(x)
