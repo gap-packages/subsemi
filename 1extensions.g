@@ -1,4 +1,7 @@
 #bitstring stuff
+
+#the idea is to pack 6 bits into a single character by using this lookup string
+#trailing bits are just written out (that is why no 1s and 0s in the key)
 CODEKEY := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=";
 
 EncodeBitString := function (bitstr)
@@ -117,19 +120,24 @@ SubSgpsBy1Extensions := function(mt)
     else
       Print("\c\n");
     fi;
-    p_subs := Size(result); p_counter := counter; p_secs := secs;
+    p_subs := Size(result); p_counter := counter;
+    p_secs := IO_gettimeofday().tv_sec;
   end;
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
     local r,filename,l,i, S,ll,output;
+    p_secs := IO_gettimeofday().tv_sec;
     filename := Concatenation(Name(mt.ts),"_", String(dumpcounter),"subs");
     output := OutputTextFile(filename, false);
     for r in AsList(result) do
-      AppendTo(output, AsBitString(r),"\n");
+      AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
     od;
     CloseStream(output);
     dumpcounter := dumpcounter + 1;
-    p_secs := secs; #resetting the timer no to mess up the speed gauge 
+    Print("#Dumping in ",
+          FormattedTimeString(IO_gettimeofday().tv_sec-p_secs),"\n");
+    #resetting the timer no to mess up the speed gauge 
+    p_secs := IO_gettimeofday().tv_sec;
   end;
   #-----------------------------------------------------------------------------
   extend := function(base,s)
@@ -137,7 +145,6 @@ SubSgpsBy1Extensions := function(mt)
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
       log();
-            Print("#",base);
     fi;
     if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
     bl := ClosureByMulTab(tab, indexlist, base, [s]);
