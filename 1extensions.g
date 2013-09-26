@@ -56,7 +56,7 @@ end;
 
 #
 Diff1Step := function(tab, indexlist, base, extender)
-  local diff, rowndx,columnndx,i,val;
+  local diff,i,val;
   #if the extender is already in base then there is nothing to do
   if base[extender] then
     return BlistList(indexlist,[]);;
