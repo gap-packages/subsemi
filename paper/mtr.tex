@@ -35,6 +35,12 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
 
+\newcommand{\SgpDec}{\textsc{SgpDec}}
+\newcommand{\GAP}{\textsc{Gap}}
+\newcommand{\Viz}{\textsc{Viz}}
+\newcommand{\GraphViz}{\textsc{GraphViz}}
+
+
 \begin{document}
 \author{Attila Egri-Nagy}
 \address{...}
@@ -86,7 +92,7 @@ The search visits non-solutions (and we have to store them), therefore without a
 Explicit enumeration of certain structures is often needed in studying the structures themselves, or for providing comprehensive test cases for some algorithms working on them.
 The enumeration is usually done by increasing size and up to isomorphism or conjugacy. 
 
-For semigroups the enumeration by the order is an ongoing quest and currently it is done up to order 9 \cite{smallsemi}. The basic idea is to enumerate all multiplication tables that encode an associative operation. %The enumeration parameter is the size of the multiplication table, i.e.\ the order of the semigroup. 
+For semigroups the enumeration by the order is an ongoing quest and currently it is done up to order 9 \cite{smallsemi,NumOf3NilPotentSgps2012,monoidenum2009,ord10semigroups}. The basic idea is to enumerate all multiplication tables that encode an associative operation. %The enumeration parameter is the size of the multiplication table, i.e.\ the order of the semigroup. 
 Most of the semigroups are 3-nilpotent \cite{smallsemi}. ``So, whereas groups are
 gems, all of them precious, the garden of semigroups is filled with weeds. One
 needs to yank out these weeds to find the interesting semigroups.'' \cite{QBook}.
