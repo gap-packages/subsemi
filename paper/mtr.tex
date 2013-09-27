@@ -3,7 +3,6 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{amsthm}
-\usepackage{eufrak}
 \usepackage{color,hyperref}
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage{tikz}
@@ -15,9 +14,7 @@
             linkcolor=darkblue,urlcolor=darkblue,
             anchorcolor=darkblue,citecolor=darkblue}
 
-\usepackage[ruled,vlined,linesnumbered]{algorithm2e}
-
-%\usepackage{texdraw}
+\usepackage[norelsize,ruled,vlined,linesnumbered]{algorithm2e}
 
 \newcommand{\cT}{{\mathcal T}}
 \newcommand{\cS}{{\mathcal S}}
@@ -38,9 +35,9 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{example}[theorem]{Example}
 
-
+\begin{document}
 \author{Attila Egri-Nagy}
-\address{}
+\address{...}
 %\institute{University of Western Sydney\\
 %School of Computing, Engineering and Mathematics\\
 %Locked Bag 1797, Penrith NSW 2751, Australia\\
@@ -49,11 +46,10 @@
 \title{Enumerating Transformation Semigroups}
 
 %\subjclass{20B05, 20B40, 20M25, 20B07, 68Q70}\keywords{permutation groups, Frobenius-Lagrange coordinates, wreath product, puzzles, groupoid action, permutation puzzles}
-\begin{document}
 
-
-
+\maketitle
 \begin{abstract}
+kl
 %Motivated by the problem of enumerating finite transformation semigroups on $n$ points, here we present a recursive algorithm for the systematic reductions of multiplication tables by cutting elements (i.e.\ removing the corresponding row and column from the table).
 %We can downsize the hopelessly huge search space even if we do not exploit properties of the underlying algebra. 
 %By considering the elements appearing in the diagonal of the table we can define a closure operator on the cuts. 
@@ -61,9 +57,10 @@
 %We use the method to enumerate the subsemigroups of $\cT_4$, the full transformation semigroups on 4 points. 
 \end{abstract}
 
-\maketitle
+
 
 \section{Introduction}
+
 Due to their large number, enumerating the subsemigroups of $\cT_n$ is not a trivial computational task.
 For $n=2$ pen and paper calculation is sufficient, for $n=3$ a brute-force algorithm is still feasible, but for $n=4$ we already have technical challenges.
 There is no single algorithm that is efficient enough to do the enumeration in one go, therefore we apply different methods, each of them exploiting some mathematical properties of (transformation) semigroups, a patchwork of different techniques and tricks. 
@@ -76,10 +73,12 @@ The search visits non-solutions (and we have to store them), therefore without a
 \item Diagonal closure:
 \item Greedy reduction:
 \end{itemize}
+
 \item[Closure search (bottom-up)] This search visits only subsemigroups but can visit the same one many times.
 \item[Conjugacy] For transformation semigroups and for full transformation semigroups and its ideals. Once we find a subsemigroup, then we can calculate its conjugacy class containing more subsemigroups. Same for nonsolutions.
 \item[Rees factors] For ideals we can make the search parallel, since if we have all subsemigroups of the ideal and all the subsemigroups of corresponding Rees factor semigroup then we can just combine these two sets of subsemigroups. 
 \item[Maximal subsemigroups] Starting from the maximal subsemigroups, then we can just form the union.
+
 \end{description}
 
 
