@@ -1,6 +1,7 @@
 LoadPackage("dust"); #needed for MultiGradedSet
 LoadPackage("sgpdec"); #for some util functions
 Read("bf.g");
+Read("blist.g");
 Read("conjugacy.g");
 Read("config.g");
 Read("util.g");

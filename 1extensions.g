@@ -1,59 +1,3 @@
-#bitstring stuff
-
-#the idea is to pack 6 bits into a single character by using this lookup string
-#trailing bits are just written out (that is why no 1s and 0s in the key)
-CODEKEY := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=";
-
-EncodeBitString := function (bitstr)
-  local str,k,i,chunk;
-  k := Int(Length(bitstr)/6);
-  str := "";
-  for i in [1..k] do
-    chunk := List(bitstr{[(6*(i-1))+1..6*i]},
-                  function(x)if x='0' then return 0; else return 1;fi;end);
-    Add(str,CODEKEY[Sum(List([0..5],x->2^x*chunk[x+1]))+1]);
-  od;
-  return Concatenation(str,bitstr{[6*k+1..Length(bitstr)]});
-end;
-
-DecodeBitString := function(str)
-  local bitstr,c,p,i,l;
-  bitstr := "";
-  for c in str do
-    if c in "01" then
-      Add(bitstr, c);
-    else
-      p := Position(CODEKEY,c);
-      l := "";
-      for i in Reversed([0..5]) do
-        if p > 2^i then
-          Add(l,'1');
-          p := p - 2^i;
-        else
-          Add(l,'0');
-        fi;
-      od;
-      Append(bitstr, Reversed(l));
-    fi;
-  od;
-  return bitstr;
-end;
-
-AsBitString := function(blist)
-  return List(blist,
-              function(x)
-                if x then
-                  return '1';
-                else
-                  return '0';
-                fi;
-              end);
-end;
-            
-AsBlist := function(bitstr)
-  return BlistList([1..Size(bitstr)],Positions(bitstr,'1'));
-end;
-
 #
 Diff1Step := function(tab, indexlist, base, extender)
   local diff,i,val;
@@ -80,7 +24,7 @@ ClosureByMulTab := function(tab, indexlist,base,extension)
   queue := BlistList(indexlist,extension);
   nbase := ShallowCopy(base);
   while SizeBlist(queue) > 0 do
-    i := FirstEntry(queue);
+    i := Position(queue,true); # it is not empty, so this is ok
     diff1step := Diff1Step(tab, indexlist,nbase, i);
     UniteBlist(queue, diff1step);
     queue[i] := false;
@@ -166,7 +110,7 @@ SubSgpsBy1Extensions := function(mt)
   syms := mt.syms;
   indexlist := mt.rn;
   tab := mt.mt;
-  result := MultiGradedSet([SizeBlist,FirstEntry,LastEntry]);#[];
+  result := MultiGradedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);#[];
   counter := 0;
   p_secs := IO_gettimeofday().tv_sec;
   for s in indexlist do
