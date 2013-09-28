@@ -43,7 +43,8 @@ end;
 # mt - MulTab, multiplication table
 SubSgpsBy1Extensions := function(mt)
   local s, L, extend, result,  indexlist, syms,
-        counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab;
+        counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab,
+        extend_conjreponly;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -78,8 +79,9 @@ SubSgpsBy1Extensions := function(mt)
     p_secs := TimeInSeconds();
   end;
   #-----------------------------------------------------------------------------
+  #ORIGINAL
   extend := function(base,s)
-    local T, t, bl;
+    local t, bl;
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
@@ -100,6 +102,33 @@ SubSgpsBy1Extensions := function(mt)
     od;
   end;
   #-----------------------------------------------------------------------------
+  extend_conjreponly := function(base,s)
+    local C, t, bl;
+    #HOUSEKEEPING: logging, dumping
+    counter := counter + 1;
+    if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
+      log();
+    fi;
+    if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
+    #calculating the new subsgp
+    bl := ClosureByMulTab(tab, indexlist, base, [s]);
+    #its conjugacy class
+    C := List(syms, g -> OnFiniteSet(bl,g));
+    Add(C,bl);
+    Sort(C);
+    bl := C[1]; #the canonical rep
+    if  bl in result then
+      return; #just bail out if we already have it
+    fi;
+    #STORE
+    AddSet(result, bl);
+    #RECURSION
+    for t in Difference(indexlist, ListBlist(indexlist,bl)) do
+      extend_conjreponly(bl,t);
+    od;
+  end;
+  #-----------------------------------------------------------------------------
+
   if not HasName(mt.ts) then #enforcing proper naming of the semigroup
     Print("#Semigroup has no name. Dump would fail!");
     return fail;
@@ -108,12 +137,13 @@ SubSgpsBy1Extensions := function(mt)
   syms := mt.syms;
   indexlist := mt.rn;
   tab := mt.mt;
-  result := MultiGradedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);#[];
+  result := MultiGradedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);#[];#IndexedSet(12, BinaryBlistIndexer(12), ListWithIdenticalEntries(12,2));
   counter := 0;
   p_secs := TimeInSeconds();
   for s in indexlist do
     Print("# ", String(s),"/",String(Size(indexlist)),"\n");
-    extend(BlistList(indexlist, []),s);
+    #if IsEmpty(syms)
+    extend_conjreponly(BlistList(indexlist, []),s);
   od;
   log();
   dump();
