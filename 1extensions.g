@@ -47,7 +47,7 @@ SubSgpsBy1Extensions := function(mt)
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
-    secs := IO_gettimeofday().tv_sec;
+    secs := TimeInSeconds();
     Print("#", FormattedBigNumberString(counter)," subs:",Size(result)," in ",
           FormattedMemoryString(MemoryUsage(result))," ",
           FormattedFloat(Float((100*(Size(result)-p_subs))/(counter-p_counter)))
@@ -59,12 +59,12 @@ SubSgpsBy1Extensions := function(mt)
       Print("\c\n");
     fi;
     p_subs := Size(result); p_counter := counter;
-    p_secs := IO_gettimeofday().tv_sec;
+    p_secs := TimeInSeconds();
   end;
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
     local r,filename,l,i, S,ll,output;
-    p_secs := IO_gettimeofday().tv_sec;
+    p_secs := TimeInSeconds();
     filename := Concatenation(Name(mt.ts),"_", String(dumpcounter),"subs");
     output := OutputTextFile(filename, false);
     for r in AsList(result) do
@@ -73,9 +73,9 @@ SubSgpsBy1Extensions := function(mt)
     CloseStream(output);
     dumpcounter := dumpcounter + 1;
     Print("#Dumping in ",
-          FormattedTimeString(IO_gettimeofday().tv_sec-p_secs),"\n");
+          FormattedTimeString(TimeInSeconds()-p_secs),"\n");
     #resetting the timer no to mess up the speed gauge 
-    p_secs := IO_gettimeofday().tv_sec;
+    p_secs := TimeInSeconds();
   end;
   #-----------------------------------------------------------------------------
   extend := function(base,s)
@@ -110,7 +110,7 @@ SubSgpsBy1Extensions := function(mt)
   tab := mt.mt;
   result := MultiGradedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);#[];
   counter := 0;
-  p_secs := IO_gettimeofday().tv_sec;
+  p_secs := TimeInSeconds();
   for s in indexlist do
     Print("# ", String(s),"/",String(Size(indexlist)),"\n");
     extend(BlistList(indexlist, []),s);

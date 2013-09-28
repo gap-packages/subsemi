@@ -1,4 +1,6 @@
-
+TimeInSeconds := function()
+  return IO_gettimeofday().tv_sec;  
+end;
 
 #the set of transformations  is a semigroup if they don't generate
 #new elements
