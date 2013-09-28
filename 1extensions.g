@@ -1,51 +1,30 @@
- #
- Diff1Step := function(tab, indexlist, base, extender)
-  local diff,i,val;
-  #if the extender is already in base then there is nothing to do
-  if base[extender] then
-    return BlistList(indexlist,[]);;
-  fi;
-  diff := BlistList(indexlist,[extender]);
-  for i in indexlist do
-    if base[i] then
-      val := tab[i][extender];
-      if not base[val] then diff[val] := true; fi;
-      val := tab[extender][i];
-      if not base[val] then diff[val] := true; fi;
-    fi;    
-  od;
-  diff[tab[extender][extender]] := true;
-  return diff;
-end;
-
-#the closure of the set (subsgp)
+#the closure of base the extension to closure (subsgp)
 ClosureByMulTab := function(tab, indexlist,base,extension)
-  local queue,diff, nbase,i,j,val;
+  local queue,diff, closure,i,j,val;
   queue := BlistList(indexlist,extension);
-  nbase := ShallowCopy(base);
+  closure := ShallowCopy(base);
   while SizeBlist(queue) > 0 do
     i := Position(queue,true); # it is not empty, so this is ok
-    #diff1step := Diff1Step(tab, indexlist,nbase, i);
-    #if the extender is already in base then there is nothing to do
-    if nbase[i] then
-        ; #we already have it, nothing to do
+    if closure[i] then
+      ; #we already have it, nothing to do
     else
+      #we calculate the difference induced by 1
       diff := BlistList(indexlist,[i]);
       for j in indexlist do
-        if nbase[j] then
+        if closure[j] then
           val := tab[j][i];
-          if not nbase[val] then diff[val] := true; fi;
+          if not closure[val] then diff[val] := true; fi;
           val := tab[i][j];
-          if not nbase[val] then diff[val] := true; fi;
+          if not closure[val] then diff[val] := true; fi;
         fi;    
       od;
       diff[tab[i][i]] := true;
       UniteBlist(queue, diff);  
     fi;   
     queue[i] := false;
-    nbase[i] := true;    
+    closure[i] := true;    
   od;
-  return nbase;
+  return closure;
 end;
 
 GenerateSg := function(tab, indexlist,gens)
@@ -101,17 +80,21 @@ SubSgpsBy1Extensions := function(mt)
   #-----------------------------------------------------------------------------
   extend := function(base,s)
     local T, t, bl;
+    #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
       log();
     fi;
     if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
+    #calculating the new subsgp
     bl := ClosureByMulTab(tab, indexlist, base, [s]);
     if  bl in result then
       return; #just bail out if we already have it
     fi;
+    #STORE
     AddSet(result, bl);
     Perform(List(syms, g -> OnFiniteSet(bl,g)),function(b)AddSet(result,b);end);
+    #RECURSION
     for t in Difference(indexlist, ListBlist(indexlist,bl)) do
       extend(bl,t);
     od;
