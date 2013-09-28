@@ -1,6 +1,6 @@
 Read("MTR.g");
 
-K42 := SemigroupIdealByGenerators(SingularSemigroup(4),[Transformation([1,1,2,2])]);
+K42 := SemigroupIdealByGenerators(SingularTransformationSemigroup(4),[Transformation([1,1,2,2])]);
 rfh := ReesFactorHomomorphism(K42);
 T := Range(rfh);
 SetName(T,"K43-K42");
