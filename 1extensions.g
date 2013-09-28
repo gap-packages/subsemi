@@ -1,5 +1,5 @@
-#
-Diff1Step := function(tab, indexlist, base, extender)
+ #
+ Diff1Step := function(tab, indexlist, base, extender)
   local diff,i,val;
   #if the extender is already in base then there is nothing to do
   if base[extender] then
@@ -20,13 +20,28 @@ end;
 
 #the closure of the set (subsgp)
 ClosureByMulTab := function(tab, indexlist,base,extension)
-  local queue,diff1step, nbase,i;
+  local queue,diff, nbase,i,j,val;
   queue := BlistList(indexlist,extension);
   nbase := ShallowCopy(base);
   while SizeBlist(queue) > 0 do
     i := Position(queue,true); # it is not empty, so this is ok
-    diff1step := Diff1Step(tab, indexlist,nbase, i);
-    UniteBlist(queue, diff1step);
+    #diff1step := Diff1Step(tab, indexlist,nbase, i);
+    #if the extender is already in base then there is nothing to do
+    if nbase[i] then
+        ; #we already have it, nothing to do
+    else
+      diff := BlistList(indexlist,[i]);
+      for j in indexlist do
+        if nbase[j] then
+          val := tab[j][i];
+          if not nbase[val] then diff[val] := true; fi;
+          val := tab[i][j];
+          if not nbase[val] then diff[val] := true; fi;
+        fi;    
+      od;
+      diff[tab[i][i]] := true;
+      UniteBlist(queue, diff);  
+    fi;   
     queue[i] := false;
     nbase[i] := true;    
   od;
