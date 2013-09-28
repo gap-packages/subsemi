@@ -16,6 +16,25 @@ local i;
   return i;
 end;
 
+BinaryBlistIndexer := function(n)
+  local f;
+  f := function(blist)
+    local i,l;
+    l := EmptyPlist(n);
+    i := (Size(blist) - n)+1; 
+    while i <= Size(blist) do
+      if blist[i] then
+        Add(l,2);
+      else
+        Add(l,1);
+      fi;
+      i :=  i +1;
+    od;
+    return l;
+  end;  
+  return f;
+end;
+
 ### BITLIST - BITSTRING - COMPRESSED STRING ####################################
 #the idea is to pack 6 bits into a single character by using this lookup string
 #trailing bits are just written out (that is why no 1s and 0s in the key)
