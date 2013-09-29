@@ -137,7 +137,8 @@ SubSgpsBy1Extensions := function(mt)
   syms := mt.syms;
   indexlist := mt.rn;
   tab := mt.mt;
-  result := MultiGradedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);#[];#IndexedSet(12, BinaryBlistIndexer(12), ListWithIdenticalEntries(12,2));
+  result := DynamicIndexedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
+    #IndexedSet(13,BinaryBlistIndexer(13), ListWithIdenticalEntries(13,2));
   counter := 0;
   p_secs := TimeInSeconds();
   for s in indexlist do
