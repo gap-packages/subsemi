@@ -103,7 +103,7 @@ SubSgpsBy1Extensions := function(mt)
   end;
   #-----------------------------------------------------------------------------
   extend_conjreponly := function(base,s)
-    local C, t, bl;
+    local C,  bl;
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
@@ -113,9 +113,8 @@ SubSgpsBy1Extensions := function(mt)
     #calculating the new subsgp
     bl := ClosureByMulTab(tab, indexlist, base, [s]);
     #its conjugacy class
-    C := List(syms, g -> OnFiniteSet(bl,g));
-    Add(C,bl);
-    Sort(C);
+    C := [bl];
+    Perform(syms, function(g) AddSet(C,OnFiniteSet(bl,g));end);
     bl := C[1]; #the canonical rep
     if  bl in result then
       return; #just bail out if we already have it
@@ -123,9 +122,11 @@ SubSgpsBy1Extensions := function(mt)
     #STORE
     AddSet(result, bl);
     #RECURSION
-    for t in Difference(indexlist, ListBlist(indexlist,bl)) do
-      extend_conjreponly(bl,t);
-    od;
+    Perform(Difference(indexlist, ListBlist(indexlist,bl)),
+            function(t) extend_conjreponly(bl,t);end);#t->extend_conjreponly(bl,t));
+    #for t in Difference(indexlist, ListBlist(indexlist,bl)) do
+    #  extend_conjreponly(bl,t);
+    #od;
   end;
   #-----------------------------------------------------------------------------
 
