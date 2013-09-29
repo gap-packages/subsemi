@@ -123,10 +123,7 @@ SubSgpsBy1Extensions := function(mt)
     AddSet(result, bl);
     #RECURSION
     Perform(Difference(indexlist, ListBlist(indexlist,bl)),
-            function(t) extend_conjreponly(bl,t);end);#t->extend_conjreponly(bl,t));
-    #for t in Difference(indexlist, ListBlist(indexlist,bl)) do
-    #  extend_conjreponly(bl,t);
-    #od;
+            function(t) extend_conjreponly(bl,t);end);
   end;
   #-----------------------------------------------------------------------------
 
