@@ -110,7 +110,7 @@ ReduceMulTab := function(arg)
 local mt,log,waiting,startcut, cutpoints,i,cut,blocker;
   mt := arg[1]; #the mulitplication table data structure
   #the log keeps track of visited cuts, anything that can do AddSet and in
-  log := MultiGradedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
+  log := DynamicIndexedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
   waiting := Stack(); #new cuts waiting to be examined, queue is worse
   ### the main function starts here ############################################
   if IsBound(arg[2]) then
