@@ -1,6 +1,6 @@
 #the closure of base the extension to closure (subsgp)
 ClosureByMulTab := function(tab, indexlist,base,extension)
-  local queue,diff, closure,i,j,val;
+  local queue,diff, closure,i,j;
   queue := BlistList(indexlist,extension);
   closure := ShallowCopy(base);
   while SizeBlist(queue) > 0 do
@@ -12,17 +12,16 @@ ClosureByMulTab := function(tab, indexlist,base,extension)
       diff := BlistList(indexlist,[i]);
       for j in indexlist do
         if closure[j] then
-          val := tab[j][i];
-          if not closure[val] then diff[val] := true; fi;
-          val := tab[i][j];
-          if not closure[val] then diff[val] := true; fi;
+          diff[tab[j][i]] := true;
+          diff[tab[i][j]] := true;
         fi;    
       od;
       diff[tab[i][i]] := true;
+      SubtractBlist(diff,closure);
       UniteBlist(queue, diff);  
+      closure[i] := true; #adding i  
     fi;   
-    queue[i] := false;
-    closure[i] := true;    
+    queue[i] := false; #removing i from the queue
   od;
   return closure;
 end;
