@@ -48,13 +48,12 @@ SubSgpsBy1Extensions := function(mt)
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
-    Print("#", FormattedBigNumberString(counter)," subs:",Size(result)," in ",
+    Print("#", FormattedBigNumberString(counter)," #",Size(result)," ",
           FormattedMemoryString(MemoryUsage(result))," ",
-          FormattedFloat(Float((100*(Size(result)-p_subs))/(counter-p_counter)))
-          ," sgps/100 checks ");
+          FormattedPercentageString(Size(result)-p_subs,counter-p_counter)," ");
     if (secs-p_secs) > 0 then
       Print(FormattedFloat(Float((Size(result)-p_subs)/(secs-p_secs))),
-            " sgps/sec\c\n");
+            "/s\c\n");
     else
       Print("\c\n");
     fi;
