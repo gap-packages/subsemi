@@ -133,7 +133,7 @@ SubSgpsBy1Extensions := function(mt)
   syms := mt.syms;
   indexlist := mt.rn;
   tab := mt.mt;
-  result := DynamicIndexedSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
+  result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
     #IndexedSet(13,BinaryBlistIndexer(13), ListWithIdenticalEntries(13,2));
   counter := 0;
   p_secs := TimeInSeconds();
