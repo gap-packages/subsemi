@@ -22,6 +22,8 @@
 \newcommand{\Max}{\mathbf{Max}}
 \newcommand{\compl}{\mathsf{c}}
 
+\DeclareMathOperator{\Aut}{Aut}
+
 \newcommand{\todo}[1]{ \small \textsf{[TODO:  #1 ]} \normalsize}
 
 
@@ -121,7 +123,14 @@ It follows from the fact that $\Sub(S)$ is an algebraic lattice.
 \qed
 
 \begin{lemma}
+Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle T,U \rangle\mid T\in \Sub(S/I), U\in\Sub(I)\big\}.$$
+\end{lemma}
+\proof
 
+\qed
+
+\begin{lemma}
+$T\in\Sub(S)$ and $g\in \Aut(S)$ then $gTg^{-1}\in\Sub(S)$.
 \end{lemma}
 
 \section{The algorithm}
