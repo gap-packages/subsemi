@@ -43,7 +43,7 @@ end;
 SubSgpsBy1Extensions := function(mt)
   local s, L, extend, result,  indexlist, syms,
         counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab,
-        extend_conjreponly;
+        extend_conjreponly;#,boosters;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -109,7 +109,7 @@ SubSgpsBy1Extensions := function(mt)
     fi;
     if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
     #calculating the new subsgp
-    bl := ClosureByMulTab(tab, indexlist, base, [s]);
+    bl := ClosureByMulTab(tab, indexlist, base, [s]);#boosters[s]);#[s]);
     #its conjugacy class
     C := [bl];
     Perform(syms, function(g) AddSet(C,OnFiniteSet(bl,g));end);
@@ -133,6 +133,7 @@ SubSgpsBy1Extensions := function(mt)
   syms := mt.syms;
   indexlist := mt.rn;
   tab := mt.mt;
+  #boosters := List([1..mt.n], i->ListBlist(mt.rn,(GenerateSg(mt.mt,mt.rn,[i]))));
   result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
     #IndexedSet(13,BinaryBlistIndexer(13), ListWithIdenticalEntries(13,2));
   counter := 0;
@@ -144,5 +145,6 @@ SubSgpsBy1Extensions := function(mt)
   od;
   log();
   dump();
+  Print("#",counter,"\n");
   return result;
 end;
