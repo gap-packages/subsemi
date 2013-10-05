@@ -51,7 +51,7 @@ end;
 #sorted list
 NonTrivialSymmetriesOfElementIndices := function(M,G)
   local syms;
-  syms := List(G, g -> AsPermutation(TransformationOp(g,AsSortedList(M),\^)));
+  syms := List(G, g -> AsPermutation(TransformationOp(g,M,\^)));
   Remove(syms, Position(syms,()));    #remove the identity to save time later
   return syms;
 end;
@@ -60,11 +60,10 @@ end;
 #sorted list
 #through a homomorphism
 NonTrivialSymmetriesOfElementIndicesThroughHom := function(M,G,hom)
-  local syms,L;
-  L := AsSortedList(M);
+  local syms;
   syms := List(G, g ->
                AsPermutation(
-                       TransformationOp(g,L,
+                       TransformationOp(g,M,
                                function(p,t)
                                  return Image(hom,PreImagesRepresentative(hom,p)^t);
                                end)));

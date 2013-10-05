@@ -32,7 +32,7 @@ local n,freqs,p,i,j,mt,sortedts,syms,ts,mtrecord;
   ts := arg[1];
   n := Size(ts);
   #this sorting is used to construct the multiplication table
-  sortedts := (SortByMulTabFreqs(AsSortedList(ts)));
+  sortedts := AsSortedList(ts);#(SortByMulTabFreqs(AsSortedList(ts)));
   #we store the table and also the frequencies of the elements
   freqs := List([1..n], x -> 0);
   mt := List([1..n], x->ListWithIdenticalEntries(n,0));
@@ -57,9 +57,9 @@ local n,freqs,p,i,j,mt,sortedts,syms,ts,mtrecord;
   #arg[2] is an automorphism group of ts in case it is there
   if IsBound(arg[2]) then
     if IsBound(arg[3]) then
-      mtrecord.syms := NonTrivialSymmetriesOfElementIndicesThroughHom(ts,arg[2],arg[3]);
+      mtrecord.syms := NonTrivialSymmetriesOfElementIndicesThroughHom(sortedts,arg[2],arg[3]);
     else
-      mtrecord.syms := NonTrivialSymmetriesOfElementIndices(ts,arg[2]);
+      mtrecord.syms := NonTrivialSymmetriesOfElementIndices(sortedts,arg[2]);
     fi;
     mtrecord.CONJUGACY:=true;
   fi;
