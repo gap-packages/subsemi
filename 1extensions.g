@@ -39,6 +39,14 @@ TestGenerateSg := function(mt)
   return blT = BlistList(mt.rn, List(AsList(T), t->Position(mt.sortedts,t)));
 end;
 
+SameSgpEquivs := function(mt)
+local al,i;  
+  al := AssociativeList();
+  for i in mt.rn do Assign(al,i,GenerateSg(mt.mt, mt.rn, [i]));od;
+  al := ReversedAssociativeList(al);
+  return Filtered(ValueSet(al), x->Length(x)>1);
+end;
+
 # mt - MulTab, multiplication table
 SubSgpsBy1Extensions := function(mt)
   local s, L, extend, result,  indexlist, syms,
