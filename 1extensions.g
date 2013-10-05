@@ -51,7 +51,7 @@ end;
 SubSgpsBy1Extensions := function(mt)
   local s, L, extend, result,  indexlist, syms,
         counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab,
-        extend_conjreponly;#,boosters;
+        extend_conjreponly,equivs, indexblist;#,boosters;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -109,7 +109,7 @@ SubSgpsBy1Extensions := function(mt)
   end;
   #-----------------------------------------------------------------------------
   extend_conjreponly := function(base,s)
-    local C,  bl;
+    local C,  bl, diff,f,i;
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
     if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
@@ -128,8 +128,20 @@ SubSgpsBy1Extensions := function(mt)
     #STORE
     AddSet(result, bl);
     #RECURSION
-    Perform(Difference(indexlist, ListBlist(indexlist,bl)),
-            function(t) extend_conjreponly(bl,t);end);
+    diff := DifferenceBlist(indexblist, bl);
+    for C in equivs do #keep maximum one from each equiv class
+      f := false;
+      for i in C do
+        if diff[i] then
+          if f then
+            diff[i] := false;
+          else
+            f := true;
+          fi;
+        fi;
+      od;
+    od;
+    Perform(ListBlist(indexlist,diff), function(t) extend_conjreponly(bl,t);end);
   end;
   #-----------------------------------------------------------------------------
 
@@ -140,7 +152,9 @@ SubSgpsBy1Extensions := function(mt)
   L := mt.sortedts;
   syms := mt.syms;
   indexlist := mt.rn;
+  indexblist := BlistList(mt.rn,mt.rn);
   tab := mt.mt;
+  equivs := SameSgpEquivs(mt);
   #boosters := List([1..mt.n], i->ListBlist(mt.rn,(GenerateSg(mt.mt,mt.rn,[i]))));
   result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
     #IndexedSet(13,BinaryBlistIndexer(13), ListWithIdenticalEntries(13,2));
