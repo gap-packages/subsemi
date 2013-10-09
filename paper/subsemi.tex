@@ -1,0 +1,65 @@
+\documentclass{amsart}
+
+
+\newcommand{\cT}{{\mathcal T}}
+\newcommand{\cS}{{\mathcal S}}
+\newcommand{\Sub}{\mathbf{Sub}}
+\newcommand{\Max}{\mathbf{Max}}
+\newcommand{\compl}{\mathsf{c}}
+
+\DeclareMathOperator{\Aut}{Aut}
+
+\newcommand{\todo}[1]{ \small \textsf{[TODO:  #1 ]} \normalsize}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{Proposition}[theorem]{Proposition}
+\newtheorem{cor}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\newcommand{\SgpDec}{\textsc{SgpDec}}
+\newcommand{\GAP}{\textsc{Gap}}
+\newcommand{\Viz}{\textsc{Viz}}
+\newcommand{\GraphViz}{\textsc{GraphViz}}
+
+
+
+\begin{document}
+\section{Notation}
+%Let $(X,S)$ be a transformation semigroup, $n=|S|$.
+Let $S$ be a semigroup, $n=|S|$.
+We fix an order on the semigroup elements, $s_1,\ldots, s_n$, so we can easily refer to the elements by their indices. 
+Then the  \emph{multiplication table}, or \emph{Cayley-table} of $S$ is a $n\times n$ matrix $M$ with entries from $\{1,..,n\}$ such that $M_{i,j}=k$ if $s_is_j=s_k$.
+$\Sub(S)=\big\{T\mid T\leq S \big\}$ the set of all subsemigroups, $\Max(S)$ the set of maximal proper subsemigroups.
+
+\section{Useful facts}
+We can simplify and parallelize enumerating subsemigroups by enumerating subsemigroups of its maximal subsemigroups.
+\begin{fact}
+$\Sub(S)=\big( \bigcup_{T\in \Max(S)}\Sub(T)\big)\cup \{S\}$
+\end{fact}
+\proof
+It follows from the fact that $\Sub(S)$ is an algebraic lattice.
+\qed
+
+\begin{lemma}
+Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle T,U \rangle\mid T\in \Sub(S/I), U\in\Sub(I)\big\}.$$
+\end{lemma}
+\proof
+
+\qed
+
+\begin{lemma}
+$T\in\Sub(S)$ and $g\in \Aut(S)$ then $g^{-1}Tg\in\Sub(S)$.
+\end{lemma}
+\proof
+Let $s,t\in T$ and $T'=g^{-1}Tg$.
+$$g^{-1}sgg^{-1}tg=g^{-1}stg.$$
+\qed
+\end{document}
+
+$\cS_n$ denotes the symmetric group, $\cT_n$ the full transformation group on $n$ points.
