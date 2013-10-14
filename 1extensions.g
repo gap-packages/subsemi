@@ -72,6 +72,7 @@ SubSgpsBy1Extensions := function(mt)
   dump := function() #write all the subsemigroups into a file
     local r,filename,l,i, S,ll,output;
     p_secs := TimeInSeconds();
+    if not HasName(mt.ts) then Print("# No name, no dump!\n");return;fi;
     filename := Concatenation(Name(mt.ts),"_", String(dumpcounter),"subs");
     output := OutputTextFile(filename, false);
     for r in AsList(result) do
@@ -144,11 +145,7 @@ SubSgpsBy1Extensions := function(mt)
     Perform(ListBlist(indexlist,diff), function(t) extend_conjreponly(bl,t);end);
   end;
   #-----------------------------------------------------------------------------
-
-  if not HasName(mt.ts) then #enforcing proper naming of the semigroup
-    Print("#Semigroup has no name. Dump would fail!");
-    return fail;
-  fi;
+  #MAIN
   L := mt.sortedts;
   syms := mt.syms;
   indexlist := mt.rn;
