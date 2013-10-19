@@ -7,4 +7,7 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-DeclateGlobalFunction("CalcMulTabAndFreqs");
+DeclateGlobalFunction("MagmaProducts");
+DeclateGlobalFunction("Frequencies");
+
+DeclateGlobalFunction("MulTab");
