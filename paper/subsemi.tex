@@ -47,7 +47,7 @@
 \begin{document}
 \section{Notation}
 %Let $(X,S)$ be a transformation semigroup, $n=|S|$.
-Let $S$ be a semigroup, $n=|S|$.
+Let $S$ be finite a semigroup, $n=|S|$.
 We fix an order on the semigroup elements, $s_1,\ldots, s_n$, so we can easily refer to the elements by their indices. 
 Then the  \emph{multiplication table}, or \emph{Cayley-table} of $S$ is a $n\times n$ matrix $M$ with entries from $\{1,..,n\}$ such that $M_{i,j}=k$ if $s_is_j=s_k$.
 $\Sub(S)=\big\{T\mid T\leq S \big\}$ the set of all subsemigroups, $\Max(S)$ the set of maximal proper subsemigroups.
@@ -59,9 +59,17 @@ We can simplify and parallelize enumerating subsemigroups by enumerating subsemi
 \begin{fact}
 $\Sub(S)=\big( \bigcup_{T\in \Max(S)}\Sub(T)\big)\cup \{S\}$
 \end{fact}
-\proof
-It follows from the fact that $\Sub(S)$ is an algebraic lattice.
-\qed
+%\proof
+%It follows from the fact that $\Sub(S)$ is an algebraic lattice.
+%\qed
+
+\begin{fact}
+$T\in\Sub(S)$ and $g\in \Aut(S)$ then $T^g\in\Sub(S)$.%$g^{-1}Tg\in\Sub(S)$.
+\end{fact}
+%\proof
+%Let $s,t\in T$ and $T'=g^{-1}Tg$.
+%$$g^{-1}sgg^{-1}tg=g^{-1}stg.$$
+%\qed
 
 
 Enumeration is truly parallel for an ideal and its corresponding factor semigroup followed by a combining the results.
@@ -72,13 +80,6 @@ Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle (T\setminus\{0\})\cup U
 
 \qed
 
-\begin{lemma}
-$T\in\Sub(S)$ and $g\in \Aut(S)$ then $g^{-1}Tg\in\Sub(S)$.
-\end{lemma}
-\proof
-Let $s,t\in T$ and $T'=g^{-1}Tg$.
-$$g^{-1}sgg^{-1}tg=g^{-1}stg.$$
-\qed
 
 
 
