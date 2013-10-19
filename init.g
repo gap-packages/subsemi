@@ -1,1 +1,1 @@
-ReadPackage("SubSemi","/lib/multab.gi");
+ReadPackage("SubSemi","/lib/multab.gd");
