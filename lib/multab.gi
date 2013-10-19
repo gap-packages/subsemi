@@ -7,18 +7,19 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-#based on the order of the sorted magma, indices are assigned to elements
+#based on the order of the magma elements in list,
+#indices are assigned to elements
 #mulitplication table and table of frequencies calculated
-InstallGlobalFunction(CalcMulTabAndFreqs,
-function(SM) #sorted magma
+InstallGlobalFunction(MagmaProducts,
+function(M) #magma in a list
 local n,freqs, mt,i,j,p;
-  n := Size(SM);
+  n := Size(M);
   freqs := List([1..n], x -> 0);
   mt := List([1..n], x->ListWithIdenticalEntries(n,0));
   #just a double loop to have all products
   for i in [1..n] do
     for j in [1..n] do
-      p := Position(SM, SM[i]*SM[j]);
+      p := Position(M, M[i]*M[j]);
       mt[i][j] := p;
       freqs[p] := freqs[p] + 1;
     od;
