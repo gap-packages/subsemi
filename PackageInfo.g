@@ -75,8 +75,9 @@ PackageDoc := rec(
 
 Dependencies := rec(
  GAP := ">= 4.6",
- NeededOtherPackages := [["GAPDoc", ">=1.5"],  #StringPrint
-                   ["semigroups", ">=1.3"] #hashtable functionalities
+ NeededOtherPackages := [["GAPDoc", ">=1.5"],
+                   ["semigroups", ">=1.3"],
+                   ["dust", ">=0.1.13"]
                    ],
  SuggestedOtherPackages := [],#["viz", ">=0.2"]], #Draw, Splash]
  ExternalConditions := [ ]
