@@ -7,7 +7,7 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-DeclareGlobalFunction("MagmaProducts");
-DeclareGlobalFunction("Frequencies");
+DeclareGlobalFunction("ProductTableOfElements");
+DeclareGlobalFunction("FrequenciesInProductTable");
 
 DeclareGlobalFunction("MulTab");
