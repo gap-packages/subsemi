@@ -1,21 +1,32 @@
+################################################################################
+##
+## SubSemi
+##
+## Symmetries of transformations
+##
+## Copyright (C) 2013  Attila Egri-Nagy
+##
+
 # returns the conjugate of a transformation collection by a permutation
 # if it is a semigroup, then only the generators are conjugated
 # T - a collection of transformations
 # perm - a permutation
-ConjugateTransformationCollection := function(T, perm)
+InstallGlobalFunction(ConjugateTransformationCollection,
+function(T, perm)
   if IsSemigroup(T) then
     return Semigroup(List(GeneratorsOfSemigroup(T), s -> s^perm));
   else
     return List(T, t -> t^perm);
   fi;
-end;
+end);
 
 # returns the distinct conjugates by the elements of G of the collection
 # this always return a list of transformation collections, since isomorphism
 # testing for semigroups is not yet available TODO
 # T - a collection of transformations
 # G - permutations, most likely a group
-ConjugacyClassOfTransformationCollection := function(T,G)
+InstallGlobalFunction(ConjugacyClassOfTransformationCollection,
+function(T,G)
 local g, conjugate, conjclass;
   conjclass := [];
   for g in G do
@@ -24,14 +35,17 @@ local g, conjugate, conjclass;
     AddSet(conjclass, AsSortedList(conjugate));
   od;
   return conjclass;
-end;
+end);
 
-ConjugacyClassOfTransformation := function(t,G)
+InstallGlobalFunction(ConjugacyClassOfTransformation,
+function(t,G)
   return DuplicateFreeList(List(G, g -> t^g));
-end;
+end);
+
 #example usage: you have all subsemigroups of T_n, but no idea about conjugacy
 #classes, this function finds those classes
-CalculateConjugacyClassesOfTransformations := function(T,G)
+InstallGlobalFunction(CalculateConjugacyClassesOfTransformations,
+function(T,G)
 local log, #every conjugates we found so far
       classes, #the result will be a list of conjugacy classes
       cl,
@@ -45,21 +59,23 @@ local log, #every conjugates we found so far
     fi;
   od;
   return classes;
-end;
+end);
 
 #getting conjugacy symmetries that act on the magma's elements' indices in the
 #sorted list
-NonTrivialSymmetriesOfElementIndices := function(M,G)
+InstallGlobalFunction(NonTrivialSymmetriesOfElementIndices,
+function(M,G)
   local syms;
   syms := List(G, g -> AsPermutation(TransformationOp(g,M,\^)));
   Remove(syms, Position(syms,()));    #remove the identity to save time later
   return syms;
-end;
+end);
 
 #getting conjugacy symmetries that act on the magma's elements' indices in the
 #sorted list
 #through a homomorphism
-NonTrivialSymmetriesOfElementIndicesThroughHom := function(M,G,hom)
+InstallGlobalFunction(NonTrivialSymmetriesOfElementIndicesThroughHom,
+function(M,G,hom)
   local syms;
   syms := List(G, g ->
                AsPermutation(
@@ -69,4 +85,4 @@ NonTrivialSymmetriesOfElementIndicesThroughHom := function(M,G,hom)
                                end)));
   Remove(syms, Position(syms,()));    #remove the identity to save time later
   return syms;
-end;
+end);

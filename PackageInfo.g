@@ -7,7 +7,7 @@ SetPackageInfo( rec(
 
 PackageName := "SubSemi",
 
-Subtitle := "Enmeration of subsemigroups",
+Subtitle := "Enumeration of subsemigroups",
 
 Version := "0.1",
 
@@ -68,7 +68,7 @@ PackageDoc := rec(
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "Subsemigroup Enumeartion",
+  LongTitle := "Subsemigroup Enumeration",
   Autoload  := true
 ),
 
