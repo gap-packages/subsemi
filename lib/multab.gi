@@ -7,6 +7,8 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+#based on the order of the sorted magma, indices are assigned to elements
+#mulitplication table and table of frequencies calculated
 InstallGlobalFunction(CalcMulTabAndFreqs,
 function(SM) #sorted magma
 local n,freqs, mt,i,j,p;
