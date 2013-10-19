@@ -1,7 +1,7 @@
 #record containing options to change the behaviour of the reduction algorithm
 BindGlobal("MTROptions",
-        rec(LOGFREQ:=100000,
-            DUMPFREQ:=5000000,
+        rec(LOGFREQ:=10000,
+            DUMPFREQ:=10000000,
             RESCUE:=true,
             DIAGONAL:=true,
             EXHAUSTIVE:=true));
