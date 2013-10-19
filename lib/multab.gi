@@ -1,4 +1,14 @@
-CalcMulTabAndFreqs := function(SM) #sorted magma
+################################################################################
+##
+## SubSemi
+##
+## Multiplication table for magmas
+##
+## Copyright (C) 2013  Attila Egri-Nagy
+##
+
+InstallGlobalFunction(CalcMulTabAndFreqs,
+function(SM) #sorted magma
 local n,freqs, mt,i,j,p;
   n := Size(SM);
   freqs := List([1..n], x -> 0);
@@ -13,7 +23,7 @@ local n,freqs, mt,i,j,p;
   od;
   return rec(multiplicationtable:=mt,
              frequencies:=freqs);
-end;
+end);
 
 SortByMulTabFreqs := function(M)
   local freqs,l;
