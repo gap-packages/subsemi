@@ -13,7 +13,7 @@ MakeReadWriteGlobal("SubSemiOptions");
 # 2 new cuts
 DeclareInfoClass("SubSemiInfoClass");
 
-SetInfoLevel(MulTabInfoClass,1);
+SetInfoLevel(SubSemiInfoClass,1);
 
 #gives info on the parameters and the multab in a short string
 AlgorithmIDString := function(mt)
