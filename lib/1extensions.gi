@@ -158,12 +158,13 @@ SubSgpsBy1Extensions := function(mt)
   counter := 0;
   p_secs := TimeInSeconds();
   for s in indexlist do
-    Print("# ", String(s),"/",String(Size(indexlist)),"\n");
+    Info(SubSemiInfoClass,1,
+         Concatenation("# ", String(s),"/",String(Size(indexlist))));
     #if IsEmpty(syms)
     extend_conjreponly(BlistList(indexlist, []),s);
   od;
   log();
   dump();
-  Print("#",counter,"\n");
+  Info(SubSemiInfoClass,1,Concatenation("#",String(counter)));
   return result;
 end;
