@@ -1,5 +1,15 @@
+################################################################################
+##
+## SubSemi
+##
+## Brute-force submagma search functions
+##
+## Copyright (C) 2013  Attila Egri-Nagy
+##
+
 #this uses EnumeratorOfCartesianProduct
-BruteForceSubSemiEnum := function(S)
+InstallGlobalFunction(BFSubMagmas,
+function(S)
 local trans, ssgs, bitlist, bl, gens,i, nonsgs, duplicates,n;
   trans := AsSortedList(S);
   n := Size(trans);
@@ -35,7 +45,7 @@ local trans, ssgs, bitlist, bl, gens,i, nonsgs, duplicates,n;
           " NonSubs:", nonsgs,"\n");
   fi;
   return ssgs;
-end;
+end);
 
 ################################################################################
 # GAP 4.5 function implementing a brute force search for submagmas of a magma.
