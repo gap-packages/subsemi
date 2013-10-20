@@ -2,13 +2,17 @@
 ##
 ## SubSemi
 ##
-## Brute-force submagma search functions
+## Brute-force subsemigroup search functions
 ##
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+#the set of elements  is a semigroup if they don't generate new elements
+InstallGlobalFunction(IsSG,
+        function(elms) return Size(elms) = Size(Semigroup(elms));end);
+
 #this uses EnumeratorOfCartesianProduct
-InstallGlobalFunction(BFSubMagmas,
+InstallGlobalFunction(BFSubSemis,
 function(S)
 local trans, ssgs, bitlist, bl, gens,i, nonsgs, duplicates,n;
   trans := AsSortedList(S);
@@ -24,7 +28,7 @@ local trans, ssgs, bitlist, bl, gens,i, nonsgs, duplicates,n;
     Perform([1..n], function(x) if bl[x] then Add(gens, trans[x]);fi;end);
     if Size(gens) = 0 then
       ;#GAP bug: Size(Semigroup([])) breaks
-    elif Size(gens) = Size(Semigroup(gens)) then
+    elif IsSG(gens) then
       if gens in ssgs then
         duplicates := duplicates + 1;
       else

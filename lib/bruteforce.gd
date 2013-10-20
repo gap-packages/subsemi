@@ -7,4 +7,5 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-DeclareGlobalFunction("BFSubMagmas");
+DeclareGlobalFunction("IsSG");
+DeclareGlobalFunction("BFSubSemis");

@@ -1,12 +1,22 @@
-TimeInSeconds := function()
-  return IO_gettimeofday().tv_sec;  
-end;
+################################################################################
+##
+## SubSemi
+##
+## Util functions
+##
+## Copyright (C) 2013  Attila Egri-Nagy
+##
 
-#the set of transformations  is a semigroup if they don't generate
-#new elements
-IsSG := function(transformations)
-  return Size(transformations) = Size(Semigroup(transformations));
-end;
+#time related #should go to SGPDEC!
+InstallGlobalFunction(TimeInSeconds,
+        function() return IO_gettimeofday().tv_sec; end);
+
+#this does not work TODO
+InstallGlobalFunction(RandomizeBySystemClock,
+function()
+  Reset(GlobalMersenneTwister, TimeInSeconds);
+  Print("#Random seed:", State(GlobalMersenneTwister), "\n");
+end);
 
 InvertedCutAsList := function(mt, cut)
   return mt.sortedts{Difference(mt.rn,
@@ -21,9 +31,3 @@ ConvertToSgps := function(mt,cuts)
   return  List(invcuts, ic -> Semigroup(ic));
 end;
 
-RandomizeBySystemClock := function()
-  local SEED;
-  SEED := IO_gettimeofday().tv_sec;
-  Reset(GlobalMersenneTwister, SEED);
-  Print("#Random seed:", SEED, "\n");
-end;
