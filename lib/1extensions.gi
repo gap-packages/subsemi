@@ -91,10 +91,10 @@ SubSgpsBy1Extensions := function(mt)
     local t, bl;
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
-    if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
+    if InfoLevel(SubSemiInfoClass)>0 and (counter mod SubSemiOptions.LOGFREQ)=0 then
       log();
     fi;
-    if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
+    if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
     #calculating the new subsgp
     bl := ClosureByMulTab(tab, indexlist, base, [s]);
     if  bl in result then
@@ -113,10 +113,10 @@ SubSgpsBy1Extensions := function(mt)
     local C,  bl, diff,f,i;
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
-    if InfoLevel(MulTabInfoClass)>0 and (counter mod MTROptions.LOGFREQ)=0 then
+    if InfoLevel(SubSemiInfoClass)>0 and (counter mod SubSemiOptions.LOGFREQ)=0 then
       log();
     fi;
-    if (counter mod MTROptions.DUMPFREQ)=0 then dump(); fi;
+    if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
     #calculating the new subsgp
     bl := ClosureByMulTab(tab, indexlist, base, [s]);#boosters[s]);#[s]);
     #its conjugacy class
