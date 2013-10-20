@@ -77,9 +77,10 @@ Dependencies := rec(
  GAP := ">= 4.6",
  NeededOtherPackages := [["GAPDoc", ">=1.5"],
                    ["semigroups", ">=1.3"],
+                   ["sgpdec", ">=0.7"],
                    ["dust", ">=0.1.13"]
                    ],
- SuggestedOtherPackages := [],#["viz", ">=0.2"]], #Draw, Splash]
+ SuggestedOtherPackages := [],
  ExternalConditions := [ ]
 ),
 
