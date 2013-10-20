@@ -6,14 +6,15 @@ local trans, ssgs, bitlist, bl, gens,i, nonsgs, duplicates,n;
   nonsgs := 0;
   duplicates := 0;
   ssgs := [];
+  #all bitstrings corresponding to all subsets
   bitlist := EnumeratorOfCartesianProduct(List([1..n], x->[false,true]));
   for i in [1..2^n] do
     gens := [];
     bl := bitlist[i];
-    Perform([1..n], function(x) if bl[x] then Add(gens, x);fi;end);
+    Perform([1..n], function(x) if bl[x] then Add(gens, trans[x]);fi;end);
     if Size(gens) = 0 then
       ;#GAP bug: Size(Semigroup([])) breaks
-    elif Size(gens) = Size(Semigroup(trans{gens})) then
+    elif Size(gens) = Size(Semigroup(gens)) then
       if gens in ssgs then
         duplicates := duplicates + 1;
       else
@@ -22,13 +23,17 @@ local trans, ssgs, bitlist, bl, gens,i, nonsgs, duplicates,n;
     else
       nonsgs := nonsgs + 1;
     fi;
-    if (i mod 10000) = 0 then
-      Print("#", Size(ssgs)," at ",i, "\n\c");
+    if InfoLevel(SubSemiInfoClass)>0
+       and (i mod SubSemiOptions.LOGFREQ) = 0 then
+      Print("#", Size(ssgs)," at ",
+            FormattedBigNumberString(i), "\n\c");
     fi;
   od;
-  Print("#I Subsemis:", Size(ssgs),
-        " Duplicates:", duplicates,
-        " Nonsgs:", nonsgs,"\n");
+  if InfoLevel(SubSemiInfoClass)>0 then
+    Print("#Subs:", Size(ssgs),
+          " Dups:", duplicates,
+          " NonSubs:", nonsgs,"\n");
+  fi;
   return ssgs;
 end;
 
