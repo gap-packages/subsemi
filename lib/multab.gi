@@ -54,6 +54,7 @@ local n,p,mt,sortedts,syms,ts,mtrecord;
   n := Size(ts);
   #this sorting is used to construct the multiplication table
   sortedts := AsSortedList(ts);#(SortByMulTabFreqs(AsSortedList(ts)));
+  MakeImmutable(sortedts);#to be on the safe side
   mt := ProductTableOfElements(sortedts);
   mtrecord := rec(ts:=ts,
                   freqs:=FrequenciesInProductTable(mt),
