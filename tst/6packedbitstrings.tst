@@ -21,5 +21,10 @@ gap> Concatenation(List(EnumeratorOfCartesianProduct([B,B,B,B,B,B]),EncodeBitStr
 "AgQwIoY6EkU2Msc_CiSyKqa8GmW4Oue+BhRxJpZ7FlV3Ntd-DjTzLrb9HnX5Pvf="
 
 #
+gap> ForAll(EnumeratorOfCartesianProduct([B,B,B,B,B,B,B,B,B,B,B,B]),
+>     bs -> bs = AsBitString(AsBlist(bs)));
+true
+
+#
 gap> SemigroupsStopTest();
 gap> STOP_TEST( "Sgpdec package: cartesianenum.tst", 10000);
