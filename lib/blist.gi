@@ -1,20 +1,31 @@
+################################################################################
+##
+## SubSemi
+##
+## Extra functions for boolean lists. Indexing, encoding.
+##
+## Copyright (C) 2013  Attila Egri-Nagy
+##
+
 #functions for dealing with bolean lists
 
 ### INDEXING ###################################################################
 # returns the position of the 1st entry or 1 if empty
-FirstEntryPosOr1 := function(blist)
+InstallGlobalFunction(FirstEntryPosOr1,
+function(blist)
   if SizeBlist(blist) = 0 then return 1; fi;
   return Position(blist,true);
-end;
+end);
 
 # returns the position of the last entry or 1 if empty
-LastEntryPosOr1 := function(blist)
+InstallGlobalFunction(LastEntryPosOr1,
+function(blist)
 local i;
   if SizeBlist(blist) = 0 then return 1; fi;
   i := Size(blist);
   while not blist[i] do i := i - 1; od;
   return i;
-end;
+end);
 
 #TODO this is some fancy indexing tool, but needs some description
 BinaryBlistIndexer := function(n)
