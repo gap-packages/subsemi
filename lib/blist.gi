@@ -40,6 +40,7 @@ end;
 #the idea is to pack 6 bits into a single character by using this lookup string
 #trailing bits are just written out (that is why no 1s and 0s in the key)
 CODEKEY := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=";
+MakeReadOnlyGlobal("CODEKEY");
 
 EncodeBitString := function (bitstr)
   local str,k,i,chunk;
