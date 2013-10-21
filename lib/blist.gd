@@ -9,3 +9,10 @@
 
 DeclareGlobalFunction("FirstEntryPosOr1");
 DeclareGlobalFunction("LastEntryPosOr1");
+
+DeclareGlobalFunction("EncodeBitString");
+DeclareGlobalFunction("DecodeBitString");
+
+DeclareGlobalFunction("AsBlist");
+DeclareGlobalFunction("AsBitString");
+
