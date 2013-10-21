@@ -53,7 +53,8 @@ end;
 CODEKEY := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=";
 MakeReadOnlyGlobal("CODEKEY");
 
-EncodeBitString := function (bitstr)
+InstallGlobalFunction(EncodeBitString,
+function (bitstr)
   local str,k,i,chunk;
   k := Int(Length(bitstr)/6);
   str := "";
@@ -63,9 +64,10 @@ EncodeBitString := function (bitstr)
     Add(str,CODEKEY[Sum(List([0..5],x->2^x*chunk[x+1]))+1]);
   od;
   return Concatenation(str,bitstr{[6*k+1..Length(bitstr)]});
-end;
+end);
 
-DecodeBitString := function(str)
+InstallGlobalFunction(DecodeBitString,
+function(str)
   local bitstr,c,p,i,l;
   bitstr := "";
   for c in str do
@@ -86,9 +88,10 @@ DecodeBitString := function(str)
     fi;
   od;
   return bitstr;
-end;
+end);
 
-AsBitString := function(blist)
+InstallGlobalFunction(AsBitString,
+function(blist)
   return List(blist,
               function(x)
                 if x then
@@ -97,8 +100,9 @@ AsBitString := function(blist)
                   return '0';
                 fi;
               end);
-end;
+end);
             
-AsBlist := function(bitstr)
+InstallGlobalFunction(AsBlist,
+function(bitstr)
   return BlistList([1..Size(bitstr)],Positions(bitstr,'1'));
-end;
+end);
