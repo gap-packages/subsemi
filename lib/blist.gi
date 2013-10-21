@@ -16,6 +16,7 @@ local i;
   return i;
 end;
 
+#TODO this is some fancy indexing tool, but needs some description
 BinaryBlistIndexer := function(n)
   local f;
   f := function(blist)
