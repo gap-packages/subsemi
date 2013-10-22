@@ -17,17 +17,3 @@ function()
   Reset(GlobalMersenneTwister, TimeInSeconds);
   Print("#Random seed:", State(GlobalMersenneTwister), "\n");
 end);
-
-InvertedCutAsList := function(mt, cut)
-  return mt.sortedts{Difference(mt.rn,
-                 ListBlist(mt.rn,cut))
-                 };
-end;
-
-ConvertToSgps := function(mt,cuts)
-  local invcuts;
-  invcuts := List(cuts, x -> InvertedCutAsList(mt,x) );
-  Remove(invcuts,Position(invcuts,[]));#removing the empty set
-  return  List(invcuts, ic -> Semigroup(ic));
-end;
-
