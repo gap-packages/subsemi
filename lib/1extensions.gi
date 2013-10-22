@@ -72,7 +72,10 @@ SubSgpsBy1Extensions := function(mt)
   dump := function() #write all the subsemigroups into a file
     local r,filename,l,i, S,ll,output;
     p_secs := TimeInSeconds();
-    if not HasName(mt.ts) then Print("# No name, no dump!\n");return;fi;
+    if not HasName(mt.ts) then
+      Info(SubSemiInfoClass,1,"# No name, no dump!");
+      return;
+    fi;
     filename := Concatenation(Name(mt.ts),"_", String(dumpcounter),"subs");
     output := OutputTextFile(filename, false);
     for r in AsList(result) do
@@ -80,8 +83,8 @@ SubSgpsBy1Extensions := function(mt)
     od;
     CloseStream(output);
     dumpcounter := dumpcounter + 1;
-    Print("#Dumping in ",
-          FormattedTimeString(TimeInSeconds()-p_secs),"\n");
+    Info(SubSemiInfoClass,Concatenation("#Dumping in ",
+          FormattedTimeString(TimeInSeconds()-p_secs)));
     #resetting the timer no to mess up the speed gauge 
     p_secs := TimeInSeconds();
   end;
@@ -163,7 +166,7 @@ SubSgpsBy1Extensions := function(mt)
     #if IsEmpty(syms)
     extend_conjreponly(BlistList(indexlist, []),s);
   od;
-  log();
+  if InfoLevel(SubSemiInfoClass)>0 then log();fi;
   dump();
   Info(SubSemiInfoClass,1,Concatenation("#",String(counter)));
   return result;
