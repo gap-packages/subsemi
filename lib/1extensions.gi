@@ -83,7 +83,7 @@ SubSgpsBy1Extensions := function(mt)
     od;
     CloseStream(output);
     dumpcounter := dumpcounter + 1;
-    Info(SubSemiInfoClass,Concatenation("#Dumping in ",
+    Info(SubSemiInfoClass,1,Concatenation("#Dumping in ",
           FormattedTimeString(TimeInSeconds()-p_secs)));
     #resetting the timer no to mess up the speed gauge 
     p_secs := TimeInSeconds();
