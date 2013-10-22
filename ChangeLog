@@ -1,2 +1,4 @@
+0.2
+	Adding test cases, checking against brute-force methods. Converting between the indicator set (bitlist) and the subsets of semigroups.
 0.1
 	Working 1-extension method transferred, but poor package structure, no test cases yet.
