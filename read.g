@@ -6,3 +6,4 @@ ReadPackage("SubSemi","/lib/multab.gi");
 ReadPackage("SubSemi","/lib/1extensions.gi");
 
 ReadPackage("SubSemi","/tst/testfunctions.g");
+ReadPackage("SubSemi","/tst/againstbf.g");
