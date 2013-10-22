@@ -1,15 +1,37 @@
 \documentclass{amsart}
+\usepackage{color}
+\newcommand{\T}{\mathcal T}
+
+\newcommand{\todo}[1]{ \textsf{\color{red}{[TODO:  #1 ]}}}
 
 \begin{document}
+\section*{Representations of Finite Semigroups: Combinatorial Enumeration and Decomposition Methods}
+
 A \emph{transformation} is a function $f:X\rightarrow X$ from a set to itself.
-Restricting our attention to finite sets, this mathematical object is so basic that we can easily answer all questions about it.
+Restricting our attention to finite sets, this mathematical object is so basic, that we can easily answer all questions about it.
 However, the situation changes dramatically when we start combining transformations.
 A \emph{transformation semigroup} of degree $n$ is a collection of transformations of an $n$-element set closed under function composition.
-How many degree $n$ transformation semigroups are there? Up to conjugacy? Up to isomorphism? What exactly are they?
+\emph{How many degree $n$ transformation semigroups are there? ...up to conjugacy? ...up to isomorphism?}
+These are typical combinatorial questions but an actual enumeration enables us to answer other type of important questions.
+\emph{Can we represent a given abstract semigroup as transformations of $n$ points?}
+For instance, in low-degree cases,  we can take the set of all transformations of $n$ points, the full transformation semigroup $\T_n$, and find all of its subsemigroups.
+Then, the question of possible representation is simply checking the abstract semigroup against this list.
 
-ENUMERATION problem
+The idea of enumerating semigroups of a certain kind by finding all subsemigroups of the corresponding full strucure is not limited to transformation semigroups.
+It applies to partial transformations, partial permutations, several diagram algebras contained in partition monoids, cascades (tree transformations) and also linear representations.  
 
-Can we represent a particular abstract semigroup as a degree $n$ ts?
+Previous efforts for enumerating semigroups were focused on enumerating by the order of the semigroup and worked by finding all valid multiplication tables of the given size.
+Here we plan to enumerate not by size but by a parameter of a given type of representation working by finding all valid tables inside one big multiplication table.
+Existing results also show that there are mind-blowing amount of semigroups even for low parameter values (52,989,400,714,478 semigroups of order 9, XXX transformation semigroups on 4 points), and in this project we aim to tap into the vast stream of mathematical data produced by efficient enumeration algorithms in order to gain knowledge about representations far beyond the practically computable cases.
+More precisely,
+\begin{quote}
+\noindent\emph{we aim to enumerate finite semigroups of different representations by multiplication table-based combinatorial algorithms, and by studying these low-degree cases we intend to formulate and prove theorems about representations of finite semigroups in general.}
+\end{quote}
 
-REPRESENTATION problem
+Generating  and validating this vast amount of data, compressing and making it accessible both computationally and mathematically  will require and provide new mathematical results.    
+
+From the practical applications (biology, physics, artificial intelligence) point of view the cascade representations have utmost importance, since they are tightly connected to hierarchical decompositions, the algebraic ways of understanding complex systems. The biggest obstacle for these decomposition methods in realizing their potential is that we have limited understanding of the minimal tree transformation representations of semigroups. 
+
+\todo{Are there questions for Temperley-Lieb that can potentially answered by these methods?}
+
 \end{document}
