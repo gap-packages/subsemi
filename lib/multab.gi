@@ -78,6 +78,20 @@ local n,p,mt,sortedts,syms,ts,mtrecord;
   return mtrecord;
 end);
 
+InstallGlobalFunction(ElementsByIndicatorSet,
+function(indset, mt)
+  return List(ListBlist(mt.rn,indset),x->mt.sortedts[x]);
+end);
+
+InstallGlobalFunction(IndicatorSetOfElements,
+function(elms, mt)
+  local blist;
+  blist := BlistList(mt.rn,[]);
+  Perform(elms, function(t) blist[Position(mt.sortedts,t)]:=true;end);
+  return blist;
+end);
+
+
 #returns the diagonal elements of a multiplication  table in a list
 #MulTabDiagonal := function(mt)
 #  return List([1..mt.n], x -> mt.mt[x][x]);

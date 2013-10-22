@@ -11,3 +11,6 @@ DeclareGlobalFunction("ProductTableOfElements");
 DeclareGlobalFunction("FrequenciesInProductTable");
 
 DeclareGlobalFunction("MulTab");
+
+DeclareGlobalFunction("ElementsByIndicatorSet");
+DeclareGlobalFunction("IndicatorSetOfElements");
