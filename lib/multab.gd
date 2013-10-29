@@ -8,9 +8,11 @@
 ##
 
 DeclareGlobalFunction("ProductTableOfElements");
-DeclareGlobalFunction("FrequenciesInProductTable");
-
 DeclareGlobalFunction("MulTab");
+
+DeclareGlobalFunction("Frequencies");
+DeclareGlobalFunction("DiagonalPartition");
+DeclareGlobalFunction("MulTabProfile");
 
 DeclareGlobalFunction("ElementsByIndicatorSet");
 DeclareGlobalFunction("IndicatorSetOfElements");

@@ -26,13 +26,25 @@ local n, mt,i,j;
 end);
 
 #calculate the frequencies of entries in a matrix of positive integers
-InstallGlobalFunction(FrequenciesInProductTable,
+InstallGlobalFunction(Frequencies,
 function(mt)
 local l,freqs;
-  freqs := ListWithIdenticalEntries(Size(mt),0);
-  Perform(Collected(Flat(mt)),
+  freqs := ListWithIdenticalEntries(Size(mt.mt),0);
+  Perform(Collected(Flat(mt.mt)),
           function(pair) freqs[pair[1]]:=pair[2];end);
   return freqs;
+end);
+
+InstallGlobalFunction(DiagonalPartition,
+function(mt)
+local diag;
+  diag := DiagonalOfMat(mt.mt);
+  return AsSortedList(List(Collected(diag),p->p[2]));
+end);
+
+InstallGlobalFunction(MulTabProfile,
+function(mt)
+  return [Collected(Frequencies(mt)),DiagonalPartition(mt)];
 end);
 
 #SortByMulTabFreqs := function(M)
