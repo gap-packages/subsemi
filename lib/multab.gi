@@ -88,6 +88,14 @@ function(mt)
           Collected(List(mt.rn,x->AbstractIndexPeriod(mt,x)))];
 end);
 
+InstallGlobalFunction(ElementProfile,
+function(mt,k) #TODO optimize
+  return [Size(Positions(Flat(mt.mt),k)), #freq
+          Size(Positions(DiagonalOfMat(mt.mt),k)), #diagfreq
+          AbstractIndexPeriod(mt,k)];
+end);
+
+
 CheckAIP := function(mt)
   return ForAll(mt.rn,
                 i->AbstractIndexPeriod(mt,i)=IndPer(mt.sortedts[i]));

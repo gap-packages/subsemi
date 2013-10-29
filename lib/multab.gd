@@ -13,6 +13,7 @@ DeclareGlobalFunction("MulTab");
 DeclareGlobalFunction("Frequencies");
 DeclareGlobalFunction("DiagonalPartition");
 DeclareGlobalFunction("MulTabProfile");
+DeclareGlobalFunction("ElementProfile");
 DeclareGlobalFunction("AbstractIndexPeriod");
 
 DeclareGlobalFunction("ElementsByIndicatorSet");
