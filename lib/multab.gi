@@ -42,10 +42,56 @@ local diag;
   return AsSortedList(List(Collected(diag),p->p[2]));
 end);
 
+InstallGlobalFunction(AbstractIndexPeriod,
+function(mt,k)
+local orbit, set,i,p,m;
+  orbit := [k];
+  set := [];
+  m:=k;
+  repeat
+    AddSet(set,m);
+    m := mt.mt[m][k];
+    Add(orbit,m);
+  until m in set;
+  i := Position(orbit,m);
+  #Display(orbit);Display(set);
+  return [i,Size(orbit)-i];
+end);
+
+
+IndPer := function(t)
+local orbit, set, u, i;
+  orbit := [t];
+  set := [];
+  u := t;
+  repeat
+    AddSet(set,u);
+    u := u*t;
+    Add(orbit,u);
+  until u in set;
+  i := Position(orbit,u);
+  return [i,Size(orbit)-i];
+end;
+
+IndPerTypes := function(T)
+local types;
+  types := [];
+  #for t in T do AddSet(types,IndPer(t));od;
+  Perform(T,function(t) AddSet(types,IndPer(t));end);
+  return types;
+end;
+
 InstallGlobalFunction(MulTabProfile,
 function(mt)
-  return [Collected(Frequencies(mt)),DiagonalPartition(mt)];
+  return [Collected(Frequencies(mt)),
+          DiagonalPartition(mt),
+          Collected(List(mt.rn,x->AbstractIndexPeriod(mt,x)))];
 end);
+
+CheckAIP := function(mt)
+  return ForAll(mt.rn,
+                i->AbstractIndexPeriod(mt,i)=IndPer(mt.sortedts[i]));
+end;
 
 #SortByMulTabFreqs := function(M)
 #  local freqs,l;
