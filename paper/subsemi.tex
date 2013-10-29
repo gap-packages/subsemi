@@ -45,11 +45,12 @@
 
 
 \begin{document}
+\tableofcontents
 \section{Notation}
 %Let $(X,S)$ be a transformation semigroup, $n=|S|$.
 Let $S$ be finite a semigroup, $n=|S|$.
 We fix an order on the semigroup elements, $s_1,\ldots, s_n$, so we can easily refer to the elements by their indices. 
-Then the  \emph{multiplication table}, or \emph{Cayley-table} of $S$ is a $n\times n$ matrix $M$ with entries from $\{1,..,n\}$ such that $M_{i,j}=k$ if $s_is_j=s_k$.
+Then the  \emph{multiplication table}, or \emph{Cayley-table} of $S$ is a $n\times n$ matrix $M(S)$ or simply $M$ with entries from $\{1,..,n\}$ such that $M_{i,j}=k$ if $s_is_j=s_k$.
 $\Sub(S)=\big\{T\mid T\leq S \big\}$ the set of all subsemigroups, $\Max(S)$ the set of maximal proper subsemigroups.
 If $I$ is an ideal of $S$ then the \emph{Rees factor semigroup} $S/I$ has elements $S\setminus I\cup\{0\}$ with multiplication same as in $S$ except $I$ is replaced by zero.
 
@@ -81,9 +82,18 @@ Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle (T\setminus\{0\})\cup U
 \qed
 
 
+\section{Isomorphism and Anti-Isomorphism of Multiplication Tables}
+Two semigroups $S$ and $T$ are isomorphic or anti-isomorphic if $M(S)$ can be transformed into $M(T)$ by rearranging its columns and rows and transposing the table.
+Therefore, an element of $C_2\times S_n$ can witness the isomorphism.
 
-
-
+\subsection{Invariants}
+Any property that does not contain information about the ordering of the elements can be used as an invariant.
+\begin{enumerate}
+\item Distinct frequency values and the number of elements with a given frequency. Useless for groups.
+\item The diagonal partition. $|S|=n$ partitioned as a sum of number of occurences of elements in the diagonal. This can even tell some groups apart: $C_4\mapsto 2+2$, $C_x\times C_2\mapsto 4$, but it assings 2+6 to both $D_8$ and $Q_8$.
+\item Distinct index-period types and their number of occurences. In the group case this invariant reduces to the order of elements, but it can distinguish between $D_8$ and $Q_8$. However, this invariant fails to detect the difference between some direct and semidirect products. For instance, $C_8\times C_2$ and $C_8\rtimes C_2$ both have 1 element of order 1, 3 of order 2, 4 of order 4, and 8 of order 8.
+\end{enumerate} 
+If all invariants check out, then we can use backtrack to check whether the one of the multiplication tables can be rearranged to get the other one. The search space can be reduced by aligning elements with the same profile (frequency, diagonal frequency, index-period).
 \section{Algorithms}
 \begin{algorithm}
 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
