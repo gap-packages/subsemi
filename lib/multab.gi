@@ -57,14 +57,13 @@ local n,p,mt,sortedts,syms,ts,mtrecord;
   MakeImmutable(sortedts);#to be on the safe side
   mt := ProductTableOfElements(sortedts);
   mtrecord := rec(ts:=ts,
-                  freqs:=FrequenciesInProductTable(mt),
                   mt:=mt,
                   n:=n,
                   rn := [1..n], #for reusing it in loops to avoid excess objects
                   sortedts:=sortedts,
                   CONJUGACY:=false,
                   syms:=[],
-                  BLOCKING:=false
+                  #BLOCKING:=false
                   );
   #arg[2] is an automorphism group of ts in case it is there
   if IsBound(arg[2]) then
@@ -90,9 +89,3 @@ function(elms, mt)
   Perform(elms, function(t) blist[Position(mt.sortedts,t)]:=true;end);
   return blist;
 end);
-
-
-#returns the diagonal elements of a multiplication  table in a list
-#MulTabDiagonal := function(mt)
-#  return List([1..mt.n], x -> mt.mt[x][x]);
-#end;
