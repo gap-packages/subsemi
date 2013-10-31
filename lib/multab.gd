@@ -15,6 +15,8 @@ DeclareGlobalFunction("DiagonalPartition");
 DeclareGlobalFunction("MulTabProfile");
 DeclareGlobalFunction("ElementProfile");
 DeclareGlobalFunction("AbstractIndexPeriod");
+DeclareGlobalFunction("RowPartition");
+DeclareGlobalFunction("ColumnPartition");
 
 DeclareGlobalFunction("ElementsByIndicatorSet");
 DeclareGlobalFunction("IndicatorSetOfElements");

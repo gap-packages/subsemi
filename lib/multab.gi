@@ -42,6 +42,22 @@ local diag;
   return AsSortedList(List(Collected(diag),p->p[2]));
 end);
 
+InstallGlobalFunction(RowPartition,
+function(mt,k)
+local row;
+  row := mt.mt[k];
+  return AsSortedList(List(Collected(row),p->p[2]));
+end);
+
+InstallGlobalFunction(ColumnPartition,
+function(mt,k)
+local column;
+  column := List(mt.rn, i->mt.mt[i][k]);
+  return AsSortedList(List(Collected(column),p->p[2]));
+end);
+
+
+
 InstallGlobalFunction(AbstractIndexPeriod,
 function(mt,k)
 local orbit, set,i,p,m;
@@ -92,7 +108,9 @@ InstallGlobalFunction(ElementProfile,
 function(mt,k) #TODO optimize
   return [Size(Positions(Flat(mt.mt),k)), #freq
           Size(Positions(DiagonalOfMat(mt.mt),k)), #diagfreq
-          AbstractIndexPeriod(mt,k)];
+          AbstractIndexPeriod(mt,k),
+          ColumnPartition(mt,k),
+          RowPartition(mt,k)];
 end);
 
 
