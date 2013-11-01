@@ -9,10 +9,18 @@
 ##
 
 DeclareGlobalFunction("Frequencies");
-#DeclareGlobalFunction("Frequencies");
-DeclareGlobalFunction("DiagonalPartition");
-DeclareGlobalFunction("MulTabProfile");
-DeclareGlobalFunction("ElementProfile");
+
+#ELEMENT-LEVEL INVARIANTS
+DeclareGlobalFunction("Frequency");
+DeclareGlobalFunction("DiagonalFrequency");
+DeclareGlobalFunction("RowFrequencies");
+DeclareGlobalFunction("ColumnFrequencies");
 DeclareGlobalFunction("AbstractIndexPeriod");
-DeclareGlobalFunction("RowPartition");
-DeclareGlobalFunction("ColumnPartition");
+DeclareGlobalFunction("ElementProfile");
+
+#TABLE-LEVEL INVARIANTS
+DeclareGlobalFunction("MulTabFrequencies");
+DeclareGlobalFunction("DiagonalFrequencies");
+DeclareGlobalFunction("MulTabProfile");
+
+
