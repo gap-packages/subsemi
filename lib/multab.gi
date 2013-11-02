@@ -12,17 +12,19 @@
 #mulitplication table and table of frequencies calculated
 InstallGlobalFunction(ProductTableOfElements,
 function(M) #magma in a list
-local n, mt,i,j;
+local n, rows,cols,i,j;
   n := Size(M);
   #nxn matrix 
-  mt := List([1..n], x->ListWithIdenticalEntries(n,0));
+  rows := List([1..n], x->ListWithIdenticalEntries(n,0));
+  cols := List([1..n], x->ListWithIdenticalEntries(n,0));
   #just a double loop to have all products
   for i in [1..n] do
     for j in [1..n] do
-      mt[i][j] := Position(M, M[i]*M[j]);
+      rows[i][j] := Position(M, M[i]*M[j]);
+      cols[j][i] := rows[i][j]; 
     od;
   od;
-  return mt;
+  return rec(rows:=rows, cols:=cols);
 end);
 
 
@@ -40,15 +42,17 @@ end);
 #returns a record with the multiplication table and other extra info
 InstallGlobalFunction(MulTab,
 function(arg)
-local n,p,mt,sortedts,syms,ts,mtrecord;
+local n,p,rcs,sortedts,syms,ts,mtrecord;
   ts := arg[1];
   n := Size(ts);
   #this sorting is used to construct the multiplication table
   sortedts := AsSortedList(ts);#(SortByMulTabFreqs(AsSortedList(ts)));
   MakeImmutable(sortedts);#to be on the safe side
-  mt := ProductTableOfElements(sortedts);
+  rcs := ProductTableOfElements(sortedts);
   mtrecord := rec(ts:=ts,
-                  mt:=mt,
+                  rows:=rcs.rows,
+                  cols:=rcs.cols,
+                  mt:=rcs.rows, #legacy
                   n:=n,
                   rn := [1..n], #for reusing it in loops to avoid excess objects
                   sortedts:=sortedts,
