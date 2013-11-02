@@ -41,10 +41,8 @@ local orbit, set,i,p,m;
     Add(orbit,m);
   until m in set;
   i := Position(orbit,m);
-  #Display(orbit);Display(set);
   return [i,Size(orbit)-i];
 end);
-
 
 InstallGlobalFunction(ElementProfile,
 function(mt,k)
