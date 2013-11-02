@@ -23,4 +23,4 @@ true
 
 #
 gap> SemigroupsStopTest();
-gap> STOP_TEST( "SubSemi package: indexperiof.tst", 10000);
+gap> STOP_TEST( "SubSemi package: indexperiod.tst", 10000);

@@ -3,7 +3,8 @@ local test;
   for test in [
           "6packedbitstrings",
           "indicatorset",
-          "indexperiod"
+          "indexperiod",
+          "invariants"
           ] do
     Test(Concatenation(
             PackageInfo("subsemi")[1]!.InstallationPath,
