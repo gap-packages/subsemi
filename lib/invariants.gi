@@ -45,19 +45,6 @@ local orbit, set,i,p,m;
   return [i,Size(orbit)-i];
 end);
 
-IndPer := function(t)
-local orbit, set, u, i;
-  orbit := [t];
-  set := [];
-  u := t;
-  repeat
-    AddSet(set,u);
-    u := u*t;
-    Add(orbit,u);
-  until u in set;
-  i := Position(orbit,u);
-  return [i,Size(orbit)-i];
-end;
 
 InstallGlobalFunction(ElementProfile,
 function(mt,k)
@@ -68,32 +55,30 @@ function(mt,k)
           RowFrequencies(mt,k)];
 end);
 
-CheckAIP := function(mt)
-  return ForAll(mt.rn,
-                i->AbstractIndexPeriod(mt,i)=IndPer(mt.sortedts[i]));
-end;
-
 #TABLE-LEVEL INVARIANTS#########################################################
 
 InstallGlobalFunction(DiagonalFrequencies,
 function(mt) return Frequencies(DiagonalOfMat(mt.mt));end);
 
+InstallGlobalFunction(IndexPeriodTypeFrequencies,
+function(mt) return Collected(List(mt.rn,x->AbstractIndexPeriod(mt,x)));end);
+
 InstallGlobalFunction(MulTabProfile,
 function(mt)
   return [MulTabFrequencies(mt),
           DiagonalFrequencies(mt),
-          Collected(List(mt.rn,x->AbstractIndexPeriod(mt,x)))];
+          IndexPeriodTypeFrequencies(mt)];
+
 end);
-
-IndPerTypes := function(T)
-local types;
-  types := [];
-  #for t in T do AddSet(types,IndPer(t));od;
-  Perform(T,function(t) AddSet(types,IndPer(t));end);
-  return types;
-end;
-
 
 #calculate the frequencies of entries in a matrix of positive integers
 InstallGlobalFunction(MulTabFrequencies,
 function(mt) return Frequencies(Flat(mt.mt));end);
+
+NumOfProfileClasses := function(mt)
+  local al, bl;
+  al := AssociativeList();
+  Perform(mt.rn, function(x)Assign(al, x, ElementProfile(mt,x));end);
+  bl := ReversedAssociativeList(al);
+  return Size(Keys(bl));
+end;

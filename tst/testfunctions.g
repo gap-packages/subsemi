@@ -2,7 +2,8 @@ SubSemiTestInstall := function()
 local test;
   for test in [
           "6packedbitstrings",
-          "indicatorset"
+          "indicatorset",
+          "indexperiod"
           ] do
     Test(Concatenation(
             PackageInfo("subsemi")[1]!.InstallationPath,
