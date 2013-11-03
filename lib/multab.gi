@@ -7,41 +7,56 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-#based on the order of the magma elements in list,
+#mulitplication table based on the order of the magma elements in list,
 #indices are assigned to elements
-#mulitplication table and table of frequencies calculated
 InstallGlobalFunction(ProductTableOfElements,
 function(M) #magma in a list
-local n, rows,cols,i,j;
+local n, rows,i,j;
   n := Size(M);
   #nxn matrix 
   rows := List([1..n], x->ListWithIdenticalEntries(n,0));
-  cols := List([1..n], x->ListWithIdenticalEntries(n,0));
   #just a double loop to have all products
   for i in [1..n] do
     for j in [1..n] do
       rows[i][j] := Position(M, M[i]*M[j]);
-      cols[j][i] := rows[i][j]; 
     od;
   od;
-  return rec(rows:=rows, cols:=cols);
+  return rows;
+end);
+
+### CONSTRUCTORS ###############################################################
+InstallOtherMethod(MulTab, "for a closed ordered list of multiplicative elements",
+[IsSortedList],
+function(l)
+  local mt,inds; 
+  mt := Objectify(MulTabType, rec());
+  SetRows(mt,ProductTableOfElements(l));
+  SetSortedElements(mt,l);
+  inds := [1..Size(l)];
+  MakeImmutable(inds);
+  SetIndices(mt,inds);
+  return mt;
+end);
+
+InstallMethod(MulTab, "for a semigroup",
+[IsSemigroup],
+function(S)
+  return MulTab(AsSortedList(S));
+end);
+
+InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
+[IsSemigroup,IsGroup],
+function(S,G)
+local mt;  
+  mt := MulTab(S);
+  SetSymmetries(mt,NonTrivialSymmetriesOfElementIndices(SortedElements(mt),G));
+  return mt;
 end);
 
 
-#SortByMulTabFreqs := function(M)
-#  local freqs,l;
-#  freqs := CalcMulTabAndFreqs(M).frequencies;
-#  l := ShallowCopy(M);
-#  Sort(l,function(s,t)
-#    return freqs[Position(M,s)] < freqs[Position(M,t)];end);
-    #return RankOfTransformation(s) < RankOfTransformation(t);end);
-#  return l;
-#end;
-
 #ts - transformation semigroup, permutation group
 #returns a record with the multiplication table and other extra info
-InstallGlobalFunction(MulTab,
-function(arg)
+hupi := function(arg)
 local n,p,rcs,sortedts,syms,ts,mtrecord;
   ts := arg[1];
   n := Size(ts);
@@ -69,8 +84,8 @@ local n,p,rcs,sortedts,syms,ts,mtrecord;
     fi;
     mtrecord.CONJUGACY:=true;
   fi;
-  return mtrecord;
-end);
+  return Objectify(MulTabType,mtrecord);
+end;
 
 InstallGlobalFunction(ElementsByIndicatorSet,
 function(indset, mt)
