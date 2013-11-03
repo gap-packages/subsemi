@@ -41,7 +41,10 @@ end);
 InstallMethod(MulTab, "for a semigroup",
 [IsSemigroup],
 function(S)
-  return MulTab(AsSortedList(S));
+  local mt;
+  mt := MulTab(AsSortedList(S));
+  if HasName(S) then SetName(mt,Name(S));fi;
+  return mt;
 end);
 
 InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
