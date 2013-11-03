@@ -62,14 +62,14 @@ end);
 ### CONVERTING TO REAL SEMIGROUPS ##############################################
 InstallGlobalFunction(ElementsByIndicatorSet,
 function(indset, mt)
-  return List(ListBlist(mt.rn,indset),x->mt.sortedts[x]);
+  return List(ListBlist(Indices(mt),indset),x->SortedElements(mt)[x]);
 end);
 
 InstallGlobalFunction(IndicatorSetOfElements,
 function(elms, mt)
   local blist;
-  blist := BlistList(mt.rn,[]);
-  Perform(elms, function(t) blist[Position(mt.sortedts,t)]:=true;end);
+  blist := BlistList(Indices(mt),[]);
+  Perform(elms, function(t) blist[Position(SortedElements(mt),t)]:=true;end);
   return blist;
 end);
 
