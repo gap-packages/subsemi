@@ -18,16 +18,16 @@ end);
 #ELEMENT-LEVEL INVARIANTS#######################################################
 
 InstallGlobalFunction(Frequency,
-function(mt,k) return Size(Positions(Flat(mt.mt),k));end);
+function(mt,k) return Size(Positions(Flat(Rows(mt)),k));end);
 
 InstallGlobalFunction(DiagonalFrequency,
-function(mt,k) return Size(Positions(DiagonalOfMat(mt.mt),k));end);
+function(mt,k) return Size(Positions(DiagonalOfMat(Rows(mt)),k));end);
 
 InstallGlobalFunction(RowFrequencies,
-function(mt,k) return Frequencies(mt.mt[k]);end);
+function(mt,k) return Frequencies(Rows(mt)[k]);end);
 
 InstallGlobalFunction(ColumnFrequencies,
-function(mt,k) return Frequencies(List(mt.rn, i->mt.mt[i][k]));end);
+function(mt,k) return Frequencies(List(Indices(mt), i->Rows(mt)[i][k]));end);
 
 InstallGlobalFunction(AbstractIndexPeriod,
 function(mt,k)
@@ -37,7 +37,7 @@ local orbit, set,i,p,m;
   m:=k;
   repeat
     AddSet(set,m);
-    m := mt.mt[m][k];
+    m := Rows(mt)[m][k];
     Add(orbit,m);
   until m in set;
   i := Position(orbit,m);
@@ -56,10 +56,10 @@ end);
 #TABLE-LEVEL INVARIANTS#########################################################
 
 InstallGlobalFunction(DiagonalFrequencies,
-function(mt) return Frequencies(DiagonalOfMat(mt.mt));end);
+function(mt) return Frequencies(DiagonalOfMat(Rows(mt)));end);
 
 InstallGlobalFunction(IndexPeriodTypeFrequencies,
-function(mt) return Collected(List(mt.rn,x->AbstractIndexPeriod(mt,x)));end);
+function(mt) return Collected(List(Indices(mt),x->AbstractIndexPeriod(mt,x)));end);
 
 InstallGlobalFunction(MulTabProfile,
 function(mt)
@@ -71,12 +71,12 @@ end);
 
 #calculate the frequencies of entries in a matrix of positive integers
 InstallGlobalFunction(MulTabFrequencies,
-function(mt) return Frequencies(Flat(mt.mt));end);
+function(mt) return Frequencies(Flat(Rows(mt)));end);
 
 NumOfProfileClasses := function(mt)
   local al, bl;
   al := AssociativeList();
-  Perform(mt.rn, function(x)Assign(al, x, ElementProfile(mt,x));end);
+  Perform(Indices(mt), function(x)Assign(al, x, ElementProfile(mt,x));end);
   bl := ReversedAssociativeList(al);
   return Size(Keys(bl));
 end;
