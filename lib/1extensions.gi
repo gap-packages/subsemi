@@ -76,7 +76,7 @@ SubSgpsBy1Extensions := function(mt)
       Info(SubSemiInfoClass,1,"# No name, no dump!");
       return;
     fi;
-    filename := Concatenation(Name(mt),"_", String(dumpcounter),"subs");
+    filename := Concatenation(OriginalName(mt),"_", String(dumpcounter),"subs");
     output := OutputTextFile(filename, false);
     for r in AsList(result) do
       AppendTo(output, EncodeBitString(AsBitString(r)),"\n");

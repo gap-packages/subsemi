@@ -43,7 +43,7 @@ InstallMethod(MulTab, "for a semigroup",
 function(S)
   local mt;
   mt := MulTab(AsSortedList(S));
-  if HasName(S) then SetName(mt,Name(S));fi;
+  if HasName(S) then SetOriginalName(mt,Name(S));fi;
   return mt;
 end);
 
@@ -57,39 +57,9 @@ local mt;
 end);
 
 
-#ts - transformation semigroup, permutation group
-#returns a record with the multiplication table and other extra info
-hupi := function(arg)
-local n,p,rcs,sortedts,syms,ts,mtrecord;
-  ts := arg[1];
-  n := Size(ts);
-  #this sorting is used to construct the multiplication table
-  sortedts := AsSortedList(ts);#(SortByMulTabFreqs(AsSortedList(ts)));
-  MakeImmutable(sortedts);#to be on the safe side
-  rcs := ProductTableOfElements(sortedts);
-  mtrecord := rec(ts:=ts,
-                  rows:=rcs.rows,
-                  cols:=rcs.cols,
-                  mt:=rcs.rows, #legacy
-                  n:=n,
-                  rn := [1..n], #for reusing it in loops to avoid excess objects
-                  sortedts:=sortedts,
-                  CONJUGACY:=false,
-                  syms:=[],
-                  #BLOCKING:=false
-                  );
-  #arg[2] is an automorphism group of ts in case it is there
-  if IsBound(arg[2]) then
-    if IsBound(arg[3]) then
-      mtrecord.syms := NonTrivialSymmetriesOfElementIndicesThroughHom(sortedts,arg[2],arg[3]);
-    else
-      mtrecord.syms := NonTrivialSymmetriesOfElementIndices(sortedts,arg[2]);
-    fi;
-    mtrecord.CONJUGACY:=true;
-  fi;
-  return Objectify(MulTabType,mtrecord);
-end;
+#      mtrecord.syms := NonTrivialSymmetriesOfElementIndicesThroughHom(sortedts,arg[2],arg[3]);
 
+### CONVERTING TO REAL SEMIGROUPS ##############################################
 InstallGlobalFunction(ElementsByIndicatorSet,
 function(indset, mt)
   return List(ListBlist(mt.rn,indset),x->mt.sortedts[x]);
@@ -102,3 +72,21 @@ function(elms, mt)
   Perform(elms, function(t) blist[Position(mt.sortedts,t)]:=true;end);
   return blist;
 end);
+
+### DISPLAY ####################################################################
+InstallOtherMethod(Size, "for a multab",
+[IsMulTab],
+function(mt)
+  return Size(Indices(mt));
+end);
+
+InstallMethod(ViewObj, "for a multab",
+[IsMulTab],
+function(mt)
+  if HasOriginalName(mt) then
+    Print("<multiplication table of ",OriginalName(mt),">");
+  else
+    Print("<multiplication table of ",Size(mt)," elements>");
+  fi;
+end);
+
