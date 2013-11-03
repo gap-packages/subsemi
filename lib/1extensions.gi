@@ -33,16 +33,16 @@ end;
 TestGenerateSg := function(mt)
   local gens,numofgens,blT,T;
   numofgens := Random([1..7]);
-  gens := DuplicateFreeList(List([1..numofgens], x->Random(mt.rn)));
-  blT := GenerateSg(mt.mt, mt.rn, gens);
-  T := Semigroup(List(gens, x->mt.sortedts[x]));
-  return blT = BlistList(mt.rn, List(AsList(T), t->Position(mt.sortedts,t)));
+  gens := DuplicateFreeList(List([1..numofgens], x->Random(Indices(mt))));
+  blT := GenerateSg(Rows(mt), Indices(mt), gens);
+  T := Semigroup(List(gens, x->SortedElements(mt)[x]));
+  return blT = BlistList(Indices(mt), List(AsList(T), t->Position(SortedElements(mt),t)));
 end;
 
 SameSgpEquivs := function(mt)
 local al,i;  
   al := AssociativeList();
-  for i in mt.rn do Assign(al,i,GenerateSg(mt.mt, mt.rn, [i]));od;
+  for i in Indices(mt) do Assign(al,i,GenerateSg(Rows(mt), Indices(mt), [i]));od;
   al := ReversedAssociativeList(al);
   return Filtered(ValueSet(al), x->Length(x)>1);
 end;
@@ -72,11 +72,11 @@ SubSgpsBy1Extensions := function(mt)
   dump := function() #write all the subsemigroups into a file
     local r,filename,l,i, S,ll,output;
     p_secs := TimeInSeconds();
-    if not HasName(mt.ts) then
+    if not HasName(mt) then
       Info(SubSemiInfoClass,1,"# No name, no dump!");
       return;
     fi;
-    filename := Concatenation(Name(mt.ts),"_", String(dumpcounter),"subs");
+    filename := Concatenation(Name(mt),"_", String(dumpcounter),"subs");
     output := OutputTextFile(filename, false);
     for r in AsList(result) do
       AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
@@ -149,13 +149,17 @@ SubSgpsBy1Extensions := function(mt)
   end;
   #-----------------------------------------------------------------------------
   #MAIN
-  L := mt.sortedts;
-  syms := mt.syms;
-  indexlist := mt.rn;
-  indexblist := BlistList(mt.rn,mt.rn);
-  tab := mt.mt;
+  L := SortedElements(mt);
+  if HasSymmetries(mt) then
+    syms := Symmetries(mt);
+  else
+    syms := [];
+  fi;
+  indexlist := Indices(mt);
+  indexblist := BlistList(Indices(mt),Indices(mt));
+  tab := Rows(mt);
   equivs := SameSgpEquivs(mt);
-  #boosters := List([1..mt.n], i->ListBlist(mt.rn,(GenerateSg(mt.mt,mt.rn,[i]))));
+  #boosters := List([1..mt.n], i->ListBlist(Indices(mt),(GenerateSg(Rows(mt),Indices(mt),[i]))));
   result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
     #IndexedSet(13,BinaryBlistIndexer(13), ListWithIdenticalEntries(13,2));
   counter := 0;
