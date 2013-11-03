@@ -1,11 +1,3 @@
-ReesFactorHomomorphism := function(I)
-  local cong,quotienthom,regrepisom; 
-  cong := ReesCongruenceOfSemigroupIdeal(I);
-  quotienthom := HomomorphismQuotientSemigroup(cong);
-  regrepisom := IsomorphismTransformationSemigroup(Range(quotienthom));
-  return CompositionMapping(regrepisom, quotienthom);
-end;
-
 # n points missing k points
 IdealByRank := function(n,k)
 local shapes, ggens,sgens,i,l,shp,c;
