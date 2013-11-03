@@ -1,3 +1,4 @@
+ReadPackage("SubSemi","/lib/ideals.gi");
 ReadPackage("SubSemi","/lib/util.gi");
 ReadPackage("SubSemi","/lib/bruteforce.gi");
 ReadPackage("SubSemi","/lib/blist.gi");
