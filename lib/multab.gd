@@ -25,3 +25,4 @@ DeclareAttribute("OriginalName", IsMulTab);
 
 DeclareGlobalFunction("ElementsByIndicatorSet");
 DeclareGlobalFunction("IndicatorSetOfElements");
+DeclareGlobalFunction("ReCodeIndicatorSet");
