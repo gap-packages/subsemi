@@ -8,3 +8,4 @@
 ##
 
 DeclareGlobalFunction("ReesFactorHomomorphism");
+DeclareGlobalFunction("RFHNonZeroPreImages");
