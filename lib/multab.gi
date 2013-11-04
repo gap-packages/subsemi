@@ -73,6 +73,12 @@ function(elms, mt)
   return blist;
 end);
 
+#from one multab  to another (for subs and supers)
+#indicatorset in source to indicatorset in destination
+InstallGlobalFunction(ReCodeIndicatorSet,
+function(indset,srcmt, destmt)
+  return IndicatorSetOfElements(ElementsByIndicatorSet(indset,srcmt),destmt);
+end);
 ### DISPLAY ####################################################################
 InstallOtherMethod(Size, "for a multab",
 [IsMulTab],
