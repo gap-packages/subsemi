@@ -8,3 +8,5 @@
 ##
 
 DeclareGlobalFunction("Is3NilPotent");
+DeclareGlobalFunction("IsZeroElement");
+DeclareGlobalFunction("HasZeroElement");
