@@ -12,7 +12,11 @@ DeclareGlobalFunction("LastEntryPosOr1");
 
 DeclareGlobalFunction("EncodeBitString");
 DeclareGlobalFunction("DecodeBitString");
-
 DeclareGlobalFunction("AsBlist");
 DeclareGlobalFunction("AsBitString");
+
+DeclareGlobalFunction("ElementsByIndicatorSet");
+DeclareGlobalFunction("IndicatorSetOfElements");
+DeclareGlobalFunction("ReCodeIndicatorSet");
+
 

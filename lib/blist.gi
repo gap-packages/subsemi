@@ -101,8 +101,29 @@ function(blist)
                 fi;
               end);
 end);
-            
+
 InstallGlobalFunction(AsBlist,
 function(bitstr)
   return BlistList([1..Size(bitstr)],Positions(bitstr,'1'));
+end);
+
+### CONVERTING TO SET ELEMENTS #################################################
+InstallGlobalFunction(ElementsByIndicatorSet,
+function(indset, elements)
+  return List(ListBlist([1..Size(indset)],indset),x->elements[x]);
+end);
+
+InstallGlobalFunction(IndicatorSetOfElements,
+function(elms, universe)
+  local blist;
+  blist := BlistList([1..Size(universe)],[]);
+  Perform(elms, function(t) blist[Position(universe,t)]:=true;end);
+  return blist;
+end);
+
+#from one multab  to another (for subs and supers)
+#indicatorset in source to indicatorset in destination
+InstallGlobalFunction(ReCodeIndicatorSet,
+function(indset,src, dest)
+  return IndicatorSetOfElements(ElementsByIndicatorSet(indset,src),dest);
 end);

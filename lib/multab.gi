@@ -56,29 +56,6 @@ local mt;
   return mt;
 end);
 
-
-#      mtrecord.syms := NonTrivialSymmetriesOfElementIndicesThroughHom(sortedts,arg[2],arg[3]);
-
-### CONVERTING TO REAL SEMIGROUPS ##############################################
-InstallGlobalFunction(ElementsByIndicatorSet,
-function(indset, mt)
-  return List(ListBlist(Indices(mt),indset),x->SortedElements(mt)[x]);
-end);
-
-InstallGlobalFunction(IndicatorSetOfElements,
-function(elms, mt)
-  local blist;
-  blist := BlistList(Indices(mt),[]);
-  Perform(elms, function(t) blist[Position(SortedElements(mt),t)]:=true;end);
-  return blist;
-end);
-
-#from one multab  to another (for subs and supers)
-#indicatorset in source to indicatorset in destination
-InstallGlobalFunction(ReCodeIndicatorSet,
-function(indset,srcmt, destmt)
-  return IndicatorSetOfElements(ElementsByIndicatorSet(indset,srcmt),destmt);
-end);
 ### DISPLAY ####################################################################
 InstallOtherMethod(Size, "for a multab",
 [IsMulTab],
