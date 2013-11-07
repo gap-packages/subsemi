@@ -17,3 +17,13 @@ function(S)
   fi;
   return false;
 end);
+
+InstallGlobalFunction(IsZeroElement,
+function(s,S)
+  return ForAll(S, t -> s*t=s and t*s=s);
+end);
+
+InstallGlobalFunction(HasZeroElement,
+function(S)
+  return ForAny(S, function(s) return IsZeroElement(s,S);end);
+end);
