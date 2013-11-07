@@ -72,7 +72,7 @@ SubSgpsBy1Extensions := function(mt)
   dump := function() #write all the subsemigroups into a file
     local r,filename,l,i, S,ll,output;
     p_secs := TimeInSeconds();
-    if not HasName(mt) then
+    if not HasOriginalName(mt) then
       Info(SubSemiInfoClass,1,"# No name, no dump!");
       return;
     fi;
