@@ -20,9 +20,3 @@ DeclareAttribute("Indices", IsMulTab);
 DeclareAttribute("SortedElements", IsMulTab);
 DeclareAttribute("Symmetries", IsMulTab);
 DeclareAttribute("OriginalName", IsMulTab);
-
-
-
-DeclareGlobalFunction("ElementsByIndicatorSet");
-DeclareGlobalFunction("IndicatorSetOfElements");
-DeclareGlobalFunction("ReCodeIndicatorSet");
