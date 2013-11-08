@@ -1,6 +1,8 @@
-Sing3 := FullTransformationSemigroup(3);
-mtorig := MulTab(Sing3);
-I := SemigroupIdealByGenerators(Sing3,[Transformation([2,2,3])]);
+T3 := FullTransformationSemigroup(3);
+Sing3 := SingularTransformationSemigroup(3);
+
+mtorig := MulTab(T3);
+I := SemigroupIdealByGenerators(T3,[Transformation([2,2,2])]);
 rfh := ReesFactorHomomorphism(I);
 R := Range(rfh);
 mtR := MulTab(R);
@@ -19,4 +21,3 @@ Is := List(AsList(SubSgpsBy1Extensions(mtlittle)),
 
 Add(Is,BlistList(Indices(mtorig),[]));
 Add(x,BlistList(Indices(mtorig),[]));
-
