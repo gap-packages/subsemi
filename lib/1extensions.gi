@@ -30,9 +30,9 @@ GenerateSg := function(tab, indexlist,gens)
   return ClosureByMulTab(tab, indexlist,BlistList(indexlist,[]),gens );
 end;
 
-SgpInMultab := function(gens,mt)
+InstallGlobalFunction(SgpInMulTab,function(gens,mt)
   return GenerateSg(Rows(mt), Indices(mt),ListBlist(Indices(mt),gens));
-end;
+end);
 
 TestGenerateSg := function(mt)
   local gens,numofgens,blT,T;
@@ -52,7 +52,8 @@ local al,i;
 end;
 
 # mt - MulTab, multiplication table
-SubSgpsBy1Extensions := function(mt)
+InstallGlobalFunction(SubSgpsBy1Extensions,
+function(mt)
   local s, L, extend, result,  indexlist, syms,
         counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab,
         extend_conjreponly,equivs, indexblist;#,boosters;
@@ -178,4 +179,4 @@ SubSgpsBy1Extensions := function(mt)
   dump();
   Info(SubSemiInfoClass,1,Concatenation("#",String(counter)));
   return result;
-end;
+end);

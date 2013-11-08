@@ -8,3 +8,4 @@ ReadPackage("SubSemi","/lib/bruteforce.gd");
 ReadPackage("SubSemi","/lib/conjugacy.gd");
 ReadPackage("SubSemi","/lib/multab.gd");
 ReadPackage("SubSemi","/lib/invariants.gd");
+ReadPackage("SubSemi","/lib/1extensions.gd");

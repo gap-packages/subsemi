@@ -8,7 +8,5 @@ ReadPackage("SubSemi","/lib/multab.gi");
 ReadPackage("SubSemi","/lib/invariants.gi");
 ReadPackage("SubSemi","/lib/1extensions.gi");
 
-ReadPackage("SubSemi","/lib/combiner.g");
-
 ReadPackage("SubSemi","/tst/testfunctions.g");
 ReadPackage("SubSemi","/tst/againstbf.g");
