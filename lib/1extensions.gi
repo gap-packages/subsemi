@@ -14,13 +14,13 @@ ClosureByMulTab := function(tab, indexlist,base,extension)
         if closure[j] then
           diff[tab[j][i]] := true;
           diff[tab[i][j]] := true;
-        fi;    
+        fi;
       od;
       diff[tab[i][i]] := true;
       SubtractBlist(diff,closure);
-      UniteBlist(queue, diff);  
-      closure[i] := true; #adding i  
-    fi;   
+      UniteBlist(queue, diff);
+      closure[i] := true; #adding i
+    fi;
     queue[i] := false; #removing i from the queue
   od;
   return closure;
