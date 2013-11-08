@@ -9,3 +9,5 @@
 
 DeclareGlobalFunction("ReesFactorHomomorphism");
 DeclareGlobalFunction("RFHNonZeroPreImages");
+DeclareGlobalFunction("SubSgpsByIdeals");
+DeclareGlobalFunction("Combiner");
