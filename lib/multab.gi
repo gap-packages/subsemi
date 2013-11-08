@@ -25,35 +25,44 @@ local n, rows,i,j;
 end);
 
 ### CONSTRUCTORS ###############################################################
-InstallOtherMethod(MulTab, "for a closed ordered list of multiplicative elements",
-[IsSortedList],
-function(l)
-  local mt,inds; 
+InstallGlobalFunction(CreateMulTab,
+function(sortedelements, G, name)
+local mt,inds;
   mt := Objectify(MulTabType, rec());
-  SetRows(mt,ProductTableOfElements(l));
-  SetSortedElements(mt,l);
-  inds := [1..Size(l)];
+  SetRows(mt,ProductTableOfElements(sortedelements));
+  SetSortedElements(mt,sortedelements);
+  inds := [1..Size(sortedelements)];
   MakeImmutable(inds);
   SetIndices(mt,inds);
+  SetSymmetries(mt, NonTrivialSymmetriesOfElementIndices(SortedElements(mt),G));
+  if  name <> fail then SetOriginalName(mt,name);fi;
   return mt;
+end);
+
+InstallOtherMethod(MulTab,"for closed ordered list of multiplicative elements",
+[IsSortedList],
+function(l)
+  return CreateMulTab(l, Group(()), fail);
 end);
 
 InstallMethod(MulTab, "for a semigroup",
 [IsSemigroup],
 function(S)
-  local mt;
-  mt := MulTab(AsSortedList(S));
-  if HasName(S) then SetOriginalName(mt,Name(S));fi;
-  return mt;
+  if HasName(S) then
+    return CreateMulTab(AsSortedList(S), Group(()),Name(S));
+  else
+    return CreateMulTab(AsSortedList(S), Group(()),fail);
+  fi;
 end);
 
 InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
 [IsSemigroup,IsGroup],
 function(S,G)
-local mt;  
-  mt := MulTab(S);
-  SetSymmetries(mt,NonTrivialSymmetriesOfElementIndices(SortedElements(mt),G));
-  return mt;
+  if HasName(S) then
+    return CreateMulTab(AsSortedList(S), G, Name(S));
+  else
+    return CreateMulTab(AsSortedList(S), G,fail);
+  fi;
 end);
 
 

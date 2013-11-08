@@ -13,6 +13,7 @@ BindGlobal("MulTabFamily",NewFamily("MulTabFamily",IsMulTab));
 BindGlobal("MulTabType", NewType(MulTabFamily,IsMulTab));
 
 DeclareOperation("MulTab",[IsSemigroup]);
+DeclareGlobalFunction("CreateMulTab");
 DeclareGlobalFunction("ProductTableOfElements");
 
 DeclareAttribute("Rows", IsMulTab);

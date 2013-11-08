@@ -30,6 +30,10 @@ GenerateSg := function(tab, indexlist,gens)
   return ClosureByMulTab(tab, indexlist,BlistList(indexlist,[]),gens );
 end;
 
+SgpInMultab := function(gens,mt)
+  return GenerateSg(Rows(mt), Indices(mt),ListBlist(Indices(mt),gens));
+end;
+
 TestGenerateSg := function(mt)
   local gens,numofgens,blT,T;
   numofgens := Random([1..7]);
