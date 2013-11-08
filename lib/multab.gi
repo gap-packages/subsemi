@@ -56,6 +56,15 @@ local mt;
   return mt;
 end);
 
+
+InstallGlobalFunction(ConjugacyClassRep,
+function(indset,mt)
+local C;
+  C := [indset]; #this set is kept sorted
+  Perform(Symmetries(mt), function(g) AddSet(C,OnFiniteSet(indset,g));end);
+  return C[1]; #the canonical rep
+end);
+
 ### DISPLAY ####################################################################
 InstallOtherMethod(Size, "for a multab",
 [IsMulTab],
