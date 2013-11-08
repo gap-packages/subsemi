@@ -22,11 +22,10 @@ repeat
   #elts := ElementsByIndicatorSet(indset,mtT);
   #if IsSG(elts) then Print("#"); else Print("FAIL");Error();fi;
   #torso := RFHNonZeroPreImages(elts,rfh);
-  torso := List(ListBlist(Indices(mtT),indset),x->LL[x]);
+  torso := ElementsByIndicatorSet(indset,LL);
+  # List(ListBlist(Indices(mtT),indset),x->LL[x]);
   if fail in torso then Remove(torso,Position(torso,fail));fi;
   WriteLine(otf,EncodeBitString(AsBitString(
-          IndicatorSetOfElements(torso,mtSing4))));
+          IndicatorSetOfElements(torso,SortedElements(mtSing4)))));
   s := ReadLine(itf);
 until s=fail;
-     
-     
