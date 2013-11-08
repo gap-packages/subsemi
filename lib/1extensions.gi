@@ -123,9 +123,9 @@ SubSgpsBy1Extensions := function(mt)
     #calculating the new subsgp
     bl := ClosureByMulTab(tab, indexlist, base, [s]);#boosters[s]);#[s]);
     #its conjugacy class
-    C := [bl];
-    Perform(syms, function(g) AddSet(C,OnFiniteSet(bl,g));end);
-    bl := C[1]; #the canonical rep
+    #C := [bl];
+    #Perform(syms, function(g) AddSet(C,OnFiniteSet(bl,g));end);
+    bl := ConjugacyClassRep(bl,mt);#C[1]; #the canonical rep
     if  bl in result then
       return; #just bail out if we already have it
     fi;
