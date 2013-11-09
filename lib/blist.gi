@@ -127,3 +127,16 @@ InstallGlobalFunction(ReCodeIndicatorSet,
 function(indset,src, dest)
   return IndicatorSetOfElements(ElementsByIndicatorSet(indset,src),dest);
 end);
+
+### COMBINING ##################################################################
+CombineBlists := function(A,B)
+  local a,b,c, result;
+  c := 0;
+  result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
+  for a in A do
+    for b in B do
+      AddSet(result,UnionBlist(a,b));
+    od;
+  od;
+  return result;
+end;

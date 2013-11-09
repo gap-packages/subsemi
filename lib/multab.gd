@@ -23,3 +23,4 @@ DeclareAttribute("Symmetries", IsMulTab);
 DeclareAttribute("OriginalName", IsMulTab);
 
 DeclareGlobalFunction("ConjugacyClassRep");
+DeclareGlobalFunction("ConjugacyClassOfSet");
