@@ -71,12 +71,12 @@ end);
 InstallGlobalFunction(ConjugacyClassCombiner,
 function(A,B,mt)
   local result, a,b,Ca,Cb,combined;
-  result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1]);
+  result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
   for a in A do
     Ca := ConjugacyClassOfSet(a,mt);
     for b in B do
       Cb := ConjugacyClassOfSet(b,mt);
-      combined := AsList(CombineBlists(Ca,Cb));
+      combined := Unique(List(EnumeratorOfCartesianProduct(Ca,Cb),UnionBlist));
       Perform(combined, function(x) AddSet(result,ConjugacyClassRep(x,mt));end);
     od;
   od;
