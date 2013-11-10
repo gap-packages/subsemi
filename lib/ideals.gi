@@ -66,3 +66,19 @@ function(A,B,mt)
   od;
   return result;
 end);
+
+# two sets plainly
+InstallGlobalFunction(ConjugacyClassCombiner,
+function(A,B,mt)
+  local result, a,b,Ca,Cb,combined;
+  result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1]);
+  for a in A do
+    Ca := ConjugacyClassOfSet(a,mt);
+    for b in B do
+      Cb := ConjugacyClassOfSet(b,mt);
+      combined := AsList(CombineBlists(Ca,Cb));
+      Perform(combined, function(x) AddSet(result,ConjugacyClassRep(x,mt));end);
+    od;
+  od;
+  return result;
+end);
