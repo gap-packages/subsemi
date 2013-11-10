@@ -77,7 +77,10 @@ function(A,B,mt)
     for b in B do
       Cb := ConjugacyClassOfSet(b,mt);
       combined := Unique(List(EnumeratorOfCartesianProduct(Ca,Cb),UnionBlist));
-      Perform(combined, function(x) AddSet(result,ConjugacyClassRep(x,mt));end);
+      combined := Unique(List(combined, x->ConjugacyClassRep(x,mt)));
+      #Perform(combined, function(x) AddSet(result,ConjugacyClassRep(x,mt));end);
+      #UniteSet(result, combined);
+      Perform(combined, function(x)AddSet(result,x);end);
     od;
   od;
   return result;
