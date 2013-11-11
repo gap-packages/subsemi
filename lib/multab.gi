@@ -26,7 +26,7 @@ end);
 
 ### CONSTRUCTORS ###############################################################
 InstallGlobalFunction(CreateMulTab,
-function(sortedelements, G, name)
+function(sortedelements, G, name, hom)
 local mt,inds;
   mt := Objectify(MulTabType, rec());
   SetRows(mt,ProductTableOfElements(sortedelements));
@@ -34,7 +34,15 @@ local mt,inds;
   inds := [1..Size(sortedelements)];
   MakeImmutable(inds);
   SetIndices(mt,inds);
-  SetSymmetries(mt, NonTrivialSymmetriesOfElementIndices(SortedElements(mt),G));
+  if hom = fail then
+    SetSymmetries(mt,
+            NonTrivialSymmetriesOfElementIndices(SortedElements(mt),G));
+  else
+    SetSymmetries(mt,
+            NonTrivialSymmetriesOfElementIndicesThroughHom(SortedElements(mt),
+                    G,
+                    hom));
+  fi;
   if  name <> fail then SetOriginalName(mt,name);fi;
   return mt;
 end);
@@ -42,16 +50,16 @@ end);
 InstallOtherMethod(MulTab,"for closed ordered list of multiplicative elements",
 [IsSortedList],
 function(l)
-  return CreateMulTab(l, Group(()), fail);
+  return CreateMulTab(l, Group(()), fail, fail);
 end);
 
 InstallMethod(MulTab, "for a semigroup",
 [IsSemigroup],
 function(S)
   if HasName(S) then
-    return CreateMulTab(AsSortedList(S), Group(()),Name(S));
+    return CreateMulTab(AsSortedList(S), Group(()),Name(S),fail);
   else
-    return CreateMulTab(AsSortedList(S), Group(()),fail);
+    return CreateMulTab(AsSortedList(S), Group(()),fail,fail);
   fi;
 end);
 
@@ -59,9 +67,19 @@ InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
 [IsSemigroup,IsGroup],
 function(S,G)
   if HasName(S) then
-    return CreateMulTab(AsSortedList(S), G, Name(S));
+    return CreateMulTab(AsSortedList(S), G, Name(S),fail);
   else
-    return CreateMulTab(AsSortedList(S), G,fail);
+    return CreateMulTab(AsSortedList(S), G,fail,fail);
+  fi;
+end);
+
+InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
+[IsSemigroup,IsGroup,IsMapping],
+function(S,G,hom)
+  if HasName(S) then
+    return CreateMulTab(AsSortedList(S), G, Name(S),hom);
+  else
+    return CreateMulTab(AsSortedList(S), G,fail,hom);
   fi;
 end);
 
