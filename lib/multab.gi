@@ -99,4 +99,3 @@ function(mt)
     Print("<multiplication table of ",Size(mt)," elements>");
   fi;
 end);
-
