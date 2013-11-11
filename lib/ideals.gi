@@ -58,7 +58,7 @@ end);
 InstallGlobalFunction(Combiner,
 function(A,B,mt)
   local result, a,b;
-  result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1]);
+  result := [];#DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1]);
   for a in A do
     for b in B do
       AddSet(result, SgpInMulTab(UnionBlist(a,b),mt));
