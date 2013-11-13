@@ -142,7 +142,7 @@ function(filename)
   return result;
 end);
 
-InstallGlobalFunction(WriteIndicatorSets,
+InstallGlobalFunction(SaveIndicatorSets,
 function(indsets, filename)
   local output,r;
   output := OutputTextFile(filename, false);
