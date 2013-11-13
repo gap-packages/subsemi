@@ -13,6 +13,8 @@
 \newcommand{\T}{\mathcal T}
 \newcommand{\I}{\mathcal I}
 \newcommand{\cS}{\mathcal S}
+\newcommand{\fB}{\mathfrak B}
+\newcommand{\fJ}{\mathfrak J}
 
 \newcommand{\todo}[1]{ \textsf{\color{red}{[TODO:  #1 ]}}}
 
@@ -48,6 +50,33 @@ From the practical applications (biology, physics, artificial intelligence) poin
 \draw node (Tn) {$\T_n$};
 \draw node [right of=Tn] (In) {$\I_n$};
 \draw node [right of=In] (Ins) {$\I_n^*$};
+\draw node [right of=Ins] (Br) {$\fB_n$};
+\draw node [below of=In] (Sn) {$\cS_n$};
+\draw node [above of=Ins] (Pn) {$P_n$};
+\draw node [below right of=Sn] (1n) {$1_n$};
+\draw node [below of=Br] (Jn) {$\fJ_n$};
+\draw node [above of=Tn] (PTn) {$PT_n$};
+\draw node [above of=PTn] (Bin) {Bin$_n$};
+\draw node [above right of=Bin] (PBn) {PB$_n$};
+
+\draw  (Tn) -- (Sn);
+\draw  (In) -- (Sn);
+\draw  (Ins) -- (Sn);
+
+\draw  (Pn) -- (In);
+\draw  (Pn) -- (Ins);
+\draw  (Pn) -- (Tn);
+\draw  (Pn) -- (Br);
+
+\draw  (Jn) -- (1n);
+\draw  (Br) -- (Jn);
+\draw  (Sn) -- (1n);
+
+\draw (PTn) -- (Tn);
+\draw (PTn) -- (In);
+\draw (Bin) -- (PTn);
+\draw (PBn) -- (Bin);
+\draw (PBn) -- (Pn);
 \end{tikzpicture}
 
 \begin{tabular}{|c|c|l|}
