@@ -19,4 +19,5 @@ DeclareGlobalFunction("ElementsByIndicatorSet");
 DeclareGlobalFunction("IndicatorSetOfElements");
 DeclareGlobalFunction("ReCodeIndicatorSet");
 
-
+DeclareGlobalFunction("LoadIndicatorSets");
+DeclareGlobalFunction("SaveIndicatorSets");

@@ -127,3 +127,27 @@ InstallGlobalFunction(ReCodeIndicatorSet,
 function(indset,src, dest)
   return IndicatorSetOfElements(ElementsByIndicatorSet(indset,src),dest);
 end);
+
+InstallGlobalFunction(LoadIndicatorSets,
+function(filename)
+  local result,itf,s;
+  itf := InputTextFile(filename);
+  result := [];
+  s := ReadLine(itf);
+  repeat
+    NormalizeWhitespace(s);
+    Add(result,AsBlist(DecodeBitString(s)));    
+    s := ReadLine(itf);
+  until s=fail;
+  return result;
+end);
+
+InstallGlobalFunction(WriteIndicatorSets,
+function(indsets, filename)
+  local output,r;
+  output := OutputTextFile(filename, false);
+  for r in indsets do
+    AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
+  od;
+  CloseStream(output);
+end);
