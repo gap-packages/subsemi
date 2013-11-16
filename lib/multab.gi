@@ -86,18 +86,15 @@ end);
 
 InstallGlobalFunction(ConjugacyClassRep,
 function(indset,mt)
-local C;
-  C := [indset]; #this set is kept sorted
-  Perform(Symmetries(mt), function(g) AddSet(C,OnFiniteSet(indset,g));end);
-  return C[1]; #the canonical rep
+  return ConjugacyClassOfSet(indset,mt)[1]; #the canonical rep
 end);
 
 InstallGlobalFunction(ConjugacyClassOfSet,
 function(indset,mt)
 local C;
-  C := [indset]; #this set is kept sorted
-  Perform(Symmetries(mt), function(g) AddSet(C,OnFiniteSet(indset,g));end);
-  return C;
+  C := List(Symmetries(mt), g->OnFiniteSet(indset,g));
+  Add(C,indset);
+  return AsSortedList(Unique(C));
 end);
 
 
