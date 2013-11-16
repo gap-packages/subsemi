@@ -83,20 +83,18 @@ function(S,G,hom)
   fi;
 end);
 
+InstallGlobalFunction(ConjugacyClassOfSet,
+function(indset,mt)
+  return Unique(List(Symmetries(mt), g->OnFiniteSet(indset,g)));
+end);
 
 InstallGlobalFunction(ConjugacyClassRep,
 function(indset,mt)
-  return ConjugacyClassOfSet(indset,mt)[1]; #the canonical rep
-end);
-
-InstallGlobalFunction(ConjugacyClassOfSet,
-function(indset,mt)
 local C;
-  C := List(Symmetries(mt), g->OnFiniteSet(indset,g));
-  Add(C,indset);
-  return AsSortedList(Unique(C));
+  C := ConjugacyClassOfSet(indset,mt);
+  Sort(C); #sorting in place instead of copy by AsSortedList
+  return C[1]; #the canonical rep
 end);
-
 
 ### DISPLAY ####################################################################
 InstallOtherMethod(Size, "for a multab",

@@ -65,10 +65,7 @@ end);
 #sorted list
 InstallGlobalFunction(NonTrivialSymmetriesOfElementIndices,
 function(M,G)
-  local syms;
-  syms := List(G, g -> AsPermutation(TransformationOp(g,M,\^)));
-  Remove(syms, Position(syms,()));    #remove the identity to save time later
-  return syms;
+  return List(G, g -> AsPermutation(TransformationOp(g,M,\^)));
 end);
 
 #getting conjugacy symmetries that act on the magma's elements' indices in the
@@ -76,13 +73,9 @@ end);
 #through a homomorphism
 InstallGlobalFunction(NonTrivialSymmetriesOfElementIndicesThroughHom,
 function(M,G,hom)
-  local syms;
-  syms := List(G, g ->
-               AsPermutation(
-                       TransformationOp(g,M,
-                               function(p,t)
-                                 return Image(hom,PreImagesRepresentative(hom,p)^t);
-                               end)));
-  Remove(syms, Position(syms,()));    #remove the identity to save time later
-  return syms;
+  return List(G, g -> AsPermutation(
+                 TransformationOp(g,M,
+                         function(p,t)
+                           return Image(hom,PreImagesRepresentative(hom,p)^t);
+                         end)));
 end);
