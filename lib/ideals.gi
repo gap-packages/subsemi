@@ -77,7 +77,7 @@ function(A,B,mt)
     Ca := ConjugacyClassOfSet(a,mt);
     for Cb in Cbs do
       Perform(List(EnumeratorOfCartesianProduct(Ca,Cb),UnionBlist),
-              function(x)AddSet(hashtab,x);end);
+              function(x)AddSet(hashtab,ConjugacyClassRep(x,mt));end);
     od;
   od;
   Info(SubSemiInfoClass,1,Concatenation(String(Size(hashtab))," unions"));
