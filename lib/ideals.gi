@@ -80,12 +80,11 @@ function(A,B,mt)
               function(x)AddSet(hashtab,x);end);
     od;
   od;
-  Print(Size(hashtab),"\n\c");
+  Info(SubSemiInfoClass,1,Concatenation(String(Size(hashtab))," unions"));
   combined := AsList(hashtab);
   hashtab := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
   Perform(combined, function(x)AddSet(hashtab, SgpInMulTab(x,mt));end);
-  Print(Size(hashtab),"\n\c");
-
+  Info(SubSemiInfoClass,1,Concatenation(String(Size(hashtab))," sgps"));
   combined := AsList(hashtab);
   hashtab := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
   Perform(combined, function(x)AddSet(hashtab, ConjugacyClassRep(x,mt));end);
