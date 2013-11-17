@@ -1,0 +1,8 @@
+#input := "LowerTorso_01_1_3262X";;
+time := TimeInSeconds();;
+mtSing4 := MulTab(SingularTransformationSemigroup(4),S4);;
+K42 := LoadIndicatorSets("K42ccs"){[1..1000]};;
+subs := LoadIndicatorSets(input);; 
+SaveIndicatorSets(AsList(ConjugacyClassCombiner(subs,K42,mtSing4)),Concatenation(input,"M"));;
+PrintTo(Concatenation(input,"F"),String(TimeInSeconds()-time));;
+
