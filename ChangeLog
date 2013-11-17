@@ -1,3 +1,5 @@
+0.5
+	Lot of work on enumerating by parallel search for ideals.
 0.4
 	MulTab now is an attribute storing object, so no more record references.
 0.3
