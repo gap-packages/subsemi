@@ -14,6 +14,7 @@
 \newcommand{\I}{\mathcal I}
 \newcommand{\cS}{\mathcal S}
 \newcommand{\cD}{\mathcal D}
+\newcommand{\cP}{\mathcal P}
 \newcommand{\fB}{\mathfrak B}
 \newcommand{\fJ}{\mathfrak J}
 
@@ -38,31 +39,32 @@ In low-degree cases,  we can take the set of all transformations of $n$ points, 
 \draw node [right of=In] (Ins) {$\I_n^*$};
 \draw node [right of=Ins] (Br) {$\fB_n$};
 \draw node [below of=In] (Sn) {$\cS_n$};
-\draw node [above of=Ins] (Pn) {$P_n$};
+
 \draw node [below right of=Sn] (1n) {$1_n$};
-\draw node [below of=Br] (Jn) {$\fJ_n$};
+\draw node [below of=Br] (TemperleyLieb) {$TL_n$};
 \draw node [above of=Tn] (PTn) {$PT_n$};
 \draw node [above of=PTn] (Bin) {Bin$_n$};
 \draw node [above right of=Bin] (PBn) {PB$_n$};
+\draw node [below right of=PBn] (PartitionMonoid) {$\cP_n$};
 
 \draw  (Tn) -- (Sn);
 \draw  (In) -- (Sn);
 \draw  (Ins) -- (Sn);
 
-\draw  (Pn) -- (In);
-\draw  (Pn) -- (Ins);
-\draw  (Pn) -- (Tn);
-\draw  (Pn) -- (Br);
+\draw  (PartitionMonoid) -- (In);
+\draw  (PartitionMonoid) -- (Ins);
+\draw  (PartitionMonoid) -- (Tn);
+\draw  (PartitionMonoid) -- (Br);
 
-\draw  (Jn) -- (1n);
-\draw  (Br) -- (Jn);
+\draw  (TemperleyLieb) -- (1n);
+\draw  (Br) -- (TemperleyLieb);
 \draw  (Sn) -- (1n);
 
 \draw (PTn) -- (Tn);
 \draw (PTn) -- (In);
 \draw (Bin) -- (PTn);
 \draw (PBn) -- (Bin);
-\draw (PBn) -- (Pn);
+\draw (PBn) -- (PartitionMonoid);
 \end{tikzpicture}
 \end{wrapfigure}
 Previous efforts for enumerating semigroups were focused on the abstract case, enumerating by the order, and worked by finding all valid multiplication tables of the given size.
@@ -81,21 +83,24 @@ Generating  and validating this vast amount of data, compressing and making it a
 
 From the practical applications (biology, physics, artificial intelligence) point of view the cascade representations have utmost importance, since they are tightly connected to hierarchical decompositions, the algebraic ways of understanding complex systems. The biggest obstacle for these decomposition methods in realizing their potential is that we have limited understanding of the minimal tree transformation representations of semigroups. 
 
-
-\begin{tabular}{|c|c|l|}
+\begin{figure}
+\begin{tabular}{|c|l|l|l|}
 \hline
- & Order & $n=0,1,2,3,\ldots$\\ 
+Symbol & Name &Order &$n=0,1,2,3,\ldots$\\ 
 \hline 
-$\cS_n$& $n!$ & $1, 1, 2, 6, 24, 120, 720,\ldots$\\
+$\cS_n$&symmetric group &$n!$ & $1, 1, 2, 6, 24, 120, 720,\ldots$\\
 \hline 
-$\T_n$& $n^n$ & $1,1,4,27,256,3125,\ldots$\\
+$\T_n$&full transformation semigroup &$n^n$ & $1,1,4,27,256,3125,\ldots$\\
 \hline
-$\I_n$&$\sum_0^n k!{n\choose k}^2$ &$1, 2, 7, 34, 209, 1546,\ldots$\\
+$\I_n$&symmetric inverse monoid&$\sum_0^n k!{n\choose k}^2$ &$1, 2, 7, 34, 209, 1546,\ldots$\\
 \hline
-$\I_n^*$& $\sum_1^n k!\big(S(n, k)\big)^2$&$1, 1, 3, 25, 339, 6721,\ldots$\\
+$\I_n^*$&dual symmetric inverse monoid &$\sum_1^n k!\big(S(n, k)\big)^2$&$1, 1, 3, 25, 339, 6721,\ldots$\\
+\hline
+$TL_n,J_n$ & \begin{minipage}[l]{130pt}generators of Temperley-Lieb algebras, Jones monoid\end{minipage} & $C_n=\frac{1}{n+1} {2n \choose n}$ & $1,1,2,5,14,42, 132,\ldots$\\
 \hline
 \end{tabular}
-
+\caption{summary}
+\end{figure}
 
 \begin{enumerate}
 \item Enumerate finite semigroups of different representations (across all types of diagrams) up to conjugacy and isomorphism.
@@ -103,5 +108,7 @@ $\I_n^*$& $\sum_1^n k!\big(S(n, k)\big)^2$&$1, 1, 3, 25, 339, 6721,\ldots$\\
 \item Study the results of the classification in order to establish new results for combinatorial representation theory of finite semigroups.
 \item Study the properties of cascade representations in order to realize their application potential.
 \end{enumerate}
+
+
 
 \end{document}
