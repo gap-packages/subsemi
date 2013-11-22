@@ -11,17 +11,20 @@
 \usepackage{wrapfig}
 
 % NOTATION for diagram semigroups
-\newcommand{\BinRel}{\text{Bin}}
+\newcommand{\BinRel}{\text{B}}
 \newcommand{\InvMon}{\mathcal I}
 \newcommand{\DualInvMon}{{\mathcal I}^*}
+\newcommand{\FullTrans}{\mathcal T}
+\newcommand{\Symmetric}{\mathcal S}
+\newcommand{\Brauer}{\mathfrak B}
+\newcommand{\Partition}{\mathcal P}
+\newcommand{\PartBinRel}{\Partition\BinRel}
 
-\newcommand{\T}{\mathcal T}
-\newcommand{\cS}{\mathcal S}
 \newcommand{\cD}{\mathcal D}
-\newcommand{\cP}{\mathcal P}
-\newcommand{\fB}{\mathfrak B}
-\newcommand{\PB}{\mathfrak{PB}}
-\newcommand{\fJ}{\mathfrak J}
+
+
+
+%\newcommand{\fJ}{\mathfrak J}
 
 
 
@@ -39,23 +42,23 @@ A \emph{transformation semigroup} of degree $n$ is a collection of transformatio
 These are typical combinatorial questions but an actual enumeration enables us to answer other type of important questions.
 \emph{Can we represent a given abstract semigroup as transformations of $n$ points?}
 \emph{What is the minimal value for such an $n$?}
-In low-degree cases,  we can take the set of all transformations of $n$ points, the \emph{full transformation semigroup} $\T_n$, enumerate all of its subsemigroups, and by that we can find all possible degree-$n$ representations. 
+In low-degree cases,  we can take the set of all transformations of $n$ points, the \emph{full transformation semigroup} $\FullTrans_n$, enumerate all of its subsemigroups, and by that we can find all possible degree-$n$ representations. 
 
 \begin{wrapfigure}{R}{0.3\textwidth}
 \begin{tikzpicture}
 \tikzstyle{plain}=[rounded corners=3pt, draw]
-\draw node [plain](Tn) {$\T_n$};
+\draw node [plain](Tn) {$\FullTrans_n$};
 \draw node [plain,right of=Tn] (In) {$\InvMon_n$};
 \draw node [plain,right of=In] (Ins) {$\DualInvMon_n$};
-\draw node [plain,right of=Ins] (Br) {$\fB_n$};
-\draw node [plain,below of=In] (Sn) {$\cS_n$};
+\draw node [plain,right of=Ins] (Br) {$\Brauer_n$};
+\draw node [plain,below of=In] (Sn) {$\Symmetric_n$};
 
 \draw node [plain,below right of=Sn] (1n) {$1_n$};
 \draw node [plain,below of=Br] (TemperleyLieb) {$TL_n$};
-\draw node [plain,above of=Tn] (PTn) {$PT_n$};
+\draw node [plain,above of=Tn] (PTn) {$P\FullTrans_n$};
 \draw node [plain,above of=PTn] (Bin) {\BinRel$_n$};
-\draw node [plain,above right of=Bin] (PBn) {$\PB_n$};
-\draw node at (2,1.5) [plain] (PartitionMonoid) {$\cP_n$};
+\draw node [plain,above right of=Bin] (PBn) {$\PartBinRel_n$};
+\draw node at (2,2) [plain] (PartitionMonoid) {$\Partition_n$};
 
 \draw  (Tn) -- (Sn);
 \draw  (In) -- (Sn);
@@ -98,17 +101,17 @@ From the practical applications (biology, physics, artificial intelligence) poin
 \hline
 Symbol & Name &Order &$n=0,1,2,3,\ldots$\\ 
 \hline 
-$\PB_n$& \begin{minipage}[l]{130pt}Partitioned binary relations\end{minipage}  & $2^{(2n)^2}$ & $1, 16,65536,\ldots$\\
+$\PartBinRel_n$& \begin{minipage}[l]{130pt}Partitioned binary relations\end{minipage}  & $2^{(2n)^2}$ & $1, 16,65536,\ldots$\\
 \hline 
 $\BinRel_n$& \begin{minipage}[l]{130pt}Binary relations\end{minipage}  & $2^{n^2}$ & $1, 2, 16,512,65536,\ldots$\\
 \hline 
 $PT_n$& \begin{minipage}[l]{130pt}Full partial transformation semigroup\end{minipage}  & $(n+1)^n$ & $1, 2, 9, 64, 625, 7776,\ldots$\\
 \hline 
-$\fB_n$&Brauer monoid &$(2n-1)!!$ & $1, 1, 3, 15, 105, 945,\ldots$\\
+$\Brauer_n$&Brauer monoid &$(2n-1)!!$ & $1, 1, 3, 15, 105, 945,\ldots$\\
 \hline 
-$\cS_n$&symmetric group &$n!$ & $1, 1, 2, 6, 24, 120, 720,\ldots$\\
+$\Symmetric_n$&symmetric group &$n!$ & $1, 1, 2, 6, 24, 120, 720,\ldots$\\
 \hline 
-$\T_n$&full transformation semigroup &$n^n$ & $1,1,4,27,256,3125,\ldots$\\
+$\FullTrans_n$&full transformation semigroup &$n^n$ & $1,1,4,27,256,3125,\ldots$\\
 \hline
 $\InvMon_n$&symmetric inverse monoid&$\sum_0^n k!{n\choose k}^2$ &$1, 2, 7, 34, 209, 1546,\ldots$\\
 \hline
