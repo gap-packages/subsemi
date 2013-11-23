@@ -4,9 +4,14 @@
 \usepackage{color}
 \usepackage{tikz}
 \usetikzlibrary{matrix,arrows,positioning,automata}
+\pgfdeclarelayer{background layer}
+\pgfsetlayers{background layer,main}
+
 \usepackage{hyperref}
 \definecolor{darkblue}{rgb}{0.0,0.0,0.3}
 \definecolor{lgr}{rgb}{0.8,0.8,0.8}
+\definecolor{grey}{rgb}{0.95,0.95,0.95}
+
 \hypersetup{colorlinks,breaklinks,
             linkcolor=darkblue,urlcolor=darkblue,
             anchorcolor=darkblue,citecolor=darkblue}
@@ -166,10 +171,14 @@ Transformations and partial permutations and the categorical dual of the inverse
 \draw [arrow] (d2) edge (u3);
 %\draw [arrow,bend right] (u3) edge (u4);
 \draw [arrow,bend left] (d3) edge (d4);
-\draw [arrow,bend left] (d4) edge (d3);
-\draw [arrow,bend right] (u5) edge (d5);
-\draw [arrow,bend right] (d5) edge (u5);
+\draw [arrow,bend right] (d4) edge (d3);
+\draw [arrow] (u5) edge (d5);
+\draw [arrow] (d5) edge (u5);
 \draw [arrow] (u5) edge (d4);
+\begin{pgfonlayer}{background layer}
+\fill  [grey] plot (-.3,0) rectangle (4.3,-1);
+\end{pgfonlayer}
+
 \end{tikzpicture}
 
 
