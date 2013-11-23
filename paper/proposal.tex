@@ -133,14 +133,20 @@ $TL_n,J_n$ & \begin{minipage}[l]{130pt}generators of Temperley-Lieb algebras, Jo
 \end{enumerate}
 
 
-\section{Diagram Semigroups}
+\subsection{Diagram Semigroups}
 
 For a $n$-element set $X$ a \emph{diagram} is a subset of $(X\cup X')\times (X\cup X')$ where $|X|=|X'|=n$ and $X\cap X'=\varnothing$.
 In other words, a diagram is a relation on a set partitioned into two equal sized susbsets.
 Pictorially we have an upper and lower set of points that may be connected by directed edges but with no parallel edges allowed.
 Combining diagrams is stacking one on the top of the other and follow the arrows top-down and bottom-up, possibly removing combined paths that end or completely stay inside the middle. \todo{This isn't very precise, is it?}
-The set of all diagrams of size $n$ form a monoid, $\Partition\BinRel_n$, the partitioned binary relations. 
+The set of all diagrams of \emph{degree} $n$ form a monoid $\Partition\BinRel_n$, the partitioned binary relations \cite{PartBinRel2013}. Subsemigroups of $\Partition\BinRel_n$ are the \emph{diagram semigroups} of degree $n$.
 
+Posing different sets of constraints on the diagrams we get different kinds of diagram semigroups.
+Prohibiting edges within the upper and lower sets and restricting to top-down edges yields $\BinRel_n$, the monoid of binary relations. Further constraints gives us partial transformations $P\FullTrans_n$, transformations $\FullTrans_n$, partial permutations $\InvMon_n$ and permutations $\Symmetric_n$.
+When the edges are undirected (pair of directed edges), the relation is an equivalence relation and we get the \emph{partition monoid} $\Partition_n$.
+Restriciting the partitions of size 2 only we get the Brauer monoid $\Brauer_n$ and allowing only planar diagrams we get the Temperly-Lieb monoid $TL_n$.
+Transformations and partial permutations and the categorical dual of the inverse monoid $\DualInvMon_n$ also embed into $\Partition_n$.
+\todo{Ask JE for quick explanation why $P\FullTrans_n$ does not embed into $\Partition_n$.}
 
 
 \section{Sandbox}
@@ -149,5 +155,8 @@ Connections and allusions:
 \begin{itemize}
 \item Some of the diagram algebras have very sophisticated linear representation theories. Once we identify the the semigroups living in the diagrams, we have those representations for free. So semigroups act like the conduit for different results.
 \end{itemize}
+
+\bibliography{subsemi}
+\bibliographystyle{plain}
 
 \end{document}
