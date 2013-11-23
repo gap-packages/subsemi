@@ -143,6 +143,36 @@ Transformations and partial permutations and the categorical dual of the inverse
 \todo{Ask JE for quick explanation why $P\FullTrans_n$ does not embed into $\Partition_n$.}
 
 
+\begin{tikzpicture}
+\tikzstyle{blackdot}=[draw=black,circle,fill=black,inner sep=1pt]
+\tikzstyle{arrow}=[thick,->,>=angle 60]
+\node [blackdot] at (0,0) (u1) {};
+\node [blackdot,right of=u1] (u2) {};
+\node [blackdot,right of=u2] (u3) {};
+\node [blackdot,right of=u3] (u4) {};
+\node [blackdot,right of=u4] (u5) {};
+
+\node [blackdot,below of=u1] (d1) {};
+\node [blackdot,below of=u2] (d2) {};
+\node [blackdot,below of=u3] (d3) {};
+\node [blackdot,below of=u4] (d4) {};
+\node [blackdot,below of=u5] (d5) {};
+
+\node at (5,-.5) {$\in\Partition\BinRel_n$,};
+
+\draw [arrow] (u1) edge (d1);
+\draw [arrow,bend left] (u2) edge (u1);
+\draw [arrow] (u2) edge (d3);
+\draw [arrow] (d2) edge (u3);
+%\draw [arrow,bend right] (u3) edge (u4);
+\draw [arrow,bend left] (d3) edge (d4);
+\draw [arrow,bend left] (d4) edge (d3);
+\draw [arrow,bend right] (u5) edge (d5);
+\draw [arrow,bend right] (d5) edge (u5);
+\draw [arrow] (u5) edge (d4);
+\end{tikzpicture}
+
+
 \section{Research Project}
 
 \begin{enumerate}
