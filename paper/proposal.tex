@@ -1,4 +1,6 @@
 \documentclass{amsart}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{color}
 \usepackage{tikz}
 \usetikzlibrary{matrix,arrows,positioning,automata}
@@ -129,6 +131,19 @@ $TL_n,J_n$ & \begin{minipage}[l]{130pt}generators of Temperley-Lieb algebras, Jo
 \item Study the results of the classification in order to establish new results for combinatorial representation theory of finite semigroups.
 \item Study the properties of cascade representations in order to realize their application potential.
 \end{enumerate}
+
+
+\section{Diagram Semigroups}
+
+For a $n$-element set $X$ a \emph{diagram} is a subset of $(X\cup X')\times (X\cup X')$ where $|X|=|X'|=n$ and $X\cap X'=\varnothing$.
+In other words, a diagram is a relation on a set partitioned into two equal sized susbsets.
+Pictorially we have an upper and lower set of points that may be connected by directed edges but with no parallel edges allowed.
+Combining diagrams is stacking one on the top of the other and follow the arrows top-down and bottom-up, possibly removing combined paths that end or completely stay inside the middle. \todo{This isn't very precise, is it?}
+The set of all diagrams of size $n$ form a monoid, $\Partition\BinRel_n$, the partitioned binary relations. 
+
+
+
+\section{Sandbox}
 
 Connections and allusions:
 \begin{itemize}
