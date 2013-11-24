@@ -1,7 +1,8 @@
 #the closure of base the extension to closure (subsgp)
-ClosureByMulTab := function(tab, indexlist,base,extension)
-  local queue,diff, closure,i,j;
-  queue := BlistList(indexlist,extension);
+ClosureByMulTab := function(base,extension,mt)
+  local queue,diff, closure,i,j,tab;
+  tab := Rows(mt);
+  queue := BlistList(Indices(mt),extension);
   closure := ShallowCopy(base);
   while SizeBlist(queue) > 0 do
     i := Position(queue,true); # it is not empty, so this is ok
@@ -9,8 +10,8 @@ ClosureByMulTab := function(tab, indexlist,base,extension)
       ; #we already have it, nothing to do
     else
       #we calculate the difference induced by 1
-      diff := BlistList(indexlist,[i]);
-      for j in indexlist do
+      diff := BlistList(Indices(mt),[i]);
+      for j in Indices(mt) do
         if closure[j] then
           diff[tab[j][i]] := true;
           diff[tab[i][j]] := true;
@@ -26,27 +27,25 @@ ClosureByMulTab := function(tab, indexlist,base,extension)
   return closure;
 end;
 
-GenerateSg := function(tab, indexlist,gens)
-  return ClosureByMulTab(tab, indexlist,BlistList(indexlist,[]),gens );
-end;
-
 InstallGlobalFunction(SgpInMulTab,function(gens,mt)
-  return GenerateSg(Rows(mt), Indices(mt),ListBlist(Indices(mt),gens));
+  return ClosureByMulTab(BlistList(Indices(mt),gens),[],mt);
 end);
 
 TestGenerateSg := function(mt)
   local gens,numofgens,blT,T;
   numofgens := Random([1..7]);
   gens := DuplicateFreeList(List([1..numofgens], x->Random(Indices(mt))));
-  blT := GenerateSg(Rows(mt), Indices(mt), gens);
-  T := Semigroup(List(gens, x->SortedElements(mt)[x]));
-  return blT = BlistList(Indices(mt), List(AsList(T), t->Position(SortedElements(mt),t)));
+  blT := SgpInMulTab(gens,mt);
+  T := Semigroup(ElementsByIndicatorSet(BlistList(Indices(mt),gens),SortedElements(mt)));
+  Display(blT);
+  Display(IndicatorSetOfElements(T, SortedElements(mt)));
+  return blT = IndicatorSetOfElements(T, SortedElements(mt));  
 end;
 
 SameSgpEquivs := function(mt)
 local al,i;  
   al := AssociativeList();
-  for i in Indices(mt) do Assign(al,i,GenerateSg(Rows(mt), Indices(mt), [i]));od;
+  for i in Indices(mt) do Assign(al,i,SgpInMulTab([i],mt));od;
   al := ReversedAssociativeList(al);
   return Filtered(ValueSet(al), x->Length(x)>1);
 end;
@@ -54,7 +53,7 @@ end;
 # mt - MulTab, multiplication table
 InstallGlobalFunction(SubSgpsBy1Extensions,
 function(mt)
-  local s, L, extend, result,  indexlist, syms,
+  local s, L, extend, result, syms,
         counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab,
         extend_conjreponly,equivs, indexblist;#,boosters;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
@@ -104,7 +103,7 @@ function(mt)
     fi;
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
     #calculating the new subsgp
-    bl := ClosureByMulTab(tab, indexlist, base, [s]);
+    bl := ClosureByMulTab(base, [s], mt);
     if  bl in result then
       return; #just bail out if we already have it
     fi;
@@ -112,7 +111,7 @@ function(mt)
     AddSet(result, bl);
     Perform(List(syms, g -> OnFiniteSet(bl,g)),function(b)AddSet(result,b);end);
     #RECURSION
-    for t in Difference(indexlist, ListBlist(indexlist,bl)) do
+    for t in Difference(Indices(mt), ListBlist(Indices(mt),bl)) do
       extend(bl,t);
     od;
   end;
@@ -126,7 +125,7 @@ function(mt)
     fi;
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
     #calculating the new subsgp
-    bl := ClosureByMulTab(tab, indexlist, base, [s]);#boosters[s]);#[s]);
+    bl := ClosureByMulTab(base, [s], mt);#boosters[s]);#[s]);
     #its conjugacy class
     #C := [bl];
     #Perform(syms, function(g) AddSet(C,OnFiniteSet(bl,g));end);
@@ -150,7 +149,7 @@ function(mt)
         fi;
       od;
     od;
-    Perform(ListBlist(indexlist,diff), function(t) extend_conjreponly(bl,t);end);
+    Perform(ListBlist(Indices(mt),diff), function(t) extend_conjreponly(bl,t);end);
   end;
   #-----------------------------------------------------------------------------
   #MAIN
@@ -160,7 +159,6 @@ function(mt)
   else
     syms := [];
   fi;
-  indexlist := Indices(mt);
   indexblist := BlistList(Indices(mt),Indices(mt));
   tab := Rows(mt);
   equivs := SameSgpEquivs(mt);
@@ -169,11 +167,11 @@ function(mt)
     #IndexedSet(13,BinaryBlistIndexer(13), ListWithIdenticalEntries(13,2));
   counter := 0;
   p_secs := TimeInSeconds();
-  for s in indexlist do
+  for s in Indices(mt) do
     Info(SubSemiInfoClass,1,
-         Concatenation("# ", String(s),"/",String(Size(indexlist))));
+         Concatenation("# ", String(s),"/",String(Size(Indices(mt)))));
     #if IsEmpty(syms)
-    extend_conjreponly(BlistList(indexlist, []),s);
+    extend_conjreponly(BlistList(Indices(mt), []),s);
   od;
   if InfoLevel(SubSemiInfoClass)>0 then log();fi;
   dump();
