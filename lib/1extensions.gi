@@ -28,17 +28,14 @@ ClosureByMulTab := function(base,extension,mt)
 end;
 
 InstallGlobalFunction(SgpInMulTab,function(gens,mt)
-  return ClosureByMulTab(BlistList(Indices(mt),gens),[],mt);
+  return ClosureByMulTab(BlistList(Indices(mt),[]),gens,mt);
 end);
 
 TestGenerateSg := function(mt)
-  local gens,numofgens,blT,T;
-  numofgens := Random([1..7]);
-  gens := DuplicateFreeList(List([1..numofgens], x->Random(Indices(mt))));
+  local gens,blT,T;
+  gens := DuplicateFreeList(List([1..Random([1..7])], x->Random(Indices(mt))));
   blT := SgpInMulTab(gens,mt);
   T := Semigroup(ElementsByIndicatorSet(BlistList(Indices(mt),gens),SortedElements(mt)));
-  Display(blT);
-  Display(IndicatorSetOfElements(T, SortedElements(mt)));
   return blT = IndicatorSetOfElements(T, SortedElements(mt));  
 end;
 
