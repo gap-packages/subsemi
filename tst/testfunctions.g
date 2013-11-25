@@ -4,6 +4,7 @@ local test;
           "6packedbitstrings",
           "indicatorset",
           "indexperiod",
+          "1extensions",
           "invariants"
           ] do
     Test(Concatenation(
