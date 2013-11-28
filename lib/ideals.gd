@@ -12,3 +12,4 @@ DeclareGlobalFunction("RFHNonZeroPreImages");
 DeclareGlobalFunction("SubSgpsByIdeals");
 DeclareGlobalFunction("Combiner");
 DeclareGlobalFunction("ConjugacyClassCombiner");
+DeclareGlobalFunction("CombineConjugacyClassWithClasses");

@@ -69,24 +69,35 @@ end);
 
 # A bigger, B potentially inside
 InstallGlobalFunction(ConjugacyClassCombiner,
-function(A,B,mt)
-  local hashtab,a,Ca,Cb,Cbs,combined;
-  hashtab := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
+function(A,B,mt)        
+  local Cas, Ca, Cbs,result;
+  result := [];
+  Cas := List(A,x->ConjugacyClassOfSet(x,mt));#precalculate a's conjugacy classes
   Cbs := List(B,x->ConjugacyClassOfSet(x,mt));#precalculate B's conjugacy classes
-  for a in A do
-    Ca := ConjugacyClassOfSet(a,mt);
-    for Cb in Cbs do
-      Perform(List(EnumeratorOfCartesianProduct(Ca,Cb),UnionBlist),
-              function(x)AddSet(hashtab,ConjugacyClassRep(x,mt));end);
-    od;
+  for Ca in Cas do
+    Append(result, AsList(CombineConjugacyClassWithClasses(Ca,Cbs,mt)));
+  od;
+  return result;
+end);
+
+InstallGlobalFunction(CombineConjugacyClassWithClasses,
+function(Ca,Cbs,mt)
+  local hashtab,Cb,combined;
+  hashtab := HeavyBlistContainer();
+  #for each union collecting its representative
+  for Cb in Cbs do
+    Perform(Unique(List(EnumeratorOfCartesianProduct(Ca,Cb),UnionBlist)),
+            function(x)AddSet(hashtab,ConjugacyClassRep(x,mt));end);
   od;
   Info(SubSemiInfoClass,1,Concatenation(String(Size(hashtab))," unions"));
+  #collect what they generate
   combined := AsList(hashtab);
-  hashtab := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
-  Perform(combined, function(x)AddSet(hashtab, SgpInMulTab(x,mt));end);
+  hashtab := HeavyBlistContainer();
+  Perform(combined, function(x) AddSet(hashtab, SgpInMulTab(x,mt));end);
   Info(SubSemiInfoClass,1,Concatenation(String(Size(hashtab))," sgps"));
+  #sgps may be in the same conjugacy class, so making them unique
   combined := AsList(hashtab);
-  hashtab := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
-  Perform(combined, function(x)AddSet(hashtab, ConjugacyClassRep(x,mt));end);
+  hashtab := HeavyBlistContainer();
+  Perform(combined, function(x) AddSet(hashtab, ConjugacyClassRep(x,mt));end);
   return hashtab;
 end);
