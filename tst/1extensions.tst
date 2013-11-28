@@ -11,6 +11,13 @@ gap> TestGenerateSg := function(mt)
 gap> mt := MulTab(FullTransformationSemigroup(4));;
 gap> ForAll([1..10], i-> TestGenerateSg(mt));
 true
+gap> TestDifferentTypeGenerateSg := function(mt)
+>  local gens,blT,T;
+>  gens := DuplicateFreeList(List([1..Random([1..7])], x->Random(Indices(mt))));
+>  return SgpInMulTab(gens,mt) = SgpInMulTab(BlistList(Indices(mt),gens),mt);
+> end;;
+gap> ForAll([1..10], i-> TestDifferentTypeGenerateSg(mt));
+true
 
 #
 gap> SemigroupsStopTest();
