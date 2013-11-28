@@ -2,7 +2,11 @@
 ClosureByMulTab := function(base,extension,mt)
   local queue,diff, closure,i,j,tab;
   tab := Rows(mt);
-  queue := BlistList(Indices(mt),extension);
+  if IsBlist(extension) then #to make it type agnostic
+    queue := ShallowCopy(extension);
+  else
+    queue := BlistList(Indices(mt),extension);
+  fi;
   closure := ShallowCopy(base);
   while SizeBlist(queue) > 0 do
     i := Position(queue,true); # it is not empty, so this is ok
