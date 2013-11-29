@@ -35,6 +35,29 @@ InstallGlobalFunction(SgpInMulTab,function(gens,mt)
   return ClosureByMulTab(BlistList(Indices(mt),[]),gens,mt);
 end);
 
+SgpInMulTabWithKick := function(gens,mt)
+  return ClosureByMulTab(gens,MissingElements(gens,mt),mt);
+end;
+
+#just to kickstart the closure, calculate the missing elements
+#this may not be a closure
+InstallGlobalFunction(MissingElements,
+function(gens,mt)
+  local i,j,rows,completion;
+  rows := Rows(mt);
+  completion := [];
+  for i in Indices(mt) do
+    for j in Indices(mt) do
+      if gens[i] and gens[j] then
+        if not gens[rows[i][j]] then
+          AddSet(completion,rows[i][j]);
+        fi;
+      fi;
+    od;
+  od;
+  return completion;
+end);
+
 SameSgpEquivs := function(mt)
 local al,i;  
   al := AssociativeList();
