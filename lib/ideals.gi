@@ -58,13 +58,13 @@ end);
 InstallGlobalFunction(Combiner,
 function(A,B,mt)
   local result, a,b;
-  result := [];#DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1]);
+  result := HeavyBlistContainer();
   for a in A do
     for b in B do
       AddSet(result, SgpInMulTab(UnionBlist(a,b),mt));
     od;
   od;
-  return result;
+  return AsList(result);
 end);
 
 # A bigger, B potentially inside
@@ -80,16 +80,20 @@ function(A,B,mt)
   return result;
 end);
 
+Unions := function(Ca,Cb,mt)
+  return Unique(List(EnumeratorOfCartesianProduct(Ca,Cb),UnionBlist));
+end;
+
 InstallGlobalFunction(CombineConjugacyClassWithClasses,
 function(Ca,Cbs,mt)
   local hashtab,Cb,combined;
   hashtab := HeavyBlistContainer();
   #for each union collecting its representative
   for Cb in Cbs do
-    Perform(Unique(List(EnumeratorOfCartesianProduct(Ca,Cb),UnionBlist)),
-            function(x)AddSet(hashtab,ConjugacyClassRep(x,mt));end);
+    Perform(Unions(Ca,Cb,mt),
+            function(x) AddSet(hashtab,ConjugacyClassRep(x,mt));end);
   od;
-  Info(SubSemiInfoClass,1,Concatenation(String(Size(hashtab))," unions"));
+  Info(SubSemiInfoClass,1,Concatenation(String(Size(hashtab))," unionreps"));
   #collect what they generate
   combined := AsList(hashtab);
   hashtab := HeavyBlistContainer();
