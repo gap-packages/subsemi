@@ -21,6 +21,7 @@ DeclareAttribute("Indices", IsMulTab);
 DeclareAttribute("SortedElements", IsMulTab);
 DeclareAttribute("Symmetries", IsMulTab);
 DeclareAttribute("OriginalName", IsMulTab);
+DeclareAttribute("LogicTable", IsMulTab);
 
 DeclareGlobalFunction("ConjugacyClassRep");
 DeclareGlobalFunction("ConjugacyClassOfSet");

@@ -18,6 +18,11 @@ gap> TestDifferentTypeGenerateSg := function(mt)
 > end;;
 gap> ForAll([1..10], i-> TestDifferentTypeGenerateSg(mt));
 true
+gap> subs := EnumeratorOfCartesianProduct(List([1..27],x->[false,true]));;
+gap> l := List([1..10000],x->Random(subs));;
+gap> mt := MulTab(FullTransformationSemigroup(3));;
+gap> ForAll(l, x-> SgpInMulTab(x,mt) = SgpInMulTabWithKick(x,mt));
+true
 
 #
 gap> SemigroupsStopTest();
