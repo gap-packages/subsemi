@@ -1,5 +1,6 @@
 #the closure of base the extension to closure (subsgp)
-ClosureByMulTab2 := function(base,extension,mt)
+# when adding a new point we check for new entries (filtered out by exisitng positions)
+ClosureByMulTab := function(base,extension,mt)
   local queue,diff, closure,i,j,tab;
   tab := Rows(mt);
   if IsBlist(extension) then #to make it type agnostic
@@ -31,10 +32,10 @@ ClosureByMulTab2 := function(base,extension,mt)
   return closure;
 end;
 
-#the closure of base the extension to closure (subsgp)
-ClosureByMulTab := function(base,extension,mt)
+#alternative method: we check all the missing points and add them by their logic
+ClosureByMulTab2 := function(base,extension,mt)
   local diff, closure,i,j,booltab,size,flag;
-  booltab := LogicMT(mt);
+  booltab := LogicTable(mt);
   if IsBlist(extension) then #to make it type agnostic
     closure := UnionBlist([base,extension]);
   else
@@ -63,13 +64,13 @@ ClosureByMulTab := function(base,extension,mt)
   return closure;
 end;
 
-
 InstallGlobalFunction(SgpInMulTab,function(gens,mt)
   return ClosureByMulTab(BlistList(Indices(mt),[]),gens,mt);
 end);
 
+#since the nonincluded points are less, this is faster with CBMT2 in general
 SgpInMulTabWithKick := function(gens,mt)
-  return ClosureByMulTab(gens,MissingElements(gens,mt),mt);
+  return ClosureByMulTab2(gens,MissingElements(gens,mt),mt);
 end;
 
 IsMaximalSubSgp := function(set,mt)

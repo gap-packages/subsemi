@@ -114,7 +114,9 @@ function(mt)
 end);
 
 #experimental
-LogicMT := function(mt)
+InstallMethod(LogicTable,"for multab",
+        [IsMulTab],
+function(mt)
   local i,j, boolfunctab,val, L;
   boolfunctab := List(Indices(mt),x -> []);
   for i in Indices(mt) do
@@ -134,7 +136,7 @@ LogicMT := function(mt)
     od;
   od;
   return L;
-end;
+end);
 
 FullSet := function(mt)
   return BlistList(Indices(mt),Indices(mt));
