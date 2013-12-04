@@ -39,6 +39,15 @@ SgpInMulTabWithKick := function(gens,mt)
   return ClosureByMulTab(gens,MissingElements(gens,mt),mt);
 end;
 
+IsMaximalSubSgp := function(set,mt)
+  local diff, full;
+  diff := ShallowCopy(Indices(mt)); 
+  SubtractSet(diff, AsSet(ListBlist(Indices(mt), set)));
+  if IsEmpty(diff) then return false; fi;
+  full := BlistList(Indices(mt),Indices(mt));
+  return ForAll(diff, i-> full = ClosureByMulTab(set,[i],mt));
+end;
+
 #just to kickstart the closure, calculate the missing elements
 #this may not be a closure
 InstallGlobalFunction(MissingElements,
