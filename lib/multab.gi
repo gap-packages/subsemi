@@ -115,7 +115,7 @@ end);
 
 #experimental
 LogicMT := function(mt)
-  local i,j, boolfunctab,val;
+  local i,j, boolfunctab,val, L;
   boolfunctab := List(Indices(mt),x -> []);
   for i in Indices(mt) do
     for j in Indices(mt) do
@@ -125,5 +125,17 @@ LogicMT := function(mt)
       fi;
     od;
   od;
-  return boolfunctab;
+  #processing to make it more compact
+  #this magically puts diagonal closure there  easily as it is the first entry int the second part, cool stuff
+  L := List(Indices(mt),x -> []);
+  for i in Indices(mt) do
+    for j in AsSet(List(boolfunctab[i], x->x[1])) do
+      Add(L[i], [j, List(Filtered(boolfunctab[i],x->x[1]=j),y->y[2])]);
+    od;
+  od;
+  return L;
+end;
+
+FullSet := function(mt)
+  return BlistList(Indices(mt),Indices(mt));
 end;
