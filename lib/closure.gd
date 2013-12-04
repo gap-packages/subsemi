@@ -1,0 +1,2 @@
+DeclareGlobalFunction("SgpInMulTab");
+DeclareGlobalFunction("MissingElements");
