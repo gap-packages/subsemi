@@ -1,5 +1,5 @@
 #the closure of base the extension to closure (subsgp)
-ClosureByMulTab := function(base,extension,mt)
+ClosureByMulTab2 := function(base,extension,mt)
   local queue,diff, closure,i,j,tab;
   tab := Rows(mt);
   if IsBlist(extension) then #to make it type agnostic
@@ -30,6 +30,39 @@ ClosureByMulTab := function(base,extension,mt)
   od;
   return closure;
 end;
+
+#the closure of base the extension to closure (subsgp)
+ClosureByMulTab := function(base,extension,mt)
+  local diff, closure,i,j,booltab,size,flag;
+  booltab := LogicMT(mt);
+  if IsBlist(extension) then #to make it type agnostic
+    closure := UnionBlist([base,extension]);
+  else
+    closure := UnionBlist([base,BlistList(Indices(mt),extension)]);
+  fi;
+  diff := FullSet(mt);
+  SubtractBlist(diff, closure);
+  flag := true;
+  while flag do
+    flag := false;
+    for i in Indices(mt) do
+      if diff[i] then
+            #do we include i?
+        if   ForAny(booltab[i],
+                    function(bt)
+          return closure[bt[1]] and ForAny(bt[2], y->closure[y]);
+        end) then
+          closure[i] := true;
+          flag := true;
+        fi;
+      fi;
+    od;
+    diff := FullSet(mt);
+    SubtractBlist(diff, closure);
+  od;
+  return closure;
+end;
+
 
 InstallGlobalFunction(SgpInMulTab,function(gens,mt)
   return ClosureByMulTab(BlistList(Indices(mt),[]),gens,mt);
