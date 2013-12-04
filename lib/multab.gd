@@ -17,11 +17,13 @@ DeclareGlobalFunction("CreateMulTab");
 DeclareGlobalFunction("ProductTableOfElements");
 
 DeclareAttribute("Rows", IsMulTab);
+DeclareAttribute("Columns", IsMulTab);
 DeclareAttribute("Indices", IsMulTab);
 DeclareAttribute("SortedElements", IsMulTab);
 DeclareAttribute("Symmetries", IsMulTab);
 DeclareAttribute("OriginalName", IsMulTab);
 DeclareAttribute("LogicTable", IsMulTab);
+DeclareAttribute("LogicTable2", IsMulTab);
 
 DeclareGlobalFunction("ConjugacyClassRep");
 DeclareGlobalFunction("ConjugacyClassOfSet");
