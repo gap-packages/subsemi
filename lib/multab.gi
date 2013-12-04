@@ -112,3 +112,18 @@ function(mt)
     Print("<multiplication table of ",Size(mt)," elements>");
   fi;
 end);
+
+#experimental
+LogicMT := function(mt)
+  local i,j, boolfunctab,val;
+  boolfunctab := List(Indices(mt),x -> []);
+  for i in Indices(mt) do
+    for j in Indices(mt) do
+      val := Rows(mt)[i][j];
+      if (not val = i) and (not val = j) then
+        AddSet(boolfunctab[val],AsSortedList([i,j]));
+      fi;
+    od;
+  od;
+  return boolfunctab;
+end;
