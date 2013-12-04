@@ -83,6 +83,12 @@ function(S,G,hom)
   fi;
 end);
 
+InstallMethod(Columns,"for multab",
+        [IsMulTab],
+function(mt)
+  return TransposedMat(Rows(mt));
+end);
+
 InstallGlobalFunction(ConjugacyClassOfSet,
 function(indset,mt)
   return Unique(List(Symmetries(mt), g->OnFiniteSet(indset,g)));
@@ -137,6 +143,23 @@ function(mt)
   od;
   return L;
 end);
+
+InstallMethod(LogicTable2,"for multab",
+        [IsMulTab],
+function(mt)
+  local i,j, tab,val, vals,row,col;
+  tab := List(Indices(mt),x -> []);
+  for i in Indices(mt) do
+    row := Rows(mt)[i];
+    col := Columns(mt)[i];
+    vals := Unique(Union(row,col));
+    for val in vals do
+      Add(tab[i],[val,Unique(Union(Positions(row,val),Positions(col,val)))]);
+    od;
+  od;
+  return tab;
+end);
+
 
 FullSet := function(mt)
   return BlistList(Indices(mt),Indices(mt));
