@@ -32,6 +32,33 @@ ClosureByMulTab := function(base,extension,mt)
   return closure;
 end;
 
+ClosureByMulTab1 := function(base,extension,mt)
+  local queue,diff, closure,i,v,tab;
+  tab := LogicTable2(mt);
+  if IsBlist(extension) then #to make it type agnostic
+    queue := ShallowCopy(extension);
+  else
+    queue := BlistList(Indices(mt),extension);
+  fi;
+  closure := ShallowCopy(base);
+  while SizeBlist(queue) > 0 do
+    i := Position(queue,true); # it is not empty, so this is ok
+    if not closure[i] then
+      closure[i] := true; #adding i
+      #what shall we include?
+      for v in tab[i] do
+        if not closure[v[1]] and ForAny(v[2], x->closure[x]) then
+          queue[v[1]] := true;
+          #closure[v[1]] := true; #boosting does not work, it explodes
+        fi;
+      od;
+    fi;
+    queue[i] := false; #removing i from the queue
+  od;
+  return closure;
+end;
+
+
 #alternative method: we check all the missing points and add them by their logic
 ClosureByMulTab2 := function(base,extension,mt)
   local diff, closure,i,j,booltab,size,flag;
