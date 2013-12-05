@@ -1,6 +1,6 @@
 #the closure of base the extension to closure (subsgp)
 # when adding a new point we check for new entries (filtered out by exisitng positions)
-ClosureByMulTab1 := function(base,extension,mt)
+ClosureByMulTab := function(base,extension,mt)
   local queue,diff, closure,i,j,tab;
   tab := Rows(mt);
   if IsBlist(extension) then #to make it type agnostic
@@ -9,31 +9,29 @@ ClosureByMulTab1 := function(base,extension,mt)
     queue := BlistList(Indices(mt),extension);
   fi;
   closure := ShallowCopy(base);
+  diff := BlistList(Indices(mt),[]);
   while SizeBlist(queue) > 0 do
     i := Position(queue,true); # it is not empty, so this is ok
-    if closure[i] then
-      ; #we already have it, nothing to do
-    else
-      #we calculate the difference induced by 1
-      diff := BlistList(Indices(mt),[i]);
-      for j in Indices(mt) do
-        if closure[j] then
-          diff[tab[j][i]] := true;
-          diff[tab[i][j]] := true;
-        fi;
-      od;
-      diff[tab[i][i]] := true;
-      SubtractBlist(diff,closure);
-      UniteBlist(queue, diff);
-      closure[i] := true; #adding i
-    fi;
+    #we calculate the difference induced by i
+    for j in Indices(mt) do
+      if closure[j] then
+        diff[tab[j][i]] := true;
+        diff[tab[i][j]] := true;
+      fi;
+    od;
+    diff[tab[i][i]] := true;
+    SubtractBlist(diff,closure);
+    UniteBlist(queue, diff);
+    SubtractBlist(diff,queue);#cleaning for reusing diff object
+    closure[i] := true; #adding i
     queue[i] := false; #removing i from the queue
   od;
   return closure;
 end;
 
-ClosureByMulTab := function(base,extension,mt)
-  local queue,diff, closure,i,v,tab;
+#alternative method
+ClosureByMulTab1 := function(base,extension,mt)
+  local queue,closure,i,v,tab;
   tab := LogicTable2(mt);
   if IsBlist(extension) then #to make it type agnostic
     queue := ShallowCopy(extension);
@@ -55,7 +53,6 @@ ClosureByMulTab := function(base,extension,mt)
   od;
   return closure;
 end;
-
 
 #alternative method: we check all the missing points and add them by their logic
 ClosureByMulTab2 := function(base,extension,mt)
