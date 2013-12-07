@@ -1,6 +1,15 @@
+################################################################################
+##
+## SubSemi
+##
+## Calculating the closure of a subarray of a multiplication table.
+##
+## Copyright (C) 2013  Attila Egri-Nagy
+##
+
 #the closure of base the extension to closure (subsgp)
 # when adding a new point we check for new entries (filtered out by exisitng positions)
-ClosureByMulTab := function(base,extension,mt)
+ClosureByQueue := function(base,extension,mt)
   local queue,diff, closure,i,j,tab;
   tab := Rows(mt);
   if IsBlist(extension) then #to make it type agnostic
@@ -30,9 +39,9 @@ ClosureByMulTab := function(base,extension,mt)
 end;
 
 #alternative method
-ClosureByMulTab1 := function(base,extension,mt)
+ClosureByQueueAndLocalTables := function(base,extension,mt)
   local queue,closure,i,v,tab;
-  tab := LogicTable2(mt);
+  tab := LocalTables(mt);
   if IsBlist(extension) then #to make it type agnostic
     queue := ShallowCopy(extension);
   else
@@ -55,9 +64,9 @@ ClosureByMulTab1 := function(base,extension,mt)
 end;
 
 #alternative method: we check all the missing points and add them by their logic
-ClosureByMulTab2 := function(base,extension,mt)
+ClosureByComplement := function(base,extension,mt)
   local diff, closure,i,j,booltab,size,flag;
-  booltab := LogicTable(mt);
+  booltab := GlobalTables(mt);
   if IsBlist(extension) then #to make it type agnostic
     closure := UnionBlist([base,extension]);
   else
@@ -87,12 +96,12 @@ ClosureByMulTab2 := function(base,extension,mt)
 end;
 
 InstallGlobalFunction(SgpInMulTab,function(gens,mt)
-  return ClosureByMulTab(BlistList(Indices(mt),[]),gens,mt);
+  return ClosureByQueue(BlistList(Indices(mt),[]),gens,mt);
 end);
 
 #since the nonincluded points are less, this is faster with CBMT2 in general
 SgpInMulTabWithKick := function(gens,mt)
-  return ClosureByMulTab2(gens,MissingElements(gens,mt),mt);
+  return ClosureByComplement(gens,MissingElements(gens,mt),mt);
 end;
 
 IsMaximalSubSgp := function(set,mt)
@@ -101,7 +110,7 @@ IsMaximalSubSgp := function(set,mt)
   SubtractSet(diff, AsSet(ListBlist(Indices(mt), set)));
   if IsEmpty(diff) then return false; fi;
   full := BlistList(Indices(mt),Indices(mt));
-  return ForAll(diff, i-> full = ClosureByMulTab(set,[i],mt));
+  return ForAll(diff, i-> full = ClosureByQueue(set,[i],mt));
 end;
 
 #just to kickstart the closure, calculate the missing elements

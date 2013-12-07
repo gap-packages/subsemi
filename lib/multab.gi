@@ -120,7 +120,7 @@ function(mt)
 end);
 
 #experimental
-InstallMethod(LogicTable,"for multab",
+InstallMethod(GlobalTables,"for multab",
         [IsMulTab],
 function(mt)
   local i,j, boolfunctab,val, L;
@@ -144,8 +144,8 @@ function(mt)
   return L;
 end);
 
-InstallMethod(LogicTable2,"for multab",
-        [IsMulTab],
+#backward thinking
+InstallMethod(LocalTables,"for multab", [IsMulTab],
 function(mt)
   local i,j, tab,val, vals,row,col;
   tab := List(Indices(mt),x -> []);

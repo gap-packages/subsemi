@@ -59,7 +59,7 @@ function(mt)
     fi;
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
     #calculating the new subsgp
-    bl := ClosureByMulTab(base, [s], mt);
+    bl := ClosureByQueue(base, [s], mt);
     if  bl in result then
       return; #just bail out if we already have it
     fi;
@@ -81,7 +81,7 @@ function(mt)
     fi;
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
     #calculating the new subsgp
-    bl := ClosureByMulTab(base, [s], mt);#boosters[s]);#[s]);
+    bl := ClosureByQueue(base, [s], mt);#boosters[s]);#[s]);
     #its conjugacy class
     #C := [bl];
     #Perform(syms, function(g) AddSet(C,OnFiniteSet(bl,g));end);
