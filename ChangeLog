@@ -1,3 +1,5 @@
+0.7
+	SgpInMulTab can be given differenct closure functions.
 0.6
 	Alternative closure method added, further work on combining ideals, simplifications.
 0.5
