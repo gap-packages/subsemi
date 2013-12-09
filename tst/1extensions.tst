@@ -21,7 +21,10 @@ true
 gap> subs := EnumeratorOfCartesianProduct(List([1..27],x->[false,true]));;
 gap> l := List([1..10000],x->Random(subs));;
 gap> mt := MulTab(FullTransformationSemigroup(3));;
-gap> ForAll(l, x-> SgpInMulTab(x,mt) = SgpInMulTabWithKick(x,mt));
+gap> ForAll(l, x-> SgpInMulTab(x,mt) = SgpInMulTab(x,mt,ClosureByQueueAndLocalTables));
+true
+gap> l := List([1..10000],x->Random(subs));;
+gap> ForAll(l, x-> SgpInMulTab(x,mt) = SgpInMulTab(x,mt,ClosureByComplement));
 true
 
 #
