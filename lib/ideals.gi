@@ -7,7 +7,8 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-#actually building the Rees factor semigroup
+#actually building the Rees factor semigroup as the right regular representation
+#of the quotient
 InstallGlobalFunction(ReesFactorHomomorphism,
 function(I)
   local cong,quotienthom,regrepisom; 
@@ -16,6 +17,7 @@ function(I)
   regrepisom := IsomorphismTransformationSemigroup(Range(quotienthom));
   return CompositionMapping(regrepisom, quotienthom);
 end);
+
 
 InstallGlobalFunction(RFHNonZeroPreImages,
 function (l,rfh)
@@ -80,8 +82,9 @@ function(A,B,mt)
   return result;
 end);
 
-Unions := function(Ca,Cb,mt)
-  return Unique(List(EnumeratorOfCartesianProduct(Ca,Cb),UnionBlist));
+#calculates all distinct pairwise unions of sets in A and sets in B
+Unions := function(A,B,mt)
+  return Unique(List(EnumeratorOfCartesianProduct(A,B),UnionBlist));
 end;
 
 InstallGlobalFunction(CombineConjugacyClassWithClasses,
