@@ -95,14 +95,17 @@ ClosureByComplement := function(base,extension,mt)
   return closure;
 end;
 
-InstallGlobalFunction(SgpInMulTab,function(gens,mt)
-  return ClosureByQueue(BlistList(Indices(mt),[]),gens,mt);
+InstallGlobalFunction(SgpInMulTab,
+function(arg)
+  #arg[1] - gens
+  #arg[2] - mt
+  #arg[3] - closure function
+  if IsBound(arg[3]) then
+    return arg[3](BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
+  else
+    return ClosureByQueue(BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
+  fi;
 end);
-
-#since the nonincluded points are less, this is faster with CBMT2 in general
-SgpInMulTabWithKick := function(gens,mt)
-  return ClosureByComplement(gens,MissingElements(gens,mt),mt);
-end;
 
 IsMaximalSubSgp := function(set,mt)
   local diff, full;
