@@ -10,6 +10,7 @@ local R,H,G;
   return R;
 end;
 
+#A174511
 NumOfIsomorphismClassesDegreeNPerms := function(n)
   return Size(IsomorphicGroupReps(
                  List(ConjugacyClassesSubgroups(SymmetricGroup(n)),
