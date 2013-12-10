@@ -36,7 +36,8 @@ function(mt)
       Info(SubSemiInfoClass,1,"# No name, no dump!");
       return;
     fi;
-    filename := Concatenation(OriginalName(mt),"_", String(dumpcounter),"subs");
+    filename := Concatenation(OriginalName(mt),"_",
+                        String(dumpcounter),fileextension);
     output := OutputTextFile(filename, false);
     for r in AsList(result) do
       AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
@@ -84,6 +85,11 @@ function(mt)
   end;
   #-----------------------------------------------------------------------------
   #MAIN
+  if Size(Symmetries(mt)) = 1 then
+    fileextension := ".subs";
+  else
+    fileextension := ".reps";
+  fi;
   equivs := SameSgpEquivs(mt);
   result := HeavyBlistContainer();
   counter := 0;
