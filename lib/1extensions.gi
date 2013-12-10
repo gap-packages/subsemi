@@ -9,9 +9,9 @@ end;
 # mt - MulTab, multiplication table
 InstallGlobalFunction(SubSgpsBy1Extensions,
 function(mt)
-  local s, L, extend, result, syms,
+  local s, L, extend, result,
         counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab,
-        extend_conjreponly,equivs, indexblist;#,boosters;
+        equivs, indexblist;#,boosters;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -49,9 +49,8 @@ function(mt)
     p_secs := TimeInSeconds();
   end;
   #-----------------------------------------------------------------------------
-  #ORIGINAL
   extend := function(base,s)
-    local t, bl;
+    local C, bl, diff,f,i;
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
     if InfoLevel(SubSemiInfoClass)>0 and (counter mod SubSemiOptions.LOGFREQ)=0 then
@@ -60,32 +59,8 @@ function(mt)
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
     #calculating the new subsgp
     bl := ClosureByQueue(base, [s], mt);
-    if  bl in result then
-      return; #just bail out if we already have it
-    fi;
-    #STORE
-    AddSet(result, bl);
-    Perform(List(syms, g -> OnFiniteSet(bl,g)),function(b)AddSet(result,b);end);
-    #RECURSION
-    for t in Difference(Indices(mt), ListBlist(Indices(mt),bl)) do
-      extend(bl,t);
-    od;
-  end;
-  #-----------------------------------------------------------------------------
-  extend_conjreponly := function(base,s)
-    local C,  bl, diff,f,i;
-    #HOUSEKEEPING: logging, dumping
-    counter := counter + 1;
-    if InfoLevel(SubSemiInfoClass)>0 and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      log();
-    fi;
-    if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
-    #calculating the new subsgp
-    bl := ClosureByQueue(base, [s], mt);#boosters[s]);#[s]);
-    #its conjugacy class
-    #C := [bl];
-    #Perform(syms, function(g) AddSet(C,OnFiniteSet(bl,g));end);
-    bl := ConjugacyClassRep(bl,mt);#C[1]; #the canonical rep
+    #its conjugacy class rep
+    bl := ConjugacyClassRep(bl,mt);
     if  bl in result then
       return; #just bail out if we already have it
     fi;
@@ -105,32 +80,24 @@ function(mt)
         fi;
       od;
     od;
-    Perform(ListBlist(Indices(mt),diff), function(t) extend_conjreponly(bl,t);end);
+    Perform(ListBlist(Indices(mt),diff), function(t) extend(bl,t);end);
   end;
   #-----------------------------------------------------------------------------
   #MAIN
   L := SortedElements(mt);
-  if HasSymmetries(mt) then
-    syms := Symmetries(mt);
-  else
-    syms := [];
-  fi;
   indexblist := BlistList(Indices(mt),Indices(mt));
   tab := Rows(mt);
   equivs := SameSgpEquivs(mt);
-  #boosters := List([1..mt.n], i->ListBlist(Indices(mt),(GenerateSg(Rows(mt),Indices(mt),[i]))));
-  result := DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
-    #IndexedSet(13,BinaryBlistIndexer(13), ListWithIdenticalEntries(13,2));
+  result := HeavyBlistContainer();
   counter := 0;
   p_secs := TimeInSeconds();
   for s in Indices(mt) do
     Info(SubSemiInfoClass,1,
-         Concatenation("# ", String(s),"/",String(Size(Indices(mt)))));
-    #if IsEmpty(syms)
-    extend_conjreponly(BlistList(Indices(mt), []),s);
+         Concatenation("# ",String(s),"/",String(Size(Indices(mt)))));
+    extend(BlistList(Indices(mt), []),s);
   od;
   if InfoLevel(SubSemiInfoClass)>0 then log();fi;
   dump();
-  Info(SubSemiInfoClass,1,Concatenation("#",String(counter)));
+  Info(SubSemiInfoClass,1,Concatenation("# Total checks: ",String(counter)));
   return result;
 end);
