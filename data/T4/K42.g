@@ -1,18 +1,22 @@
-# calculating all subsemigroups of the K_{4,2} ideal within K_{4,3}
-# K42inK43subs is the final result
-LoadPackage("subsemi");
-Sing4 := SingularTransformationSemigroup(4);
-mtSing4 := MulTab(Sing4);
-K42 := SemigroupIdealByGenerators(Sing4,
-               [Transformation([1,2,2,2])]);
-SetName(K42,"K42ideal");
-mt := MulTab(K42,SymmetricGroup(IsPermGroup,4));
+# calculating all subsemigroups of the K_{4,2} ideal within K_{4,3} and T4
+Read("sgps.g");
 
-L := List(AsList(SubSgpsBy1Extensions(mt)),
-          x->ReCodeIndicatorSet(x,SortedElements(mt),SortedElements(mtSing4)));
+mtT4 := MulTab(T4);
+mtK43 := MulTab(K43);
+mtK42 := MulTab(K42,S4);
 
-output := OutputTextFile("K42inK43subs", false);
-for r in L do
+reps := AsList(SubSgpsBy1Extensions(mtK42));
+
+output := OutputTextFile("K42_K43.reps", false);
+for r in List(reps,
+        x->ReCodeIndicatorSet(x,SortedElements(mtK42),SortedElements(mtK43))) do
+  AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
+od;
+CloseStream(output);
+
+output := OutputTextFile("K42_T4.reps", false);
+for r in List(reps,
+        x->ReCodeIndicatorSet(x,SortedElements(mtK42),SortedElements(mtT4))) do
   AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
 od;
 CloseStream(output);
