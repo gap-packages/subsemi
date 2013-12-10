@@ -1,1 +1,10 @@
 SubSemi GAP scripts for calculating the subsemigroups of T4.
+
+File types:
+
+*.reps - conjugacy class representatives only
+*.sgps - all subsemigroups
+
+Naming: 
+
+T_S - file contains the subsemigroups of T within the ambient semigroup S
