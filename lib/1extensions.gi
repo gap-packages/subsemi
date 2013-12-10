@@ -30,15 +30,13 @@ function(mt)
   end;
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
-    local r,filename,l,i, S,ll,output;
+    local r,l,i, S,ll,output;
     p_secs := TimeInSeconds();
     if not HasOriginalName(mt) then
-      Info(SubSemiInfoClass,1,"# No name, no dump!");
-      return;
+      Info(SubSemiInfoClass,1,"# No name, no dump!"); return;
     fi;
-    filename := Concatenation(OriginalName(mt),"_",
-                        String(dumpcounter),fileextension);
-    output := OutputTextFile(filename, false);
+    output := OutputTextFile(Concatenation(OriginalName(mt),"_",
+                        String(dumpcounter),fileextension), false);
     for r in AsList(result) do
       AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
     od;
