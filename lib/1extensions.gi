@@ -9,9 +9,9 @@ end;
 # mt - MulTab, multiplication table
 InstallGlobalFunction(SubSgpsBy1Extensions,
 function(mt)
-  local s, L, extend, result,
-        counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs, tab,
-        equivs, indexblist;#,boosters;
+  local s, extend, result,
+        counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs,
+        equivs, fileextension;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -67,7 +67,7 @@ function(mt)
     #STORE
     AddSet(result, bl);
     #RECURSION
-    diff := DifferenceBlist(indexblist, bl);
+    diff := DifferenceBlist(FullSet(mt), bl);
     for C in equivs do #keep maximum one from each equiv class
       f := false;
       for i in C do
@@ -84,9 +84,6 @@ function(mt)
   end;
   #-----------------------------------------------------------------------------
   #MAIN
-  L := SortedElements(mt);
-  indexblist := BlistList(Indices(mt),Indices(mt));
-  tab := Rows(mt);
   equivs := SameSgpEquivs(mt);
   result := HeavyBlistContainer();
   counter := 0;
