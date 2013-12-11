@@ -20,6 +20,7 @@ DeclareAttribute("Rows", IsMulTab);
 DeclareAttribute("Columns", IsMulTab);
 DeclareAttribute("Indices", IsMulTab);
 DeclareAttribute("SortedElements", IsMulTab);
+DeclareAttribute("EquivalentGenerators", IsMulTab);
 DeclareAttribute("Symmetries", IsMulTab);
 DeclareAttribute("OriginalName", IsMulTab);
 DeclareAttribute("LocalTables", IsMulTab);

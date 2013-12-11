@@ -1,17 +1,9 @@
-SameSgpEquivs := function(mt)
-local al,i;  
-  al := AssociativeList();
-  for i in Indices(mt) do Assign(al,i,SgpInMulTab([i],mt));od;
-  al := ReversedAssociativeList(al);
-  return Filtered(ValueSet(al), x->Length(x)>1);
-end;
-
 # mt - MulTab, multiplication table
 InstallGlobalFunction(SubSgpsBy1Extensions,
 function(mt)
   local s, extend, result,
         counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs,
-        equivs, fileextension;
+        fileextension;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -67,7 +59,7 @@ function(mt)
     AddSet(result, bl);
     #RECURSION
     diff := DifferenceBlist(FullSet(mt), bl);
-    for C in equivs do #keep maximum one from each equiv class
+    for C in EquivalentGenerators(mt) do #keep maximum one from each equiv class
       f := false;
       for i in C do
         if diff[i] then
@@ -88,7 +80,6 @@ function(mt)
   else
     fileextension := ".reps";
   fi;
-  equivs := SameSgpEquivs(mt);
   result := HeavyBlistContainer();
   counter := 0;
   p_secs := TimeInSeconds();
