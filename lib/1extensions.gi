@@ -1,9 +1,8 @@
 # mt - MulTab, multiplication table
 InstallGlobalFunction(SubSgpsBy1Extensions,
 function(mt)
-  local s, extend, result,
-        counter, log, dump, p_subs, p_counter, dumpcounter, secs, p_secs,
-        fileextension;
+  local s, extend, result, counter, log, dump, p_subs, p_counter, dumpcounter,
+        secs, p_secs, fileextension;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -41,10 +40,11 @@ function(mt)
   end;
   #-----------------------------------------------------------------------------
   extend := function(base,s)
-    local C, bl, diff,f,i;
+    local class, bl, diff,flag,i;
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
-    if InfoLevel(SubSemiInfoClass)>0 and (counter mod SubSemiOptions.LOGFREQ)=0 then
+    if InfoLevel(SubSemiInfoClass)>0
+       and (counter mod SubSemiOptions.LOGFREQ)=0 then
       log();
     fi;
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
@@ -57,20 +57,18 @@ function(mt)
     fi;
     #STORE
     AddSet(result, bl);
-    #RECURSION
+    #REMAINDER
     diff := DifferenceBlist(FullSet(mt), bl);
-    for C in EquivalentGenerators(mt) do #keep maximum one from each equiv class
-      f := false;
-      for i in C do
+    #REDUCTION
+    for class in EquivalentGenerators(mt) do #keep max one from each equiv class
+      flag := false;
+      for i in class  do
         if diff[i] then
-          if f then
-            diff[i] := false;
-          else
-            f := true;
-          fi;
+          if flag then diff[i] := false; else flag := true;fi;
         fi;
       od;
     od;
+    #RECURSION
     Perform(ListBlist(Indices(mt),diff), function(t) extend(bl,t);end);
   end;
   #-----------------------------------------------------------------------------
