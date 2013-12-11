@@ -120,6 +120,16 @@ function(mt)
 end);
 
 #experimental
+InstallMethod(EquivalentGenerators,"for a multab",
+        [IsMulTab],
+function(mt)
+local al,i;  
+  al := AssociativeList();
+  for i in Indices(mt) do Assign(al,i,SgpInMulTab([i],mt));od;
+  al := ReversedAssociativeList(al);
+  return Filtered(ValueSet(al), x->Length(x)>1);
+end);
+
 InstallMethod(GlobalTables,"for multab",
         [IsMulTab],
 function(mt)
