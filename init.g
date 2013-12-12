@@ -9,4 +9,5 @@ ReadPackage("SubSemi","/lib/conjugacy.gd");
 ReadPackage("SubSemi","/lib/multab.gd");
 ReadPackage("SubSemi","/lib/closure.gd");
 ReadPackage("SubSemi","/lib/invariants.gd");
+ReadPackage("SubSemi","/lib/isomorphism.gd");
 ReadPackage("SubSemi","/lib/1extensions.gd");
