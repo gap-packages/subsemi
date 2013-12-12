@@ -59,7 +59,14 @@ InstallGlobalFunction(DiagonalFrequencies,
 function(mt) return Frequencies(DiagonalOfMat(Rows(mt)));end);
 
 InstallGlobalFunction(IndexPeriodTypeFrequencies,
-function(mt) return Collected(List(Indices(mt),x->AbstractIndexPeriod(mt,x)));end);
+function(mt)
+  return Collected(List(Indices(mt),x->AbstractIndexPeriod(mt,x)));
+end);
+
+InstallGlobalFunction(ElementProfileTypes,
+function(mt)
+  return [];
+end);
 
 InstallGlobalFunction(MulTabProfile,
 function(mt)
