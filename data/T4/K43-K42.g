@@ -1,29 +1,24 @@
-K42 := SemigroupIdealByGenerators(
-               SingularTransformationSemigroup(4),
-               [Transformation([1,1,2,2])]);
+Read("sgps.g");
+
 rfh := ReesFactorHomomorphism(K42);
-T := Range(rfh);
-SetName(T,"K43-K42");
+K43modK42 := Range(rfh);
+SetName(T,"K43modK42");
+mtT := MulTab(T,S4,rfh);
+SubSgpsBy1Extensions(mtT);
 
-#SubSgpsBy1Extensions(MulTab(T,S4,rfh));
-mtSing4 := MulTab(SingularTransformationSemigroup(4));
-mtT := MulTab(T);
+mtK43 := MulTab(K43);
 
- L := List(SortedElements(mtT),x->PreImages(rfh,x));
-LL := List(L, function(x) if Size(x)> 1 then return fail; else return x[1];fi;end);
+preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
+elts := List(preimgs, function(x) if Size(x)> 1 then return fail; else return x[1];fi;end);
 
-itf := InputTextFile("K43-K42ccs");
-otf := OutputTextFile("K43-K42torsos",false);
+itf := InputTextFile("K43modK42.reps");
+otf := OutputTextFile("K43modK42.uppertorsos",false);
 
 s := ReadLine(itf);
 repeat
   NormalizeWhitespace(s);
   indset := AsBlist(DecodeBitString(s));
-  #elts := ElementsByIndicatorSet(indset,mtT);
-  #if IsSG(elts) then Print("#"); else Print("FAIL");Error();fi;
-  #torso := RFHNonZeroPreImages(elts,rfh);
-  torso := ElementsByIndicatorSet(indset,LL);
-  # List(ListBlist(Indices(mtT),indset),x->LL[x]);
+  torso := ElementsByIndicatorSet(indset,elts);
   if fail in torso then Remove(torso,Position(torso,fail));fi;
   WriteLine(otf,EncodeBitString(AsBitString(
           IndicatorSetOfElements(torso,SortedElements(mtSing4)))));
