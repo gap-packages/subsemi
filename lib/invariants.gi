@@ -65,14 +65,18 @@ end);
 
 InstallGlobalFunction(ElementProfileTypes,
 function(mt)
-  return [];
+local al;
+  al := AssociativeList();
+  Perform(Indices(mt), function(x)Assign(al, x, ElementProfile(mt,x));end);
+  return ValueSet(al);
 end);
 
 InstallGlobalFunction(MulTabProfile,
 function(mt)
   return [MulTabFrequencies(mt),
           DiagonalFrequencies(mt),
-          IndexPeriodTypeFrequencies(mt)];
+          IndexPeriodTypeFrequencies(mt),
+          ElementProfileTypes(mt)];
 
 end);
 
