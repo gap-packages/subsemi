@@ -9,15 +9,14 @@
 
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
-  local L, Aprofs,Bprofs,used,N, tab,BT,found,Atypes,Btypes;
+  local L, Aprofs,Bprofs,Bprofs2elts,used,N, tab,BackTrack,found,Atypes,Btypes, element_profiles;
   #-----------------------------------------------------------------------------
-  BT := function()
+  BackTrack := function()
     local k,row,col,i,candidates;
-    Display(L);
     if found then return;fi;
     if Size(L)=N then found := true; return; fi;
     k := Size(L)+1;
-    candidates := Difference(AsSet(Bprofs[ElementProfile(mtA,k)]),used);
+    candidates := Difference(AsSet(Bprofs2elts[Aprofs[k]]),used);
     if IsEmpty(candidates) then return; fi;
     for i in candidates do
       Add(L,i);
@@ -31,8 +30,7 @@ function(mtA,mtB)
         #glue
         Perform([1..k-1], function(x)Add(tab[x],col[x]);end);
         Add(tab,row);
-        #Display(tab);
-        BT();
+        BackTrack();
         if found then return;fi;
         #unglue
         Perform([1..k-1], function(x)Remove(tab[x]);end);
@@ -43,26 +41,34 @@ function(mtA,mtB)
     od;
   end;
   #-----------------------------------------------------------------------------
-  #checking size, then profile
-  if not (Size(Rows(mtA)) = Size(Rows(mtB))) then return fail;fi;
-  if not (MulTabProfile(mtA) = MulTabProfile(mtB)) then return fail;fi;
-  N := Size(Rows(mtA));
-  #for lining-up the elements we need the profiles TODO have this automated
-  Aprofs := AssociativeList();
-  Perform(Indices(mtA), function(x) Assign(Aprofs,x,ElementProfile(mtA,x));end);
+  element_profiles := function(mt)
+    local al;
+    al:= AssociativeList();
+    Perform(Indices(mt), function(x) Assign(al,x,ElementProfile(mt,x));end);
+    return al;
+  end;
+  #-----------------------------------------------------------------------------
+  #checking global invariants on by one
+  if Size(Rows(mtA)) <> Size(Rows(mtB)) then return fail;fi;
+  if MulTabFrequencies(mtA) <> MulTabFrequencies(mtB) then return fail;fi;
+  if DiagonalFrequencies(mtA) <> DiagonalFrequencies(mtB) then return fail;fi;
+  if IndexPeriodTypeFrequencies(mtA) <> IndexPeriodTypeFrequencies(mtB) then
+    return fail;
+  fi;
+  #for lining-up the elements we need the profiles
+  Aprofs := element_profiles(mtA);
   Atypes := AsSet(ValueSet(Aprofs));
-  Aprofs := ReversedAssociativeList(Aprofs);
-  Bprofs := AssociativeList();
-  Perform(Indices(mtB), function(x) Assign(Bprofs,x,ElementProfile(mtB,x));end);
+  Bprofs := element_profiles(mtB);
   Btypes := AsSet(ValueSet(Bprofs));
-  if Atypes <> Btypes then return fail;fi;
-  Bprofs := ReversedAssociativeList(Bprofs);
+  if Atypes <> Btypes then return fail;fi; #just another quick invariant
+  Bprofs2elts := ReversedAssociativeList(Bprofs);
   #now the backtrack
+  N := Size(Rows(mtA));
   used := [];
   found := false;
   tab := [];
   L := [];
-  BT();
+  BackTrack();
   if Size(L)=N then 
     return PermList(L); 
   else
