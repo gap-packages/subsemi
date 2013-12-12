@@ -174,3 +174,9 @@ end);
 FullSet := function(mt)
   return BlistList(Indices(mt),Indices(mt));
 end;
+
+#just for convenience
+Sgps := function(l,mt)
+  return List(AsList(l),
+              x->Semigroup(ElementsByIndicatorSet(x,SortedElements(mt))));
+end;
