@@ -1,7 +1,7 @@
 Read("sgps.g");
 
 rfh := ReesFactorHomomorphism(K42);
-K43modK42 := Range(rfh);
+T := Range(rfh);
 SetName(T,"K43modK42");
 mtT := MulTab(T,S4,rfh);
 SubSgpsBy1Extensions(mtT);
