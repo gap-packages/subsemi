@@ -1,5 +1,7 @@
+0.8
+	IsomorphismMulTabs, IsomorphismSemigroups added.
 0.7
-	SgpInMulTab can be given differenct closure functions.
+	SgpInMulTab can be given different closure functions.
 0.6
 	Alternative closure method added, further work on combining ideals, simplifications.
 0.5
