@@ -15,6 +15,7 @@ BindGlobal("MulTabType", NewType(MulTabFamily,IsMulTab));
 DeclareOperation("MulTab",[IsSemigroup]);
 DeclareGlobalFunction("CreateMulTab");
 DeclareGlobalFunction("ProductTableOfElements");
+DeclareGlobalFunction("SubArray");
 
 DeclareAttribute("Rows", IsMulTab);
 DeclareAttribute("Columns", IsMulTab);
