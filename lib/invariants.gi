@@ -77,7 +77,6 @@ function(mt)
           DiagonalFrequencies(mt),
           IndexPeriodTypeFrequencies(mt),
           ElementProfileTypes(mt)];
-
 end);
 
 #calculate the frequencies of entries in a matrix of positive integers
