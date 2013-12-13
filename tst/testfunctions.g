@@ -5,7 +5,8 @@ local test;
           "indicatorset",
           "indexperiod",
           "1extensions",
-          "invariants"
+          "invariants",
+          "isomorphism"
           ] do
     Test(Concatenation(
             PackageInfo("subsemi")[1]!.InstallationPath,
