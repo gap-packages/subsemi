@@ -180,11 +180,11 @@ Sgps := function(l,mt)
               x->Semigroup(ElementsByIndicatorSet(x,SortedElements(mt))));
 end;
 
+#it is not sorted or anything
 InstallGlobalFunction(SubArray,
-function(mt, elts)
-  local sa,i,j,L;
+function(mt, L)
+  local sa,i,j;
   sa := [];
-  L := AsSet(elts);
   for i in L do
     Add(sa,List(L,
             function(j) if Rows(mt)[i][j] in L then 
