@@ -170,7 +170,6 @@ function(mt)
   return tab;
 end);
 
-
 FullSet := function(mt)
   return BlistList(Indices(mt),Indices(mt));
 end;
@@ -180,3 +179,18 @@ Sgps := function(l,mt)
   return List(AsList(l),
               x->Semigroup(ElementsByIndicatorSet(x,SortedElements(mt))));
 end;
+
+InstallGlobalFunction(SubArray,
+function(mt, elts)
+  local sa,i,j,L;
+  sa := [];
+  L := AsSet(elts);
+  for i in L do
+    Add(sa,List(L,
+            function(j) if Rows(mt)[i][j] in L then 
+                          return Rows(mt)[i][j]; 
+                        else 
+                          return 0;fi;end));
+  od;
+  return sa;                  
+end);
