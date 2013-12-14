@@ -11,7 +11,8 @@
 \pgfsetlayers{background layer,main}
 
 \definecolor{darkblue}{rgb}{0.0,0.0,0.3}
-\definecolor{lgr}{rgb}{0.8,0.8,0.8}
+\definecolor{lgr}{rgb}{0.9,0.9,0.9}
+\definecolor{dgr}{rgb}{0.6,0.6,0.6}
 \hypersetup{colorlinks,breaklinks,
             linkcolor=darkblue,urlcolor=darkblue,
             anchorcolor=darkblue,citecolor=darkblue}
@@ -202,41 +203,15 @@ $T'$ $\leftarrow$ $\langle T\cup\{s\}\rangle$\\
 \section{Enumerating transformation semigroups of degree 2,3 and 4}
 
 \subsection{$\cT_2$, The Pen and Paper Case}
+Since $\cT_2$ has only four elements, thus the search space size is only $2^4=16$, it is an easy exercise to find all of its subsemigroups. 
+Using one-line notation for permutations, we order the elements lexicographically, 1=[1,1], 2=[1,2], 3=[2,1], 4=[2,2]. Here are the closed subarrays.
+\input{T2subs.tab}
+Using these we can draw the subsemigroup lattice (Fig.\ \ref{fig:T2subs}).
 
 \begin{figure}
-\begin{tikzpicture}
-[align=center,node distance=2.2cm]
-\tikzstyle{plain}=[rounded corners=3pt, draw]
-
-\draw node [plain] (1234) {[11],[12],[21],[22]};
-\draw node [plain,below left of=1234] (124) {[11],[12],[22]};
-\draw node [plain,below of=124] (12) {[11],[12]};
-\draw node [plain,left of=12] (14) {[11],[22]};
-\draw node [plain,right of=12] (24) {[12],[22]};
-\draw node [plain,right of=24] (23) {[12],[21]};
-
-\draw node [plain,below of=12] (1) {[11]};
-\draw node [plain,left of=1] (4) {[22]};
-\draw node [plain,right of=1] (2) {[12]};
-\draw node [plain,below of=1] (empty) {$\varnothing$};
-
-\draw  (1234) -- (124);
-\draw (124) -- (12);
-\draw (124) -- (24);
-\draw (124) -- (14);
-\draw  (1234) -- (23);
-\path (23) edge (2);
-\draw (1) -- (empty);
-\draw (2) -- (empty);
-\draw (4) -- (empty);
-\draw (14) -- (4);
-\draw (14) -- (1);
-\draw (12) -- (2);
-\draw (12) -- (1);
-\draw (24) -- (4);
-\draw (24) -- (2);
-
-\end{tikzpicture}
+\input{T2subs.tikz}
+\caption{$\Sub(\cT_2)$, dark grey blobs indicate nontrivial conjugacy classes, light grey shows an isomorphism class.}
+\label{fig:T2subs}
 \end{figure}
 \todo{explain frequencies of elements in multiplication table}
 
