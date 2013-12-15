@@ -4,7 +4,7 @@
 \usepackage{amssymb}
 \usepackage{amsthm}
 \usepackage{color,hyperref}
-\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[table,usenames,dvipsnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{matrix,arrows,positioning,automata}
 \pgfdeclarelayer{background layer}
@@ -180,7 +180,7 @@ Any property that does not contain information about the ordering of the element
 \SetKwData{subs}{subs}
 \SetKwData{diff}{diff}
 \SetKwFunction{Extend}{Extend}
-\Input{$S$ semigroup, $T\leq S$, \subs, $s\in S$ }
+\Input{$S$ semigroup, $T\leq S$,\subs, $s\in S$ }
 \Output{\subs with all possible extensions of $T$ added}
 \SetKwInOut{Name}{\Extend($T$,$s$,$S$,\subs)}
 \BlankLine
@@ -214,6 +214,47 @@ Using these we can draw the subsemigroup lattice (Fig.\ \ref{fig:T2subs}).
 \label{fig:T2subs}
 \end{figure}
 \todo{explain frequencies of elements in multiplication table}
+
+
+\begin{table}
+\renewcommand{\arraystretch}{1}
+\begin{tabular}{|c|r|r|r||r|r|r||r|r|r|}
+\hline
+$K_{i,j}$ & \multicolumn{3}{c||}{$j=1$} & \multicolumn{3}{c||}{2} & \multicolumn{3}{c|}{3} \\
+\hline
+$i=2$ & 4&3&3   & \cellcolor{lgr}  & \cellcolor{lgr}&  \cellcolor{lgr} & \cellcolor{lgr}  &\cellcolor{lgr} &\cellcolor{lgr}\\
+\hline
+$3$ &  8&4&4  &  600 & 123 & 118  & \cellcolor{lgr}  & \cellcolor{lgr}&\cellcolor{lgr}\\
+\hline
+$4$ & 16&5&5  &   & 162332 &   &   & &\\
+\hline
+$n$ & $2^n$&$n+1$&$n+1$    &    & &    &    & & \\
+\hline
+
+\end{tabular}
+\caption{Number of subsemigroups of ideals in of full transformation semigroups. The second and third numbers are the number of distinct subsemigroups up to conjugacy and isomorphism.}
+\end{table}
+
+
+\begin{table}
+\renewcommand{\arraystretch}{1}
+\begin{tabular}{|c|r|r|r|}
+\hline
+ & \#subsemigroups & \#conjugacy classes & \#isomorphism classes \\
+\hline
+$\cT_0$ & 1  & 1 & 1\\
+\hline
+$\cT_1$ & 2  & 2 & 2\\
+\hline
+$\cT_2$ & 10  & 8 & 7\\
+\hline
+$\cT_3$ & 1299 & 283 & 267\\
+\hline
+%$\cT_4$ & & & \\
+%\hline
+\end{tabular}
+\caption{Number of subsemigroups of full transformation semigroups.}
+\end{table}
 
 \bibliography{subsemi}
 \bibliographystyle{plain}
