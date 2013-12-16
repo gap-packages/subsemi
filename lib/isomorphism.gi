@@ -89,13 +89,46 @@ function(S,T)
 end);
 
 # given a list of semigroups returns isomorphism class representatives
+#IsomorphismClassesSgpsReps := function(sgps)
+#local R,S;
+#  R:=[];
+#  for S in sgps do
+#    if First(R, T->IsomorphismMulTabs(MulTab(S),MulTab(T))<>fail) = fail then
+#      Add(R,S); #adding it if it is not isomorphic to any in R
+#    fi;
+#  od;
+#  return R;
+#end;
+
+# given a list of semigroups returns isomorphism class representatives
 IsomorphismClassesSgpsReps := function(sgps)
-local R,S;
-  R:=[];
-  for S in sgps do
-    if First(R, T->IsomorphismMulTabs(MulTab(S),MulTab(T))<>fail) = fail then
-      Add(R,S); #adding it if it is not isomorphic to any in R
+  local fullcheck,al, k,tmp, result, sgp;
+  #-----------------------------------------------------------------------------
+  fullcheck := function(semis)
+    local R,S;
+    R:=[];
+    for S in semis do
+      if First(R, T->IsomorphismMulTabs(MulTab(S),MulTab(T))<>fail) = fail then
+        Add(R,S); #adding it if it is not isomorphic to any in R
+      fi;
+    od;
+    return R;
+  end;
+  #-----------------------------------------------------------------------------
+  al := AssociativeList();
+  for sgp in sgps do
+    Collect(al,MulTabProfile(MulTab(sgp)) ,sgp);
+  od;
+  #al := ReversedAssociativeList(al);
+  Print("hopszi\c");
+  result := [];
+  for k in Keys(al) do
+    tmp := al[k];
+    if Size(tmp) = 1 then
+      Append(result, tmp);
+    else
+      Append(result,fullcheck(tmp));
     fi;
   od;
-  return R;
+  return result;
 end;
