@@ -10,6 +10,7 @@
 DeclareGlobalFunction("FirstEntryPosOr1");
 DeclareGlobalFunction("LastEntryPosOr1");
 DeclareGlobalFunction("HeavyBlistContainer");
+DeclareGlobalFunction("LightBlistContainer");
 
 DeclareGlobalFunction("EncodeBitString");
 DeclareGlobalFunction("DecodeBitString");
