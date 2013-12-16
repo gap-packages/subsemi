@@ -32,6 +32,12 @@ function()
   return DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
 end);
 
+InstallGlobalFunction(LightBlistContainer,
+function()
+  return DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1]);
+end);
+
+
 #TODO this is some fancy indexing tool, but needs some description
 BinaryBlistIndexer := function(n)
   local f;
