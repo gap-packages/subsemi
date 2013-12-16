@@ -177,7 +177,8 @@ end;
 #just for convenience
 Sgps := function(l,mt)
   return List(AsList(l),
-              x->Semigroup(ElementsByIndicatorSet(x,SortedElements(mt))));
+              #x->Semigroup(ElementsByIndicatorSet(x,SortedElements(mt))));
+              x->AsSortedList(ElementsByIndicatorSet(x,SortedElements(mt))));
 end;
 
 #it is not sorted or anything
