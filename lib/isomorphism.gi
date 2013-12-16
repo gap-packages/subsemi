@@ -119,8 +119,6 @@ IsomorphismClassesSgpsReps := function(sgps)
   for sgp in sgps do
     Collect(al,MulTabProfile(MulTab(sgp)) ,sgp);
   od;
-  #al := ReversedAssociativeList(al);
-  Print("hopszi\c");
   result := [];
   for k in Keys(al) do
     tmp := al[k];
