@@ -32,7 +32,7 @@
 
 \DeclareMathOperator{\Aut}{Aut}
 
-\newcommand{\todo}[1]{ \small \textsf{[TODO:  #1 ]} \normalsize}
+\newcommand{\todo}[1]{\textcolor{red}{ \small \textsf{[TODO:  #1 ]} \normalsize}}
 
 
 \theoremstyle{plain}
@@ -214,6 +214,15 @@ $T'$ $\leftarrow$ $\langle T\cup\{s\}\rangle$\\
 \label{alg:1-extensions}
 \end{algorithm}
 
+\subsection{Equivalent Generators}
+
+We define an equivalence relation on $S$ by
+$$ s\equiv t \Longleftrightarrow \langle\{s\} \rangle= \langle\{t\} \rangle.$$
+For distinct elements this can only happen to nontrivial elements of cyclic groups of prime order.
+However, a semigroup can contain many copies of those.
+For instance, in the singular transformation semigroup of degree 4, $[ 2, 3, 1, 1 ]$ is equivalent to  $[ 3, 1, 2, 2 ]$, both generating $\{ [ 2, 3, 1, 1 ], [ 3, 1, 2, 2 ], [ 1, 2, 3, 3 ]\}$.
+
+In a search algorithm, if $s\equiv t$, then after extending by $s$ we can simply omit extending by $t$.
 \subsection{Parallel Enumeration in Ideal Quotients}
 In general, an ideal $I$ divides a subsemigroup into two parts: a subsemigroup contained in the ideal and a subset (Fig.\ \ref{fig:torsos}).
 The subset also can be made into a subsemigroup by adjoining a zero element, exactly as in a Rees quotient. 
