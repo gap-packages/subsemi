@@ -1,8 +1,15 @@
 # mt - MulTab, multiplication table
 InstallGlobalFunction(SubSgpsBy1Extensions,
-function(mt)
+        function(mt) return SubSgpsBy1ExtensionsWithLimitSet(mt,
+                                    BlistList(Indices(mt), []),
+                                    FullSet(mt));end);
+
+# mt - MulTab, multiplication table
+# limitset - the set where to get the extending elements from
+InstallGlobalFunction(SubSgpsBy1ExtensionsWithLimitSet,
+function(mt,startset,limitset)
   local s, extend, result, counter, log, dump, p_subs, p_counter, dumpcounter,
-        secs, p_secs, fileextension;
+        secs, p_secs, fileextension, dosyms;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -51,14 +58,14 @@ function(mt)
     #calculating the new subsgp
     bl := ClosureByQueue(base, [s], mt);
     #its conjugacy class rep
-    bl := ConjugacyClassRep(bl,mt);
+    if dosyms then bl := ConjugacyClassRep(bl,mt);fi;
     if  bl in result then
       return; #just bail out if we already have it
     fi;
     #STORE
     AddSet(result, bl);
     #REMAINDER
-    diff := DifferenceBlist(FullSet(mt), bl);
+    diff := DifferenceBlist(limitset, bl);
     #REDUCTION
     for class in EquivalentGenerators(mt) do #keep max one from each equiv class
       flag := false;
@@ -74,17 +81,19 @@ function(mt)
   #-----------------------------------------------------------------------------
   #MAIN
   if Size(Symmetries(mt)) = 1 then
+    dosyms := false;
     fileextension := ".subs";
   else
+    dosyms := true;
     fileextension := ".reps";
   fi;
   result := HeavyBlistContainer();
   counter := 0;
   p_secs := TimeInSeconds();
-  for s in Indices(mt) do
+  for s in ListBlist(Indices(mt),DifferenceBlist(limitset, startset)) do
     Info(SubSemiInfoClass,1,
-         Concatenation("# ",String(s),"/",String(Size(Indices(mt)))));
-    extend(BlistList(Indices(mt), []),s);
+         Concatenation("# ",String(s),"/",String(Size(Indices(mt)))));#TODO fix
+    extend(startset,s);
   od;
   if InfoLevel(SubSemiInfoClass)>0 then log();fi;
   dump();

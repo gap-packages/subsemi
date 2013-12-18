@@ -174,6 +174,10 @@ FullSet := function(mt)
   return BlistList(Indices(mt),Indices(mt));
 end;
 
+EmptySet := function(mt)
+  return BlistList(Indices(mt),[]);
+end;
+
 #just for convenience
 Sgps := function(l,mt)
   return List(AsList(l),
