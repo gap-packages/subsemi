@@ -1,0 +1,29 @@
+\def\S{(0,0) ellipse (1.7cm and 3cm)}
+\def\I{(0,-1.7) ellipse (3cm and 2cm)}
+\def\T{(-.2,0)ellipse (.8cm and 1.4cm)}
+\begin{tikzpicture}
+\begin{scope}
+\clip\S;
+\draw\I;
+\draw[very thick]\S;
+\end{scope}
+\fill [color=gray9] \T;
+\draw \T;
+\draw (0.3,2.1) node (SI) {$S\setminus I$};
+\draw (0.9,2.9) node (S) {$S$};
+\draw (0.4,-1.9) node (I) {$I$};
+\draw (-0.1,.4) node (T) {$T$};
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{scope}
+\clip\T;
+\draw[very thick]\S;
+\fill [color=gray9] \T;
+\draw\I;
+\end{scope}
+\draw \T;
+\draw (.5,1.2) node (T) {$T$};
+\draw (0,-.6) node (L) {$L$};
+\draw (-0.3,0.9) node (U) {$U$};
+\draw (-2,-2.9) node (invisible) {};%trick for shifting the image
+\end{tikzpicture}
