@@ -149,10 +149,6 @@ Any property that does not contain information about the ordering of the element
 
 
 
-
-
-
-
 \section{Subsemigroup Enumeration Algorithms}
 \label{sec:enum}
 
@@ -176,10 +172,11 @@ $\Sub(S)=\big( \bigcup_{T\in \Max(S)}\Sub(T)\big)\cup \{S\}$
 %\qed
 \noindent Constructing $\Max(S)$ is described in \cite{MaxSubSemi} and implemented in \cite{Semigroups}.
 However, the sets of subsemigroups of the maximal subsemigroups do overlap in general, therefore the same subsemigroup gets enumerated many times and merging is a non-trivial step.
-Also, recursively iterating the maximal subsemigroups is a variant of the breadth-first search algorithm.  
+Also, recursively iterating the maximal subsemigroups is a variant of the depth-first search algorithm.  
 
 \subsection{Exploiting Symmetries}
-Once a subsemigroup is found, we can generate its conjugate subsemigroups.
+If we know all the symmetries of $S$, the semigroup's automorphism group, then we can accelerate any subsemigroup enumeration algorithm.
+Whenever a subsemigroup is found, we can generate its conjugate subsemigroups.
 \begin{fact}
 $T\in\Sub(S)$ and $g\in \Aut(S)$ then $T^g\in\Sub(S)$.%$g^{-1}Tg\in\Sub(S)$.
 \end{fact}
@@ -189,43 +186,52 @@ $T\in\Sub(S)$ and $g\in \Aut(S)$ then $T^g\in\Sub(S)$.%$g^{-1}Tg\in\Sub(S)$.
 %\qed
 
 
-Enumeration is truly parallel for an ideal and its corresponding factor semigroup followed by combining the results.
-\begin{lemma}
-Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle (T\setminus\{0\})\cup U \rangle\mid T\in \Sub(S/I), U\in\Sub(I)\big\}.$$
-\end{lemma}
-\proof
-
-\qed
-
-
-
 \subsection{Enumerating by 1-extensions}
-The idea is the simplest possible 
+
+
+
+The idea is the simplest possible: given a subsemigroup $T\leq S$ we construct all the minimal subsemigroups that contain $T$.
+These are obtained by adding one extra generator from $S\setminus T$ (Algorithm \ref{alg:1-extensions}).
+\todo{Shall we call these minimal closures? instead of 1-extensions, since extension has other meanings.} 
+This algorithm is a depth-first search and its efficiency comes from the fact that the search is cut at subsemigroups alreay known. 
 \begin{algorithm}
 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 \SetKwData{subs}{subs}
-\SetKwData{diff}{diff}
 \SetKwFunction{Extend}{Extend}
-\Input{$S$ semigroup, $T\leq S$,\subs, $s\in S$ }
+\Input{$S$ - the ambient semigroup,\\ $T\leq S$ -  a subsemigroup,\\\subs\ - a set storing subsemigroups already constructed,\\ $s\in S$ - a semigroup element to be added as new generator}
 \Output{\subs with all possible extensions of $T$ added}
 \SetKwInOut{Name}{\Extend($T$,$s$,$S$,\subs)}
 \BlankLine
 \Name{}
-
 $T'$ $\leftarrow$ $\langle T\cup\{s\}\rangle$\\
     \If{$T'\notin$ \subs}{
       \subs$\leftarrow$ \subs$\cup\{T'\}$\\
-      \diff $\leftarrow$ $S\setminus T'$\\
-      \For{$t\in$\diff}{
+      \For{$t\in S\setminus T'$}{
       \Extend($T',t,S$,\subs)
     }
   }
-\caption{Finding all subsemigroup containing $T$ in $S$ .\textsf{subs} $\leftarrow$ $\varnothing$ $s\in S$ \textsf{Extend}($\varnothing,s,S$,\textsf{subs}) enumerates all subsemigroups of $S$.}
-\label{alg:1-extensons}
+\caption{Finding all subsemigroup containing $T$ in $S$. In particular, \textsf{subs} $\leftarrow$ $\varnothing$,  \textsf{Extend}($\varnothing,s,S$,\textsf{subs}) for all  $s\in S$ enumerates all subsemigroups of $S$.}
+\label{alg:1-extensions}
 \end{algorithm}
 
 \subsection{Parallel Enumeration in Ideal Quotients}
+In general, an ideal $I$ divides a subsemigroup into two parts: a subsemigroup contained in the ideal and a subset (Fig.\ \ref{fig:torsos}).
+The subset also can be made into a subsemigroup by adjoining a zero element, exactly as in a Rees quotient. 
+Subsemigroup enumeration can be done in parallel in $I$ and $S/I$  and then  we can combine the results.
 
+\begin{lemma}
+Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle (U\setminus\{0\})\cup L \rangle\mid U\in \Sub(S/I), L\in\Sub(I)\big\}.$$
+\end{lemma}
+\proof
+\qed
+
+\begin{figure}
+\begin{center}
+\input{torsos.tikz}
+\caption{If semigroup $S$ has an ideal $I$, then in general a subsemigroup $T$ is partitioned into two parts, the upper torso $U=T\cap S\setminus I$ and the lower torso $L=T\cap I$ by the ideal.}
+\label{fig:torsos}
+\end{center}
+\end{figure}
 \section{Enumerating transformation semigroups of degree 2,3 and 4}
 \label{sec:fulltranssgp}
 \subsection{$\cT_2$, The Pen and Paper Case}
@@ -256,6 +262,7 @@ Order&0&1&2&3& 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 1
 \hline
 \end{tabular}
 \normalsize
+\caption{The frequency distribution of conjugacy and isomorphism classes of $\Sub(\cT_3)$.}
 \end{table}
 
 \todo{explain frequencies of elements in multiplication table}
