@@ -9,7 +9,7 @@ InstallGlobalFunction(SubSgpsBy1Extensions,
 InstallGlobalFunction(SubSgpsBy1ExtensionsWithLimitSet,
 function(mt,startset,limitset)
   local s, extend, result, counter, log, dump, p_subs, p_counter, dumpcounter,
-        secs, p_secs, fileextension, dosyms;
+        secs, p_secs, fileextension, dosyms, complement, extensioncounter;
   p_subs := 0; p_counter := 0; dumpcounter := 1;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -90,10 +90,14 @@ function(mt,startset,limitset)
   result := HeavyBlistContainer();
   counter := 0;
   p_secs := TimeInSeconds();
-  for s in ListBlist(Indices(mt),DifferenceBlist(limitset, startset)) do
+  complement := DifferenceBlist(limitset, startset);
+  extensioncounter := 1;
+  for s in ListBlist(Indices(mt),complement) do
     Info(SubSemiInfoClass,1,
-         Concatenation("# ",String(s),"/",String(Size(Indices(mt)))));#TODO fix
+         Concatenation("# ",String(s)," ",
+                 String(extensioncounter),"/",String(SizeBlist(complement))));
     extend(startset,s);
+    extensioncounter := extensioncounter + 1;
   od;
   if InfoLevel(SubSemiInfoClass)>0 then log();fi;
   dump();
