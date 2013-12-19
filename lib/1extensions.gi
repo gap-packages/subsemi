@@ -53,7 +53,7 @@ function(mt,baseset,generators)
     local r,l,i, S,ll,output;
     prev_secs := TimeInSeconds();
     if not HasOriginalName(mt) then
-      Info(SubSemiInfoClass,1,"# No name, no dump!"); return;
+      Info(SubSemiInfoClass,1,"No name, no dump!"); return;
     fi;
     dumpcounter := dumpcounter + 1;
     output := OutputTextFile(Concatenation(OriginalName(mt),"_",
@@ -62,7 +62,7 @@ function(mt,baseset,generators)
       AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
     od;
     CloseStream(output);
-    Info(SubSemiInfoClass,1,Concatenation("#Dumping in ",
+    Info(SubSemiInfoClass,1,Concatenation("Dumping in ",
           FormattedTimeString(TimeInSeconds()-prev_secs)));
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
@@ -80,9 +80,8 @@ function(mt,baseset,generators)
     bl := ClosureByQueue(base, [s], mt);
     #its conjugacy class rep
     if dosyms then bl := ConjugacyClassRep(bl,mt);fi;
-    if  bl in result then
-      return; #just bail out if we already have it
-    fi;
+    #EXIT if nothing to do
+    if  bl in result then return; fi;
     #STORE
     AddSet(result, bl);
     #REMAINDER
@@ -109,16 +108,16 @@ function(mt,baseset,generators)
   result := HeavyBlistContainer();
   prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
   prev_secs:=TimeInSeconds();
-  real_generators := DifferenceBlist(generators, base);
+  real_generators := DifferenceBlist(generators, baseset);
   generator_counter := 1;
   for gen in ListBlist(Indices(mt),real_generators) do
-    Info(SubSemiInfoClass,1,Concatenation("# ",String(gen)," ",
+    Info(SubSemiInfoClass,1,Concatenation(String(gen)," ",
             String(generator_counter),"/",String(SizeBlist(real_generators))));
     extend(baseset,gen);
     generator_counter := generator_counter + 1;
   od;
   if InfoLevel(SubSemiInfoClass)>0 then log();fi;
   dump();#the final dump
-  Info(SubSemiInfoClass,1,Concatenation("# Total checks: ",String(counter)));
+  Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
   return result;
 end);
