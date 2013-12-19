@@ -1,49 +1,70 @@
+################################################################################
+##
+## SubSemi
+##
+## Enumerating subsemigroups by recursively extending with a generator.
+##
+## Copyright (C) 2013-2014  Attila Egri-Nagy
+##
+
 # mt - MulTab, multiplication table
 InstallGlobalFunction(SubSgpsBy1Extensions,
-        function(mt) return SubSgpsBy1ExtensionsWithLimitSet(mt,
-                                    BlistList(Indices(mt), []),
+        function(mt) return SubSgpsBy1ExtensionsParametrized(mt,
+                                    EmptySet(mt),
                                     FullSet(mt));end);
 
 # mt - MulTab, multiplication table
-# limitset - the set where to get the extending elements from
-InstallGlobalFunction(SubSgpsBy1ExtensionsWithLimitSet,
-function(mt,startset,limitset)
-  local s, extend, result, counter, log, dump, p_subs, p_counter, dumpcounter,
-        secs, p_secs, fileextension, dosyms, complement, extensioncounter;
-  p_subs := 0; p_counter := 0; dumpcounter := 1;
+# baseset - the elements already in
+# generators - the set of possible extending elements from
+InstallGlobalFunction(SubSgpsBy1ExtensionsParametrized,
+function(mt,baseset,generators)
+  local gen, # the generator to be added to the base
+        extend, # function recursively extending the base by a generator
+        result, # container for the end result, the subsemigroups
+        counter, # counting the recursive calls
+        prev_counter, # the value of counter at previous measurement (log, dump)
+        log, # function logging some info to standart output
+        dump, # writing the found subsemigroups to a file
+        dumpcounter, # counting the number of dumps so far
+        fileextension, # reps for conjugacy class reps, subs otherwise
+        secs, prev_secs, # current time in secs and the previous check
+        prev_subs, # number of subsemigroups at previous measurement
+        dosyms, # flag showing whether we do nontrivial conjugacy classes
+        real_generators, # real generators (some generators may be in base)
+        generator_counter; # counts how many generators have been applied
+                           # on the top level
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
     Print("#", FormattedBigNumberString(counter)," #",Size(result)," ",
           FormattedMemoryString(MemoryUsage(result))," ",
-          FormattedPercentageString(Size(result)-p_subs,counter-p_counter)," ");
-    if (secs-p_secs) > 0 then
-      Print(FormattedFloat(Float((Size(result)-p_subs)/(secs-p_secs))),
+          FormattedPercentageString(Size(result)-prev_subs,
+                  counter-prev_counter)," ");
+    if (secs-prev_secs) > 0 then # printing speed only if it measurable
+      Print(FormattedFloat(Float((Size(result)-prev_subs)/(secs-prev_secs))),
             "/s\c\n");
     else
       Print("\c\n");
     fi;
-    p_subs := Size(result); p_counter := counter;
-    p_secs := TimeInSeconds();
+    prev_subs:=Size(result);prev_counter:=counter;prev_secs:=TimeInSeconds();
   end;
   #-----------------------------------------------------------------------------
   dump := function() #write all the subsemigroups into a file
     local r,l,i, S,ll,output;
-    p_secs := TimeInSeconds();
+    prev_secs := TimeInSeconds();
     if not HasOriginalName(mt) then
       Info(SubSemiInfoClass,1,"# No name, no dump!"); return;
     fi;
+    dumpcounter := dumpcounter + 1;
     output := OutputTextFile(Concatenation(OriginalName(mt),"_",
                         String(dumpcounter),fileextension), false);
     for r in AsList(result) do
       AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
     od;
     CloseStream(output);
-    dumpcounter := dumpcounter + 1;
     Info(SubSemiInfoClass,1,Concatenation("#Dumping in ",
-          FormattedTimeString(TimeInSeconds()-p_secs)));
-    #resetting the timer no to mess up the speed gauge 
-    p_secs := TimeInSeconds();
+          FormattedTimeString(TimeInSeconds()-prev_secs)));
+    prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
   extend := function(base,s)
@@ -65,7 +86,7 @@ function(mt,startset,limitset)
     #STORE
     AddSet(result, bl);
     #REMAINDER
-    diff := DifferenceBlist(limitset, bl);
+    diff := DifferenceBlist(generators, bl);
     #REDUCTION
     for class in EquivalentGenerators(mt) do #keep max one from each equiv class
       flag := false;
@@ -81,26 +102,23 @@ function(mt,startset,limitset)
   #-----------------------------------------------------------------------------
   #MAIN
   if Size(Symmetries(mt)) = 1 then
-    dosyms := false;
-    fileextension := ".subs";
+    dosyms := false;fileextension := ".subs";
   else
-    dosyms := true;
-    fileextension := ".reps";
+    dosyms := true;fileextension := ".reps";
   fi;
   result := HeavyBlistContainer();
-  counter := 0;
-  p_secs := TimeInSeconds();
-  complement := DifferenceBlist(limitset, startset);
-  extensioncounter := 1;
-  for s in ListBlist(Indices(mt),complement) do
-    Info(SubSemiInfoClass,1,
-         Concatenation("# ",String(s)," ",
-                 String(extensioncounter),"/",String(SizeBlist(complement))));
-    extend(startset,s);
-    extensioncounter := extensioncounter + 1;
+  prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
+  prev_secs:=TimeInSeconds();
+  real_generators := DifferenceBlist(generators, base);
+  generator_counter := 1;
+  for gen in ListBlist(Indices(mt),real_generators) do
+    Info(SubSemiInfoClass,1,Concatenation("# ",String(gen)," ",
+            String(generator_counter),"/",String(SizeBlist(real_generators))));
+    extend(baseset,gen);
+    generator_counter := generator_counter + 1;
   od;
   if InfoLevel(SubSemiInfoClass)>0 then log();fi;
-  dump();
+  dump();#the final dump
   Info(SubSemiInfoClass,1,Concatenation("# Total checks: ",String(counter)));
   return result;
 end);
