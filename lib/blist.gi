@@ -7,8 +7,6 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-#functions for dealing with bolean lists
-
 ### INDEXING ###################################################################
 # returns the position of the 1st entry or 1 if empty
 InstallGlobalFunction(FirstEntryPosOr1,
@@ -29,12 +27,12 @@ end);
 
 InstallGlobalFunction(HeavyBlistContainer,
 function()
-  return DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1,LastEntryPosOr1]);
+  return DynamicIndexedHashSet([x->SizeBlist(x)+1,FirstEntryPosOr1,LastEntryPosOr1]);
 end);
 
 InstallGlobalFunction(LightBlistContainer,
 function()
-  return DynamicIndexedHashSet([SizeBlist,FirstEntryPosOr1]);
+  return DynamicIndexedHashSet([x->SizeBlist(x)+1,FirstEntryPosOr1]);
 end);
 
 
