@@ -8,6 +8,7 @@
 ##
 
 # mt - MulTab, multiplication table
+#TODO this does not add the base - we could, but the empty set is trouble
 InstallGlobalFunction(SubSgpsBy1Extensions,
         function(mt) return SubSgpsBy1ExtensionsParametrized(mt,
                                     EmptySet(mt),
