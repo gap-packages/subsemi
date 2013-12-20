@@ -8,4 +8,5 @@
 ##
 
 DeclareGlobalFunction("SgpInMulTab");
+DeclareGlobalFunction("IsClosedSubTable");
 DeclareGlobalFunction("MissingElements");

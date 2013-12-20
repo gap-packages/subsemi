@@ -116,6 +116,12 @@ IsMaximalSubSgp := function(set,mt)
   return ForAll(diff, i-> full = ClosureByQueue(set,[i],mt));
 end;
 
+InstallGlobalFunction(IsClosedSubTable,
+function(set,mt)
+  return IsEmpty(MissingElements(set,mt));
+end);
+
+
 #just to kickstart the closure, calculate the missing elements
 #this may not be a closure
 InstallGlobalFunction(MissingElements,
