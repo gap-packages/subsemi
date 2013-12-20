@@ -8,7 +8,6 @@
 ##
 
 # mt - MulTab, multiplication table
-#TODO this does not add the base - we could, but the empty set is trouble
 InstallGlobalFunction(SubSgpsBy1Extensions,
         function(mt) return SubSgpsBy1ExtensionsParametrized(mt,
                                     EmptySet(mt),
@@ -107,6 +106,9 @@ function(mt,baseset,generators)
     dosyms := true;fileextension := ".reps";
   fi;
   result := HeavyBlistContainer();
+  if IsClosedSubTable(baseset, mt) then
+    AddSet(result,ConjugacyClassRep(baseset,mt));
+  fi;
   prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
   prev_secs:=TimeInSeconds();
   real_generators := DifferenceBlist(generators, baseset);
