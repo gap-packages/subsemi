@@ -34,7 +34,6 @@
 
 \newcommand{\todo}[1]{\textcolor{red}{ \small \textsf{[TODO:  #1 ]} \normalsize}}
 
-
 \theoremstyle{plain}
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -82,9 +81,11 @@ We denote the set of the elements of a vector $v$ by $\Set(v)=\{x\mid x\in v\}$.
 $\Pos(v,i)$ is the set of positions in vector $v$ containing the value $i$.
 
 $\Sub(S)=\big\{T\mid T\leq S \big\}$ the set of all subsemigroups, $\Max(S)$ the set of maximal proper subsemigroups.
-If $I$ is an ideal of $S$ then the \emph{Rees factor semigroup} $S/I$ has elements $S\setminus I\cup\{0\}$ with multiplication same as in $S$ if the product stays in $S\setminus I$ and zero otherwise.
+If $I$ is an ideal of $S$ then the \emph{Rees factor semigroup} $S/I$ has elements $(S\setminus I)\cup\{0\}$ with multiplication same as in $S$ if the product stays in $S\setminus I$ and zero otherwise.
 
-$\cS_n$ denotes the symmetric group, $\cT_n$ the full transformation group on $n$ points.
+$\cS_n$ denotes the \emph{symmetric group}, $\cT_n$ the \emph{full transformation semigroup} on $n$ points.
+$K_{n,i}$ is the ideal of $\cT_n$ by elements of rank $i$.
+$K_{n,n-1}$ is also called the \emph{singular transformation semigroup} of degree $n$.
 
 \section{Multiplication Table Algorithms}
 \label{sec:multab}
