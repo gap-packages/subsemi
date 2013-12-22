@@ -5,7 +5,7 @@ mtT4 := MulTab(T4);
 mtK43 := MulTab(K43);
 mtK42 := MulTab(K42,S4);
 
-reps := AsList(SubSgpsBy1Extensions(mtK42));
+reps := AsList(SubSgpsByMinClosures(mtK42));
 
 output := OutputTextFile("K42_K43.reps", false);
 for r in List(reps,

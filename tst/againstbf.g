@@ -5,7 +5,7 @@ TestAgainstBruteForce := function(M)
   l1 := BFSubSemis(M);
   Perform(l1,Sort);
   Sort(l1);
-  l2 := List(AsList(SubSgpsBy1Extensions(mt)),
+  l2 := List(AsList(SubSgpsByMinClosures(mt)),
              b->ElementsByIndicatorSet(b,mt));
   Perform(l2,Sort);
   Sort(l2);

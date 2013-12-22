@@ -8,7 +8,7 @@ ReadPackage("SubSemi","/lib/multab.gi");
 ReadPackage("SubSemi","/lib/closure.gi");
 ReadPackage("SubSemi","/lib/invariants.gi");
 ReadPackage("SubSemi","/lib/isomorphism.gi");
-ReadPackage("SubSemi","/lib/1extensions.gi");
+ReadPackage("SubSemi","/lib/minclosure.gi");
 
 ReadPackage("SubSemi","/tst/testfunctions.g");
 ReadPackage("SubSemi","/tst/againstbf.g");

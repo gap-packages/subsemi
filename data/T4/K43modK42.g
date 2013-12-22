@@ -4,7 +4,7 @@ rfh := ReesFactorHomomorphism(K42);
 T := Range(rfh);
 SetName(T,"K43modK42");
 mtT := MulTab(T,S4,rfh);
-SubSgpsBy1Extensions(mtT);
+SubSgpsByMinClosures(mtT);
 
 mtK43 := MulTab(K43);
 
