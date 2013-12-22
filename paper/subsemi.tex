@@ -78,6 +78,7 @@ Then the  \emph{multiplication table}, or \emph{Cayley-table} of $S$ is a $n\tim
 $M_A$ denotes the subarray of $M$ spanned by $A\subseteq\{1,\ldots,n\}$.
 $R_i$ is the $i$th row and $C_j$ is the $j$th column vector of $M$.
 We denote the set of the elements of a vector $v$ by $\Set(v)=\{x\mid x\in v\}$.
+Similarly for multiplication tables or subarrays, $\Set(M_A)=\{x\mid x\in M_A\}$.
 $\Pos(v,i)$ is the set of positions in vector $v$ containing the value $i$.
 
 $\Sub(S)=\big\{T\mid T\leq S \big\}$ the set of all subsemigroups, $\Max(S)$ the set of maximal proper subsemigroups.
@@ -92,10 +93,17 @@ $K_{n,n-1}$ is also called the \emph{singular transformation semigroup} of degre
 
 \subsection{Closure Algorithms}
 Given a subsemigroup $T\leq S$ and a set of elements  $A\subseteq S$, the \emph{closure} of $T$ by $A$ is $\langle T\cup A \rangle$.
-For calculating what subsemigroup a set $A$ generates, we can take the closure of $\varnothing$ by $A$, which is simply $\langle A\rangle$.
+In particular, when $T=\varnothing$  the closure $\langle A\rangle$, simply  what subsemigroup the set $A$ generates.
 
-\subsubsection{Simple Method}
-Checking $M_{T\cup A}$ for set of elements $B$ not in $T\cup A$. Then iterate with $T\cup A\cup B$.
+\subsubsection{Queue Method}
+The simplest idea for calculating the closure of $T$ by $A$ in $S$ is that we calculate $B=\Set\left(M_{T\cup A}\right)\setminus T\cup A$, the set of elements that are not contained in the subarray spanned by $T\cup A$. 
+Then repeat the same process with $T\cup A\cup B$, until $B=\varnothing$.
+
+To make this iterative process more efficient we have avoid double checking elements.
+Based on the assumption that $T$ is closed, we need look for new elements only in the rows and columns spanned by $A$ and subsequently by the elements of $B$.
+We put the new elements in the queue (first-in-first-out abstract datatype) and include those in the closure one by one.
+
+\todo{The next two table methods may not be needed, as the queueing method is fast enough and works well in general.}
 \subsubsection{Global Tables}
 Starting from the result of a product, we ask how can we produce element $k$?
 All possible $s_is_j=s_k$ or $s_js_i=s_k$.
@@ -104,12 +112,12 @@ From the point of calculating the closure we can  omit coordinate pairs $i,j$ wh
 We do not need the order information, so we can talk about ordered pairs $(i,j)$, $i\leq j$. 
 Let's denote the set of these pairs by $P_k$.
 
-The set $P_k$ of all coordinate pairs encoding the locations is still redundant in a sense that instead of storing all pairs including $i$, we can simply record $i$ and all the other elements in those pairs.
+The set $P_k$ of all coordinate pairs encoding the locations is still redundant in a sense that instead of storing all pairs including $i$, we can simply record $i$ and all second  elements in  pairs where $i$ is the first element.
 For instance $(i,j)$ and $(i,h)$ can be stored as $(i,\{h,j\})$, therefore $i$ is only checked once.
 Then the  global information table of $k$ is defined by
 $$G_k=\bigcup_{(i,j)\in P_k} \left\{ (i,\{j\mid i\leq j\})\right\}.$$
 These tables are useful when we would like to calculate the closure of a set $A$ which is relatively big in $S$.
-We take $A\subseteq S$ and for all elements $k$ in $S\setminus A$ we check whether $G_k$ contains pairs from $X$ to decide whether $k$ is in $\langle A\rangle$ or not. 
+We take $A\subseteq S$ and for all elements $k$ in $S\setminus A$ we check whether $G_k$ contains pairs from $A$ to decide whether $k$ is in $\langle A\rangle$ or not. 
 
 \subsubsection{Local Tables} Given that we have a set elements $A\subseteq S$, what do we need to add when including a new element $i$?
 %from the value, get the positions (value, positions) pairs
@@ -156,9 +164,9 @@ Any property that does not contain information about the ordering of the element
 
 \begin{problem}
 For a semigroup $S$ find all of its subsemigroups:
-$$\Sub(S)=\left\{ X\in S\mid \langle X\rangle=X\right\}.$$
+$$\Sub(S)=\left\{ X\subseteq S\mid \langle X\rangle=X\right\}.$$
 \end{problem}
-Thinking in terms of the multiplication table $M$ of $S$, we are looking for subarrays $M_X$ that are also multiplication tables, i.e.\ they do not contain elements not in $X$.
+Thinking in terms of the multiplication table $M$ of $S$, we are looking for subarrays $M_X$ that are also multiplication tables, i.e.\ they do not contain elements not in $X$, $\Set(M_X)=X$.
 
 The obvious brute-force algorithm for constructing $\Sub(S)$ is the enumeration of the powerset $2^S$ and check each subset whether it is closed or not.
 However, since we are dealing with algebraic structures, we have many mathematical results to exploit, instead of doing a blind search.
@@ -187,32 +195,31 @@ $T\in\Sub(S)$ and $g\in \Aut(S)$ then $T^g\in\Sub(S)$.%$g^{-1}Tg\in\Sub(S)$.
 %\qed
 
 
-\subsection{Enumerating by 1-extensions}
+\subsection{Enumerating by Minimal Closures}
 
 
 
 The idea is the simplest possible: given a subsemigroup $T\leq S$ we construct all the minimal subsemigroups that contain $T$.
-These are obtained by adding one extra generator from $S\setminus T$ (Algorithm \ref{alg:1-extensions}).
-\todo{Shall we call these minimal closures? instead of 1-extensions, since extension has other meanings.} 
-This algorithm is a depth-first search and its efficiency comes from the fact that the search is cut at subsemigroups alreay known. 
+These are obtained by adding one extra generator from $S\setminus T$ (Algorithm \ref{alg:minclosure}).
+This algorithm is a depth-first search and its efficiency comes from the fact that the search is cut at subsemigroups already known. 
 \begin{algorithm}
 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 \SetKwData{subs}{subs}
-\SetKwFunction{Extend}{Extend}
+\SetKwFunction{MinClosure}{MinClosure}
 \Input{$S$ - the ambient semigroup,\\ $T\leq S$ -  a subsemigroup,\\\subs\ - a set storing subsemigroups already constructed,\\ $s\in S$ - a semigroup element to be added as new generator}
 \Output{\subs with all possible extensions of $T$ added}
-\SetKwInOut{Name}{\Extend($T$,$s$,$S$,\subs)}
+\SetKwInOut{Name}{\MinClosure($T$,$s$,$S$,\subs)}
 \BlankLine
 \Name{}
 $T'$ $\leftarrow$ $\langle T\cup\{s\}\rangle$\\
     \If{$T'\notin$ \subs}{
       \subs$\leftarrow$ \subs$\cup\{T'\}$\\
       \For{$t\in S\setminus T'$}{
-      \Extend($T',t,S$,\subs)
+      \MinClosure($T',t,S$,\subs)
     }
   }
 \caption{Finding all subsemigroup containing $T$ in $S$. In particular, \textsf{subs} $\leftarrow$ $\varnothing$,  \textsf{Extend}($\varnothing,s,S$,\textsf{subs}) for all  $s\in S$ enumerates all subsemigroups of $S$.}
-\label{alg:1-extensions}
+\label{alg:minclosure}
 \end{algorithm}
 
 \subsection{Equivalent Generators}
@@ -221,7 +228,7 @@ We define an equivalence relation on $S$ by
 $$ s\equiv t \Longleftrightarrow \langle\{s\} \rangle= \langle\{t\} \rangle.$$
 For distinct elements this can only happen to nontrivial elements of cyclic groups of prime order.
 However, a semigroup can contain many copies of those.
-For instance, in the singular transformation semigroup of degree 4, $[ 2, 3, 1, 1 ]$ is equivalent to  $[ 3, 1, 2, 2 ]$, both generating $\{ [ 2, 3, 1, 1 ], [ 3, 1, 2, 2 ], [ 1, 2, 3, 3 ]\}$.
+Beyond the obvious copies with fixed points, we have examples that also move the point not in the cycle. For instance, in the singular transformation semigroup of degree 4, $[ 2, 3, 1, 1 ]$ is equivalent to  $[ 3, 1, 2, 2 ]$, both generating $\{ [ 2, 3, 1, 1 ], [ 3, 1, 2, 2 ], [ 1, 2, 3, 3 ]\}$.
 
 In a search algorithm, if $s\equiv t$, then after extending by $s$ we can simply omit extending by $t$.
 \subsection{Parallel Enumeration in Ideal Quotients}
