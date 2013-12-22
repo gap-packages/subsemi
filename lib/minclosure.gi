@@ -8,15 +8,15 @@
 ##
 
 # mt - MulTab, multiplication table
-InstallGlobalFunction(SubSgpsBy1Extensions,
-        function(mt) return SubSgpsBy1ExtensionsParametrized(mt,
+InstallGlobalFunction(SubSgpsByMinClosures,
+        function(mt) return SubSgpsByMinClosuresParametrized(mt,
                                     EmptySet(mt),
                                     FullSet(mt));end);
 
 # mt - MulTab, multiplication table
 # baseset - the elements already in
 # generators - the set of possible extending elements from
-InstallGlobalFunction(SubSgpsBy1ExtensionsParametrized,
+InstallGlobalFunction(SubSgpsByMinClosuresParametrized,
 function(mt,baseset,generators)
   local gen, # the generator to be added to the base
         extend, # function recursively extending the base by a generator

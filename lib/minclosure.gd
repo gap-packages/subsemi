@@ -7,5 +7,5 @@
 ## Copyright (C) 2013-2014  Attila Egri-Nagy
 ##
 
-DeclareGlobalFunction("SubSgpsBy1Extensions");
-DeclareGlobalFunction("SubSgpsBy1ExtensionsParametrized");
+DeclareGlobalFunction("SubSgpsByMinClosures");
+DeclareGlobalFunction("SubSgpsByMinClosuresParametrized");

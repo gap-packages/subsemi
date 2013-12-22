@@ -10,7 +10,7 @@ mult := fail; #just need to be a global variable for inline function
 for i in k do
   G := SymmetricGroup(i);
   mult := MulTab(G,G);
-  subs := SubSgpsBy1Extensions(mult);
+  subs := SubSgpsByMinClosures(mult);
   ids := Unique(List(AsList(subs),
                  x->IdSmallGroup(Group(
                          ElementsByIndicatorSet(
