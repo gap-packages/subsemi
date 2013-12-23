@@ -49,15 +49,20 @@ function(mt,baseset,generators)
     prev_subs:=Size(result);prev_counter:=counter;prev_secs:=TimeInSeconds();
   end;
   #-----------------------------------------------------------------------------
-  dump := function() #write all the subsemigroups into a file
+  dump := function(isfinal) #write all the subsemigroups into a file
     local r,l,i, S,ll,output;
     prev_secs := TimeInSeconds();
     if not HasOriginalName(mt) then
       Info(SubSemiInfoClass,1,"No name, no dump!"); return;
     fi;
     dumpcounter := dumpcounter + 1;
-    output := OutputTextFile(Concatenation(OriginalName(mt),"_",
+    if isfinal then #for the last one we do not count dumping
+      output := OutputTextFile(Concatenation(OriginalName(mt),
+                        fileextension), false);
+    else
+      output := OutputTextFile(Concatenation(OriginalName(mt),"_",
                         String(dumpcounter),fileextension), false);
+    fi;
     for r in AsList(result) do
       AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
     od;
@@ -75,7 +80,7 @@ function(mt,baseset,generators)
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
       log();
     fi;
-    if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(); fi;
+    if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(false); fi;
     #calculating the new subsgp
     bl := ClosureByQueue(base, [s], mt);
     #its conjugacy class rep
@@ -120,7 +125,7 @@ function(mt,baseset,generators)
     generator_counter := generator_counter + 1;
   od;
   if InfoLevel(SubSemiInfoClass)>0 then log();fi;
-  dump();#the final dump
+  dump(true);#the final dump
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
   return result;
 end);
