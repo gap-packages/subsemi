@@ -1,8 +1,15 @@
-#input := "LowerTorso_01_1_3262X";;
+Read("sgps.g");
+input := "test";;
+SetInfoLevel(SubSemiInfoClass,0);
 time := TimeInSeconds();;
-mtSing4 := MulTab(SingularTransformationSemigroup(4),S4);;
-K42 := LoadIndicatorSets("K42ccs");;
-subs := LoadIndicatorSets(input);; 
-SaveIndicatorSets(AsList(ConjugacyClassCombiner(subs,K42,mtSing4)),Concatenation(input,"M"));;
+mt := MulTab(K43,S4);;
+filter := IndicatorSetOfElements(AsList(K42),SortedElements(mt));
+subs := LoadIndicatorSets(input);
+result := [];
+for T in subs do
+  Append(result, AsList(SubSgpsByMinClosuresParametrized(mt, T, filter)));
+od;
+SaveIndicatorSets(result,
+Concatenation(input,"M"));;
 PrintTo(Concatenation(input,"F"),String(TimeInSeconds()-time));;
 

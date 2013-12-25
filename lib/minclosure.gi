@@ -124,7 +124,7 @@ function(mt,baseset,generators)
     extend(baseset,gen);
     generator_counter := generator_counter + 1;
   od;
-  if InfoLevel(SubSemiInfoClass)>0 then log();fi;
+  if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
   dump(true);#the final dump
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
   return result;
