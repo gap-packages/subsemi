@@ -264,15 +264,15 @@ Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle (U\setminus\{0\})\cup L
 \begin{figure}
 \begin{center}
 \input{torsos.tikz}
-\caption{If semigroup $S$ has an ideal $I$, then in general a subsemigroup $T$ is partitioned into two parts, the upper torso $U=T\cap S\setminus I$ and the lower torso $L=T\cap I$ by the ideal.}
+\caption{If semigroup $S$ has an ideal $I$, then in general a subsemigroup $T$ is partitioned into two parts, the upper torso $U=T\cap (S\setminus I)$ and the lower torso $L=T\cap I$ by the ideal.}
 \label{fig:torsos}
 \end{center}
 \end{figure}
 \section{Enumerating transformation semigroups of degree 2,3 and 4}
 \label{sec:fulltranssgp}
 \subsection{$\cT_2$, The Pen and Paper Case}
-Since $\cT_2$ has only four elements, thus the search space size is only $2^4=16$, it is an easy exercise to find all of its subsemigroups. 
-Using one-line notation for permutations, we order the elements lexicographically, 1=[1,1], 2=[1,2], 3=[2,1], 4=[2,2]. Here are the closed subarrays.
+Since $\cT_2$ has only four elements and consequently the search space size is only $2^4=16$, it is an easy exercise to find all of its subsemigroups. 
+Using one-line notation for transformations, we order the elements lexicographically, 1=[1,1], 2=[1,2], 3=[2,1], 4=[2,2]. Here are the closed subarrays.
 \input{T2subs.tab}
 Using these we can draw the subsemigroup lattice (Fig.\ \ref{fig:T2subs}).
 
@@ -282,7 +282,8 @@ Using these we can draw the subsemigroup lattice (Fig.\ \ref{fig:T2subs}).
 \label{fig:T2subs}
 \end{figure}
 
-\subsection{$\cT_3$}
+\subsection{$\cT_3$, The Brute-force Doable}
+Tables \ref{tab:T3freqs} and \ref{tab:T3ngeneratedness}.
 
 \begin{table}
 \small
@@ -299,6 +300,7 @@ Order&0&1&2&3& 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 1
 \end{tabular}
 \normalsize
 \caption{The frequency distribution of conjugacy and isomorphism classes of $\Sub(\cT_3)$.}
+\label{tab:T3freqs}
 \end{table}
 
 \begin{table}
@@ -314,13 +316,22 @@ Order&0&1&2&3& 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 1
 \end{tabular}
 \normalsize
 \caption{$n$-generatedness of conjugacy classes of $\Sub(\cT_3)$. The number of generators in a minimal size minimal generating set and the number of conjugacy classes with that many minimal generators.}
+\label{tab:T3ngeneratedness}
 \end{table}
 
 
 \todo{explain frequencies of elements in multiplication table}
 
-\subsection{$\cT_4$}
+\subsection{$\cT_4$, The Parallel Possible }
 
+Calculation steps:
+
+\begin{enumerate}
+\item $\Sub(K_{4,3}/K_{4,2})$
+\item In parallel, calculate all lower torsos $L$ for all the upper torso $U\in \Sub(K_{4,3}/K_{4,2})$. This gives $\Sub(K_{4,3})$.
+\item $P=\left\{\langle G\cup T\rangle\mid G\in\Sub(\cS_4), T\in\Sub(K_{4,3})\right\}$. 
+\item $\Sub(\cT_4)=\Sub(S_4)\cup\Sub(K_{4,3})\cup P$.
+\end{enumerate}
 
 \begin{table}
 \renewcommand{\arraystretch}{1}
