@@ -31,8 +31,8 @@ function(mt,baseset,generators)
         prev_subs, # number of subsemigroups at previous measurement
         dosyms, # flag showing whether we do nontrivial conjugacy classes
         real_generators, # real generators (some generators may be in base)
-        generator_counter; # counts how many generators have been applied
-                           # on the top level
+        generator_counter, # counts how many generators have been applied
+        gensets;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -72,7 +72,7 @@ function(mt,baseset,generators)
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
-  extend := function(base,s)
+  extend := function(base,s,gens)
     local class, bl, diff,flag,i;
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
@@ -88,6 +88,7 @@ function(mt,baseset,generators)
     #EXIT if nothing to do
     if  bl in result then return; fi;
     #STORE
+    Add(gensets,gens);
     AddSet(result, bl);
     #REMAINDER
     diff := DifferenceBlist(generators, bl);
@@ -101,7 +102,7 @@ function(mt,baseset,generators)
       od;
     od;
     #RECURSION
-    Perform(ListBlist(Indices(mt),diff), function(t) extend(bl,t);end);
+    Perform(ListBlist(Indices(mt),diff), function(t) extend(bl,t,Concatenation(gens,[t]));end);
   end;
   #-----------------------------------------------------------------------------
   #MAIN
@@ -118,14 +119,15 @@ function(mt,baseset,generators)
   prev_secs:=TimeInSeconds();
   real_generators := DifferenceBlist(generators, baseset);
   generator_counter := 1;
+  gensets := [];
   for gen in ListBlist(Indices(mt),real_generators) do
     Info(SubSemiInfoClass,1,Concatenation(String(gen)," ",
             String(generator_counter),"/",String(SizeBlist(real_generators))));
-    extend(baseset,gen);
+    extend(baseset,gen,[gen]);
     generator_counter := generator_counter + 1;
   od;
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
   dump(true);#the final dump
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
-  return result;
+  return gensets;#result;
 end);
