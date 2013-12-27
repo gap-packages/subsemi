@@ -82,7 +82,7 @@ function(mt,baseset,generators)
     fi;
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(false); fi;
     #calculating the new subsgp
-    bl := ClosureByQueue(base, [s], mt);
+    bl := ClosureByIncrements(base, [s], mt);
     #its conjugacy class rep
     if dosyms then bl := ConjugacyClassRep(bl,mt);fi;
     #EXIT if nothing to do

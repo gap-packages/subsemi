@@ -9,56 +9,55 @@
 
 #the closure of base the extension to closure (subsgp)
 # when adding a new point we check for new entries (filtered out by exisitng positions)
-ClosureByQueue := function(base,extension,mt)
-  local queue,diff, closure,i,j,tab;
+ClosureByIncrements := function(base,extension,mt)
+  local waiting,diff,closure,i,j,tab;
   tab := Rows(mt);
   if IsBlist(extension) then #to make it type agnostic
-    queue := ShallowCopy(extension);
+    waiting := ShallowCopy(extension);
   else
-    queue := BlistList(Indices(mt),extension);
+    waiting := BlistList(Indices(mt),extension);
   fi;
   closure := ShallowCopy(base);
   diff := BlistList(Indices(mt),[]);
-  while SizeBlist(queue) > 0 do
-    i := Position(queue,true); # it is not empty, so this is ok
-    #we calculate the difference induced by i
+  while SizeBlist(waiting) > 0 do
+    i := Position(waiting,true); # it is not empty, so this is ok, not a queue
     for j in Indices(mt) do
       if closure[j] then
-        diff[tab[j][i]] := true;
-        diff[tab[i][j]] := true;
+        diff[tab[j][i]] := true; #scanning the ith column 
+        diff[tab[i][j]] := true; #scanning the ith row 
       fi;
     od;
-    diff[tab[i][i]] := true;
-    SubtractBlist(diff,closure);
-    UniteBlist(queue, diff);
-    SubtractBlist(diff,queue);#cleaning for reusing diff object
+    diff[tab[i][i]] := true; # adding the diagonal
+    SubtractBlist(diff,closure); #now it is a real diff
+    UniteBlist(waiting, diff);
+    SubtractBlist(diff,waiting);#cleaning for reusing diff object
     closure[i] := true; #adding i
-    queue[i] := false; #removing i from the queue
+    waiting[i] := false; #removing i from the waiting
   od;
   return closure;
 end;
 
 #alternative method
-ClosureByQueueAndLocalTables := function(base,extension,mt)
-  local queue,closure,i,v,tab;
+ClosureByIncrementsAndLocalTables := function(base,extension,mt)
+  local waiting,closure,i,v,tab;
   tab := LocalTables(mt);
   if IsBlist(extension) then #to make it type agnostic
-    queue := ShallowCopy(extension);
+    waiting := ShallowCopy(extension);
   else
-    queue := BlistList(Indices(mt),extension);
+    waiting := BlistList(Indices(mt),extension);
   fi;
   closure := ShallowCopy(base);
-  while SizeBlist(queue) > 0 do
-    i := Position(queue,true); # it is not empty, so this is ok
+  while SizeBlist(waiting) > 0 do
+    i := Position(waiting,true); # it is not empty, so this is ok
     closure[i] := true; #adding i
     #what shall we include?
     for v in tab[i] do
       if not closure[v[1]] and ForAny(v[2], x->closure[x]) then
-        queue[v[1]] := true;
-        closure[v[1]] := true; #boosting: if in queue then it is in
+        waiting[v[1]] := true;
+        closure[v[1]] := true; #boosting: if in waiting then it is in
       fi;
     od;
-    queue[i] := false; #removing i from the queue
+    waiting[i] := false; #removing i from the waiting list
   od;
   return closure;
 end;
@@ -103,7 +102,7 @@ function(arg)
   if IsBound(arg[3]) then
     return arg[3](BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
   else
-    return ClosureByQueue(BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
+    return ClosureByIncrements(BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
   fi;
 end);
 
@@ -113,7 +112,7 @@ IsMaximalSubSgp := function(set,mt)
   SubtractSet(diff, AsSet(ListBlist(Indices(mt), set)));
   if IsEmpty(diff) then return false; fi;
   full := BlistList(Indices(mt),Indices(mt));
-  return ForAll(diff, i-> full = ClosureByQueue(set,[i],mt));
+  return ForAll(diff, i-> full = ClosureByIncrements(set,[i],mt));
 end;
 
 InstallGlobalFunction(IsClosedSubTable,
