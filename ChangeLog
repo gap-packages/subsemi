@@ -1,3 +1,5 @@
+0.11
+	Reviewing closures. Finetuning logging and dumping in SubSgpsByMinClosures. FullSet, EmptySet now attributes.
 0.10
 	1Extension renamed to MinClosure.
 0.9
