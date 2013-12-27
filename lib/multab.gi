@@ -170,13 +170,15 @@ function(mt)
   return tab;
 end);
 
-FullSet := function(mt)
+InstallMethod(FullSet,"for multab", [IsMulTab],
+function(mt)
   return BlistList(Indices(mt),Indices(mt));
-end;
+end);
 
-EmptySet := function(mt)
+InstallMethod(EmptySet,"for multab", [IsMulTab],
+function(mt)
   return BlistList(Indices(mt),[]);
-end;
+end);
 
 #just for convenience
 Sgps := function(l,mt)

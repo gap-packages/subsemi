@@ -26,6 +26,8 @@ DeclareAttribute("Symmetries", IsMulTab);
 DeclareAttribute("OriginalName", IsMulTab);
 DeclareAttribute("LocalTables", IsMulTab);
 DeclareAttribute("GlobalTables", IsMulTab);
+DeclareAttribute("FullSet", IsMulTab);
+DeclareAttribute("EmptySet", IsMulTab);
 
 DeclareGlobalFunction("ConjugacyClassRep");
 DeclareGlobalFunction("ConjugacyClassOfSet");
