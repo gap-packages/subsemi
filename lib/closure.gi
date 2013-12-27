@@ -62,34 +62,29 @@ ClosureByIncrementsAndLocalTables := function(base,extension,mt)
   return closure;
 end;
 
-#alternative method: we check all the missing points and add them by their logic
+#alternative method: we check all the missing points whether to include or not
 ClosureByComplement := function(base,extension,mt)
-  local diff, closure,i,j,booltab,size,flag;
-  booltab := GlobalTables(mt);
+  local complement,closure,i,globtab,flag;
+  globtab := GlobalTables(mt);
   if IsBlist(extension) then #to make it type agnostic
     closure := UnionBlist([base,extension]);
   else
     closure := UnionBlist([base,BlistList(Indices(mt),extension)]);
   fi;
-  diff := FullSet(mt);
-  SubtractBlist(diff, closure);
-  flag := true;
+  complement := DifferenceBlist(FullSet(mt), closure);
+  flag := true; # true means we still have work to do
   while flag do
     flag := false;
     for i in Indices(mt) do
-      if diff[i] then
-            #do we include i?
-        if   ForAny(booltab[i],
-                    function(bt)
-          return closure[bt[1]] and ForAny(bt[2], y->closure[y]);
-        end) then
+      if complement[i] then #is it in the complement
+        if ForAny(globtab[i], function(bt) #do we include i?
+             return closure[bt[1]] and ForAny(bt[2], y->closure[y]);end) then
           closure[i] := true;
           flag := true;
         fi;
       fi;
     od;
-    diff := FullSet(mt);
-    SubtractBlist(diff, closure);
+    complement := DifferenceBlist(FullSet(mt), closure);
   od;
   return closure;
 end;
