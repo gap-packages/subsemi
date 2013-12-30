@@ -21,6 +21,6 @@ repeat
   torso := ElementsByIndicatorSet(indset,elts);
   if fail in torso then Remove(torso,Position(torso,fail));fi;
   WriteLine(otf,EncodeBitString(AsBitString(
-          IndicatorSetOfElements(torso,SortedElements(mtSing4)))));
+          IndicatorSetOfElements(torso,SortedElements(mtK43)))));
   s := ReadLine(itf);
 until s=fail;
