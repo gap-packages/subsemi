@@ -19,7 +19,6 @@ InstallGlobalFunction(SubSgpsByMinClosures,
 InstallGlobalFunction(SubSgpsByMinClosuresParametrized,
 function(mt,baseset,generators)
   local gen, # the generator to be added to the base
-        extend, # function recursively extending the base by a generator
         result, # container for the end result, the subsemigroups
         counter, # counting the recursive calls
         prev_counter, # the value of counter at previous measurement (log, dump)
@@ -30,9 +29,7 @@ function(mt,baseset,generators)
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
         dosyms, # flag showing whether we do nontrivial conjugacy classes
-        real_generators, # real generators (some generators may be in base)
-        generator_counter, # counts how many generators have been applied
-        gensets;
+        gensets,waiting,class, bl, diff,flag,i,base,s,gens,next;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -40,6 +37,7 @@ function(mt,baseset,generators)
           FormattedMemoryString(MemoryUsage(result))," ",
           FormattedPercentageString(Size(result)-prev_subs,
                   counter-prev_counter)," ");
+    Print(Size(waiting), " ");
     if (secs-prev_secs) > 0 then # printing speed only if it measurable
       Print(FormattedFloat(Float((Size(result)-prev_subs)/(secs-prev_secs))),
             "/s\c\n");
@@ -72,8 +70,26 @@ function(mt,baseset,generators)
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
-  extend := function(base,s,gens)
-    local class, bl, diff,flag,i;
+  #MAIN
+  if Size(Symmetries(mt)) = 1 then
+    dosyms := false;fileextension := ".subs";
+  else
+    dosyms := true;fileextension := ".reps";
+  fi;
+  waiting := Queue();
+  result := HeavyBlistContainer();
+  if IsClosedSubTable(baseset, mt) then
+    AddSet(result,ConjugacyClassRep(baseset,mt));
+  fi;
+  prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
+  prev_secs:=TimeInSeconds();
+  # removing generators that are in the base already
+  generators := DifferenceBlist(generators, baseset); 
+  gensets := [];
+  for gen in ListBlist(Indices(mt),generators) do
+    Store(waiting, [baseset, gen,[gen]]);
+  od;
+  while not IsEmpty(waiting)do 
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
     if InfoLevel(SubSemiInfoClass)>0
@@ -82,11 +98,15 @@ function(mt,baseset,generators)
     fi;
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(false); fi;
     #calculating the new subsgp
+    next := Retrieve(waiting);
+    base := next[1];
+    s := next[2];
+    gens := next[3];
     bl := ClosureByIncrements(base, [s], mt);
     #its conjugacy class rep
     if dosyms then bl := ConjugacyClassRep(bl,mt);fi;
     #EXIT if nothing to do
-    if  bl in result then return; fi;
+    if  bl in result then continue; fi;
     #STORE
     Add(gensets,gens);
     AddSet(result, bl);
@@ -102,30 +122,9 @@ function(mt,baseset,generators)
       od;
     od;
     #RECURSION
-    Perform(ListBlist(Indices(mt),diff), function(t) extend(bl,t,Concatenation(gens,[t]));end);
-  end;
-  #-----------------------------------------------------------------------------
-  #MAIN
-  if Size(Symmetries(mt)) = 1 then
-    dosyms := false;fileextension := ".subs";
-  else
-    dosyms := true;fileextension := ".reps";
-  fi;
-  result := HeavyBlistContainer();
-  if IsClosedSubTable(baseset, mt) then
-    AddSet(result,ConjugacyClassRep(baseset,mt));
-  fi;
-  prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
-  prev_secs:=TimeInSeconds();
-  real_generators := DifferenceBlist(generators, baseset);
-  generator_counter := 1;
-  gensets := [];
-  for gen in ListBlist(Indices(mt),real_generators) do
-    Info(SubSemiInfoClass,1,Concatenation(String(gen)," ",
-            String(generator_counter),"/",String(SizeBlist(real_generators))));
-    extend(baseset,gen,[gen]);
-    generator_counter := generator_counter + 1;
+    Perform(ListBlist(Indices(mt),diff), function(t) Store(waiting,[bl,t,Concatenation(gens,[t])]);end);    
   od;
+  
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
   dump(true);#the final dump
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
