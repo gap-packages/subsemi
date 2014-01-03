@@ -1,4 +1,4 @@
-gap> START_TEST("SubSemi package: 1extensions.tst");
+gap> START_TEST("SubSemi package: closures.tst");
 gap> LoadPackage("SubSemi", false);;
 gap> SemigroupsStartTest();
 gap> TestGenerateSg := function(mt)
@@ -29,4 +29,4 @@ true
 
 #
 gap> SemigroupsStopTest();
-gap> STOP_TEST( "SubSemi package: 1extensions.tst", 10000);
+gap> STOP_TEST( "SubSemi package: closures.tst", 10000);
