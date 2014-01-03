@@ -11,13 +11,20 @@
 InstallGlobalFunction(SubSgpsByMinClosures,
         function(mt) return SubSgpsByMinClosuresParametrized(mt,
                                     EmptySet(mt),
-                                    FullSet(mt));end);
+                                    FullSet(mt),
+                                    Stack());end);
+
+InstallGlobalFunction(SubSgpsGenSetsByMinClosures,
+        function(mt) return SubSgpsByMinClosuresParametrized(mt,
+                                    EmptySet(mt),
+                                    FullSet(mt),
+                                    Queue());end);
 
 # mt - MulTab, multiplication table
 # baseset - the elements already in
 # generators - the set of possible extending elements from
 InstallGlobalFunction(SubSgpsByMinClosuresParametrized,
-function(mt,baseset,generators)
+function(mt,baseset,generators, waiting)
   local gen, # the generator to be added to the base
         result, # container for the end result, the subsemigroups
         counter, # counting the recursive calls
@@ -29,7 +36,7 @@ function(mt,baseset,generators)
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
         dosyms, # flag showing whether we do nontrivial conjugacy classes
-        gensets,waiting,class, bl, diff,flag,i,base,s,gens,next;
+        gensets, class, bl, diff,flag,i,base,s,gens,next,isBreadthFirst;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -71,12 +78,16 @@ function(mt,baseset,generators)
   end;
   #-----------------------------------------------------------------------------
   #MAIN
+  if IsStack(waiting) then
+    isBreadthFirst := false;
+  else
+    isBreadthFirst := true;
+  fi;
   if Size(Symmetries(mt)) = 1 then
     dosyms := false;fileextension := ".subs";
   else
     dosyms := true;fileextension := ".reps";
   fi;
-  waiting := Queue();
   result := HeavyBlistContainer();
   if IsClosedSubTable(baseset, mt) then
     AddSet(result,ConjugacyClassRep(baseset,mt));
@@ -85,10 +96,16 @@ function(mt,baseset,generators)
   prev_secs:=TimeInSeconds();
   # removing generators that are in the base already
   generators := DifferenceBlist(generators, baseset); 
-  gensets := [];
-  for gen in ListBlist(Indices(mt),generators) do
-    Store(waiting, [baseset, gen,[gen]]);
-  od;
+  if isBreadthFirst then
+    gensets := [];  
+    for gen in ListBlist(Indices(mt),generators) do
+      Store(waiting, [baseset, gen,[gen]]);
+    od;
+  else
+    for gen in ListBlist(Indices(mt),generators) do
+      Store(waiting, [baseset, gen]);
+    od;    
+  fi;
   while not IsEmpty(waiting)do 
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
@@ -101,14 +118,13 @@ function(mt,baseset,generators)
     next := Retrieve(waiting);
     base := next[1];
     s := next[2];
-    gens := next[3];
     bl := ClosureByIncrements(base, [s], mt);
     #its conjugacy class rep
     if dosyms then bl := ConjugacyClassRep(bl,mt);fi;
     #EXIT if nothing to do
     if  bl in result then continue; fi;
     #STORE
-    Add(gensets,gens);
+    if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
     AddSet(result, bl);
     #REMAINDER
     diff := DifferenceBlist(generators, bl);
@@ -122,11 +138,18 @@ function(mt,baseset,generators)
       od;
     od;
     #RECURSION
-    Perform(ListBlist(Indices(mt),diff), function(t) Store(waiting,[bl,t,Concatenation(gens,[t])]);end);    
+    if isBreadthFirst then
+      Perform(ListBlist(Indices(mt),diff), function(t) Store(waiting,[bl,t,Concatenation(gens,[t])]);end);    
+    else
+      Perform(ListBlist(Indices(mt),diff), function(t) Store(waiting,[bl,t]);end);    
+    fi;
   od;
-  
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
   dump(true);#the final dump
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
-  return gensets;#result;
+  if isBreadthFirst then
+    return [result, gensets];
+  else
+    return result;
+  fi;
 end);
