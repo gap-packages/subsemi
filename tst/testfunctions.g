@@ -1,10 +1,13 @@
 SubSemiTestInstall := function()
-local test;
+local test,infolevel;
+  infolevel := InfoLevel(SubSemiInfoClass);
+  SetInfoLevel(SubSemiInfoClass, 0);
   for test in [
           "6packedbitstrings",
           "indicatorset",
           "indexperiod",
-          "1extensions",
+          "closures",
+          "gensets",
           "invariants",
           "isomorphism"
           ] do
@@ -13,5 +16,6 @@ local test;
             "/tst/",test,
             ".tst"));;
   od;
+  SetInfoLevel(SubSemiInfoClass, infolevel);
 end;
 MakeReadOnlyGlobal("SubSemiTestInstall");
