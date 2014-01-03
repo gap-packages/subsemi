@@ -8,4 +8,5 @@
 ##
 
 DeclareGlobalFunction("SubSgpsByMinClosures");
+DeclareGlobalFunction("SubSgpsGenSetsByMinClosures");
 DeclareGlobalFunction("SubSgpsByMinClosuresParametrized");
