@@ -148,7 +148,7 @@ function(mt,baseset,generators, waiting)
   dump(true);#the final dump
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
   if isBreadthFirst then
-    return [result, gensets];
+    return rec(subsgps:=result, gensets:=gensets);
   else
     return result;
   fi;

@@ -9,6 +9,7 @@ ReadPackage("SubSemi","/lib/closure.gi");
 ReadPackage("SubSemi","/lib/invariants.gi");
 ReadPackage("SubSemi","/lib/isomorphism.gi");
 ReadPackage("SubSemi","/lib/minclosure.gi");
+ReadPackage("SubSemi","/lib/ngenerated.gi");
 
 ReadPackage("SubSemi","/tst/testfunctions.g");
 ReadPackage("SubSemi","/tst/againstbf.g");
