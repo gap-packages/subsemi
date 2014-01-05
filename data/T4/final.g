@@ -4,7 +4,8 @@ SetInfoLevel(SubSemiInfoClass,0);
 time := TimeInSeconds();;
 mt := MulTab(T4_S4);;
 mtT4 := MulTab(T4,S4);
-S4subs := AsList(SubSgpsByMinClosures(mt));
+S4subs := ShallowCopy(AsList(SubSgpsByMinClosures(mt)));
+Remove(S4subs, Position(S4subs,EmptySet(mt)));#just not to extend with the empty set
 S4subs := List(S4subs, x->ReCodeIndicatorSet(x,SortedElements(mt),SortedElement(mtT4)));
 result := HeavyBlistContainer();
 subs := LoadIndicatorSets(input);
