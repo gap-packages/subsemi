@@ -1,0 +1,5 @@
+Title: On Enumerating Subsemigroups of the Full Transformation Semigroup
+
+Enumerating all distinct subsemigroups, or the conjugacy and the isomorphism classes of subsemigroups of the full transformation semigroup $T_n$ is an easy pen and paper calculation for $n=2$. A computational implementation of a brute-force algorithm can do the same calculation for $T_3$. However, for $T_4$, calculating these sets is still an ongoing battle. In this talk we summarize the results for $T_2$ and $T_3$ and also describe how we approach the subsemigroup enumeration of $T_4$.
+
+This is joint work with James D. Mitchell and James East.
