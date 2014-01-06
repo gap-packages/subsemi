@@ -327,9 +327,10 @@ Order&0&1&2&3& 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 1
 Calculation steps:
 
 \begin{enumerate}
-\item $\Sub(K_{4,3}/K_{4,2})$
+%\item $\Sub(K_{4,2})$
+\item $\Sub(K_{4,3}/K_{4,2})$, these are the upper torsos with a zero adjoined.
 \item In parallel, calculate all lower torsos $L$ for all the upper torso $U\in \Sub(K_{4,3}/K_{4,2})$. This gives $\Sub(K_{4,3})$.
-\item $P=\left\{\langle G\cup T\rangle\mid G\in\Sub(\cS_4), T\in\Sub(K_{4,3})\right\}$. 
+\item $P=\left\{\langle G\cup T\rangle\mid G\in\Sub(\cS_4), T\in\Sub(K_{4,3})\right\}$. \todo{JE idea: what we are looking for is the lower torsos fixed by the subgroups of $\cS_4$.}
 \item $\Sub(\cT_4)=\Sub(S_4)\cup\Sub(K_{4,3})\cup P$.
 \end{enumerate}
 
@@ -368,8 +369,8 @@ $\cT_2$ & 10  & 8 & 7\\
 \hline
 $\cT_3$ & 1299 & 283 & 267\\
 \hline
-%$\cT_4$ & & & \\
-%\hline
+$\cT_4$ & &$\approx$133 000 000 & \\
+\hline
 \end{tabular}
 \caption{Number of subsemigroups of full transformation semigroups.}
 \end{table}
