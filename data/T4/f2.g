@@ -1,0 +1,10 @@
+input := "test";;
+Read("sgps.g");
+SetInfoLevel(SubSemiInfoClass,0);
+time := TimeInSeconds();;
+mt := MulTab(T4,S4);
+G := LoadIndicatorSets(input)[1];
+gens := IndicatorSetOfElements(AsList(K43), SortedElements(mt));
+result := SubSgpsByMinClosuresParametrized(mt, G, gens, Stack());
+SaveIndicatorSets(AsList(result),Concatenation(input,"M"));;
+PrintTo(Concatenation(input,"F"),String(TimeInSeconds()-time));;
