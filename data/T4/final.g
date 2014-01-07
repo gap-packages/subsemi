@@ -2,7 +2,7 @@ input := "test";;
 Read("sgps.g");
 SetInfoLevel(SubSemiInfoClass,0);
 time := TimeInSeconds();;
-mt := MulTab(T4_S4);;
+mt := MulTab(S4_T4);;
 mtT4 := MulTab(T4,S4);
 S4subs := ShallowCopy(AsList(SubSgpsByMinClosures(mt)));
 #Remove(S4subs, Position(S4subs,EmptySet(mt)));#just not to extend with the empty set
