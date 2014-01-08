@@ -123,12 +123,28 @@ end);
 InstallMethod(EquivalentGenerators,"for a multab",
         [IsMulTab],
 function(mt)
-local al,i;  
+local al,i;
   al := AssociativeList();
   for i in Indices(mt) do Assign(al,i,SgpInMulTab([i],mt));od;
   al := ReversedAssociativeList(al);
   return Filtered(ValueSet(al), x->Length(x)>1);
 end);
+
+InstallGlobalFunction(RemoveEquivalentGenerators,
+function(indset,mt)
+  local class, flag, i, set;
+  set := ShallowCopy(indset);
+  for class in EquivalentGenerators(mt) do #keep max one from each equiv class
+    flag := false;
+    for i in class  do
+      if set[i] then
+        if flag then set[i] := false; else flag := true;fi;
+      fi;
+    od;
+  od;
+  return set;
+end);
+
 
 InstallMethod(GlobalTables,"for multab",
         [IsMulTab],
