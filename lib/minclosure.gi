@@ -36,7 +36,7 @@ function(mt,baseset,generators, waiting)
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
         dosyms, # flag showing whether we do nontrivial conjugacy classes
-        gensets, class, bl, diff,flag,i,base,s,gens,next,isBreadthFirst;
+        gensets, bl, diff,i,base,s,gens,next,isBreadthFirst;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -77,36 +77,43 @@ function(mt,baseset,generators, waiting)
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
-  #MAIN
+  # START
+  #which search method are we doing?
   if IsStack(waiting) then
     isBreadthFirst := false;
   else
     isBreadthFirst := true;
   fi;
+  #do we have nontrivial symmetries?
   if Size(Symmetries(mt)) = 1 then
     dosyms := false;fileextension := ".subs";
   else
     dosyms := true;fileextension := ".reps";
   fi;
   result := HeavyBlistContainer();
+  #the baseset might be closed, in that case it is a sub
   if IsClosedSubTable(baseset, mt) then
     AddSet(result,ConjugacyClassRep(baseset,mt));
   fi;
   prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
   prev_secs:=TimeInSeconds();
   # removing generators that are in the base already
-  generators := DifferenceBlist(generators, baseset); 
+  generators := DifferenceBlist(generators, baseset);
+  # removing equivalent generators
+  generators := RemoveEquivalentGenerators(generators,mt);
+  # fill up the waiting list
   if isBreadthFirst then
-    gensets := [];  
+    gensets := [];
     for gen in ListBlist(Indices(mt),generators) do
       Store(waiting, [baseset, gen,[gen]]);
     od;
   else
     for gen in ListBlist(Indices(mt),generators) do
       Store(waiting, [baseset, gen]);
-    od;    
+    od;
   fi;
-  while not IsEmpty(waiting)do 
+  # THE MAIN LOOP
+  while not IsEmpty(waiting)do
     #HOUSEKEEPING: logging, dumping
     counter := counter + 1;
     if InfoLevel(SubSemiInfoClass)>0
@@ -128,20 +135,12 @@ function(mt,baseset,generators, waiting)
     AddSet(result, bl);
     #REMAINDER
     diff := DifferenceBlist(generators, bl);
-    #REDUCTION
-    for class in EquivalentGenerators(mt) do #keep max one from each equiv class
-      flag := false;
-      for i in class  do
-        if diff[i] then
-          if flag then diff[i] := false; else flag := true;fi;
-        fi;
-      od;
-    od;
     #RECURSION
     if isBreadthFirst then
-      Perform(ListBlist(Indices(mt),diff), function(t) Store(waiting,[bl,t,Concatenation(gens,[t])]);end);    
+      Perform(ListBlist(Indices(mt),diff),
+              function(t) Store(waiting,[bl,t,Concatenation(gens,[t])]);end);
     else
-      Perform(ListBlist(Indices(mt),diff), function(t) Store(waiting,[bl,t]);end);    
+      Perform(ListBlist(Indices(mt),diff),function(t)Store(waiting,[bl,t]);end);    
     fi;
   od;
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
