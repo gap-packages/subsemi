@@ -31,3 +31,5 @@ DeclareAttribute("EmptySet", IsMulTab);
 
 DeclareGlobalFunction("ConjugacyClassRep");
 DeclareGlobalFunction("ConjugacyClassOfSet");
+
+DeclareGlobalFunction("RemoveEquivalentGenerators");
