@@ -1,3 +1,5 @@
+0.13
+	Removing equivalent generators is done only once for the minimal closure method.
 0.12
 	Added possibility to search for minimal generating sets as well. This required the minimal closure search to change to breadth-first. Depth-first is still possible.
 0.11
