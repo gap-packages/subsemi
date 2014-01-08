@@ -62,16 +62,20 @@
 \email{J.East@uws.edu.au,\ A.Egri-Nagy@uws.edu.au,\ jdm3@st-and.ac.uk}
 
 \maketitle
-
+\begin{abstract}
+\end{abstract}
 \tableofcontents
 \section{Introduction}
-Previous efforts for enumerating semigroups were focused on the abstract case, enumerating by the order, and worked by finding all valid multiplication tables of the given size \cite{monoidenum2009}.
+Previous efforts for enumerating semigroups were focused on the abstract case, enumerating by the order, and worked by finding all valid multiplication tables of the given size \cite{For55,tamura1,tamura2,Ple67,KRS76,JW77,SZT94,monoidenum2009}.
 Here we enumerate transformation semigroups by degree.
 For degree $n$ this is the task of enumerating all valid subtables inside one big multiplication table of the  full transformation semigroups $\cT_n$.
 
+There are several combinatorial and linear representations of semigroups, each them with its own way of multiplying elements, with varying efficiency.
+The fastest way to calculate a product is just to look it up in a table, hence we choose the multiplication table as the main way of representing semigroups.
+
 In Section \ref{sec:multab} we describe methods to work with multiplication tables.
 In Section \ref{sec:enum} we describe techniques and algorithms to enumerate subsemigroups of semigroups.
-Finally, in Section \ref{sec:fulltranssgp} we apply the developed methods for enumerating transformation semigroups.
+Finally, in Section \ref{sec:fulltranssgp} we apply the developed methods for enumerating transformation semigroups acting on up to 4 points.
 \section{Notation}
 %Let $(X,S)$ be a transformation semigroup, $n=|S|$.
 Let $S$ be finite a semigroup, $n=|S|$.
