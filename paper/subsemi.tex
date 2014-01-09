@@ -92,8 +92,6 @@ $\Sub(S)=\big\{T\mid T\leq S \big\}$ the set of all subsemigroups of $S$, $\Max(
 If $I$ is an ideal of $S$ then the \emph{Rees factor semigroup} $S/I$ has elements $(S\setminus I)\cup\{0\}$ with multiplication same as in $S$ if the product stays in $S\setminus I$ and zero otherwise.
 
 $\cS_n$ denotes the \emph{symmetric group}, $\cT_n$ the \emph{full transformation semigroup} on $n$ points.
-$K_{n,i}$ is the ideal of $\cT_n$ by elements of rank $i$.
-$K_{n,n-1}$ is also called the \emph{singular transformation semigroup} of degree $n$.
 We consider the empty set a semigroup.
 
 \section{Multiplication Table Algorithms}
@@ -274,16 +272,26 @@ Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle (U\setminus\{0\})\cup L
 \end{figure}
 \section{Enumerating transformation semigroups of degree 2,3 and 4}
 \label{sec:fulltranssgp}
+In order to enumerate all transformation semigroups on $n$ points we construct all subsemigroups of the full transformation semigroupp $\cT_n$ and use its ideal structure to make the enumeration efficient.
+$K_{n,i}$ is the ideal of $\cT_n$ by elements of rank $i$.
+$K_{n,n-1}$ is also called the \emph{singular transformation semigroup} of degree $n$.
+
 \subsection{$\cT_2$, The Pen and Paper Case}
 Since $\cT_2$ has only four elements and consequently the search space size is only $2^4=16$, it is an easy exercise to find all of its subsemigroups. 
 Using one-line notation for transformations, we order the elements lexicographically, 1=[1,1], 2=[1,2], 3=[2,1], 4=[2,2]. Here are the closed subarrays.
 \input{T2subs.tab}
 Using these we can draw the subsemigroup lattice (Fig.\ \ref{fig:T2subs}).
-
 \begin{figure}
 \input{T2subs.tikz}
-\caption{$\Sub(\cT_2)$, dark grey blobs indicate nontrivial conjugacy classes, light grey shows a nontrivial isomorphism class.}
+\caption{The subsemigroup lattice of $\cT_2$. The horizontal levels correspond to classes of subsemigroups of the same size.  Dark grey blobs indicate nontrivial conjugacy classes, while light grey shows a nontrivial isomorphism class.}
 \label{fig:T2subs}
+\end{figure}
+An obvious classification of $\Sub(\cT_2)$ can be done according to the sizes of the subsemigroups.
+Another way of partitioning the elements will also be important for higher degrees. Since we have no problems with calculating $\Sub(\cT_2)$, this division has no significance, but can be visualized easily (Fig.\ \ref{fig:T2subsAlt}).
+\begin{figure}
+\input{T2subsAlt.tikz}
+\caption{The subsemigroup lattice of $\cT_2$, alternative classification. The singular part is indicated by the lowest light gray blob. The other light gray group is an identical copy of the singular part, just the identity adjoined to each subsemigroup. The dark grey part consists of the subsemigroups containing nontrivial permutations. The size of the dark group gets smaller relative to the singular part for higher degrees.}
+\label{fig:T2subsAlt}
 \end{figure}
 
 \subsection{$\cT_3$, The Brute-force Doable}
