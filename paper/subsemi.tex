@@ -80,6 +80,9 @@ For degree $n$ this is the task of enumerating all valid subtables inside one bi
 
 There are several combinatorial and linear representations of semigroups, each them with its own way of multiplying elements, with varying efficiency.
 The fastest way to calculate a product is just to look it up in a table, hence we choose the multiplication table as the main way of representing semigroups.
+This decision has two consequences. 
+First, our algorithms fall into the class of semigroup algorithms that fully enumerate the elements. This of course  restricts us to relatively small semigroups.
+Second, our algorithms are completely representaion agnostic.
 
 In Section \ref{sec:multab} we describe methods to work with multiplication tables.
 In Section \ref{sec:enum} we describe techniques and algorithms to enumerate subsemigroups of semigroups.
