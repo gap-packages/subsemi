@@ -166,21 +166,21 @@ Though we have the luxury of having the full structure of the semigroup represen
 Two semigroups $S$ and $T$ are isomorphic or anti-isomorphic if $M_S$ can be transformed into $M_T$ by rearranging its columns and rows without or with transposing the table.
 By computing some global properties of the multiplication tables that are invariant under these rearrangings in some cases we can easily decide non-isomorphism.
 These properties can be any statistics that do not take into account any information of actual positions of elements, for instance frequency values.
-More complex properties are encoded as \emph{partition types}, containing the number of partitions and their sizes in a sorted list to make comparison possible.
+More complex properties are encoded as \emph{collected lists}.
+A collected list takes a multiset and enumerates its distinct elements paired with the number of occurences of the elements, sorted according to the natural order of the multiset elements\footnote{In the \GAP\ computer algebra system this functionality is implemented by the \texttt{Collected} function.}.
+For instance, the collected list of $(2,1,2,5,5,2)$ is $((1,1),(2,3),(5,2))$.
 
 We can define the properties on the element and on the table level. The properties of an element are:
 
 \begin{enumerate}
 \item\textbf{Frequency}: the number of occurences of the element in the table.
 \item \textbf{Diagonal frequency}: the number of occurences of the element in the diagonal of the table.
-\item \textbf{Index-period}: the smallest values $m\geq 1$, $r\geq 1$ such that $a^{m+r}=a^m$.
-\item \textbf{Row partition type}. Each row partitions $S$ into classes according the result of multiplying by $s_i$ on the right. So, $j$ and $k$ are in the same class if $s_is_j=s_is_k$. We simply take the partition type of this classification. In other words, the frequency values of distinct elements in $M_{i,\_}$.
-\item \textbf{Column partition type}. Same as the row partition type but for the column.
+\item \textbf{Index-period}: the smallest values $m\geq 1$, $r\geq 1$ such that $a^{m+r}=a^m$. The semigroup analogue of the order of a group element.
+\item \textbf{Row type}: for $i\in S$, the collected list of the row $M_{i,\_}$.
+\item \textbf{Column type}:  for $i\in S$, the collected list of the column $M_{\_,i}$.
 \end{enumerate} 
 
-\subsubsection{Table Invariants}
-
-Any property that does not contain information about the ordering of the elements can be used as an invariant.
+Aggregating the properties of elements ant other statistics of the table not containing information on actual positions determine the properties of a table, and thus a semigroup. Some of them can even tell apart groups.
 \begin{enumerate}
 \item Distinct frequency values of elements in the table and the number of elements with a given frequency. Useless for groups as their multiplication tables are Latin squares.
 \item Column and row partitions types.   Useless for groups since all the principal ideals are the same.
