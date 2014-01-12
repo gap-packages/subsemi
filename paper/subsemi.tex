@@ -162,22 +162,20 @@ Then the  global information table of $k$ is defined by
 $$G_k=\bigcup_{(i,j)\in P_k} \left\{ (i,\{j\mid i\leq j\})\right\}.$$
 
 \subsection{Isomorphism and Anti-Isomorphism of Multiplication Tables}
-Two semigroups $S$ and $T$ are isomorphic or anti-isomorphic if $M(S)$ can be transformed into $M(T)$ by rearranging its columns and rows and transposing the table.
-By computing some global properties of the multiplication tables that are invariant under these rearrangings in some cases we can easily decide non-isomoprhism.
-%These are the \emph{table level invariants}.
-If all invariants check out, then we can use backtrack to find out whether one of the multiplication tables can be rearranged to get the other one.
-An element of $C_2\times S_n$ can witness the isomorphism.
-Fortunately we do not have to search through the whole symmetric group, we only need to consider some special permutations that take an element to another one with the same type.
-Type is defined by the following invariants.
-The search space can be reduced by aligning elements with the same profile (frequency, diagonal frequency, index-period).
+Though we have the luxury of having the full structure of the semigroup represented in the multiplication table, it is still not a trivial matter to decide isomorphism.
+Two semigroups $S$ and $T$ are isomorphic or anti-isomorphic if $M_S$ can be transformed into $M_T$ by rearranging its columns and rows without or with transposing the table.
+By computing some global properties of the multiplication tables that are invariant under these rearrangings in some cases we can easily decide non-isomorphism.
+These properties can be any statistics that do not take into account any information of actual positions of elements, for instance frequency values.
+More complex properties are encoded as \emph{partition types}, containing the number of partitions and their sizes in a sorted list to make comparison possible.
 
-\subsubsection{Element Types}
+We can define the properties on the element and on the table level. The properties of an element are:
 
 \begin{enumerate}
-\item Frequency: the number of occurences of the element in the table.
-\item Diagonal frequency: the number of occurences of the element in the diagonal of the table.
-\item Index-period: the smallest values $m\geq 1$, $r\geq 1$ such that $a^{m+r}=a^m$.
-\item Row and column partition: encoding how many distinct elements are in the right and left principal ideals and what are their frequencies.
+\item\textbf{Frequency}: the number of occurences of the element in the table.
+\item \textbf{Diagonal frequency}: the number of occurences of the element in the diagonal of the table.
+\item \textbf{Index-period}: the smallest values $m\geq 1$, $r\geq 1$ such that $a^{m+r}=a^m$.
+\item \textbf{Row partition type}. Each row partitions $S$ into classes according the result of multiplying by $s_i$ on the right. So, $j$ and $k$ are in the same class if $s_is_j=s_is_k$. We simply take the partition type of this classification. In other words, the frequency values of distinct elements in $M_{i,\_}$.
+\item \textbf{Column partition type}. Same as the row partition type but for the column.
 \end{enumerate} 
 
 \subsubsection{Table Invariants}
@@ -190,6 +188,11 @@ Any property that does not contain information about the ordering of the element
 \item Distinct composite element types: putting together all the element types. In the group case this invariant reduces to the order of elements, but it can distinguish between $D_8$ and $Q_8$. However, this invariant fails to detect the difference between some direct and semidirect products. For instance, $C_8\times C_2$ and $C_8\rtimes C_2$ both have 1 element of order 1, 3 of order 2, 4 of order 4, and 8 of order 8.
 \end{enumerate} 
 
+If all invariants check out, then we can use backtrack to find out whether one of the multiplication tables can be rearranged to get the other one.
+An element of $C_2\times S_n$ can witness the isomorphism.
+Fortunately we do not have to search through the whole symmetric group, we only need to consider some special permutations that take an element to another one with the same type.
+Type is defined by the following invariants.
+The search space can be reduced by aligning elements with the same profile (frequency, diagonal frequency, index-period).
 
 
 \section{Subsemigroup Enumeration Algorithms}
