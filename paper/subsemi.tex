@@ -165,10 +165,14 @@ $$G_k=\bigcup_{(i,j)\in P_k} \left\{ (i,\{j\mid i\leq j\})\right\}.$$
 Though we have the luxury of having the full structure of the semigroup represented in the multiplication table, it is still not a trivial matter to decide isomorphism.
 Two semigroups $S$ and $T$ are isomorphic or anti-isomorphic if $M_S$ can be transformed into $M_T$ by rearranging its columns and rows without or with transposing the table.
 By computing some global properties of the multiplication tables that are invariant under these rearrangings in some cases we can easily decide non-isomorphism.
-These properties can be any statistics that do not take into account any information of actual positions of elements, for instance frequency values.
-More complex properties are encoded as \emph{collected lists}.
-A collected list takes a multiset and enumerates its distinct elements paired with the number of occurences of the elements, sorted according to the natural order of the multiset elements\footnote{In the \GAP\ computer algebra system this functionality is implemented by the \texttt{Collected} function.}.
-For instance, the collected list of $(2,1,2,5,5,2)$ is $((1,1),(2,3),(5,2))$.
+These properties can be any statistics that do not take into account any information of actual positions of elements, like frequency values.
+A frequency distribution takes a multiset and enumerates its distinct elements paired with the number of occurences of the elements.
+For instance, the  frequency distribution of $(2,1,2,5,5,2)$ is $((1,1),(2,3),(5,2))$.
+However, we cannot retain the element information as it depends on the sorting of the semigroup elements, we keep only the sorted frequency values $(1,2,3)$.
+Sorting is important here to decide whether two distributions are the same or not.
+If they are equal then we say that the multisets have the same \emph{type}.
+For example, the vector $(2,4,2,4)$ have the same type as $(1,3,3,1)$ and $(2,2,4,4)$, but $(2,4,4,4)$ has different type.
+
 
 We can define the properties on the element and on the table level. The properties of an element are:
 
@@ -176,24 +180,23 @@ We can define the properties on the element and on the table level. The properti
 \item\textbf{Frequency}: the number of occurences of the element in the table.
 \item \textbf{Diagonal frequency}: the number of occurences of the element in the diagonal of the table.
 \item \textbf{Index-period}: the smallest values $m\geq 1$, $r\geq 1$ such that $a^{m+r}=a^m$. The semigroup analogue of the order of a group element.
-\item \textbf{Row type}: for $i\in S$, the collected list of the row $M_{i,\_}$.
-\item \textbf{Column type}:  for $i\in S$, the collected list of the column $M_{\_,i}$.
+\item \textbf{Row type}: for $i\in S$, the frequency values of elements in the row $M_{i,\_}$.
+\item \textbf{Column type}:  for $i\in S$, the frequency values of elements in the column $M_{\_,i}$.
+\item \textbf{Profile}: Combining together all previous properties.
 \end{enumerate} 
 
-Aggregating the properties of elements ant other statistics of the table not containing information on actual positions determine the properties of a table, and thus a semigroup. Some of them can even tell apart groups.
+Aggregating the properties of elements ant other statistics of the table not containing information on actual positions determine the properties of a table, and thus a semigroup. Some of them are sensitive enough to tell apart groups, though group multiplication tables are Latin squares.
 \begin{enumerate}
-\item Distinct frequency values of elements in the table and the number of elements with a given frequency. Useless for groups as their multiplication tables are Latin squares.
-\item Column and row partitions types.   Useless for groups since all the principal ideals are the same.
-\item The diagonal partition. $|S|=n$ partitioned as a sum of number of occurences of elements in the diagonal. This can even tell some groups apart: $C_4\mapsto 2+2$, $C_2\times C_2\mapsto 4$, but it assings 2+6 to both $D_8$ and $Q_8$.
-\item Distinct composite element types: putting together all the element types. In the group case this invariant reduces to the order of elements, but it can distinguish between $D_8$ and $Q_8$. However, this invariant fails to detect the difference between some direct and semidirect products. For instance, $C_8\times C_2$ and $C_8\rtimes C_2$ both have 1 element of order 1, 3 of order 2, 4 of order 4, and 8 of order 8.
+\item\textbf{Frequency distribution of frequency values of elements}. %Useless for groups as their multiplication tables are Latin squares.
+\item\textbf{Column and row types}. The frequency distribution of column types and row types of elements. %Useless for groups since all the principal ideals are the same.
+\item \textbf{Diagonal frequencies}. This can even tell some groups apart: $C_4\mapsto (2,2)$, $C_2\times C_2\mapsto (4)$, but it assings $(2,6)$ to both $D_8$ and $Q_8$.
+\item \textbf{Element Profiles}. In the group case this invariant reduces to the order of elements, but it can distinguish between $D_8$ and $Q_8$. However, this invariant fails to detect the difference between some direct and semidirect products. For instance, $C_8\times C_2$ and $C_8\rtimes C_2$ both have 1 element of order 1, 3 of order 2, 4 of order 4, and 8 of order 8.
 \end{enumerate} 
 
+For deciding non-isomorphism we can check these properties, if any one of these is different then the semigroups are not isomorphic.
 If all invariants check out, then we can use backtrack to find out whether one of the multiplication tables can be rearranged to get the other one.
 An element of $C_2\times S_n$ can witness the isomorphism.
-Fortunately we do not have to search through the whole symmetric group, we only need to consider some special permutations that take an element to another one with the same type.
-Type is defined by the following invariants.
-The search space can be reduced by aligning elements with the same profile (frequency, diagonal frequency, index-period).
-
+Fortunately we do not have to search through the whole symmetric group, we only need to consider some special permutations that respect the type of an element.
 
 \section{Subsemigroup Enumeration Algorithms}
 \label{sec:enum}
