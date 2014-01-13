@@ -7,6 +7,6 @@
 ## Copyright (C) 2013-2014  Attila Egri-Nagy
 ##
 
-DeclareGlobalFunction("SubSgpsByMinClosures");
-DeclareGlobalFunction("SubSgpsGenSetsByMinClosures");
-DeclareGlobalFunction("SubSgpsByMinClosuresParametrized");
+DeclareGlobalFunction("SubSgpsByMinExtensions");
+DeclareGlobalFunction("SubSgpsGenSetsByMinExtensions");
+DeclareGlobalFunction("SubSgpsByMinExtensionsParametrized");

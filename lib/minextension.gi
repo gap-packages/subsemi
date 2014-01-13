@@ -8,14 +8,14 @@
 ##
 
 # mt - MulTab, multiplication table
-InstallGlobalFunction(SubSgpsByMinClosures,
-        function(mt) return SubSgpsByMinClosuresParametrized(mt,
+InstallGlobalFunction(SubSgpsByMinExtensions,
+        function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
                                     FullSet(mt),
                                     Stack());end);
 
-InstallGlobalFunction(SubSgpsGenSetsByMinClosures,
-        function(mt) return SubSgpsByMinClosuresParametrized(mt,
+InstallGlobalFunction(SubSgpsGenSetsByMinExtensions,
+        function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
                                     FullSet(mt),
                                     Queue());end);
@@ -23,7 +23,7 @@ InstallGlobalFunction(SubSgpsGenSetsByMinClosures,
 # mt - MulTab, multiplication table
 # baseset - the elements already in
 # generators - the set of possible extending elements from
-InstallGlobalFunction(SubSgpsByMinClosuresParametrized,
+InstallGlobalFunction(SubSgpsByMinExtensionsParametrized,
 function(mt,baseset,generators, waiting)
   local gen, # the generator to be added to the base
         result, # container for the end result, the subsemigroups
