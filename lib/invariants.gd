@@ -2,10 +2,10 @@
 ##
 ## SubSemi
 ##
-## Several properties for multiplication tables and their elements.
+## Several derived properties for multiplication tables and their elements.
 ## Used for quickly deciding non-isomorphism.
 ##
-## Copyright (C) 2013  Attila Egri-Nagy
+## Copyright (C) 2013-2014  Attila Egri-Nagy
 ##
 
 DeclareGlobalFunction("Frequencies");

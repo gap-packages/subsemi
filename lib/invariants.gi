@@ -2,14 +2,15 @@
 ##
 ## SubSemi
 ##
-## Several properties for multiplication tables and their elements.
+## Several derived properties for multiplication tables and their elements.
 ## Used for quickly deciding non-isomorphism.
 ##
-## Copyright (C) 2013  Attila Egri-Nagy
+## Copyright (C) 2013-14  Attila Egri-Nagy
 ##
 
 # in a list we count the number of occurences of distinct elements,
 # then we count how many times each frequency value appeared
+# in other words, keeping only the frequency values of a frequency distribution
 InstallGlobalFunction(Frequencies,
 function(list)
   return Collected(List(Collected(list),p->p[2]));
@@ -27,7 +28,7 @@ InstallGlobalFunction(RowFrequencies,
 function(mt,k) return Frequencies(Rows(mt)[k]);end);
 
 InstallGlobalFunction(ColumnFrequencies,
-function(mt,k) return Frequencies(List(Indices(mt), i->Rows(mt)[i][k]));end);
+function(mt,k) return Frequencies(Columns(mt)[k]);end);
 
 InstallGlobalFunction(AbstractIndexPeriod,
 function(mt,k)
