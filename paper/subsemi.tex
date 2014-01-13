@@ -134,10 +134,10 @@ $ \Closure(A)=\Closure_j(A), \text{ where $j$ is minimal for }\Closure_j(A)=\Clo
 The recursive definition describes an algorithm for calculating the closure, but not an efficient one. Next we discuss some techniques that can be applied to improve the calculation.
 
 \subsubsection{Incremental Method}
-We aim to eliminate double checking entries in the table.
-If $\Miss(A)$ is already calculated, then all new missing elements in $\Miss(A\cup\{i\})$ should come from the $i$th row or the $i$th column.
-So, for calculating the closure we extend the subarray one-by-one using the elements of $\Miss(A)$ and any new missing elements encountered during the recursion.
-
+We can avoid the full calculation of the missing elements in the recursive steps.
+When extending the subarray $M_A$ by a single element $i$, if $\Miss(A)$ is already calculated, then all new missing elements in $\Miss(A\cup\{i\})$ can only come from the $i$th row or the $i$th column.
+So, for calculating the closure we can extend the subarray one-by-one using the elements of $\Miss(A)$ and any new missing elements encountered during the recursion.
+This way each table entry is checked only once.
 
 \subsubsection{Local Tables}
 With additional data structure, the number of checks can be further reduced. 
