@@ -10,8 +10,7 @@
 
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
-  local L,Aprofs,Bprofs,Bprofs2elts,used,N,BackTrack,found,Atypes,Btypes,
-        element_profiles;
+  local L,Aprofs,Bprofs,Bprofs2elts,used,N,BackTrack,found,Atypes,Btypes;
   #-----------------------------------------------------------------------------
   BackTrack := function()
     local k,i,candidates,X,Y;
@@ -37,14 +36,6 @@ function(mtA,mtB)
       Remove(used, Position(used,i));
     od;
   end;
-  #-----------------------------------------------------------------------------
-  element_profiles := function(mt) #just calculating the element->profile map
-    local al;
-    al:= AssociativeList();
-    Perform(Indices(mt), function(x) Assign(al,x,ElementProfile(mt,x));end);
-    return al;
-  end;
-  #-----------------------------------------------------------------------------
   #checking global invariants one by one
   if Size(Rows(mtA)) <> Size(Rows(mtB)) then return fail;fi;
   if MulTabFrequencies(mtA) <> MulTabFrequencies(mtB) then return fail;fi;
@@ -53,9 +44,9 @@ function(mtA,mtB)
     return fail;
   fi;
   #for lining-up the elements we need the profiles
-  Aprofs := element_profiles(mtA);
+  Aprofs := ElementProfileLookup(mtA);
   Atypes := AsSet(ValueSet(Aprofs));
-  Bprofs := element_profiles(mtB);
+  Bprofs := ElementProfileLookup(mtB);
   Btypes := AsSet(ValueSet(Bprofs));
   if Atypes <> Btypes then return fail;fi; #just another quick invariant
   Bprofs2elts := ReversedAssociativeList(Bprofs);

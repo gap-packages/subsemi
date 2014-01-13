@@ -22,6 +22,7 @@ DeclareGlobalFunction("ElementProfile");
 DeclareGlobalFunction("MulTabFrequencies");
 DeclareGlobalFunction("DiagonalFrequencies");
 DeclareGlobalFunction("IndexPeriodTypeFrequencies");
+DeclareGlobalFunction("ElementProfileLookup");
 DeclareGlobalFunction("ElementProfileTypes");
 DeclareGlobalFunction("MulTabProfile");
 
