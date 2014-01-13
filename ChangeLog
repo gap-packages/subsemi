@@ -1,3 +1,5 @@
+0.14
+	Just renaming to follow the paper's terminology: minimal closures to minimal extensions.
 0.13
 	Removing equivalent generators is done only once for the minimal closure method.
 0.12
