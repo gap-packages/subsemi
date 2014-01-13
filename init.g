@@ -10,5 +10,5 @@ ReadPackage("SubSemi","/lib/multab.gd");
 ReadPackage("SubSemi","/lib/closure.gd");
 ReadPackage("SubSemi","/lib/invariants.gd");
 ReadPackage("SubSemi","/lib/isomorphism.gd");
-ReadPackage("SubSemi","/lib/minclosure.gd");
+ReadPackage("SubSemi","/lib/minextension.gd");
 ReadPackage("SubSemi","/lib/ngenerated.gd");
