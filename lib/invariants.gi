@@ -64,13 +64,16 @@ function(mt)
   return Collected(List(Indices(mt),x->AbstractIndexPeriod(mt,x)));
 end);
 
-InstallGlobalFunction(ElementProfileTypes,
+InstallGlobalFunction(ElementProfileLookup,
 function(mt)
 local al;
-  al := AssociativeList();
-  Perform(Indices(mt), function(x)Assign(al, x, ElementProfile(mt,x));end);
-  return ValueSet(al);
+  al:= AssociativeList();
+  Perform(Indices(mt), function(x) Assign(al,x,ElementProfile(mt,x));end);
+  return al;
 end);
+
+InstallGlobalFunction(ElementProfileTypes,
+function(mt) return ValueSet(ElementProfileLookup(mt));end);
 
 InstallGlobalFunction(MulTabProfile,
 function(mt)
