@@ -39,13 +39,13 @@ function(S,I)
   emptyset := BlistList(Indices(mtS),[]);
   mtI := MulTab(I);
   #recoding the subsemigroups of ideal as subsgps of the original
-  Isubs := List(AsList(SubSgpsByMinClosures(mtI)),
+  Isubs := List(AsList(SubSgpsByMinExtensions(mtI)),
               x->ReCodeIndicatorSet(x,SortedElements(mtI),SortedElements(mtS)));
   
   rfh := ReesFactorHomomorphism(I);
   T := Range(rfh); #T=S\I
   mtT := MulTab(T);
-  subs := AsList(SubSgpsByMinClosures(mtT));
+  subs := AsList(SubSgpsByMinExtensions(mtT));
   realsubs := List(subs, x->ElementsByIndicatorSet(x,SortedElements(mtT)));
   torsos := Unique(List(realsubs, x->RFHNonZeroPreImages(x,rfh)));
   Tsubs := List(torsos, x->IndicatorSetOfElements(x,SortedElements(mtS)));
