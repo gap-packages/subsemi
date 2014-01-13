@@ -173,12 +173,13 @@ Two semigroups $S$ and $T$ are isomorphic or anti-isomorphic if $M_S$ can be tra
 By computing some global properties of the multiplication tables that are invariant under these rearrangings in some cases we can easily decide non-isomorphism.
 These properties can be any statistics that do not take into account any information of actual positions of elements, like frequency values.
 A frequency distribution takes a multiset and enumerates its distinct elements paired with the number of occurences of the elements.
-For instance, the  frequency distribution of $(2,1,2,5,5,2)$ is $((1,1),(2,3),(5,2))$.
-However, we cannot retain the element information as it depends on the sorting of the semigroup elements, we keep only the sorted frequency values $(1,2,3)$.
-Sorting is important here to decide whether two distributions are the same or not.
+For instance, the  frequency distribution of a row vector $(2,1,2,5,5,2)$ is $((1,1),(2,3),(5,2))$.
+However, we cannot retain the element information as it depends on the sorting of the semigroup elements.
+We keep only the sorted frequency values $(1,2,3)$.
+Sorting is crucial here to decide whether two distributions are the same or not.
 If they are equal then we say that the multisets have the same \emph{type}.
 For example, the vector $(2,4,2,4)$ have the same type as $(1,3,3,1)$ and $(2,2,4,4)$, but $(2,4,4,4)$ has different type.
-
+We can save storage space if frequency values are repeated many times by taking the frequency distribution of frequency values.
 
 We can define the properties on the element and on the table level. The properties of an element are:
 
@@ -191,7 +192,7 @@ We can define the properties on the element and on the table level. The properti
 \item \textbf{Profile}: Combining together all previous properties.
 \end{enumerate} 
 
-Aggregating the properties of elements ant other statistics of the table not containing information on actual positions determine the properties of a table, and thus a semigroup. Some of them are sensitive enough to tell apart groups, though group multiplication tables are Latin squares.
+Aggregating the properties of elements and other statistics of the table not containing information on actual positions determine the properties of a table, and thus a semigroup. Some of them are sensitive enough to tell apart groups, though group multiplication tables are Latin squares.
 \begin{enumerate}
 \item\textbf{Frequency distribution of frequency values of elements}. %Useless for groups as their multiplication tables are Latin squares.
 \item\textbf{Column and row types}. The frequency distribution of column types and row types of elements. %Useless for groups since all the principal ideals are the same.
@@ -202,7 +203,7 @@ Aggregating the properties of elements ant other statistics of the table not con
 For deciding non-isomorphism we can check these properties, if any one of these is different then the semigroups are not isomorphic.
 If all invariants check out, then we can use backtrack to find out whether one of the multiplication tables can be rearranged to get the other one.
 An element of $C_2\times S_n$ can witness the isomorphism.
-Fortunately we do not have to search through the whole symmetric group, we only need to consider some special permutations that respect the type of an element.
+Fortunately we do not have to search through the whole symmetric group, we only need to consider some special permutations that respect the profile of an element.
 
 \section{Subsemigroup Enumeration Algorithms}
 \label{sec:enum}
