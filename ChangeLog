@@ -1,3 +1,5 @@
+0.15
+	Reviewing the isomorphism code. ElementProfileLookup added. Improving Is3NilPotent.
 0.14
 	Just renaming to follow the paper's terminology: minimal closures to minimal extensions.
 0.13
