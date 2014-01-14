@@ -88,19 +88,15 @@ end);
 IsomorphismClassesSgpsReps := function(sgps)
   local fullcheck,al, k,tmp, result, sgp;
   #-----------------------------------------------------------------------------
-  fullcheck := function(semis)
-    local indices,i,mts,mt;
-    indices:=[];
-    mts := [];#List(semis,x->MulTab(x)); #precalc multabs
-    for i in [1..Size(semis)] do
-      #checking for the first x such that it is isomorphic to i
-      mt := MulTab(semis[i]);
-      if First(mts, x->IsomorphismMulTabs(mt,x)<>fail) = fail then
-        Add(indices,i); #adding if it is not isomorphic to any already listed
-        Add(mts,mt);
+  fullcheck := function(semis) # tried to improve this by precalc mts, no good
+    local reps,S;
+    reps:=[];
+    for S in semis do
+      if First(reps,T->IsomorphismMulTabs(MulTab(S),MulTab(T))<>fail)=fail then
+        Add(reps,S); #adding it if it is not isomorphic to any sgp in reps
       fi;
     od;
-    return List(indices, x->semis[x]);#just convert them back to semis
+    return reps;
   end;
   #-----------------------------------------------------------------------------
   #we want to prefilter by table profiles
