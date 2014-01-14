@@ -235,10 +235,6 @@ Then continue up to $n$ where the set of $n$-generated semigroups is empty.
 Unfortunately this last step is wasted.
 \subsection{Enumerating by Minimal Extensions}
 \label{sec:minext}
-A \emph{minimal extension} of a subsemigroup $T\leq S$ is a subsemigroup $\langle T\cup\{u\}\rangle$, where $u\in S\setminus T$.
-We simply add a new element to $T$ and calculate the closure.
-If we iteratively do minimal extensions for all $u\in S\setminus T$, then we have a graph search algorithm.
-The efficiency of the algorithm  comes from the fact that the search tree is cut when the search encounters subsemigroups already known, simply by making no further extensions. See Algorithm \ref{alg:minclosure} for details.
 \begin{algorithm}[t]
 \SetKwInOut{Input}{input}
 \SetKwInOut{Output}{output}
@@ -249,7 +245,7 @@ The efficiency of the algorithm  comes from the fact that the search tree is cut
 \SetKwFunction{Retrieve}{Retrieve}
 \SetKwFunction{MinimalExtensions}{SubSemigroupsByMinimalExtensions}
 \Input{$S$, the ambient semigroup\\ $T\leq S$, a subsemigroup to be extended\\$X\subseteq S$, a set of elements to extend with}
-\Output{all $T'\subseteq S$ such that $T'=\langle T\cup Y\rangle$ where $Y\subseteq X$}
+\Output{all $T'\subseteq S$ such that $T'=\langle T\cup Y\rangle$ for some $Y\subseteq X$}
 \SetKwInOut{Name}{\MinimalExtensions($T$,$S$,$X$)}
 \BlankLine
 \Name{}
@@ -263,14 +259,24 @@ The efficiency of the algorithm  comes from the fact that the search tree is cut
  \If{$T'\notin$ \subs}{
    \subs$\leftarrow$ \subs$\cup\{T'\}$\\
       \For{$s\in$ $(S\setminus T')\cap X$}{
-      \Store(\exts, $T\cup\{s\}$)
+      \Store(\exts, $T'\cup\{s\}$)
       }
   }
 }
 \Return \subs
-\caption{Finding subsemigroups by minimal extensions. Depending on how \textsf{exts}, the storage for extensions, behaves under the \texttt{Store}/\texttt{Retrieve} operations we get different search strategies. A stack gives a depth-first, while a queue gives a breadth-first search.}
+\caption{Finding subsemigroups by minimal extensions. Depending on how \textsf{exts}, the storage for extensions, behaves under the \texttt{Store}/\texttt{Retrieve} operations we get different search strategies. Stack gives depth-first, while queue data structure gives breadth-first search.}
 \label{alg:minclosure}
 \end{algorithm}
+
+A \emph{minimal extension} of a subsemigroup $T\leq S$ is a subsemigroup $\langle T\cup\{u\}\rangle$, where $u\in S\setminus T$.
+We simply add a new element to $T$ and calculate the closure.
+If we iteratively do minimal extensions for all $u\in S\setminus T$, then we enumerate all subsemigroups of $S$ containing $T$.
+
+This algorithm is a graph search.
+The nodes are the subsemigroups.
+There is a directed edge labelled $u$ from $T$ to $T'$ if $T'=\langle T\cup\{u\}\rangle$.
+There are in general many incoming edges to a subsemigroup.
+The efficiency of the algorithm  comes from the fact that the search tree is cut when the search encounters subsemigroups already known, simply by making no further extensions. See Algorithm \ref{alg:minclosure} for details.
 A full subsemigroup enumeration can be done by starting the algorithm with parameters $(\varnothing,S,S)$, i.e.\ extending the empty set by all elements of $S$.
 
 Optionally, we can also keep track of the generating sets of the subsemigroups.
