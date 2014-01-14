@@ -204,6 +204,7 @@ Sgps := function(l,mt)
 end;
 
 #it is not sorted or anything
+#0 indicate missing element, of course the subarray may not be closed
 InstallGlobalFunction(SubArray,
 function(mt, L)
   local sa,i,j;
