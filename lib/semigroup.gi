@@ -11,8 +11,8 @@ InstallGlobalFunction(Is3NilPotent,
 function(S)
   local zero,L;
   L := AsList(S);
-  zero := L[1]*L[1]*L[1];
-  if ForAll(Tuples(L,3), tup->Product(tup)=zero) then
+  zero := L[1]*L[1]*L[1]; #assuming 3-nilpotency 
+  if ForAll(EnumeratorOfTuples(L,3), tup->Product(tup)=zero) then
     return ForAll(L, t-> (t*zero=zero) and (zero*t=zero));
   fi;
   return false;
