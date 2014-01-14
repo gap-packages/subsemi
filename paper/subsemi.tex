@@ -220,7 +220,7 @@ This works only for small cases as $2^n$ grows fast.
 It is also inefficient in the sense that only a fraction of the subsets are closed under multiplication.
  
 \subsection{Enumerating by Minimal Generating Sets}
-
+\label{sec:mingen}
 The \emph{rank} of a semigroup is the size of its  minimal generating sets.
 Assuming that we know the maximum rank for subsemigroups, if we check all generating sets with sizes up to that value, then we get $\Sub(S)$.
 On each level $k$ we check $\binom{|S|}{k}$ many generator sets.
@@ -281,6 +281,8 @@ A full subsemigroup enumeration can be done by starting the algorithm with param
 
 Optionally, we can also keep track of the generating sets of the subsemigroups.
 When using the breadth-first search strategy, the generating set is minimal, so Algorithm \ref{alg:minclosure} can easily be modified to enumerate minimal generating sets.
+Little consideration shows that this is a more efficient version of the minimal generating sets algorithm (Section \ref{sec:mingen}), but it does not escape checking generating sets one bigger than the maximal rank.
+
 \section{Improvement Techniques}
 \label{sec:techniques}
 Since we are dealing with algebraic structures, we have many mathematical results to exploit, improving the efficiency of any  search algorithm.
