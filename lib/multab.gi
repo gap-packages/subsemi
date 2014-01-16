@@ -196,13 +196,6 @@ function(mt)
   return BlistList(Indices(mt),[]);
 end);
 
-#just for convenience
-Sgps := function(l,mt)
-  return List(AsList(l),
-              #x->Semigroup(ElementsByIndicatorSet(x,SortedElements(mt))));
-              x->AsSortedList(ElementsByIndicatorSet(x,SortedElements(mt))));
-end;
-
 #it is not sorted or anything
 #0 indicate missing element, of course the subarray may not be closed
 InstallGlobalFunction(SubArray,
@@ -218,3 +211,10 @@ function(mt, L)
   od;
   return sa;                  
 end);
+
+#just for convenience, TODO: include it properly
+SmallGenSetSgpFromIndicatorSet := function(indset,mt)
+  return SmallGeneratingSet(Semigroup(
+                 ElementsByIndicatorSet(indset,SortedElements(mt))
+                 ));
+end;
