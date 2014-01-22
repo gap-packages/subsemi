@@ -77,8 +77,13 @@ Therefore, we naturally aim both for enumerating all objects of certain size and
 
 Previous efforts for enumerating semigroups were focused on the abstract case, enumerating by the order, and worked by finding all valid multiplication tables of the given size \cite{monoidenum2009,For55,JW77,KRS76,Ple67,SZT94,tamura2,tamura1}.
 Here we enumerate transformation semigroups by degree.
-For degree $n$ this is the task of enumerating all valid subtables inside one big multiplication table of the  full transformation semigroups $\cT_n$.
-The analogue of Cayley's Theorem states that every finite semigroup is isomorphic to a transformation semigroup. Still, we will see that in a sense the two different strategies yield different results.
+For degree $n$ this is the task of enumerating all valid subtables inside the multiplication table of the  full transformation semigroups $\cT_n$.
+The analogue of Cayley's Theorem states that every finite semigroup is isomorphic to a transformation semigroup, therefore these strategies enumerate the same set.
+However, the order in which the semigroups appear in the enumeration is radically different.
+There are 52,989,400,714,478 abstract semigroups of order 9 \cite{monoidenum2009}, so one could barely imagine the number of semigroups of order 27, where $\cT_3$ would first appear.
+On the other hand, there are only 25 different transformation semigroups on 3 points of order 9.
+The different methods explore the space of semigroups in completely different directions.
+
 
 We do know how to calculate the products of finite transformations efficiently, but the fastest way to calculate a product is just to look it up in a table.
 Hence, we choose the multiplication table as the main way of representing semigroups.
@@ -91,7 +96,7 @@ For space efficiency, we store subsets as bitlists, encoding their characteristi
 
 In Section \ref{sec:multab} we describe methods to work with multiplication tables.
 In Section \ref{sec:enum} we present algorithms to enumerate subsemigroups of semigroups.
-In Section \ref{sec:enum} we discuss techniques for improving efficiency, based on mathematical results.
+In Section \ref{sec:techniques} we discuss techniques for improving efficiency, based on mathematical results.
 Finally, in Section \ref{sec:fulltranssgp} we apply the developed methods for enumerating transformation semigroups acting on up to 4 points.
 
 \subsection{Notation}
