@@ -13,7 +13,7 @@ InstallGlobalFunction(ProductTableOfElements,
 function(M) #magma in a list
 local n, rows,i,j;
   n := Size(M);
-  #nxn matrix 
+  #nxn matrix (intialized with invalid value zero)
   rows := List([1..n], x->ListWithIdenticalEntries(n,0));
   #just a double loop to have all products
   for i in [1..n] do
@@ -25,6 +25,10 @@ local n, rows,i,j;
 end);
 
 ### CONSTRUCTORS ###############################################################
+# sortedelements - a sorted list of multiplicative elements
+# G - a group of automorphisms of the multiplicative elements
+# name - fail if no need for naming (search algorithm will not dump)
+# hom - a Rees factor homomorphism
 InstallGlobalFunction(CreateMulTab,
 function(sortedelements, G, name, hom)
 local mt,inds;
