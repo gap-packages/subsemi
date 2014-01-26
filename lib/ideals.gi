@@ -8,16 +8,14 @@
 ##
 
 #actually building the Rees factor semigroup as the right regular representation
-#of the quotient
+#of the quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
 function(I)
-  local cong,quotienthom,regrepisom; 
-  cong := ReesCongruenceOfSemigroupIdeal(I);
-  quotienthom := HomomorphismQuotientSemigroup(cong);
-  regrepisom := IsomorphismTransformationSemigroup(Range(quotienthom));
+  local quotienthom,regrepisom; 
+  quotienthom:=HomomorphismQuotientSemigroup(ReesCongruenceOfSemigroupIdeal(I));
+  regrepisom:=IsomorphismTransformationSemigroup(Range(quotienthom));
   return CompositionMapping(regrepisom, quotienthom);
 end);
-
 
 InstallGlobalFunction(RFHNonZeroPreImages,
 function (l,rfh)
