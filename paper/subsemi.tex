@@ -287,7 +287,8 @@ There is a directed edge labelled $u$ from $T$ to $T'$ if $T'=\langle T\cup\{u\}
 In general, there are many incoming edges to a subsemigroup.
 The efficiency of the algorithm  comes from the fact that the search tree is cut when the search encounters a subsemigroup already known, simply by making no further extensions.
 See Algorithm \ref{alg:minclosure} for details.
-A full subsemigroup enumeration can be done by starting the algorithm with parameters $(\varnothing,S,S)$, i.e.\ extending the empty set by all elements of $S$.
+A full subsemigroup enumeration can be done by starting the algorithm with parameters $T=\varnothing$, the ambient semigroup is simply $S$, and  $X=S$.
+This is simply extending the empty set by all elements of $S$ recursively.
 
 Optionally, we can also keep track of the generating sets of the subsemigroups.
 When using the breadth-first search strategy, the generating set is minimal, so Algorithm \ref{alg:minclosure} can easily be modified to enumerate minimal generating sets.
