@@ -61,7 +61,6 @@
 \address{$^1$Centre for Research in Mathematics, School of Computing, Engineering and Mathematics, University of Western Sydney (Parramatta Campus), Locked Bag 1797, Penrith, NSW 2751, Australia}
 \address{$^2$ Mathematical Institute, University of St Andrews, North Haugh, St Andrews, Fife, KY16 9SS, Scotland}
 \email{J.East@uws.edu.au,\ A.Egri-Nagy@uws.edu.au,\ jdm3@st-and.ac.uk}
-\todo{The paper lacks mathematical precision (theorems, proofs).}
 \maketitle
 \begin{abstract}
 We describe general methods for enumerating subsemigroups and techniques to improve algorithmic efficiency of the calculations.
@@ -436,19 +435,18 @@ Using one-line notation for transformations, we order the elements lexicographic
 Using these we can draw the subsemigroup lattice (Fig.\ \ref{fig:T2subs}).
 It also shows that it is possible that isomorphic subsemigroups are not conjugate.
 
-An obvious classification of $\Sub(\cT_2)$ can be done according to the sizes of the subsemigroups.
+An obvious classification of $\Sub(\cT_2)$ can be done according to the sizes of the subsemigroups (Fig.\ \ref{fig:T2subs}).
 It turns out that another way of partitioning the elements will also be important for higher degrees. 
 One big chunk of the subsemigroup lattice of $\cT_n$ formed by the subsemigroups of the singular part, $\Sub(K_{n,n-1})$, and this has an order-isomorphic copy when we adjoin the identity of $\cT_n$ to each subsemigroup.
 The remaining part is the set of subsemigroups that contain nontrivial permutations. 
 Since we have no problems with fully calculating and displaying $\Sub(\cT_2)$, this division has no significance, but can be visualized easily (Fig.\ \ref{fig:T2subsAlt}).
 
 \subsection{$\cT_3$, The Brute-force Doable}
-The search space size for $\cT_3$ is $2^{3^3}=134217728$, approximately 134.2 million, thus exhaustive enumeration of subsets is possible, though it takes many hours on a desktop computer.
+The search space size for $\cT_3$ is $2^{3^3}=134217728$, approximately 134.2 million, thus exhaustive enumeration of subsets is still possible, though it takes many hours on a desktop computer.
 In contrast, using the minimal extension method (Section \ref{sec:minext}) together with equivalent generators trick (Section \ref{sec:equivgen}) the calculation is seemingly instantaneous.
 For generating the 283 conjugacy classes only 5362 subsets need to be checked. For all the 1299 subsemigroups 25041 checks are required. This demonstrated efficiency of the graph search algorithm makes our approach feasible.
-Tables \ref{tab:T3freqs} and \ref{tab:T3ngeneratedness}.
 
-\begin{table}
+\begin{table}[h]
 \small
 \renewcommand{\tabcolsep}{1pt}
 \renewcommand{\arraystretch}{1}
@@ -465,8 +463,11 @@ Order&0&1&2&3& 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 1
 \caption{The frequency distribution of conjugacy and isomorphism classes of $\Sub(\cT_3)$.}
 \label{tab:T3freqs}
 \end{table}
+Classifying according to the sizes of the subsets is summarized in  Table \ref{tab:T3freqs}.
+It is easy to see why there are no transformation semigroups on 3 points of size 25 and 26.
+The biggest maximal subsemigroup is of order 24, so there is nothing in between that and $\cT_3$. On the other hand, we have no such explanation for orders 18,19 and 20. 
 
-\begin{table}
+\begin{table}[h]
 \small
 \renewcommand{\tabcolsep}{1pt}
 \renewcommand{\arraystretch}{1}
@@ -481,6 +482,8 @@ Order&0&1&2&3& 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 1
 \caption{$n$-generatedness of conjugacy classes of $\Sub(\cT_3)$. The number of generators in a minimal size minimal generating set and the number of conjugacy classes with that many minimal generators.}
 \label{tab:T3ngeneratedness}
 \end{table}
+We can also apply the minimal generating sets method (Section \ref{sec:mingen}), yielding Table \ref{tab:T3ngeneratedness}.
+
 
 \subsection{$\cT_4$, The Parallel Possible }
 
