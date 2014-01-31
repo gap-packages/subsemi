@@ -394,17 +394,28 @@ $K_{n,n-1}$ is also called the \emph{singular transformation semigroup} of degre
 
  For $\cT_n$ the automorphism group is $\cS_n$, so we are primarily interested in calculating $\Sub_{\cS_n}(\cT_n)$.
 
-We can make a few observations on the multiplication table of $\cT_n$. For $s\in\cT_n$ the number of occurrences of $s$ in $M_{\cT_n}$ is denoted by $\#s$.
+We can make a few observations on the multiplication table of $\cT_n$.
 \begin{fact}
-For any  $s\in\cT_n$,  $n$ divides $\#s$.
+\label{fact:npower}
+Let $M$ be the multiplication table of $\cT_n$.
+If $t$ is in the row $M_{i,\square}$, then it appears there $n^k$ times, where $0\leq k\leq n$.
 \end{fact}
 \begin{proof}
+The $i$th row of the multiplication table is the right  ideal $s_i\cT_n$.
+The element $t$ appears in $M_{i,\square}$ as many times as the number of solutions to the the equation $s_iu=t$.
+Let $r$ be the rank of $s_i$, so for $r$ points we have a well-defined image forced by $t$.
+For the remaining $n-r$ we have $n$ choices, yielding $n^{n-r}$ solutions. 
 \end{proof}
 
+Let $\#s$ denote the number of occurrences of $s$ in $M_{\cT_n}$.
 \begin{fact}
-For any  $s,t\in\cT_n$,  $\#s=\#t$ iff the kernels have the same shape.
+$\#s$ is a multiple of $n$ for all $s\in\cT_n$.
 \end{fact}
 \begin{proof}
+From Fact \ref{fact:npower} we know that each row contains none or a power of $n$ many occurences of $s$.
+The latter includes the $n^0=1$ case.
+This happens only in the case of permutations, so we have $n!$ many occurences of permutation elements.
+For other elements we just add together the frequencies of the element in each row.
 \end{proof}
 
 \subsection{$\cT_2$, The Pen and Paper Case}
