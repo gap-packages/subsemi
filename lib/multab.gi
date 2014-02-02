@@ -222,3 +222,24 @@ SmallGenSetSgpFromIndicatorSet := function(indset,mt)
                  ElementsByIndicatorSet(indset,SortedElements(mt))
                  ));
 end;
+
+#CONVENIENCE
+InstallOtherMethod(ElementsByIndicatorSet, "for boolean list and multab",
+        [IsList, IsMulTab],
+function(indset, mt)
+  return ElementsByIndicatorSet(indset, SortedElements(mt));
+end);
+
+InstallOtherMethod(IndicatorSetOfElements,
+        "for a list of elements and multab",
+        [IsList,IsMulTab],
+function(elms, mt)
+  return IndicatorSetOfElements(elms, SortedElements(mt));
+end);
+
+InstallOtherMethod(ReCodeIndicatorSet,
+        "for a boolean list, a source and destiantion multabs",
+        [IsList,IsMulTab,IsMulTab],
+function(indset,srcmt, destmt)
+  return IndicatorSetOfElements(ElementsByIndicatorSet(indset,srcmt),destmt);
+end);

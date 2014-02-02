@@ -117,12 +117,15 @@ function(bitstr)
 end);
 
 ### CONVERTING TO SET ELEMENTS #################################################
-InstallGlobalFunction(ElementsByIndicatorSet,
+InstallMethod(ElementsByIndicatorSet, "for boolean list and a list of elements",
+        [IsList, IsList],
 function(indset, elements)
   return List(ListBlist([1..Size(indset)],indset),x->elements[x]);
 end);
 
-InstallGlobalFunction(IndicatorSetOfElements,
+InstallMethod(IndicatorSetOfElements,
+        "for a list of elements and a list (of the universe)",
+        [IsList,IsList],
 function(elms, universe)
   local blist;
   blist := BlistList([1..Size(universe)],[]);
@@ -132,7 +135,9 @@ end);
 
 #from one multab  to another (for subs and supers)
 #indicatorset in source to indicatorset in destination
-InstallGlobalFunction(ReCodeIndicatorSet,
+InstallMethod(ReCodeIndicatorSet,
+        "for a boolean list, a source and destiantion list of elements",
+        [IsList,IsList,IsList],
 function(indset,src, dest)
   return IndicatorSetOfElements(ElementsByIndicatorSet(indset,src),dest);
 end);
