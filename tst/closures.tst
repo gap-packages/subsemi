@@ -5,8 +5,8 @@ gap> TestGenerateSg := function(mt)
 >  local gens,blT,T;
 >  gens := DuplicateFreeList(List([1..Random([1..7])], x->Random(Indices(mt))));
 >  blT := SgpInMulTab(gens,mt);
->  T := Semigroup(ElementsByIndicatorSet(BlistList(Indices(mt),gens),SortedElements(mt)));
->  return blT = IndicatorSetOfElements(AsList(T), SortedElements(mt));  
+>  T := Semigroup(ElementsByIndicatorSet(BlistList(Indices(mt),gens),mt));
+>  return blT = IndicatorSetOfElements(AsList(T), mt);  
 > end;;
 gap> mt := MulTab(FullTransformationSemigroup(4));;
 gap> ForAll([1..10], i-> TestGenerateSg(mt));
