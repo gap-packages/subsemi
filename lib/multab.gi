@@ -220,6 +220,17 @@ function(mt)
   return ConvergingSets(mt,Indices(mt));
 end);
 
+InstallGlobalFunction(NilpotencyDegreeByMulTabs,
+function (sgp)
+  local  sets;
+  sets := ConvergingSets(MulTab(sgp));
+  if Size( sets[Size(sets)]) = 1  then
+    return Size(sets);
+  else
+    return fail;
+  fi;
+end);
+
 #it is not sorted or anything
 #0 indicate missing element, of course the subarray may not be closed
 InstallGlobalFunction(SubArray,
