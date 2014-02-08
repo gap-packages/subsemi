@@ -29,6 +29,7 @@ DeclareAttribute("GlobalTables", IsMulTab);
 DeclareAttribute("FullSet", IsMulTab);
 DeclareAttribute("EmptySet", IsMulTab);
 DeclareOperation("ConvergingSets", [IsMulTab,IsList]);
+DeclareGlobalFunction("NilpotencyDegreeByMulTabs");
 
 DeclareGlobalFunction("ConjugacyClassRep");
 DeclareGlobalFunction("ConjugacyClassOfSet");
