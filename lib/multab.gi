@@ -200,6 +200,26 @@ function(mt)
   return BlistList(Indices(mt),[]);
 end);
 
+# S,S^1,S^2,...,S^n=S^{n+1}
+InstallMethod(ConvergingSets,"for multab and list",
+        [IsMulTab,IsList],
+function(mt,l)
+  local tr,img;
+  tr := [];
+  img := l;
+  repeat
+    Add(tr, img, 1);
+    img := AsSet(Concatenation(
+                   List(Columns(mt){tr[1]}, x->AsSet(x{tr[1]}))));
+  until img=tr[1];
+  return Reversed(tr);
+end);
+
+InstallOtherMethod(ConvergingSets,"for multab", [IsMulTab],
+function(mt)
+  return ConvergingSets(mt,Indices(mt));
+end);
+
 #it is not sorted or anything
 #0 indicate missing element, of course the subarray may not be closed
 InstallGlobalFunction(SubArray,
