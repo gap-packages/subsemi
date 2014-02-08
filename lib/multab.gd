@@ -28,6 +28,7 @@ DeclareAttribute("LocalTables", IsMulTab);
 DeclareAttribute("GlobalTables", IsMulTab);
 DeclareAttribute("FullSet", IsMulTab);
 DeclareAttribute("EmptySet", IsMulTab);
+DeclareOperation("ConvergingSets", [IsMulTab,IsList]);
 
 DeclareGlobalFunction("ConjugacyClassRep");
 DeclareGlobalFunction("ConjugacyClassOfSet");
