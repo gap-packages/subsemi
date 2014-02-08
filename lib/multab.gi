@@ -222,7 +222,7 @@ end);
 
 InstallGlobalFunction(NilpotencyDegreeByMulTabs,
 function (sgp)
-  local  sets;
+  local sets;
   sets := ConvergingSets(MulTab(sgp));
   if Size( sets[Size(sets)]) = 1  then
     return Size(sets);
