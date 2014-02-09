@@ -337,7 +337,7 @@ In Section \ref{sec:idealparallel} we enumerated $\Sub(I)$ and checked what the 
 We can do better.
 The idea is that the upper torso acts on the elements of the ideal, so if we do a minimal extension search (Section \ref{sec:minext}) the extensions will be `large jumps' (Fig.~\ref{fig:lowertorsoenum}).
 We can use Algorithm \ref{alg:minclosure} starting from $T$ and extending only by the elements from tyhe ideal. %\texttt{SubSemigroupsByMinimalExtensions(U,S,I)}, i.e.\ extending the upper torso $U$ all possible ways but only with elements from the ideal.
-In practice, for the full transformation semigfroups, this is the most useful trick.
+In practice, for the full transformation semigroups, this is the most useful trick.
 
 \subsection{Maximal Subsemigroups}
 Assuming that we have the maximal subsemigroups calculated, we can parallelize enumerating subsemigroups by enumerating subsemigroups of its maximal subsemigroups and merge the results.
@@ -484,23 +484,29 @@ The biggest maximal subsemigroup is of order 24, so there is nothing in between 
 \end{table}
 We can also apply the minimal generating sets method (Section \ref{sec:mingen}), yielding Table \ref{tab:T3ngeneratedness}.
 
-A semigroup $S$ is nilpotent if $S^n=\{0\}$ for some $n\in\mathbb{N}$.
+A semigroup $S$ is \emph{nilpotent} if $S^n=\{0\}$ for some $n\in\mathbb{N}$.
 It is $k$-nilpotent if $k$ is the minimal such number.
  In other words, being $k$-nilpotent means that any product with at least $k$ elements yields the zero element.
 Instead of calculating $S^k$ in total we can just take a random element $t$ and keep checking all $k$-tuples whether the result of the corresponding is $t$. The worst case is when $S$ is indeed $k$-nilpotent.
-It turns out that that there are only a few $k$-nilpotent transformation semigroups of degree 3.   
+
+It turns out that that there are only 4 different $k$-nilpotent transformation semigroups on 3 points.
+The trivial monoid is 1-nilpotent and it can be realized by three different ways: by the identity transformation, by a constant map, and by a conjugate of $[1,1,3]$.
+The only $2$-nilpotent conjugacy class has the representative $\{[1,1,1],[1,1,3]\}$.
 
 \subsection{$\cT_4$, The Parallel Possible }
 
-Calculation steps, climbing up the ideal hierarchy, jumping over the first ideal.
+The practical calculation of  $\Sub(\cT_4)$ is done by climbing up the ideal hierarchy.
+We can jump over the first ideal.
 
 \begin{enumerate}
-%\item $\Sub(K_{4,2})$
-\item Calculate $\Sub_{\cS_4}(K_{4,3}/K_{4,2})$ with minimal extensions (Section \ref{sec:minext}). 
-\item \emph{In parallel}, enumerate all lower torsos for all the upper torsos from $\Sub_{\cS_4}(K_{4,3}/K_{4,2})$ with the limited enumeration (Section \ref{sec:lowertorso}). This gives $\Sub_{\cS_4}(K_{4,3})$.
-\item Adjoin the identity to all subsemigroups in $\Sub_{\cS_4}(K_{4,3})$. Call this set $C$.
-\item Calculate $\Sub_{\cS_4}(\cS_4)$ with minimal extensions. These are all closed upper torsos.
-\item \emph{In parallel}, enumerate all lower torsos for all nontrivial subgroups in $\Sub_{\cS_4}(\cS_4)$. This is $P$, subsemigroups of $\cT_4$ with nontrivial permutations, including the subgroups as well. This part corresponds to the dark blob on Figure \ref{fig:T2subsAlt}.
+\item Calculate $\Sub_{\cS_4}(K_{4,3}/K_{4,2})$ by the minimal extension algorithm (Section \ref{sec:minext}). There are 10 002 390, slightly more than 10 million conjugacy classes.  
+\item \emph{In parallel}, enumerate all lower torsos for all the upper torsos derived from  $\Sub_{\cS_4}(K_{4,3}/K_{4,2})$ with the limited enumeration method (Section \ref{sec:lowertorso}). This gives $\Sub_{\cS_4}(K_{4,3})$, with  65 997 018 conjugacy classes. The calculation is truly parallel since the upper torsos always differ, so there is no need for merging the elements. By extending the empty upper torso we get $\Sub_{\cS_4}(K_{4,2})$.
+\item To get the isomorphic copy of the singular part, we simplu adjoin the identity to all subsemigroups in $\Sub_{\cS_4}(K_{4,3})$. Call this set $C$.
+Purely administrative step.
+\item Calculate $\Sub_{\cS_4}(\cS_4)$ with minimal extensions. These are all closed upper torsos. This is a lot easier subgroup enumeration problem.
+\item \emph{In parallel}, find all lower torsos for all nontrivial subgroups in $\Sub_{\cS_4}(\cS_4)$. This  is $P$, the set subsemigroups of $\cT_4$ with nontrivial permutations, including the subgroups as well. This part corresponds to the dark blob on Figure \ref{fig:T2subsAlt}.
+Though the search space is the set of subsets of $K_{4,3}$, the search is surprisingly quick.
+This is due to the fact that a subgroup acts on the singular part, making each minimal extension into a huge step.
 \item $\Sub(\cT_4)=\Sub(K_{4,3})\cup C \cup P$. The set of subsemigroups of the ideal part, its copy with the identity adjoined to each subsemigroup, and the subsemigroups with permutations.
 \end{enumerate}
 
@@ -515,7 +521,7 @@ $i=2$ & 4&3&3   & \cellcolor{gray9}  & \cellcolor{gray9}&  \cellcolor{gray9} & \
 \hline
 $3$ &  8&4&4  &  600 & 123 & 118  & \cellcolor{gray9}  & \cellcolor{gray9}&\cellcolor{gray9}\\
 \hline
-$4$ & 16&5&5  &  3788252 & 162332 & 151959  & 1580548624  & 65997018&\\
+$4$ & 16&5&5  &  3 788 252 & 162 332 & 151 959  & 1 580 548 624  & 65 997 018&\\
 \hline
 $n$ & $2^n$&$n+1$&$n+1$    &    & &    &    & & \\
 \hline
@@ -559,9 +565,9 @@ $\cT_1$ & 2  & 2 (2)& 2\\
 \hline
 $\cT_2$ & 10  & 8 (3)& 7\\
 \hline
-$\cT_3$ & 1299 & 283 (5)& 267\\
+$\cT_3$ & 1 299 & 283 (5)& 267\\
 \hline
-$\cT_4$ & 3161965550 & 132069776 & \\
+$\cT_4$ & 3 161 965 550 & 132 069 776 & \\
 \hline
 \end{tabular}
 \caption{Number of subsemigroups of full transformation semigroups. Values in parantheses are the number of 3-nilpotent classes.}
