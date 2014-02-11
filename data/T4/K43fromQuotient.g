@@ -7,7 +7,7 @@ filter := IndicatorSetOfElements(AsList(K42),SortedElements(mt));
 subs := LoadIndicatorSets(input);
 result := [];
 for T in subs do
-  Append(result, AsList(SubSgpsByMinExtensionsParametrized(mt, T, filter)));
+  Append(result, AsList(SubSgpsByMinExtensionsParametrized(mt, T, filter, Stack())));
 od;
 SaveIndicatorSets(result,Concatenation(input,"M"));;
 PrintTo(Concatenation(input,"F"),String(TimeInSeconds()-time));;
