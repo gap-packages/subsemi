@@ -1,3 +1,4 @@
+# semigroup -> string containing green info
 GreenTag := function (sgp)
   return Concatenation("LRD_",
                  String(NrLClasses(sgp)),"_",
@@ -9,6 +10,7 @@ SgpTag := function (sgp)
   return Concatenation("S_",String(Size(sgp)),"_",GreenTag(sgp));
 end;
 
+# file of indicatorsets, multab -> separating into files with greentag classes
 GreenFilingSemigroupIndicatorSets := function(filename,mt)
   local sets, classes, tag,s,sgp;
   sets := LoadIndicatorSets(filename);
@@ -25,7 +27,7 @@ GreenFilingSemigroupIndicatorSets := function(filename,mt)
     SaveIndicatorSets(classes[x],Concatenation(filename,x));end);
 end;
 
-
+#list of indicatorsets, multab -> associative list: greentag -> indicatorset
 FilingSemigroupIndicatorSetsPreloaded := function(sets,mt)
   local classes, tag,s,sgp,counter;
   counter := 0;
@@ -40,8 +42,17 @@ FilingSemigroupIndicatorSetsPreloaded := function(sets,mt)
     Collect(classes, tag, s);
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter)," ",FormattedMemoryString(MemoryUsage(classes))," ",FormattedBigNumberString(String(Size(Keys(classes))))," ",FormattedPercentageString(Size(Keys(classes)),counter));
+      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter)," ",
+           FormattedMemoryString(MemoryUsage(classes))," ",
+           FormattedBigNumberString(String(Size(Keys(classes))))," ",
+           FormattedPercentageString(Size(Keys(classes)),counter));
     fi;
   od;
   return classes;
+end;
+
+Konv := function(filename,mt)
+  WriteGenerators(Concatenation(filename,".smallgens"),
+          List(LoadIndicatorSets(filename),
+          x->SmallGeneratingSet(Semigroup(ElementsByIndicatorSet(x,mt)))));
 end;
