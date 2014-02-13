@@ -13,3 +13,4 @@ ReadPackage("SubSemi","/lib/ngenerated.gi");
 
 ReadPackage("SubSemi","/tst/testfunctions.g");
 ReadPackage("SubSemi","/tst/againstbf.g");
+ReadPackage("SubSemi","/data/filing.g");
