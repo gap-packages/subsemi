@@ -489,7 +489,7 @@ It is $k$-nilpotent if $k$ is the minimal such number.
  In other words, being $k$-nilpotent means that any product with at least $k$ elements yields the zero element.
 Instead of calculating $S^k$ in total we can just take a random element $t$ and keep checking all $k$-tuples whether the result of the corresponding is $t$. The worst case is when $S$ is indeed $k$-nilpotent.
 
-It turns out that that there are only 4 different $k$-nilpotent transformation semigroups on 3 points.
+It turns out that that there are only 4 different nilpotent transformation semigroups on 3 points.
 The trivial monoid is 1-nilpotent and it can be realized by three different ways: by the identity transformation, by a constant map, and by a conjugate of $[1,1,3]$.
 The only $2$-nilpotent conjugacy class has the representative $\{[1,1,1],[1,1,3]\}$.
 
@@ -522,7 +522,7 @@ $i=2$ & 4&3&3   & \cellcolor{gray9}  & \cellcolor{gray9}&  \cellcolor{gray9} & \
 \hline
 $3$ &  8&4&4  &  600 & 123 & 118  & \cellcolor{gray9}  & \cellcolor{gray9}&\cellcolor{gray9}\\
 \hline
-$4$ & 16&5&5  &  3 788 252 & 162 332 & 151 959  & 1 580 548 624  & 65 997 018&\\
+$4$ & 16&5&5  &  3 788 252 & 162 332 & 151 959  & 1 580 548 624  & 65 997 018&TBA\\
 \hline
 $n$ & $2^n$&$n+1$&$n+1$    &    & &    &    & & \\
 \hline
@@ -545,6 +545,11 @@ For all subsets the maximal binomial coefficient defines the peak value.
 For $\Sub(\cT_4)$ the situation is more involved.
 The numbers are big and they make the impression of continuous change with several peaks.
 To explain the shape of the  distribution a systematic study of the size classes is needed. 
+
+There are only 22 nonempty nilpotent subsemigroups of $\cT_4$ up to isomorphism, 4 of them are 1-nilpotent, 7 are 2-nilpotent and 11 are 3-nilpotent.
+The biggest 3-nilpotent subsemigroup has 6 elements:
+$$\left\{[1,1,1,1],[1,1,1,2],[1,1,1,3],[1,1,2,1],[1,1,2,2],[1,1,2,3]\right\}.$$
+It is an interesting question whether the pattern seen here is a general recipe for constructing maximal 3-nilpotent transformation semigroups.
 \section{Summary and Conclusion}
 We enumerated and classified all transformation semigroups up to degree 4.
 It turns out while enumerating abstract semigroups yields mostly 3-nilpotent semigroups, enumerating transformation semigroups gives asymptotically vanishing amount of 3-nilpotent ones.
@@ -568,7 +573,7 @@ $\cT_2$ & 10  & 8 (3)& 7\\
 \hline
 $\cT_3$ & 1 299 & 283 (5)& 267\\
 \hline
-$\cT_4$ & 3 161 965 550 & 132 069 776 & \\
+$\cT_4$ & 3 161 965 550 & 132 069 776 (23)& TBA\\
 \hline
 \end{tabular}
 \caption{Number of subsemigroups of full transformation semigroups. Values in parantheses are the number of nilpotent classes.}
