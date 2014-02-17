@@ -25,7 +25,7 @@ NGeneratedSubSgps := function(mt,n)
   return AsList(db);
 end;
 
-
+#put the first n layers together, and find the layers
 InstallGlobalFunction(SubSgpsByMinimalGenSets,
 function(mt)
   local layers,i;
