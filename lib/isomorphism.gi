@@ -68,7 +68,7 @@ function(mtA,mtB)
 end);
 
 #returns a mapping for the whole semigroup
-InstallGlobalFunction(IsomorphismSemigroups,
+InstallGlobalFunction(IsomorphismSemigroupsByMulTabs,
 function(S,T)
   local mtS, mtT, perm,source, image, mappingfunc;
   if Size(S) <> Size(T) then return fail; fi;

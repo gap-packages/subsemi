@@ -9,4 +9,4 @@
 ##
 
 DeclareGlobalFunction("IsomorphismMulTabs");
-DeclareGlobalFunction("IsomorphismSemigroups");
+DeclareGlobalFunction("IsomorphismSemigroupsByMulTabs");
