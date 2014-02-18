@@ -256,7 +256,9 @@ Thinking in terms of the multiplication table $M$ of $S$, we are looking for all
 \subsection{Brute-Force}
 The obvious brute-force algorithm for constructing $\Sub(S)$ is the enumeration of the powerset $2^S$ and check each subset whether it is closed or not.
 This works only for small cases as $2^n$ grows fast.
-It is also inefficient in the sense that only a fraction of the subsets are closed under multiplication.
+It is also inefficient in the sense that in general only a fraction of the subsets are closed under multiplication (but not always, e.g.\ left zero semigroups).
+
+
  
 \subsection{Enumerating by Minimal Generating Sets}
 \label{sec:mingen}
