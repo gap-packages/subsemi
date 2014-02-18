@@ -406,7 +406,7 @@ We can make a few observations on the multiplication table of $\cT_n$.
 \begin{fact}
 \label{fact:npower}
 Let $M$ be the multiplication table of $\cT_n$.
-If $t$ is in the row $M_{i,\square}$, then it appears there $n^k$ times, where $0\leq k\leq n$.
+If $t$ is in the row $M_{i,\square}$, then it appears there $n^k$ times, for some $0\leq k\leq n$.
 \end{fact}
 \begin{proof}
 The $i$th row of the multiplication table is the right  ideal $s_i\cT_n$.
@@ -420,6 +420,7 @@ Let $\#s$ denote the number of occurrences of $s$ in $M_{\cT_n}$.
 $\#s$ is a multiple of $n$ for all $s\in\cT_n$.
 \end{fact}
 \begin{proof}
+\todo{JE Every element appears once in a row indexed by a permutation. So we always get $n!$ + some nontrivial powers of $n$.}
 From Fact \ref{fact:npower} we know that each row contains none or a power of $n$ many occurences of $s$.
 The latter includes the $n^0=1$ case.
 This happens only in the case of permutations, so we have $n!$ many occurences of permutation elements.
@@ -493,10 +494,13 @@ The biggest maximal subsemigroup is of order 24, so there is nothing in between 
 \end{table}
 We can also apply the minimal generating sets method (Section \ref{sec:mingen}), yielding Table \ref{tab:T3ngeneratedness}.
 
-A semigroup $S$ is \emph{nilpotent} if $S^n=\{0\}$ for some $n\in\mathbb{N}$.
+A semigroup $S$ is \emph{nilpotent} if $S^k=\{0\}$ for some $k\in\mathbb{N}$.
 It is $k$-nilpotent if $k$ is the minimal such number.
- In other words, being $k$-nilpotent means that any product with at least $k$ elements yields the zero element.
-Instead of calculating $S^k$ in total we can just take a random element $t$ and keep checking all $k$-tuples whether the result of the corresponding is $t$. The worst case is when $S$ is indeed $k$-nilpotent.
+ In other words, being $k$-nilpotent means that any product with at least $k$ elements yields the zero element, but some product of $k-1$ elements does not.
+To decide $k$-nilpotency algorithmically, in general we do not need to calculate the power $S^k$.
+We can take a random $k$-tuple of semigroup elements, evaluate it as a product and assume that this value is the zero element.
+If we find any other $k$-tuple evaluating to a different value, then the semigroup is not $k$-nilpotent.
+The worst case is when $S$ is indeed $k$-nilpotent, we end up checking all $k$-tuples.
 
 It turns out that that there are only 4 different nilpotent transformation semigroups on 3 points.
 The trivial monoid is 1-nilpotent and it can be realized by three different ways: by the identity transformation, by a constant map, and by a conjugate of $[1,1,3]$.
