@@ -310,22 +310,26 @@ Little consideration shows that this is a more efficient version of the minimal 
 Since we are dealing with well-studied algebraic structures, we have many mathematical results to exploit, improving the efficiency of any  search algorithm.
 \subsection{Parallel Enumeration in Ideal Quotients}
 \label{sec:idealparallel}
-In general, an ideal $I$ divides a subsemigroup into two parts: a subsemigroup contained in the ideal, $L=T\cap I$, and a subset outside the ideal, $U=T\cap (S\setminus I)$. They are called \emph{lower torso} and \emph{upper torso}, respectively (Fig.\ \ref{fig:torsos}).
+In general, an ideal $I$ divides a subsemigroup $T$ into two parts: a subsemigroup contained in the ideal, $L=T\cap I$, and a subset outside the ideal, $U=T\cap (S\setminus I)$. We call these the \emph{lower torso} and \emph{upper torso}, respectively (Fig.\ \ref{fig:torsos}).
 
-The subset also can be made into a subsemigroup by adjoining a zero element, the well-known Rees quotient. 
+The upper torso is only a subset in general, but it can be made into a subsemigroup by adjoining a zero element. This is the well-known Rees quotient. 
 Subsemigroup enumeration can be done in parallel in $I$ and $S/I$  and then  we can combine the results.
 
 \begin{lemma}
+\label{lem:torso}
 Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle (U\setminus\{0\})\cup T \rangle\mid U\in \Sub(S/I),\ T\in\Sub(I)\big\}.$$
 \end{lemma}
 \proof
+\todo{JE: Let $T\in\Sub(S)$ and put $L=T\cap I$ and $U=T\cap(S\setminus I)\cup\{0\}$. Then $T=L\cup(U\setminus \{0\})=\langle L\cup(U\setminus\{0\})\rangle$. This establishes the forward set containment. The other is trivial.}
 Since $\varnothing \in \Sub(S/I)$ we get all $\Sub(I)$.
 Similarly, $\varnothing \in \Sub(I)$, so all upper torsos that are actually subsemigroups, are also retained.
 Beyond these trivialities, all we have to show that no upper torso is left out after the combinations.
 But this follows from $I$ being an ideal, so lower torsos fix upper torsos.
 \qed
 
-This requires calculating $|\Sub(S/I)|\cdot|\Sub(I)|$ set unions and subsequent closures. 
+\todo{extra line after end of proof}
+
+The method suggested by Lemma \ref{lem:torso} requires calculating $|\Sub(S/I)|\cdot|\Sub(I)|$ set unions and subsequent closures. 
 \subsection{Lower Torso Enumeration}
 \label{sec:lowertorso}
 \begin{figure}
