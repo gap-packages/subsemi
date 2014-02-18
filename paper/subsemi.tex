@@ -343,8 +343,8 @@ Next question is finding all the matching lower torsos.
 In Section \ref{sec:idealparallel} we enumerated $\Sub(I)$ and checked what the combinations generated.
 We can do better.
 The idea is that the upper torso acts on the elements of the ideal, so if we do a minimal extension search (Section \ref{sec:minext}) the extensions will be `large jumps' (Fig.~\ref{fig:lowertorsoenum}).
-We can use Algorithm \ref{alg:minclosure} starting from $T$ and extending only by the elements from tyhe ideal. %\texttt{SubSemigroupsByMinimalExtensions(U,S,I)}, i.e.\ extending the upper torso $U$ all possible ways but only with elements from the ideal.
-In practice, for the full transformation semigroups, this is the most useful trick.
+We can use Algorithm \ref{alg:minclosure} starting from $T$ and extending only by the elements from the ideal. %\texttt{SubSemigroupsByMinimalExtensions(U,S,I)}, i.e.\ extending the upper torso $U$ all possible ways but only with elements from the ideal.
+In practice, for the full transformation semigroups, this is a very useful trick.
 
 \subsection{Maximal Subsemigroups}
 Assuming that we have the maximal subsemigroups calculated, we can parallelize enumerating subsemigroups by enumerating subsemigroups of its maximal subsemigroups and merge the results.
