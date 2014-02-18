@@ -207,9 +207,9 @@ Aggregating the properties of elements and other statistics of the table not con
 \item \textbf{Element Profiles}. In the group case this invariant reduces to the order of elements, but it can distinguish between $D_8$ and $Q_8$. However, this invariant fails to detect the difference between some direct and semidirect products. For instance, $C_8\times C_2$ and $C_8\rtimes C_2$ both have 1 element of order 1, 3 of order 2, 4 of order 4, and 8 of order 8.
 \end{enumerate} 
 
-For deciding non-isomorphism we can check these properties, if any one of these is different then the semigroups are not isomorphic.
+For deciding non-isomorphism we can check these properties; if any one of these is different then the semigroups are not isomorphic.
 If all invariants check out, then we can use backtrack to find out whether one of the multiplication tables can be rearranged to get the other one.
-An element of $C_2\times S_n$ can witness the isomorphism.
+An element of $C_2\times S_n$ can witness the isomorphism or anti-isomorphism.
 Fortunately we do not have to search through the whole symmetric group, we only need to consider some special permutations that respect the profile of an element.
 
 \section{Subsemigroup Enumeration Algorithms}
@@ -251,7 +251,7 @@ Fortunately we do not have to search through the whole symmetric group, we only 
 For a semigroup $S$, find all of its subsemigroups:
 $$\Sub(S)=\left\{ X\subseteq S\mid \langle X\rangle=X\right\}.$$
 \end{problem}
-Thinking in terms of the multiplication table $M$ of $S$, we are looking for all subarrays $M_X$ that are also multiplication tables, i.e.\ they do not contain elements not in $X$, $\Set(M_X)=X$.
+Thinking in terms of the multiplication table $M$ of $S$, we are looking for all subarrays $M_X$ that are also multiplication tables, i.e.\ they do not contain elements not in $X$, $\Set(M_X)\subseteq X$.
 
 \subsection{Brute-Force}
 The obvious brute-force algorithm for constructing $\Sub(S)$ is the enumeration of the powerset $2^S$ and check each subset whether it is closed or not.
