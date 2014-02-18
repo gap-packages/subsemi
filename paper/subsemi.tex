@@ -171,6 +171,7 @@ The set $P_k$ of all coordinate pairs encoding the locations is still redundant 
 For instance $(i,j)$ and $(i,h)$ can be stored as $(i,\{h,j\})$, therefore $i$ is only checked once.
 Then the  global information table of $k$ is defined by
 $$G_k=\bigcup_{(i,j)\in P_k} \left\{ (i,\{j\mid i\leq j\})\right\}.$$
+\todo{JE should the union just be over all $i\in\{1,\ldots,n\}\setminus\{k\}$?}
 
 \subsection{Isomorphism and Anti-Isomorphism of Multiplication Tables}
 Though we have the luxury of having the full structure of the semigroup represented in the multiplication table, it is still not a trivial matter to decide isomorphism.
