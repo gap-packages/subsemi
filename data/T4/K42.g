@@ -9,7 +9,7 @@ reps := AsList(SubSgpsByMinExtensions(mtK42));
 
 output := OutputTextFile("K42_K43.reps", false);
 for r in List(reps,
-        x->ConjugacyClassRep(ReCodeIndicatorSet(x,mtK42,mtK43),mtK43) do
+        x->ConjugacyClassRep(ReCodeIndicatorSet(x,mtK42,mtK43),mtK43)) do
   AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
 od;
 CloseStream(output);
