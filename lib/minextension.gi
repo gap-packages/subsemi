@@ -128,19 +128,18 @@ function(mt,baseset,generators, waiting)
     bl := ClosureByIncrements(base, [s], mt);
     #its conjugacy class rep
     if dosyms then bl := ConjugacyClassRep(bl,mt);fi;
-    #EXIT if nothing to do
-    if  bl in result then continue; fi;
+    if  bl in result then continue; fi; #EXIT if nothing to do
     #STORE
     if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
     AddSet(result, bl);
     #REMAINDER
-    diff := DifferenceBlist(generators, bl);
+    diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
     #RECURSION
     if isBreadthFirst then
-      Perform(ListBlist(Indices(mt),diff),
-              function(t) Store(waiting,[bl,t,Concatenation(gens,[t])]);end);
+      Perform(diff,
+              function(t)Store(waiting,[bl,t,Concatenation(gens,[t])]);end);
     else
-      Perform(ListBlist(Indices(mt),diff),function(t)Store(waiting,[bl,t]);end);    
+      Perform(diff,function(t)Store(waiting,[bl,t]);end);
     fi;
   od;
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
