@@ -116,7 +116,7 @@ SubSgpsByIdeal := function(I,G)
   T := Range(rfh);
   #calculate its subsgp classes
   mtT := MulTab(T,G,rfh);
-  Treps := AsSortedList(AsList(SubSgpsByMinExtensions(mtT)));
+  Treps := AsList(SubSgpsByMinExtensions(mtT));
   #mapping back the subs of the quotient to the original
   preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
   #from preimageset to elements, getting rid of zero by failing it
@@ -130,11 +130,8 @@ SubSgpsByIdeal := function(I,G)
   Textended := List(Tuppertorsos, x-> SgpInMulTab(x,mtS));
   filter := IndicatorSetOfElements(AsList(I),SortedElements(mtS));
   result := [];
-  for s in Textended do
+  Perform(Textended, function(x)
     Append(result,AsList(
-            SubSgpsByMinExtensionsParametrized(mtS,s,filter,Stack())));
-  od;
+            SubSgpsByMinExtensionsParametrized(mtS,x,filter,Stack())));end);
   return result; #TODO duplicates when the ideal has only one element
 end;
-
- I3 := SymmetricInverseMonoid(3);
