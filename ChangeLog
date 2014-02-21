@@ -1,3 +1,5 @@
+0.19
+	BUGFIX: in minextensions.gi, removing the generators already in the baseset caused losses in the torso calculation.
 0.18
 	IsomorphismSemigroups -> IsomorphismSemigroupsByMulTabs, following upstream changes.
 0.17
