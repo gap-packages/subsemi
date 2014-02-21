@@ -106,3 +106,35 @@ function(Ca,Cbs,mt)
   Perform(combined, function(x) AddSet(hashtab, ConjugacyClassRep(x,mt));end);
   return hashtab;
 end);
+
+#doing the ideal thingy
+SubSgpsByIdeal := function(I,G)
+  local rfh, T, mtT, Treps, preimgs, elts, tmp, Tuppertorsos, Textended, filter, result, S,s,mtS;
+  S := Parent(I); mtS := MulTab(S,G); 
+  #get the Rees quotient as ts
+  rfh := ReesFactorHomomorphism(I);
+  T := Range(rfh);
+  #calculate its subsgp classes
+  mtT := MulTab(T,G,rfh);
+  Treps := AsSortedList(AsList(SubSgpsByMinExtensions(mtT)));
+  #mapping back the subs of the quotient to the original
+  preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
+  #from preimageset to elements, getting rid of zero by failing it
+  elts := List(preimgs,function(x) if Size(x)> 1 then return fail;
+                                   else return x[1];fi;end);
+  tmp := List(Treps, x->ElementsByIndicatorSet(x,elts));
+  Perform(tmp, function(x) if fail in x then
+                             Remove(x, Position(x,fail));fi;end);
+  Tuppertorsos := List(Unique(tmp),x-> IndicatorSetOfElements(x,mtS));
+  Print("UTS:", Size(Unique(Tuppertorsos)),"\n");
+  Textended := List(Tuppertorsos, x-> SgpInMulTab(x,mtS));
+  filter := IndicatorSetOfElements(AsList(I),SortedElements(mtS));
+  result := [];
+  for s in Textended do
+    Append(result,AsList(
+            SubSgpsByMinExtensionsParametrized(mtS,s,filter,Stack())));
+  od;
+  return result; #TODO duplicates when the ideal has only one element
+end;
+
+ I3 := SymmetricInverseMonoid(3);
