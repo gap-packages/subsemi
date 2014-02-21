@@ -97,8 +97,9 @@ function(mt,baseset,generators, waiting)
   fi;
   prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
   prev_secs:=TimeInSeconds();
+  # TODO:understand why this trick does not work with torsos
   # removing generators that are in the base already
-  generators := DifferenceBlist(generators, baseset);
+  #generators := DifferenceBlist(generators, baseset);
   # removing equivalent generators
   generators := RemoveEquivalentGenerators(generators,mt);
   # fill up the waiting list
