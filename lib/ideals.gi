@@ -108,10 +108,10 @@ function(Ca,Cbs,mt)
 end);
 
 # upper torso conjugacy reps, expressed as elements of S
-# I an ideal in S
+# I an ideal in S (S is contained as a parent)
 # G the automorphism group of S
 UpperTorsos := function(I,G)
-local rfh,T,mtT,Treps,preimgs,elts,tmp;  
+local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;  
   #get the Rees quotient as ts
   rfh := ReesFactorHomomorphism(I);
   T := Range(rfh);
@@ -125,25 +125,19 @@ local rfh,T,mtT,Treps,preimgs,elts,tmp;
                                    else return x[1];fi;end);
   tmp := List(Treps, x->ElementsByIndicatorSet(x,elts));
   Perform(tmp, function(x) if fail in x then
-                             Remove(x, Position(x,fail));fi;end);
-  return tmp;
+      Remove(x, Position(x,fail));fi;end);
+  mtS := MulTab(Parent(I),G); 
+  return  List(Unique(tmp),x-> IndicatorSetOfElements(x,mtS));
 end;
 
 # calculates all sub conjugacy reps of S/I then extends all upper torsos
 # I semigroup ideal
 # G automorphism group
 # calcideal flag if true, then the empty uppertorso is used
-SubSgpsByIdeal := function(I,G,calcideal)
-  local uppertorsos, extended, filter, result, S,mtS;
+SubSgpsByUpperTorsos := function(I,G,uppertorsos)
+  local extended, filter, result, S,mtS;
   S := Parent(I);
   mtS := MulTab(S,G); 
-  uppertorsos := List(Unique(UpperTorsos(I,G)),x-> IndicatorSetOfElements(x,mtS));
-  if not calcideal then
-    if EmptySet(mtS) in uppertorsos then
-      Remove(uppertorsos, Position(uppertorsos, EmptySet(mtS)));
-    fi;
-  fi;
-  Print("UTS:", Size(Unique(uppertorsos)),"\n");
   extended := List(uppertorsos, x-> SgpInMulTab(x,mtS));
   filter := IndicatorSetOfElements(AsList(I),SortedElements(mtS));
   result := [];
