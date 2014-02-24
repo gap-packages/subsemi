@@ -77,9 +77,8 @@ When studying certain finite structures it can be helpful to generate small
 examples using a computer program.
 By investigating these sample objects we can formulate new hypotheses.
 More diverse sample sets make the hypotheses stronger, or easier to falsify by finding counterexamples.
-Therefore, we naturally aim both TO enumeratE \emph{all} objects of a certain
-parameter value and for \emph{increasing} the value of this
-parameter.\footnote{JDM: I don't understand this sentence.}
+Therefore, to maximize the usefulness of these small examples we naturally aim both to enumerate \emph{all} objects of a certain
+parameter value, and to \emph{increase} the value of this parameter.
 
 Previous efforts for enumerating semigroups were focused on the abstract case, enumerating by size, by the order of the semigroups.
 TheSE methods worked by finding all valid multiplication tables of the given size \cite{monoidenum2009,For55,JW77,KRS76,Ple67,SZT94,tamura2,tamura1}.
@@ -101,13 +100,8 @@ statement} different transformation semigroups on 3 points of order 9.  The
 different methods explore the space of semigroups in completely different
 directions.\footnote{JDM: this could be better}
 
-
-We do know how to calculate the products of finite transformations efficiently,
-but the fastest way to calculate a product is just to look it up in a table.
-\footnote{JDM: this sentence should be more precise: "The complexity of
-  the multiplication of two transformations of degree $n\in\mathbb{N}$ is linear in $n$.
-  However, multiplication in a semigroup defined by a multiplication table has
-constant complexity."}
+The complexity of the multiplication of two transformations of degree $n\in\mathbb{N}$ is linear in $n$.
+However, multiplication in a semigroup defined by a multiplication table has constant complexity.
 Hence, we choose multiplication tableS as the main way of representing semigroups.
 This decision has two consequences. 
 First, our algorithms fall into the class of semigroup algorithms that fully enumerate the elements.
@@ -134,8 +128,7 @@ Finally, in Section \ref{sec:fulltranssgp} we apply the developed methods for en
 Let $S$ be finite a semigroup, AND LET $n\in\mathbb{N}$ BE SUCH THAT $n=|S|$ 
 OR "Let $S$ be a finite semigroup such that $|S|=n\in\mathbb{N}$.
 We fix an order on the semigroup elements $s_1,\ldots, s_n$, so we can refer to the elements by their indices. 
-Then the  \emph{multiplication table}, or \emph{Cayley-table}\footnote{JDM: no
-hyphen!} of $S$ is a $n\times n$ matrix $M_S$ with entries from
+Then the  \emph{multiplication table}, or \emph{Cayley table} of $S$ is a $n\times n$ matrix $M_S$ with entries from
 $\{1,\ldots,n\}$, such that $M_{i,j}=k$ if $s_is_j=s_k$.
 $M_A$\footnote{JDM: it is usually considered bad style to start a sentence with
 a mathematical symbol} denotes the subarray of $M_S$ spanned by $A\subseteq\{1,\ldots,n\}$.
