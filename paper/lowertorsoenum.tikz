@@ -1,0 +1,26 @@
+\def\S{(0,0) ellipse (5cm and 3cm)}
+\def\I{(0,-2) ellipse (7cm and 3.5cm)}
+\def\T{(-1,1)ellipse (.8cm and 1.4cm)}
+\begin{tikzpicture}
+\fill [color=gray9] \T;
+\draw \T;
+\draw (2.3,2.1) node (SI) {$S\setminus I$};
+\draw (3.9,2.2) node (S) {$S$};
+\draw (4,0) node (I) {$I$};
+\draw (-.2,2.2) node (T) {$T$};
+\draw (-1.1,.4) node (L) {$L$};
+\draw (-1.1,2) node (U) {$U$};
+\draw (-2.1,-1) node (T) {$x_1$};
+\draw (2.1,0) node (T) {$x_2$};
+\begin{scope}
+\clip\S;
+\draw\I;
+\draw[very thick]\S;
+\end{scope}
+\begin{pgfonlayer}{background layer}
+\draw [black] plot [smooth cycle] coordinates {(0,1.2)(-1.,1.8)(-4,-1)(-3,-2) (2.4,-1.6)(3,0)};
+\fill [gray7] plot [smooth cycle] coordinates {(0,1.2)(-1.,1.8)(-4,-1)(-3,-2) (2.4,-1.6)(3,0)};
+\draw [black] plot [smooth cycle] coordinates {(0,.5)(-1,2)(-2.6,-1) (-.4,-1)};
+\fill [gray8] plot [smooth cycle] coordinates {(0,.5)(-1,2)(-2.6,-1) (-.4,-1)};
+\end{pgfonlayer}
+\end{tikzpicture}
