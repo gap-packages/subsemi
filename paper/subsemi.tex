@@ -141,7 +141,11 @@ If $I$ is an ideal of $S$ then the \emph{Rees factor semigroup} $S/I$ has
 elements $(S\setminus I)\cup\{0\}$ with multiplication the same as in $S$ if the
 product stays in $S\setminus I$ and 0 otherwise.
 
-$\cS_n$ denotes the \emph{symmetric group}, and $\cT_n$ the \emph{full transformation semigroup} on $n$ points.
+A \emph{transformation} is a function $f:X\rightarrow X$ from a set to itself.
+The set is denoted by positive integers $\{1,\ldots,n\}$ and a transformation $t$ is denoted by simply listing the images of the points: $[t(1),t(2),\ldots,t(n)]$. 
+A \emph{transformation semigroup} $(X,S)$ of \emph{degree} $n$ is a collection $S$ of transformations of an $n$-element set closed under function composition. 
+The semigroup of all  transformations of $n$ points is the  \emph{full transformation semigroup} $\cT_n$.
+The group  consisting of all degree $n$ permutations is the \emph{symmetric group} $\cS_n$.
 
 \section{Multiplication Table Algorithms}
 \label{sec:multab}
@@ -414,7 +418,7 @@ so semigroup elements are equivalent if they generate the same subsemigroup.
 
 For distinct elements this can only happen to nontrivial elements of cyclic groups of prime order.
 However, a semigroup can contain many copies of those.
-Beyond the obvious copies with fixed points, we have examples that also move the point not in the cycle. For instance, in the singular transformation semigroup of degree 4, $[ 2, 3, 1, 1 ]$ is equivalent to  $[ 3, 1, 2, 2 ]$, both generating $\{ [ 2, 3, 1, 1 ], [ 3, 1, 2, 2 ], [ 1, 2, 3, 3 ]\}$.\todo{Introduce notation}
+Beyond the obvious copies with fixed points, we have examples that also move the point not in the cycle. For instance, in the singular transformation semigroup of degree 4, $[ 2, 3, 1, 1 ]$ is equivalent to  $[ 3, 1, 2, 2 ]$, both generating $\{ [ 2, 3, 1, 1 ], [ 3, 1, 2, 2 ], [ 1, 2, 3, 3 ]\}$.
 
 In a search algorithm, if $s\equiv t$, then after extending by $s$ we can simply omit extending by $t$.
 
@@ -470,7 +474,7 @@ For other elements we just add together the frequencies of the element in each r
 \end{figure}
 $\cT_2$ has only four elements and consequently the search space size is only $2^4=16$.
 It is an easy exercise to find all of its subsemigroups. 
-Using one-line notation for transformations, we order the elements lexicographically, 1=[1,1], 2=[1,2], 3=[2,1], 4=[2,2]. Here are the closed subarrays.
+We order the elements lexicographically, 1=[1,1], 2=[1,2], 3=[2,1], 4=[2,2]. Here are the closed subarrays.
 \input{T2subs.tab}
 Using these we can draw the subsemigroup lattice (Fig.\ \ref{fig:T2subs}).
 It also shows that it is possible that isomorphic subsemigroups are not conjugate.
