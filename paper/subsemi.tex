@@ -82,23 +82,23 @@ parameter value, and to \emph{increase} the value of this parameter.
 
 Previous efforts for enumerating semigroups were focused on the abstract case, enumerating by size, by the order of the semigroups.
 TheSE methods worked by finding all valid multiplication tables of the given size \cite{monoidenum2009,For55,JW77,KRS76,Ple67,SZT94,tamura2,tamura1}.
-Here we enumerate transformation semigroups by degree\footnote{JDM: these terms
+Here we enumerate transformation semigroups by degree\todo{JDM: these terms
 should be defined before they are first used}.
 For degree $n$ this is the task of enumerating all valid subtables inside the
 multiplication table of the full transformation semigroups $\cT_n$.  AN analogue of Cayley's Theorem states that every finite semigroup is isomorphic to
 a transformation semigroup; therefore enumerating by size and by degree both
 enumerate the same set (with repetitions in the transformation
-case)\footnote{JDM: I also don't understand this sentence, what does
+case)\todo{JDM: I also don't understand this sentence, what does
 "enumerating by size and by degree mean?"}.
  However,
 the order in which the semigroups appear in the enumeration is radically
 different.  There are 52,989,400,714,478 abstract semigroups of order 9
 \cite{monoidenum2009}, so one could barely imagine the number of semigroups of
 order 27, where $\cT_3$ would first appear.  On the other hand, there are only
-25\footnote{JDM: you should say why this is the case, i.e. justify this
+25\todo{JDM: you should say why this is the case, i.e. justify this
 statement} different transformation semigroups on 3 points of order 9.  The
 different methods explore the space of semigroups in completely different
-directions.\footnote{JDM: this could be better}
+directions.\todo{JDM: this could be better}
 
 The complexity of the multiplication of two transformations of degree $n\in\mathbb{N}$ is linear in $n$.
 However, multiplication in a semigroup defined by a multiplication table has constant complexity.
@@ -107,18 +107,18 @@ This decision has two consequences.
 First, our algorithms fall into the class of semigroup algorithms that fully enumerate the elements.
 This of course  restricts us to relatively small semigroups, an obvious drawback.
 Second, multiplication table algorithms are completely representation agnostic,
-a clear advantage\footnote{JDM: in what sense?}.
+a clear advantage\todo{JDM: in what sense?}.
 For space efficiency, we store subsets as bitlists, encoding their characteristic functions.
 
 The article is organised as follows.
-In Section \ref{sec:multab} we describe methods to work\footnote{JDM: what
+In Section \ref{sec:multab} we describe methods to work\todo{JDM: what
 work?}
 with multiplication tables.
 In Section \ref{sec:enum} we present algorithms to enumerate subsemigroups of
-semigroups\footnote{JDM: again what kind of semigroups, be more precise}.
+finite semigroups.
 In Section \ref{sec:techniques} we discuss techniques for improving THE
 efficiency OF THE ALGORITHMS IN SECTION \ref{sec:techniques}, based on
-mathematical results.\footnote{JDM: if I was reviewing this paper, I would
+mathematical results.\todo{JDM: if I was reviewing this paper, I would
   wonder why this wasn't the only section about algorithms, and I might wonder
 what techniques were applied in the earlier sections if mathematics was not!?}
 Finally, in Section \ref{sec:fulltranssgp} we apply the developed methods for enumerating transformation semigroups acting on up to 4 points.
@@ -130,7 +130,7 @@ OR "Let $S$ be a finite semigroup such that $|S|=n\in\mathbb{N}$.
 We fix an order on the semigroup elements $s_1,\ldots, s_n$, so we can refer to the elements by their indices. 
 Then the  \emph{multiplication table}, or \emph{Cayley table} of $S$ is a $n\times n$ matrix $M_S$ with entries from
 $\{1,\ldots,n\}$, such that $M_{i,j}=k$ if $s_is_j=s_k$.
-$M_A$\footnote{JDM: it is usually considered bad style to start a sentence with
+$M_A$\todo{JDM: it is usually considered bad style to start a sentence with
 a mathematical symbol} denotes the subarray of $M_S$ spanned by $A\subseteq\{1,\ldots,n\}$.
 $M_{i,\square}$ is the $i$th row and $M_{\square,j}$ is the $j$th column vector of $M_S$.
 We denote the set of the entries of a vector $v$ by $\Set(v)=\{x\mid x\text{ is
@@ -156,17 +156,17 @@ $\cS_n$ denotes the \emph{symmetric group}, and $\cT_n$ the \emph{full transform
 \subsection{Closure Algorithms}
 A basic question in computational semigroup theory is: what subsemigroup does a subset $A\subseteq S$ generate?
 There is of course a simple algorithm for calculating $\langle A\rangle$: we keep multiplying elements of $A$, also with any new elements until all the possible products yield an element already in the collection.
-We can do this calculation directly on the table\footnote{JDM: meaning this can
+We can do this calculation directly on the table\todo{JDM: meaning this can
 be done by hand?}. 
 Parallel to the notion of the subsemigroup generated by $A$ we define the
 \emph{closure} of $A$ as the minimal subarray of containing $M_A$
-\footnote{JDM: closure and the subsemigroup generated by $A$ are not parallel
+\todo{JDM: closure and the subsemigroup generated by $A$ are not parallel
   notions but the same notion. Also this is not very well defined, do you mean
 that the least subarray of $M_S$ containing $M_A$?}.  To calculate
 the closure first we need to determine the \emph{missing elements}
 $\Miss(B)=\Set(M_B)\setminus B$, the ones that are referenced in the
 subarray,
-but not part of it \footnote{JDM: what does this mean? The products of elements in
+but not part of it \todo{JDM: what does this mean? The products of elements in
 $B$ that are not in $B$?}.  Then, recursively \begin{align*}
 \Closure_1(A)&=A\cup\Miss(A)\\ \Closure_{i+1}(A)&=\Closure_1(\Closure_{i}(A))
 \end{align*} and $ \Closure(A)=\Closure_j(A), \text{ where $j$ is minimal for
