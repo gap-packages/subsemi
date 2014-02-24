@@ -80,12 +80,13 @@ More diverse sample sets make the hypotheses stronger, or easier to falsify by f
 Therefore, to maximize the usefulness of these small examples we naturally aim both to enumerate \emph{all} objects of a certain
 parameter value, and to \emph{increase} the value of this parameter.
 
-Previous efforts for enumerating semigroups were focused on the abstract case, enumerating by size, by the order of the semigroups.
-TheSE methods worked by finding all valid multiplication tables of the given size \cite{monoidenum2009,For55,JW77,KRS76,Ple67,SZT94,tamura2,tamura1}.
-Here we enumerate transformation semigroups by degree\todo{JDM: these terms
-should be defined before they are first used}.
+Previous efforts for enumerating semigroups were focused on the abstract case, enumerating \emph{by size}, by the order of the semigroups, proceeding to semigroups of size $n+1$ after all semigroups of size $n$ are listed.
+The main idea for enumerating by size was finding all valid multiplication tables of the given size \cite{monoidenum2009,For55,JW77,KRS76,Ple67,SZT94,tamura2,tamura1}.
+Here we enumerate transformation semigroups, semigroups represented as functions of a finite set.
+The size of the set is the \emph{degree} of the transformation and we proceed by enumerating transformation semigroups of degree $n$, then of degree $n+1$, so we enumerate \emph{by degree}.
 For degree $n$ this is the task of enumerating all valid subtables inside the
-multiplication table of the full transformation semigroups $\cT_n$.  AN analogue of Cayley's Theorem states that every finite semigroup is isomorphic to
+multiplication table of the full transformation semigroups $\cT_n$. 
+An analogue of Cayley's Theorem states that every finite semigroup is isomorphic to
 a transformation semigroup; therefore enumerating by size and by degree both
 enumerate the same set (with repetitions in the transformation
 case)\todo{JDM: I also don't understand this sentence, what does
@@ -95,9 +96,9 @@ the order in which the semigroups appear in the enumeration is radically
 different.  There are 52,989,400,714,478 abstract semigroups of order 9
 \cite{monoidenum2009}, so one could barely imagine the number of semigroups of
 order 27, where $\cT_3$ would first appear.  On the other hand, enumeration shows that there are only
-25 different transformation semigroups on 3 points of order 9.  The
-different methods explore the space of semigroups in completely different
-directions.\todo{JDM: this could be better}
+25 different transformation semigroups on 3 points of order 9.
+These two methods eventually list the same set (the set of finite semigroups), but metaphorically speaking, they go in completely different
+directions and proceed with different speed.
 
 The complexity of the multiplication of two transformations of degree $n\in\mathbb{N}$ is linear in $n$.
 However, multiplication in a semigroup defined by a multiplication table has constant complexity.
@@ -634,7 +635,7 @@ $\cT_4$ & 3 161 965 550 & 132 069 776 (23)& TBA\\
 \subsection*{Acknowledgements}
 This work was partially supported by the NeCTAR Research Cloud, an
 initiative of the Australian Government's Super Science scheme and the
-Education Investment Fund and the EU project BIOMICS (contract number CNECT-ICT-318202).
+Education Investment Fund and by the EU project BIOMICS (contract number CNECT-ICT-318202).
 
 \bibliography{subsemi}
 \bibliographystyle{plain}
