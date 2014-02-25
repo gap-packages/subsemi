@@ -531,6 +531,7 @@ We can also apply the minimal generating sets method (Section \ref{sec:mingen}),
 A semigroup $S$ is \emph{nilpotent} if $S^k=\{0\}$ for some $k\in\mathbb{N}$.
 It is $k$-nilpotent if $k$ is the minimal such number.
  In other words, being $k$-nilpotent means that any product with at least $k$ elements yields the zero element, but some product of $k-1$ elements does not.
+The empty semigroup is not nilpotent.
 To decide $k$-nilpotency algorithmically, in general we do not need to calculate the power $S^k$.
 We can take a random $k$-tuple of semigroup elements, evaluate it as a product and assume that this value is the zero element.
 If we find any other $k$-tuple evaluating to a different value, then the semigroup is not $k$-nilpotent.
