@@ -53,8 +53,6 @@
 \newcommand{\Viz}{\textsc{Viz}}
 \newcommand{\GraphViz}{\textsc{GraphViz}}
 
-
-
 \begin{document}
 \title{On Enumerating Transformation Semigroups}
 \author[J. East, A. Egri-Nagy, J.D. Mitchell]{James East$^1$ and Attila Egri-Nagy$^{1}$ and James D. Mitchell$^2$}
@@ -353,15 +351,15 @@ Subsemigroup enumeration can be done in parallel in $I$ and $S/I$  and then  we 
 \label{lem:torso}
 Let $I$ be an ideal of $S$, then $$\Sub(S)=\big\{\langle (U\setminus\{0\})\cup T \rangle\mid U\in \Sub(S/I),\ T\in\Sub(I)\big\}.$$
 \end{lemma}
-\proof
-\todo{JE: Let $T\in\Sub(S)$ and put $L=T\cap I$ and $U=T\cap(S\setminus I)\cup\{0\}$. Then $T=L\cup(U\setminus \{0\})=\langle L\cup(U\setminus\{0\})\rangle$. This establishes the forward set containment. The other is trivial.}
-Since $\varnothing \in \Sub(S/I)$ we get all $\Sub(I)$.
-Similarly, $\varnothing \in \Sub(I)$, so all upper torsos that are actually subsemigroups, are also retained.
-Beyond these trivialities, all we have to show that no upper torso is left out after the combinations.
-But this follows from $I$ being an ideal, so lower torsos fix upper torsos.
-\qed
+\begin{proof}
+Let $T\in\Sub(S)$ and put $L=T\cap I$ and $U=T\cap(S\setminus I)\cup\{0\}$. Then $T=L\cup(U\setminus \{0\})=\langle L\cup(U\setminus\{0\})\rangle$. This establishes the forward set containment. The other is trivial.
+%Since $\varnothing \in \Sub(S/I)$ we get all $\Sub(I)$.
+%Similarly, $\varnothing \in \Sub(I)$, so all upper torsos that are actually subsemigroups, are also retained.
+%Beyond these trivialities, all we have to show that no upper torso is left out after the combinations.
+%But this follows from $I$ being an ideal, so lower torsos fix upper torsos.
+\end{proof}
 
-\todo{extra line after end of proof}
+
 
 The method suggested by Lemma \ref{lem:torso} requires calculating $|\Sub(S/I)|\cdot|\Sub(I)|$ set unions and subsequent closures. 
 \subsection{Lower Torso Enumeration}
@@ -448,7 +446,6 @@ The element $t$ appears in $M_{i,\square}$ as many times as the number of soluti
 Let $r$ be the rank of $s_i$, so for $r$ points we have a well-defined image forced by $t$.
 For the remaining $n-r$ we have $n$ choices, yielding $n^{n-r}$ solutions. 
 \end{proof}
-
 Let $\#s$ denote the number of occurrences of $s$ in $M_{\cT_n}$.
 \begin{fact}
 $\#s$ is a multiple of $n$ for all $s\in\cT_n$.
