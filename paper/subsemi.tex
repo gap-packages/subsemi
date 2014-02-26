@@ -384,16 +384,9 @@ $\Sub(S)=\big( \bigcup_{T\in \Max(S)}\Sub(T)\big)\cup \{S\}$
 %\proof
 %It follows from the fact that $\Sub(S)$ is an algebraic lattice.
 %\qed
-\noindent Constructing $\Max(S)$ is described in \cite{MaxSubSemi} and
-implemented in \cite{Semigroups}.\todo{JDM: neither of these statements is
-  really correct. In \cite{MaxSubSemi} there is essentially a list of properties
-  that every maximal subsemigroup of a finite semigroup must have. There is no
-  algorithm or recipe for how to construct the maximal subsemigroups of a finite
-  semigroup in \cite{MaxSubSemi}. Also in Semigroups 1.4 there is only an
-  (incorrect) method for finding the maximal subsemigroups of a Rees 0-matrix
-  semigroup. The method is fixed in the maximal branch of the repo, and there is
-  an experiment version of an algorithm to calculate all the maximal
-subsemigroups of an arbitrary finite transformation semigroup there too.}
+\noindent To compute $\Max(S)$, a list of properties that every maximal subsemigroup of a finite semigroup must have was described in \cite{MaxSubSemi}.
+Algorithms, based on these properties, are being implemented in \cite{Semigroups}.  
+
 
 However, the sets of subsemigroups of the maximal subsemigroups do overlap in general, therefore the same subsemigroup gets enumerated many times and merging is a non-trivial step.
 Also, recursively iterating the maximal subsemigroups is a variant of the depth-first search algorithm.  
