@@ -174,8 +174,7 @@ The recursive definition describes an algorithm for calculating the closure, but
 We can avoid the full calculation of the missing elements in the recursive steps.
 When extending the subarray $M_A$ by a single element $i$, if $\Miss(A)$ is already calculated, then all new missing elements in $\Miss(A\cup\{i\})$ can only come from the $i$th row or the $i$th column.
 So, for calculating the closure we can extend the subarray one-by-one using the elements of $\Miss(A)$ and any new missing elements encountered during the recursion.
-This way each table entry is checked only once.\todo{JDM: I think you should
-  add a simple example here, what these things are, and how they are calculated,
+This way each table entry is checked only once.\todo{JDM: add a simple example here, what these things are, and how they are calculated,
 just 1 sentence or so}.
 
 
@@ -428,21 +427,20 @@ Beyond the obvious copies with fixed points, we have examples that also move the
 In a search algorithm, if $s\equiv t$, then after extending by $s$ we can simply omit extending by $t$.
 
 \section{Enumerating transformation semigroups of degree 2,3 and 4}
-\label{sec:fulltranssgp}\todo{JDM: there are several sentences here starting
-with symbols}
+\label{sec:fulltranssgp}
 
 In order to enumerate all transformation semigroups on $n$ points we construct
 all subsemigroups of the full transformation semigroup $\cT_n$. We use its ideal
-structure to make the enumeration MORE efficient.
+structure to make the enumeration more efficient by making the calculation parallel.
 
 The \emph{rank} of a transformation $t$ is $|\im(t)|$. 
-$K_{n,i}$ is the ideal of $\cT_n$ containing all elements of rank at most $i$.
+The ideal of $\cT_n$ containing all elements of rank at most $i$ is denoted by $K_{n,i}$.
 The ideal structure of $\cT_n$ is a linear order of nested ideals: %simple inclusion
 %hierarchy\todo{JDM: a linear or total order, would be more standard
 %notation}:
 $$\varnothing\subset K_{n,1}\subset K_{n,2}\subset\ldots\subset K_{n,n-1}\subset \cT_n.$$
 
-$K_{n,n-1}$ is also called the \emph{singular transformation semigroup} of degree $n$, everything but the permutations.
+The ideal $K_{n,n-1}$ is also called the \emph{singular transformation semigroup} of degree $n$, all transformations but the permutations.
 
  For $\cT_n$ the automorphism group is $\cS_n$, so we are primarily interested in calculating $\Sub_{\cS_n}(\cT_n)$.
 
@@ -455,14 +453,15 @@ If $t$ is in the row $M_{i,\square}$, then it appears there $n^k$ times, for som
 \begin{proof}
 The $i$th row of the multiplication table is the right  ideal $s_i\cT_n$.
 The element $t$ appears in $M_{i,\square}$ as many times as the number of solutions to the equation $s_iu=t$.
-Let $r$ be the rank of $s_i$, so for $r$ points we have a well-defined image
-forced by $t$.\todo{JDM: I suggest changing this to something more precise,
-  like: "Since $s_i$ and $t$ are fixed, any transformation $u$ such that
+Let $r$ be the rank of $s_i$. 
+% so for $r$ points we have a well-defined image
+%forced by $t$.\todo{JDM: I suggest changing this to something more precise,
+Since $s_i$ and $t$ are fixed, any transformation $u$ such that
   $s_iu=t$ must satisfy $(x)s_iu=(x)t$ for all $x\in \{1,\ldots, n\}$. If there
   are $r$ distinct elements $(x)s_i$, then there are $n-r$ points where $u$ can
-be defined arbitrarily, which yields $n^{n-r}$ possible solutions $u$.}
-  definition of $u$ 
-For the remaining $n-r$ we have $n$ choices, yielding $n^{n-r}$ solutions. 
+be defined arbitrarily, which yields $n^{n-r}$ possible solutions $u$.
+%  definition of $u$ 
+%For the remaining $n-r$ we have $n$ choices, yielding $n^{n-r}$ solutions. 
 \end{proof}
 Let $\#s$ denote the number of occurrences of $s$ in $M_{\cT_n}$.
 \begin{fact}
