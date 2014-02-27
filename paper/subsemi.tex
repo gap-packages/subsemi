@@ -176,10 +176,22 @@ The recursive definition describes an algorithm for calculating the closure, but
 We can avoid the full calculation of the missing elements in the recursive steps.
 When extending the subarray $M_A$ by a single element $i$, if $\Miss(A)$ is already calculated, then all new missing elements in $\Miss(A\cup\{i\})$ can only come from the $i$th row or the $i$th column.
 So, for calculating the closure we can extend the subarray one-by-one using the elements of $\Miss(A)$ and any new missing elements encountered during the recursion.
-This way each table entry is checked only once.\todo{JDM: add a simple example here, what these things are, and how they are calculated,
-just 1 sentence or so}.
+This way each table entry is checked only once.
 
-
+For example, let's consider the multiplication table of $\cS_3$ induced by the ordering (), (2,3), (1,2), (1,2,3), (1,3,2), (1,3) -- the lexicographic order of the transformation notation.
+\definecolor{lgr}{rgb}{0.8,0.8,0.8}
+\begin{center}
+ %\setlength{\tabcolsep}{0pt}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}c@{}c@{}}
+1&\color{lgr}2&\color{lgr}3&4&5&\color{lgr}6\\
+\color{lgr}2&\color{lgr}1&\color{lgr}4&\color{lgr}3&\color{lgr}6&\color{lgr}5\\
+\color{lgr}3&\color{lgr}5&\color{lgr}1&\color{lgr}6&\color{lgr}2&\color{lgr}4\\
+4&\color{lgr}6&\color{lgr}2&5&1&\color{lgr}3\\
+5&\color{lgr}3&\color{lgr}6&1&4&\color{lgr}2\\
+\color{lgr}6&\color{lgr}4&\color{lgr}5&\color{lgr}2&\color{lgr}3&\color{lgr}1\\
+\end{tabular}
+\end{center}
+The subarray $M_{\{4\}}$ contains only one entry 5, which is different from 4, so the subarray is not closed. With the above notation $\Miss(\{4\})=\{5\}$, $\Miss(\{4,5\})=\{1\}$ and $\Miss(\{1\})=\varnothing$. 
 \subsection{Isomorphism and Anti-Isomorphism of Multiplication Tables}
 %\todo{JDM: I think you should precisely define the action of the symmetric
 %  group on a Cayley table, and then say that two semigroups
