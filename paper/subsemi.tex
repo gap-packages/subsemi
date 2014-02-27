@@ -244,7 +244,7 @@ If all invariants check out, then we can use backtrack to find out whether one o
 An element of $\Z_2\times \cS_n$ can witness the isomorphism or anti-isomorphism.
 Fortunately we do not have to search through the whole symmetric group, we only need to consider some special permutations that respect the profile of an element.
 
-\section{Subsemigroup Enumeration Algorithms}
+\section{Basic Search Algorithms for Subsemigroup Enumeration}
 \label{sec:enum}
 \begin{algorithm}[t]
 \SetKwInOut{Input}{input}
@@ -337,7 +337,7 @@ Little consideration shows that this is a more efficient version of the minimal 
 %terrible complexity and won't work even for semigroups of very modest size.}
 
 
-\section{Improvement Techniques}
+\section{Advanced Algorithmic Techniques}
 \label{sec:techniques}
 
 \begin{figure}[t]
@@ -348,7 +348,7 @@ Little consideration shows that this is a more efficient version of the minimal 
 \end{center}
 \end{figure}
 
-Since we are dealing with well-studied algebraic structures, we have many mathematical results to exploit, improving the efficiency of any  search algorithm.
+Since we are dealing with well-studied algebraic structures, we have many mathematical results to exploit, improving the efficiency of any basic search algorithm.
 \subsection{Parallel Enumeration in Ideal Quotients}
 \label{sec:idealparallel}
 In general, an ideal $I$ divides a subsemigroup $T$ into two parts: a subsemigroup contained in the ideal, $L=T\cap I$, and a subset outside the ideal, $U=T\cap (S\setminus I)$. We call these the \emph{lower torso} and \emph{upper torso}, respectively (Fig.\ \ref{fig:torsos}).
