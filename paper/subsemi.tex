@@ -465,16 +465,17 @@ be defined arbitrarily, which yields $n^{n-r}$ possible solutions $u$.
 \end{proof}
 Let $\#s$ denote the number of occurrences of $s$ in $M_{\cT_n}$.
 \begin{fact}
-$\#s$ is a multiple of $n$ for all $s\in\cT_n$.
+For all $s\in\cT_n$, $\#s$ is a multiple of $n$ .
 \end{fact}
 \begin{proof}
-\todo{JE Every element appears once in a row indexed by a permutation. So we
-always get $n!$ + some nontrivial powers of $n$. JDM: I bet this can even be
-calculated precisely.}
-From Fact \ref{fact:npower} we know that each row contains none or a power of $n$ many occurences of $s$.
-The latter includes the $n^0=1$ case.
-This happens only in the case of permutations, so we have $n!$ many occurences of permutation elements.
-For other elements we just add together the frequencies of the element in each row.
+Every element appears once in a row indexed by a permutation.
+So we always get $n!$ and some nontrivial powers of $n$ by Fact \ref{fact:npower}.
+%JDM: I bet this can even be
+%calculated precisely.}
+%From Fact \ref{fact:npower} we know that each row contains none or a power of $n$ many occurences of $s$.
+%The latter includes the $n^0=1$ case.
+%This happens only in the case of permutations, so we have $n!$ many occurences of permutation elements.
+%For other elements we just add together the frequencies of the element in each row.
 \end{proof}
 
 \subsection{$\cT_2$, The Pen and Paper Case}
