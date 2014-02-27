@@ -1,5 +1,7 @@
+0.22
+	Improved filing script.
 0.21
-	SubSgpsByUpperTorsos is the correct function name. 
+	SubSgpsByUpperTorsos is the correct function name.
 0.20
 	Separating upper torso calculation. It is now possible not to calculate the ideal again (empty upper torso can be removed).
 0.19
