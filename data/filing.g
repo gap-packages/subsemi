@@ -6,8 +6,8 @@ GreenTag := function (sgp)
                  String(NrDClasses(sgp)));
 end;
 
-SgpTag := function (sgp)
-  return Concatenation("S_",String(Size(sgp)),"_",GreenTag(sgp));
+SgpTag := function (sgp,ndigits)
+  return Concatenation("S_",ReplacedString(String(Size(sgp),ndigits)," ","0"),"_",GreenTag(sgp));
 end;
 
 # file of indicatorsets, multab -> separating into files with greentag classes
@@ -28,7 +28,7 @@ GreenFilingSemigroupIndicatorSets := function(filename,mt)
 end;
 
 #list of indicatorsets, multab -> associative list: greentag -> indicatorset
-FilingSemigroupIndicatorSetsPreloaded := function(sets,mt)
+FilingSemigroupIndicatorSetsPreloaded := function(sets,mt,filename)
   local classes, tag,s,sgp,counter;
   counter := 0;
   if EmptySet(mt) in sets then 
@@ -38,7 +38,7 @@ FilingSemigroupIndicatorSetsPreloaded := function(sets,mt)
   for s in sets do
     counter := counter +1;
     sgp := Semigroup(ElementsByIndicatorSet(s,mt));
-    tag := SgpTag(sgp);
+    tag := SgpTag(sgp,3);
     Collect(classes, tag, s);
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
@@ -48,7 +48,9 @@ FilingSemigroupIndicatorSetsPreloaded := function(sets,mt)
            FormattedPercentageString(Size(Keys(classes)),counter));
     fi;
   od;
-  return classes;
+  Perform(Keys(classes), function(x)
+    SaveIndicatorSets(classes[x],Concatenation(filename,"_",x));end);
+  #return classes;
 end;
 
 Konv := function(filename,mt)
