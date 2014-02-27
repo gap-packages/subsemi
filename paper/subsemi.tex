@@ -53,6 +53,7 @@
 \newcommand{\GAP}{\textsc{Gap}}
 \newcommand{\Viz}{\textsc{Viz}}
 \newcommand{\GraphViz}{\textsc{GraphViz}}
+\newcommand{\Semigroups}{\textsc{Semigroups}}
 
 \begin{document}
 \title{On Enumerating Transformation Semigroups}
@@ -180,24 +181,20 @@ just 1 sentence or so}.
 
 
 \subsection{Isomorphism and Anti-Isomorphism of Multiplication Tables}
-\todo{JDM: I think you should precisely define the action of the symmetric
-  group on a Cayley table, and then say that two semigroups
-   Then go on to say that it is usually easier
-  to check that $S$ and $T$ belong to the same orbit by calculating a canonical
-  representative of the orbit of $S$ and the orbit of $T$, and then comparing
-  these values. This is the approach in the "SmallestImageSet" function in GAP,
-  which underlies the "SmallestMultiplicationTable" function I recently added to
-  the Semigroups package. It is possible to check relatively easily that two
-  semigroups with order up to about 40 are isomorphic this way. But, of course,
-this doesn't work at all well for larger semigroups (this should be pointed
-out too). Keep in mind that the clever part of this is the backtrack search in
-the subgroup of the symmetric group, and not anything we have done.} 
-
+%\todo{JDM: I think you should precisely define the action of the symmetric
+%  group on a Cayley table, and then say that two semigroups
+%   Then go on to say that  It is possible to check relatively easily that two
+%  semigroups with order up to about 40 are isomorphic this way. But, of course,
+%this doesn't work at all well for larger semigroups (this should be pointed
+%out too). Keep in mind that the clever part of this is the backtrack search in
+%the subgroup of the symmetric group, and not anything we have done.} 
 
 Though we have the luxury of having the full structure of the semigroup represented in the multiplication table, it is still not a trivial matter to decide isomorphism.
 Two semigroups $S$ and $T$ are isomorphic or anti-isomorphic if $M_S$ can be transformed into $M_T$ by rearranging its columns and rows without or with transposing the table.
 In other words, $S$ and $T$ are isomorphic if and only if they belong to the same orbit under the action of $\Z_2\times \cS_n$.
-
+It is usually easier to check that $S$ and $T$ belong to the same orbit by calculating a canonical representative of the orbit of $S$ and the orbit of $T$, and then comparing these values.
+This is the approach in the \texttt{SmallestImageSet} function in \GAP~\cite{GAP4}, which underlies the \texttt{SmallestMultiplicationTable} function in the \Semigroups~package~\cite{Semigroups}.
+This method does not work well for larger semigroups, so we have to apply a bit more clever backtrack search.
 
 By computing some global properties of the multiplication tables that are invariant under these rearrangings in some cases we can easily decide non-isomorphism.
 These properties can be any statistics that do not take into account any information of actual positions of elements, like frequency values.
