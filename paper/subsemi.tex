@@ -282,10 +282,10 @@ Fortunately we do not have to search through the whole symmetric group, we only 
 For a semigroup $S$, find all of its subsemigroups:
 $$\Sub(S)=\left\{ X\subseteq S\mid \langle X\rangle=X\right\}.$$
 \end{problem}
-Thinking in terms of the multiplication table $M$ of $S$, we are looking for all subarrays $M_X$ that are also multiplication tables, i.e.\ they do not contain elements not in $X$, $\Set(M_X)\subseteq X$.
+Thinking in terms of the multiplication table $M_S$, we are looking for all subarrays $M_X$ that are also multiplication tables, i.e.\ they do not contain elements not in $X$, $\Set(M_X)\subseteq X$.
 
 %\subsection{Brute-Force}
-The obvious brute-force algorithm for constructing $\Sub(S)$ is the enumeration of the powerset $2^S$ and check each subset whether it is closed or not.
+The obvious brute-force algorithm for constructing $\Sub(S)$ is the enumeration of the powerset $2^S$ and checking each subset whether it is closed or not.
 This works only for small cases as $2^n$ grows fast.
 It is also inefficient in the sense that in general only a fraction of the
 subsets are closed under multiplication (but not always, e.g.\ left zero
