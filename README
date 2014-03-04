@@ -1,0 +1,13 @@
+SubSemi
+
+GAP package for enumerating subsemigroups of semigroup.
+The code is highly experimental with no user documentation, only inline comments. The algorithms are described on a high level in the paper 'On Enumerating Transformation Semigroups' http://arxiv.org/abs/1403.0274
+
+INSTALLATION
+
+Clone the repository or unpack the archive into the pkg/ folder of your gap installation. Copy and edit config_EXAMPLE.g into config.g, then
+
+LoadPackage("SubSemi");
+
+To test the installation call SubSemiTestInstall().
+
