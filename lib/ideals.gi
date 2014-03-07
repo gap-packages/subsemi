@@ -30,10 +30,10 @@ function (l,rfh)
   return result;
 end);
 
-InstallGlobalFunction(SubSgpsByIdeals,
-function(S,I)
+InstallMethod(SubSgpsByIdeals,"for a semigroup ideal",[IsSemigroupIdeal],
+function(I)
   local mtS,mtI,mtT,mtSminusI, rfh,T,Tsubs,Isubs, emptyset,subs,realsubs,torsos;
-  mtS := MulTab(S);
+  mtS := MulTab(Parent(I));
   emptyset := BlistList(Indices(mtS),[]);
   mtI := MulTab(I);
   #recoding the subsemigroups of ideal as subsgps of the original
@@ -146,3 +146,9 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
             SubSgpsByMinExtensionsParametrized(mtS,x,filter,Stack())));end);
   return result; #TODO duplicates when the ideal has only one element
 end;
+
+InstallOtherMethod(SubSgpsByIdeals,"for an ideal and an automorphism group",
+        [IsSemigroupIdeal,IsPermGroup],
+function(I,G)
+  return SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G));
+end);

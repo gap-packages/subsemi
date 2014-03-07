@@ -9,7 +9,8 @@
 
 DeclareGlobalFunction("ReesFactorHomomorphism");
 DeclareGlobalFunction("RFHNonZeroPreImages");
-DeclareGlobalFunction("SubSgpsByIdeals");
 DeclareGlobalFunction("Combiner");
 DeclareGlobalFunction("ConjugacyClassCombiner");
 DeclareGlobalFunction("CombineConjugacyClassWithClasses");
+
+DeclareOperation("SubSgpsByIdeals",[IsSemigroupIdeal]);
