@@ -1,8 +1,13 @@
+# filing - to separate bitlists into different files based on the output
+# of some given function, the function gives a string, that goes into 
+# the filename, thus we get separate files for the classes
+
+# just to have padded zeros
 PaddedNumString := function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
 end;
   
-  # semigroup -> string containing green info
+# semigroup -> string containing green info
 GreenTag := function (sgp,ndigits)
   return Concatenation("LRD_",
                  PaddedNumString(NrLClasses(sgp),ndigits),"_",
@@ -10,11 +15,13 @@ GreenTag := function (sgp,ndigits)
                  PaddedNumString(NrDClasses(sgp),ndigits));
 end;
 
+# tagging semigroup by size and Greens
 SgpTag := function (sgp,ndigits)
   return Concatenation("S_",PaddedNumString(Size(sgp),ndigits),
                  "_",GreenTag(sgp));
 end;
 
+# tagging indicator set - includes converting to semigroup
 BLGreenTag := function(bl,mt,ndigits)
 local sgp;
   sgp := Semigroup(ElementsByIndicatorSet(bl,mt));
@@ -53,8 +60,9 @@ FilingIndicatorSets := function(sets,mt,taggerfunc,filename)
     SaveIndicatorSets(classes[x],Concatenation(filename,x));end);
 end;
 
-Konv := function(filename,mt)
-  WriteGenerators(Concatenation(filename,".smallgens"),
-          List(LoadIndicatorSets(filename),
+# convert the raw bitlists to set of small generators
+Konv := function(indestfile,mt)
+  WriteGenerators(Concatenation(indsetfile,".smallgens"),
+          List(LoadIndicatorSets(indsetfile),
           x->SmallGeneratingSet(Semigroup(ElementsByIndicatorSet(x,mt)))));
 end;
