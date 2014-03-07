@@ -1,3 +1,0 @@
-torsos := LoadIndicatorSets(input);
-mt := MulTab(SingularTransformationSemigroup(4));
-SaveIndicatorSets(List(torsos,x->SgpInMulTab(x,mt)),Concatenation(input,"X"));
