@@ -61,7 +61,7 @@ FilingIndicatorSets := function(sets,mt,taggerfunc,filename)
 end;
 
 # convert the raw bitlists to set of small generators
-Konv := function(indestfile,mt)
+Konv := function(indsetfile,mt)
   WriteGenerators(Concatenation(indsetfile,".smallgens"),
           List(LoadIndicatorSets(indsetfile),
           x->SmallGeneratingSet(Semigroup(ElementsByIndicatorSet(x,mt)))));
