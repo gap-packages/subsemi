@@ -10,7 +10,8 @@ local test,infolevel;
           "gensets",
           "invariants",
           "isomorphism",
-          "T3"
+          "T3",
+          "I3"
           ] do
     Test(Concatenation(
             PackageInfo("subsemi")[1]!.InstallationPath,
