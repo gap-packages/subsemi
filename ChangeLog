@@ -1,3 +1,5 @@
+0.23
+	SubSemiTestAll/TestInstall now separated. Symmetric inverse semigroup test added. Unnecessary (used only once) functions removed.
 0.22
 	Improved filing script.
 0.21
