@@ -60,22 +60,3 @@ local log, #every conjugates we found so far
   od;
   return classes;
 end);
-
-#getting conjugacy symmetries that act on the magma's elements' indices in the
-#sorted list
-InstallGlobalFunction(NonTrivialSymmetriesOfElementIndices,
-function(M,G)
-  return List(G, g -> AsPermutation(TransformationOp(g,M,\^)));
-end);
-
-#getting conjugacy symmetries that act on the magma's elements' indices in the
-#sorted list
-#through a homomorphism
-InstallGlobalFunction(NonTrivialSymmetriesOfElementIndicesThroughHom,
-function(M,G,hom)
-  return List(G, g -> AsPermutation(
-                 TransformationOp(g,M,
-                         function(p,t)
-                           return Image(hom,PreImagesRepresentative(hom,p)^t);
-                         end)));
-end);

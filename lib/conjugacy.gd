@@ -11,5 +11,3 @@ DeclareGlobalFunction("ConjugateTransformationCollection");
 DeclareGlobalFunction("ConjugacyClassOfTransformationCollection");
 DeclareGlobalFunction("ConjugacyClassOfTransformation");
 DeclareGlobalFunction("CalculateConjugacyClassesOfTransformations");
-DeclareGlobalFunction("NonTrivialSymmetriesOfElementIndices");
-DeclareGlobalFunction("NonTrivialSymmetriesOfElementIndicesThroughHom");

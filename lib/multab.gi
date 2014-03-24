@@ -39,13 +39,16 @@ local mt,inds;
   MakeImmutable(inds);
   SetIndices(mt,inds);
   if hom = fail then
-    SetSymmetries(mt,
-            NonTrivialSymmetriesOfElementIndices(SortedElements(mt),G));
+    #conjugations expressed as permutations of the set elements (indices of)
+    SetSymmetries(mt,List(G,
+            g->AsPermutation(TransformationOp(g,SortedElements(mt),\^))));
   else
-    SetSymmetries(mt,
-            NonTrivialSymmetriesOfElementIndicesThroughHom(SortedElements(mt),
-                    G,
-                    hom));
+    #same as above, except 
+    SetSymmetries(mt,List(G,
+            g->AsPermutation(TransformationOp(g,SortedElements(mt),
+                    function(p,t)
+                      return Image(hom,PreImagesRepresentative(hom,p)^t);
+                    end))));
   fi;
   if  name <> fail then SetOriginalName(mt,name);fi;
   return mt;
