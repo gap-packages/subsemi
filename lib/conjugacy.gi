@@ -27,13 +27,10 @@ end);
 # G - permutations, most likely a group
 InstallGlobalFunction(ConjugacyClassOfTransformationCollection,
 function(T,G)
-local g, conjugate, conjclass;
+local conjclass;
   conjclass := [];
-  for g in G do
-    conjugate := ConjugateTransformationCollection(T,g);
-    #convert it to sorted list to make it comparable
-    AddSet(conjclass, AsSortedList(conjugate));
-  od;
+  Perform(G, function(g)
+    AddSet(conjclass,AsSortedList(ConjugateTransformationCollection(T,g)));end);
   return conjclass;
 end);
 
@@ -60,3 +57,12 @@ local log, #every conjugates we found so far
   od;
   return classes;
 end);
+
+## generating conjugacy classes of the given seed elements
+## uniqueness enforced
+# seeds - elements of which we calculate the conjugacy classes
+# G - the group of symmetries (of the seeds and its enveloping set)
+# conjfunc - conjugacy function to compute the conjugacy class of a seed
+GenerateConjugacyClasses := function(seeds, G, conjfunc)
+  return Unique(List(seeds,x->AsSortedList(conjfunc(x,G))));  
+end;
