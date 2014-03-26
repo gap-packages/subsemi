@@ -7,6 +7,10 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+################################################################################
+# CONJUGATE CALCULATING FUNCTIONS ##############################################
+################################################################################
+
 # returns the conjugate of a transformation collection by a permutation
 # if it is a semigroup, then only the generators are conjugated
 # T - a collection of transformations
@@ -18,6 +22,16 @@ function(T, perm)
   else
     return List(T, t -> t^perm);
   fi;
+end);
+
+
+################################################################################
+# CONJUGACY CLASS FUNCTIONS ####################################################
+################################################################################
+
+InstallGlobalFunction(ConjugacyClassOfTransformation,
+function(t,G)
+  return DuplicateFreeList(List(G, g -> t^g));
 end);
 
 # returns the distinct conjugates by the elements of G of the collection
@@ -34,10 +48,8 @@ local conjclass;
   return conjclass;
 end);
 
-InstallGlobalFunction(ConjugacyClassOfTransformation,
-function(t,G)
-  return DuplicateFreeList(List(G, g -> t^g));
-end);
+
+
 
 #example usage: you have all subsemigroups of T_n, but no idea about conjugacy
 #classes, this function finds those classes
@@ -62,7 +74,26 @@ end);
 ## uniqueness enforced
 # seeds - elements of which we calculate the conjugacy classes
 # G - the group of symmetries (of the seeds and its enveloping set)
-# conjfunc - conjugacy function to compute the conjugacy class of a seed
-GenerateConjugacyClasses := function(seeds, G, conjfunc)
-  return Unique(List(seeds,x->AsSortedList(conjfunc(x,G))));  
+# conjclassfunc - conjugacy function to compute the conjugacy class of a seed
+GenerateConjugacyClasses := function(seeds, G, conjclassfunc)
+  return Unique(List(seeds,x->AsSortedList(conjclassfunc(x,G))));  
 end;
+
+# side effect! elms gets sorted
+ConjugacyClusters := function(elms, G, conjclassfunc)
+  local l,class,cluster, clusters;
+  # we need to sort as cojugate collections are sorted
+  if IsBound(elms[1]) and IsCollection(elms[1]) then
+    Perform(elms,Sort);
+  fi;
+  clusters := [];
+  l := elms;
+  while not IsEmpty(l) do
+    class := conjclassfunc(l[1],G);
+    cluster := Filtered(class, x->x in elms);
+    Add(clusters,cluster);
+    l := Difference(l,cluster);
+  od;
+  return clusters;
+end;
+

@@ -8,6 +8,8 @@
 ##
 
 DeclareGlobalFunction("ConjugateTransformationCollection");
+
 DeclareGlobalFunction("ConjugacyClassOfTransformationCollection");
 DeclareGlobalFunction("ConjugacyClassOfTransformation");
+
 DeclareGlobalFunction("CalculateConjugacyClassesOfTransformations");
