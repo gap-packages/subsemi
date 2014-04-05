@@ -18,7 +18,7 @@ end;
 # tagging semigroup by size and Greens
 SgpTag := function (sgp,ndigits)
   return Concatenation("S_",PaddedNumString(Size(sgp),ndigits),
-                 "_",GreenTag(sgp));
+                 "_",GreenTag(sgp,ndigits));
 end;
 
 # tagging indicator set - includes converting to semigroup
