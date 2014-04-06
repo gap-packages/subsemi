@@ -17,6 +17,7 @@
 # perm - a permutation
 InstallGlobalFunction(ConjugateTransformationCollection,
 function(T, perm)
+  #if it is a semigroup then conjugate the generators only
   if IsSemigroup(T) then
     return Semigroup(List(GeneratorsOfSemigroup(T), s -> s^perm));
   else
