@@ -153,6 +153,7 @@ function(filename)
     Add(result,AsBlist(DecodeBitString(s)));    
     s := ReadLine(itf);
   until s=fail;
+  CloseStream(itf);
   return result;
 end);
 
