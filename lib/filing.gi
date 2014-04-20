@@ -54,5 +54,12 @@ end;
 BlistToTSGens := function(indsetfile,mt)
   WriteGenerators(Concatenation(indsetfile,".gens"),
           List(LoadIndicatorSets(indsetfile),
-          x->SmallGeneratingSet(Semigroup(ElementsByIndicatorSet(x,mt)))));
+               x->SmallSemigroupGeneratingSet(
+                       Semigroup(ElementsByIndicatorSet(x,mt)))));
+end;
+
+# implementing ls <dir>/<prefix>*
+PrefixMatchedListDir := function(dir, prefix)
+  return Filtered(IO_ListDir(dir),
+                 x->ForAll([1..Length(prefix)], y->x[y]=prefix[y]));
 end;
