@@ -9,51 +9,41 @@ end;
   
 # semigroup -> string containing green info
 GreenTag := function (sgp,ndigits)
-  return Concatenation("LRD_",
-                 PaddedNumString(NrLClasses(sgp),ndigits),"_",
-                 PaddedNumString(NrRClasses(sgp),ndigits),"_",
-                 PaddedNumString(NrDClasses(sgp),ndigits));
+  return Concatenation("L",PaddedNumString(NrLClasses(sgp),ndigits),
+                 "_R",PaddedNumString(NrRClasses(sgp),ndigits),
+                 "_D",PaddedNumString(NrDClasses(sgp),ndigits));
 end;
 
 # tagging semigroup by size and Greens
 SgpTag := function (sgp,ndigits)
-  return Concatenation("S_",PaddedNumString(Size(sgp),ndigits),
+  return Concatenation("S",PaddedNumString(Size(sgp),ndigits),
                  "_",GreenTag(sgp,ndigits));
 end;
 
 # tagging indicator set - includes converting to semigroup
-BLGreenTag := function(bl,mt,ndigits)
-local sgp;
-  sgp := Semigroup(ElementsByIndicatorSet(bl,mt));
-  return GreenTag(sgp,ndigits);
-end;
-
-#to make this into a function use: x->BLSizeTag(bl,3);
-BLSizeTag := function(bl,digits)
-  return Concatenation("size", PaddedNumString(SizeBlist(bl),digits));
+BLSgpTag := function(bl,mt,ndigits)
+  return SgpTag(Semigroup(ElementsByIndicatorSet(bl,mt)),ndigits);
 end;
 
 #list of indicatorsets,
-#multab
 #tagger function : indicator set -> string (should work in all cases)
 #filename
 #separating indicatorsets into files by their tags
-FilingIndicatorSets := function(sets,mt,taggerfunc,filename)
+FilingIndicatorSets := function(sets,taggerfunc,filename)
   local classes, tag,s,sgp,counter;
   counter := 0;
   classes := AssociativeList(); # tags to open classes
   for s in sets do
     counter := counter +1;
-    #sgp := Semigroup(ElementsByIndicatorSet(s,mt));
-    tag := taggerfunc(s);#SgpTag(sgp,3);
+    tag := taggerfunc(s);
     Collect(classes, tag, s);
-    if InfoLevel(SubSemiInfoClass)>0
+    if InfoLevel(SubSemiInfoClass)>0 ###########################################
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
       Info(SubSemiInfoClass,1,FormattedBigNumberString(counter)," ",
            FormattedMemoryString(MemoryUsage(classes))," ",
            FormattedBigNumberString(String(Size(Keys(classes))))," ",
            FormattedPercentageString(Size(Keys(classes)),counter));
-    fi;
+    fi; ########################################################################
   od;
   #writing the classes out to files
   Perform(Keys(classes), function(x)
@@ -61,8 +51,8 @@ FilingIndicatorSets := function(sets,mt,taggerfunc,filename)
 end;
 
 # convert the raw bitlists to set of small generators
-Konv := function(indsetfile,mt)
-  WriteGenerators(Concatenation(indsetfile,".smallgens"),
+BlistToTSGens := function(indsetfile,mt)
+  WriteGenerators(Concatenation(indsetfile,".gens"),
           List(LoadIndicatorSets(indsetfile),
           x->SmallGeneratingSet(Semigroup(ElementsByIndicatorSet(x,mt)))));
 end;

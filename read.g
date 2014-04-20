@@ -10,7 +10,8 @@ ReadPackage("SubSemi","/lib/invariants.gi");
 ReadPackage("SubSemi","/lib/isomorphism.gi");
 ReadPackage("SubSemi","/lib/minextension.gi");
 ReadPackage("SubSemi","/lib/ngenerated.gi");
+ReadPackage("SubSemi","/lib/filing.gi");
 
 ReadPackage("SubSemi","/tst/testfunctions.g");
 ReadPackage("SubSemi","/tst/againstbf.g");
-ReadPackage("SubSemi","/data/filing.g");
+
