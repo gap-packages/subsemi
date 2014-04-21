@@ -1,5 +1,6 @@
-# filing - to separate bitlists into different files based on the output
-# of some given function, the function gives a string, that goes into 
+# filing - to separate bitlists into different classes based on the output
+# of some given function
+# the tagging function gives a string, that goes into 
 # the filename, thus we get separate files for the classes
 
 # just to have padded zeros
