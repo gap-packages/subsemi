@@ -49,9 +49,6 @@ local conjclass;
   return conjclass;
 end);
 
-
-
-
 #example usage: you have all subsemigroups of T_n, but no idea about conjugacy
 #classes, this function finds those classes
 InstallGlobalFunction(CalculateConjugacyClassesOfTransformations,
