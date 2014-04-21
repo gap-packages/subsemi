@@ -12,19 +12,18 @@
 ################################################################################
 
 # returns the conjugate of a transformation collection by a permutation
-# if it is a semigroup, then only the generators are conjugated
 # T - a collection of transformations
 # perm - a permutation
 InstallGlobalFunction(ConjugateTransformationCollection,
 function(T, perm)
-  #if it is a semigroup then conjugate the generators only
-  if IsSemigroup(T) then
-    return Semigroup(List(GeneratorsOfSemigroup(T), s -> s^perm));
-  else
-    return List(T, t -> t^perm);
-  fi;
+    return Set(T, t -> t^perm);
 end);
 
+# for semigroups conjugate the generators only
+InstallGlobalFunction(ConjugateTransformationSemigroup,
+function(T, perm)
+  return Semigroup(Set(GeneratorsOfSemigroup(T), s -> s^perm));
+end);
 
 ################################################################################
 # CONJUGACY CLASS FUNCTIONS ####################################################
@@ -32,7 +31,7 @@ end);
 
 InstallGlobalFunction(ConjugacyClassOfTransformation,
 function(t,G)
-  return DuplicateFreeList(List(G, g -> t^g));
+  return Set(G, g -> t^g);
 end);
 
 # returns the distinct conjugates by the elements of G of the collection
@@ -74,7 +73,7 @@ end);
 # G - the group of symmetries (of the seeds and its enveloping set)
 # conjclassfunc - conjugacy function to compute the conjugacy class of a seed
 GenerateConjugacyClasses := function(seeds, G, conjclassfunc)
-  return Unique(List(seeds,x->AsSortedList(conjclassfunc(x,G))));  
+  return Set(seeds,x->AsSortedList(conjclassfunc(x,G)));  
 end;
 
 # side effect! elms gets sorted
