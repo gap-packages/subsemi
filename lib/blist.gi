@@ -99,6 +99,7 @@ function(str)
   return bitstr;
 end);
 
+# converting a boolean list to a bitstring, writing 1 for true, 0 for false
 InstallGlobalFunction(AsBitString,
 function(blist)
   return List(blist,
@@ -111,6 +112,8 @@ function(blist)
               end);
 end);
 
+# converting a bitstring to a boolean list,
+# the true values are coded by the positions of 1s
 InstallGlobalFunction(AsBlist,
 function(bitstr)
   return BlistList([1..Size(bitstr)],Positions(bitstr,'1'));
