@@ -22,6 +22,11 @@ SgpTag := function (sgp,ndigits)
 end;
 
 # tagging indicator set - includes converting to semigroup
+BLGreenTag := function(bl,mt,ndigits)
+  return GreenTag(Semigroup(ElementsByIndicatorSet(bl,mt)),ndigits);
+end;
+
+# tagging indicator set - includes converting to semigroup
 BLSgpTag := function(bl,mt,ndigits)
   return SgpTag(Semigroup(ElementsByIndicatorSet(bl,mt)),ndigits);
 end;
