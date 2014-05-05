@@ -98,7 +98,7 @@ end);
 
 InstallGlobalFunction(ConjugacyClassOfSet,
 function(indset,mt)
-  return Unique(List(Symmetries(mt), g->OnFiniteSet(indset,g)));
+  return Set(Symmetries(mt), g->OnFiniteSet(indset,g));
 end);
 
 InstallGlobalFunction(ConjugacyClassRep,

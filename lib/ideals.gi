@@ -45,7 +45,7 @@ function(I)
   mtT := MulTab(T);
   subs := AsList(SubSgpsByMinExtensions(mtT));
   realsubs := List(subs, x->ElementsByIndicatorSet(x,SortedElements(mtT)));
-  torsos := Unique(List(realsubs, x->RFHNonZeroPreImages(x,rfh)));
+  torsos := Set(realsubs, x->RFHNonZeroPreImages(x,rfh));
   Tsubs := List(torsos, x->IndicatorSetOfElements(x,SortedElements(mtS)));
   
   Add(Isubs,emptyset);
@@ -82,7 +82,7 @@ end);
 
 #calculates all distinct pairwise unions of sets in A and sets in B
 Unions := function(A,B,mt)
-  return Unique(List(EnumeratorOfCartesianProduct(A,B),UnionBlist));
+  return Set(EnumeratorOfCartesianProduct(A,B),UnionBlist);
 end;
 
 InstallGlobalFunction(CombineConjugacyClassWithClasses,
