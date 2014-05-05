@@ -45,6 +45,9 @@ function(mt,baseset,generators, waiting)
           FormattedPercentageString(Size(result)-prev_subs,
                   counter-prev_counter)," ");
     Print(Size(waiting), " ");
+    if Size(waiting) > 0 then
+      Print(TrueValuePositionsBlistString(Peek(waiting)[1])," ");
+    fi;
     if (secs-prev_secs) > 0 then # printing speed only if it measurable
       Print(FormattedFloat(Float((Size(result)-prev_subs)/(secs-prev_secs))),
             "/s\c\n");
