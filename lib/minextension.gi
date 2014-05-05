@@ -36,7 +36,7 @@ function(mt,baseset,generators, waiting)
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
         dosyms, # flag showing whether we do nontrivial conjugacy classes
-        gensets, bl, diff,i,base,s,gens,next,isBreadthFirst;
+        gensets, bl, diff,gens,next,isBreadthFirst;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -105,7 +105,8 @@ function(mt,baseset,generators, waiting)
   #generators := DifferenceBlist(generators, baseset);
   # removing equivalent generators
   generators := RemoveEquivalentGenerators(generators,mt);
-  # fill up the waiting list
+  # fill up the waiting list with lists of 2 or 3 elements: 
+  # 1: baseset, 2: gen the element to be extended with, 3: generating set (opt)
   if isBreadthFirst then
     gensets := [];
     for gen in ListBlist(Indices(mt),generators) do
@@ -127,9 +128,7 @@ function(mt,baseset,generators, waiting)
     if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(false); fi;
     #calculating the new subsgp
     next := Retrieve(waiting);
-    base := next[1];
-    s := next[2];
-    bl := ClosureByIncrements(base, [s], mt);
+    bl := ClosureByIncrements(next[1], [next[2]], mt);
     #its conjugacy class rep
     if dosyms then bl := ConjugacyClassRep(bl,mt);fi;
     if  bl in result then continue; fi; #EXIT if nothing to do
