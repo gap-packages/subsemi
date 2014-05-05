@@ -101,12 +101,18 @@ function(indset,mt)
   return Set(Symmetries(mt), g->OnFiniteSet(indset,g));
 end);
 
+#the minimal one is the representative
 InstallGlobalFunction(ConjugacyClassRep,
 function(indset,mt)
-local C;
-  C := ConjugacyClassOfSet(indset,mt);
-  Sort(C); #sorting in place instead of copy by AsSortedList
-  return C[1]; #the canonical rep
+local  min, new, g;
+  min := indset;
+  for g in Symmetries(mt) do
+    new := OnFiniteSet(indset,g);
+    if new < min then
+      min := new;
+    fi;
+  od;
+  return min;
 end);
 
 ### DISPLAY ####################################################################
