@@ -1,5 +1,4 @@
 # calculating P
-Read("sgps.g");
 
 mtT5 := MulTab(T5,S5);
 
