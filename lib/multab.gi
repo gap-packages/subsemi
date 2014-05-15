@@ -115,6 +115,40 @@ local  min, new, g;
   return min;
 end);
 
+MinimumConjugates := function(mt) return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y))); end;
+
+MinimumConjugators := function(mt)
+  local minimums;
+  minimums := MinimumConjugates(mt); 
+  return List(Indices(mt), x ->  Filtered(Symmetries(mt), y -> x^y=minimums[x]));
+end;
+
+ConjugacyClassRepTurbo := function(indset,mt)
+  local  min, new, g, symmetries,mi, i;
+  symmetries := [()]; #to cover the empty case
+  min := Size(Indices(mt));
+  for i in Positions(indset, true) do
+    mi := MinimumConjugates(mt)[i];
+    if min = mi then
+      Perform(MinimumConjugators(mt)[i], function(x) AddSet(symmetries, x);end);
+    elif min < mi then
+      symmetries := [];
+      min := mi;
+      Perform(MinimumConjugators(mt)[i], function(x) AddSet(symmetries, x);end);
+    fi;
+  od;
+  #doing the same with the reduced set of symmetries
+  min := indset;
+  for g in symmetries do
+    new := OnFiniteSet(indset,g);
+    if new < min then
+      min := new;
+    fi;
+  od;
+  return min;
+end;
+
+
 ### DISPLAY ####################################################################
 InstallOtherMethod(Size, "for a multab",
 [IsMulTab],
