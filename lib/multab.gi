@@ -115,23 +115,31 @@ local  min, new, g;
   return min;
 end);
 
-MinimumConjugates := function(mt) return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y))); end;
+# we are trying to be clever with conjugacy class representative calculator
+# the idea is to calculate the representative directly by finding the minimal element
+InstallMethod(MinimumConjugates,"for multab",
+        [IsMulTab],
+function(mt) return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y))); end);
 
-MinimumConjugators := function(mt)
+InstallMethod(MinimumConjugators,"for multab",
+        [IsMulTab],
+function(mt)
   local minimums;
   minimums := MinimumConjugates(mt); 
   return List(Indices(mt), x ->  Filtered(Symmetries(mt), y -> x^y=minimums[x]));
-end;
+end);
 
-ConjugacyClassRepTurbo := function(indset,mt)
+# but in practice this is not fast at all (maybe splitting sizewise?)
+InstallGlobalFunction(ConjugacyClassRepClever,
+function(indset,mt)
   local  min, new, g, symmetries,mi, i;
-  symmetries := [()]; #to cover the empty case
-  min := Size(Indices(mt));
+  symmetries := [];
+  min := Size(Indices(mt))+1;
   for i in Positions(indset, true) do
     mi := MinimumConjugates(mt)[i];
     if min = mi then
       Perform(MinimumConjugators(mt)[i], function(x) AddSet(symmetries, x);end);
-    elif min < mi then
+    elif min > mi then
       symmetries := [];
       min := mi;
       Perform(MinimumConjugators(mt)[i], function(x) AddSet(symmetries, x);end);
@@ -146,7 +154,7 @@ ConjugacyClassRepTurbo := function(indset,mt)
     fi;
   od;
   return min;
-end;
+end);
 
 
 ### DISPLAY ####################################################################

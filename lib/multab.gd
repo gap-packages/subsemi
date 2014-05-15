@@ -28,10 +28,13 @@ DeclareAttribute("LocalTables", IsMulTab);
 DeclareAttribute("GlobalTables", IsMulTab);
 DeclareAttribute("FullSet", IsMulTab);
 DeclareAttribute("EmptySet", IsMulTab);
+DeclareAttribute("MinimumConjugates", IsMulTab);
+DeclareAttribute("MinimumConjugators", IsMulTab);
 DeclareOperation("ConvergingSets", [IsMulTab,IsList]);
 DeclareGlobalFunction("NilpotencyDegreeByMulTabs");
 
 DeclareGlobalFunction("ConjugacyClassRep");
+DeclareGlobalFunction("ConjugacyClassRepClever");
 DeclareGlobalFunction("ConjugacyClassOfSet");
 
 DeclareGlobalFunction("RemoveEquivalentGenerators");
