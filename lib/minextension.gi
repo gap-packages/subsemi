@@ -36,7 +36,7 @@ function(mt,baseset,generators, waiting)
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
         dosyms, # flag showing whether we do nontrivial conjugacy classes
-        gensets, bl, diff,gens,next,isBreadthFirst;
+        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -77,6 +77,21 @@ function(mt,baseset,generators, waiting)
     CloseStream(output);
     Info(SubSemiInfoClass,1,Concatenation("Dumping in ",
           FormattedTimeString(TimeInSeconds()-prev_secs)));
+    prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
+  end;
+  #-----------------------------------------------------------------------------
+  #binds the internals into global variables and saves the workspace
+  checkpoint := function()
+    prev_secs := TimeInSeconds();
+    BindGlobal("SUBSEMI_waiting",waiting);
+    BindGlobal("SUBSEMI_result",result);
+    BindGlobal("SUBSEMI_mt",mt);
+    SaveWorkspace(Concatenation("checkpoint",String(IO_gettimeofday().tv_sec),".ws"));
+    Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved in ",
+            FormattedTimeString(TimeInSeconds()-prev_secs)));
+    Unbind("SUBSEMI_waiting");
+    Unbind("SUBSEMI_result");
+    Unbind("SUBSEMI_mt");
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
