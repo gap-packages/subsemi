@@ -35,7 +35,6 @@ function(mt,baseset,generators, waiting)
         fileextension, # reps for conjugacy class reps, subs otherwise
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
-        dosyms, # flag showing whether we do nontrivial conjugacy classes
         gensets, bl, diff,gens,next,isBreadthFirst,checkpoint;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -89,9 +88,9 @@ function(mt,baseset,generators, waiting)
     SaveWorkspace(Concatenation("checkpoint",String(IO_gettimeofday().tv_sec),".ws"));
     Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved in ",
             FormattedTimeString(TimeInSeconds()-prev_secs)));
-    Unbind("SUBSEMI_waiting");
-    Unbind("SUBSEMI_result");
-    Unbind("SUBSEMI_mt");
+    UnbindGlobal("SUBSEMI_waiting");
+    UnbindGlobal("SUBSEMI_result");
+    UnbindGlobal("SUBSEMI_mt");
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
@@ -104,9 +103,9 @@ function(mt,baseset,generators, waiting)
   fi;
   #do we have nontrivial symmetries?
   if Size(Symmetries(mt)) = 1 then
-    dosyms := false;fileextension := ".subs";
+    fileextension := ".subs";
   else
-    dosyms := true;fileextension := ".reps";
+    fileextension := ".reps";
   fi;
   result := HeavyBlistContainer();
   #the baseset might be closed, in that case it is a sub
@@ -145,7 +144,7 @@ function(mt,baseset,generators, waiting)
     next := Retrieve(waiting);
     bl := ClosureByIncrements(next[1], [next[2]], mt);
     #its conjugacy class rep
-    if dosyms then bl := ConjugacyClassRep(bl,mt);fi;
+    bl := ConjugacyClassRep(bl,mt);
     if  bl in result then continue; fi; #EXIT if nothing to do
     #STORE
     if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
