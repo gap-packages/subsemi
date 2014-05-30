@@ -11,13 +11,20 @@
 InstallGlobalFunction(SubSgpsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
-                                    FullSet(mt),
+                                    RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Stack());end);
+  # TODO:understand why this trick does not work with torsos
+  # removing generators that are in the base already
+  #generators := DifferenceBlist(generators, baseset);
+  # removing equivalent generators
+  #generators := RemoveEquivalentGenerators(generators,mt);
+
+
 
 InstallGlobalFunction(SubSgpsGenSetsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
-                                    FullSet(mt),
+                                    RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Queue());end);
 
 # mt - MulTab, multiplication table
@@ -145,11 +152,6 @@ function(mt,baseset,generators, waiting)
   fi;
   prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
   prev_secs:=TimeInSeconds();
-  # TODO:understand why this trick does not work with torsos
-  # removing generators that are in the base already
-  #generators := DifferenceBlist(generators, baseset);
-  # removing equivalent generators
-  generators := RemoveEquivalentGenerators(generators,mt);
   # fill up the waiting list with lists of 2 or 3 elements: 
   # 1: baseset, 2: gen the element to be extended with, 3: generating set (opt)
   if isBreadthFirst then
