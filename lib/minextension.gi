@@ -35,7 +35,7 @@ function(mt,baseset,generators, waiting)
         fileextension, # reps for conjugacy class reps, subs otherwise
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
-        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint;
+        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -94,6 +94,37 @@ function(mt,baseset,generators, waiting)
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
+  # THE MAIN LOOP - the graph search
+  main := function()
+    while not IsEmpty(waiting)do
+      #HOUSEKEEPING: logging, dumping, checkpointing
+      counter := counter + 1;
+      if InfoLevel(SubSemiInfoClass)>0
+         and (counter mod SubSemiOptions.LOGFREQ)=0 then
+        log();
+      fi;
+      if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(false); fi;
+      #calculating the new subsgp
+      next := Retrieve(waiting);
+      bl := ClosureByIncrements(next[1], [next[2]], mt);
+      #its conjugacy class rep
+      bl := ConjugacyClassRep(bl,mt);
+      if  bl in result then continue; fi; #EXIT if nothing to do
+      #STORE
+      if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
+      AddSet(result, bl);
+      #REMAINDER
+      diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
+      #RECURSION
+      if isBreadthFirst then
+        Perform(diff,
+                function(t)Store(waiting,[bl,t,Concatenation(gens,[t])]);end);
+      else
+        Perform(diff,function(t)Store(waiting,[bl,t]);end);
+      fi;
+    od; 
+  end;
+  #-----------------------------------------------------------------------------
   # START
   #which search method are we doing?
   if IsStack(waiting) then
@@ -131,34 +162,7 @@ function(mt,baseset,generators, waiting)
       Store(waiting, [baseset, gen]);
     od;
   fi;
-  # THE MAIN LOOP
-  while not IsEmpty(waiting)do
-    #HOUSEKEEPING: logging, dumping
-    counter := counter + 1;
-    if InfoLevel(SubSemiInfoClass)>0
-       and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      log();
-    fi;
-    if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(false); fi;
-    #calculating the new subsgp
-    next := Retrieve(waiting);
-    bl := ClosureByIncrements(next[1], [next[2]], mt);
-    #its conjugacy class rep
-    bl := ConjugacyClassRep(bl,mt);
-    if  bl in result then continue; fi; #EXIT if nothing to do
-    #STORE
-    if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
-    AddSet(result, bl);
-    #REMAINDER
-    diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
-    #RECURSION
-    if isBreadthFirst then
-      Perform(diff,
-              function(t)Store(waiting,[bl,t,Concatenation(gens,[t])]);end);
-    else
-      Perform(diff,function(t)Store(waiting,[bl,t]);end);
-    fi;
-  od;
+  main();
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
   dump(true);#the final dump
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
