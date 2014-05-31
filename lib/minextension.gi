@@ -134,11 +134,7 @@ function(mt,baseset,generators, waiting)
   #-----------------------------------------------------------------------------
   # START
   #which search method are we doing?
-  if IsStack(waiting) then
-    isBreadthFirst := false;
-  else
-    isBreadthFirst := true;
-  fi;
+  isBreadthFirst := IsQueue(waiting);
   #do we have nontrivial symmetries?
   if Size(Symmetries(mt)) = 1 then
     fileextension := ".subs";
