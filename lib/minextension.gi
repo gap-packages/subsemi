@@ -12,7 +12,8 @@ InstallGlobalFunction(SubSgpsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
                                     RemoveEquivalentGenerators(FullSet(mt),mt),
-                                    Stack());end);
+                                    Stack(),
+                                    []);end);
   # TODO:understand why this trick does not work with torsos
   # removing generators that are in the base already
   #generators := DifferenceBlist(generators, baseset);
@@ -25,15 +26,16 @@ InstallGlobalFunction(SubSgpsGenSetsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
                                     RemoveEquivalentGenerators(FullSet(mt),mt),
-                                    Queue());end);
+                                    Queue(),
+                                    []);end);
 
 # mt - MulTab, multiplication table
 # baseset - the elements already in
 # generators - the set of possible extending elements from
 InstallGlobalFunction(SubSgpsByMinExtensionsParametrized,
-function(mt,baseset,generators, waiting)
+function(mt,baseset,generators, waiting, result)
   local gen, # the generator to be added to the base
-        result, # container for the end result, the subsemigroups
+        #result, # container for the end result, the subsemigroups
         counter, # counting the recursive calls
         prev_counter, # the value of counter at previous measurement (log, dump)
         log, # function logging some info to standart output
@@ -141,25 +143,27 @@ function(mt,baseset,generators, waiting)
   else
     fileextension := ".reps";
   fi;
-  result := HeavyBlistContainer();
-  #the baseset might be closed, in that case it is a sub
-  if IsClosedSubTable(baseset, mt) then
-    AddSet(result,ConjugacyClassRep(baseset,mt));
+  if IsEmpty(result) and IsEmpty(waiting) then # initialize
+    result := HeavyBlistContainer();
+    #the baseset might be closed, in that case it is a sub
+    if IsClosedSubTable(baseset, mt) then
+      AddSet(result,ConjugacyClassRep(baseset,mt));
+    fi;
+    # fill up the waiting list with lists of 2 or 3 elements: 
+    # 1: baseset, 2: gen the element to be extended with, 3: generating set (opt)
+    if isBreadthFirst then
+      gensets := [];
+      for gen in ListBlist(Indices(mt),generators) do
+        Store(waiting, [baseset, gen,[gen]]);
+      od;
+    else
+      for gen in ListBlist(Indices(mt),generators) do
+        Store(waiting, [baseset, gen]);
+      od;
+    fi;
   fi;
   prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
-  prev_secs:=TimeInSeconds();
-  # fill up the waiting list with lists of 2 or 3 elements: 
-  # 1: baseset, 2: gen the element to be extended with, 3: generating set (opt)
-  if isBreadthFirst then
-    gensets := [];
-    for gen in ListBlist(Indices(mt),generators) do
-      Store(waiting, [baseset, gen,[gen]]);
-    od;
-  else
-    for gen in ListBlist(Indices(mt),generators) do
-      Store(waiting, [baseset, gen]);
-    od;
-  fi;
+  prev_secs:=TimeInSeconds();  
   main();
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
   dump(true);#the final dump
