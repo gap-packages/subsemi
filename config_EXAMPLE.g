@@ -3,6 +3,7 @@
 BindGlobal("SubSemiOptions",
         rec(LOGFREQ:=10000,
             DUMPFREQ:=10000000,
+            CHECKPOINTFREQ:=10000,         
             RESCUE:=true,
             DIAGONAL:=true,
             EXHAUSTIVE:=true));

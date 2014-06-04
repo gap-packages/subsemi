@@ -29,6 +29,7 @@ InstallGlobalFunction(SubSgpsGenSetsByMinExtensions,
                                     Queue(),
                                     []);end);
 
+BindGlobal("SUBSEMI_MinExtensionsCheckPointData", rec());
 # mt - MulTab, multiplication table
 # baseset - the elements already in
 # generators - the set of possible extending elements from
@@ -91,15 +92,12 @@ function(mt,baseset,generators, waiting, result)
   #binds the internals into global variables and saves the workspace
   checkpoint := function()
     prev_secs := TimeInSeconds();
-    BindGlobal("SUBSEMI_waiting",waiting);
-    BindGlobal("SUBSEMI_result",result);
-    BindGlobal("SUBSEMI_mt",mt);
+    SUBSEMI_MinExtensionsCheckPointData.waiting := waiting;
+    SUBSEMI_MinExtensionsCheckPointData.result := result;
+    SUBSEMI_MinExtensionsCheckPointData.mt := mt;
     SaveWorkspace(Concatenation("checkpoint",String(IO_gettimeofday().tv_sec),".ws"));
     Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved in ",
             FormattedTimeString(TimeInSeconds()-prev_secs)));
-    UnbindGlobal("SUBSEMI_waiting");
-    UnbindGlobal("SUBSEMI_result");
-    UnbindGlobal("SUBSEMI_mt");
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
@@ -113,6 +111,7 @@ function(mt,baseset,generators, waiting, result)
         log();
       fi;
       if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(false); fi;
+      if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then checkpoint(); fi;
       #calculating the new subsgp
       next := Retrieve(waiting);
       bl := ClosureByIncrements(next[1], [next[2]], mt);
