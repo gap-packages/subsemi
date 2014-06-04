@@ -30,6 +30,14 @@ InstallGlobalFunction(SubSgpsGenSetsByMinExtensions,
                                     []);end);
 
 BindGlobal("SUBSEMI_MinExtensionsCheckPointData", rec());
+ResumeMinExtensions := function()
+  return SubSgpsByMinExtensionsParametrized(SUBSEMI_MinExtensionsCheckPointData.mt,
+                 [], #this does not matter
+                 SUBSEMI_MinExtensionsCheckPointData.generators,
+                 SUBSEMI_MinExtensionsCheckPointData.waiting,
+                 SUBSEMI_MinExtensionsCheckPointData.result
+                 );
+end;
 # mt - MulTab, multiplication table
 # baseset - the elements already in
 # generators - the set of possible extending elements from
@@ -95,6 +103,7 @@ function(mt,baseset,generators, waiting, result)
     SUBSEMI_MinExtensionsCheckPointData.waiting := waiting;
     SUBSEMI_MinExtensionsCheckPointData.result := result;
     SUBSEMI_MinExtensionsCheckPointData.mt := mt;
+    SUBSEMI_MinExtensionsCheckPointData.generators := generators;
     SaveWorkspace(Concatenation("checkpoint",String(IO_gettimeofday().tv_sec),".ws"));
     Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved in ",
             FormattedTimeString(TimeInSeconds()-prev_secs)));
@@ -142,7 +151,7 @@ function(mt,baseset,generators, waiting, result)
   else
     fileextension := ".reps";
   fi;
-  if IsEmpty(result) and IsEmpty(waiting) then # initialize
+  if IsEmpty(AsList(result)) and IsEmpty(waiting) then # initialize
     result := HeavyBlistContainer();
     #the baseset might be closed, in that case it is a sub
     if IsClosedSubTable(baseset, mt) then
