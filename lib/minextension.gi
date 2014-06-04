@@ -53,7 +53,7 @@ function(mt,baseset,generators, waiting, result)
         fileextension, # reps for conjugacy class reps, subs otherwise
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
-        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main;
+        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main, init;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -110,6 +110,26 @@ function(mt,baseset,generators, waiting, result)
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
+  init := function()
+    result := HeavyBlistContainer();
+    #the baseset might be closed, in that case it is a sub
+    if IsClosedSubTable(baseset, mt) then
+      AddSet(result,ConjugacyClassRep(baseset,mt));
+    fi;
+    # fill up the waiting list with lists of 2 or 3 elements: 
+    # 1: baseset, 2: gen the element to be extended with, 3: generating set (opt)
+    if isBreadthFirst then
+      gensets := [];
+      for gen in ListBlist(Indices(mt),generators) do
+        Store(waiting, [baseset, gen,[gen]]);
+      od;
+    else
+      for gen in ListBlist(Indices(mt),generators) do
+        Store(waiting, [baseset, gen]);
+      od;
+    fi;
+  end;
+  #-----------------------------------------------------------------------------
   # THE MAIN LOOP - the graph search
   main := function()
     while not IsEmpty(waiting)do
@@ -151,25 +171,7 @@ function(mt,baseset,generators, waiting, result)
   else
     fileextension := ".reps";
   fi;
-  if IsEmpty(AsList(result)) and IsEmpty(waiting) then # initialize
-    result := HeavyBlistContainer();
-    #the baseset might be closed, in that case it is a sub
-    if IsClosedSubTable(baseset, mt) then
-      AddSet(result,ConjugacyClassRep(baseset,mt));
-    fi;
-    # fill up the waiting list with lists of 2 or 3 elements: 
-    # 1: baseset, 2: gen the element to be extended with, 3: generating set (opt)
-    if isBreadthFirst then
-      gensets := [];
-      for gen in ListBlist(Indices(mt),generators) do
-        Store(waiting, [baseset, gen,[gen]]);
-      od;
-    else
-      for gen in ListBlist(Indices(mt),generators) do
-        Store(waiting, [baseset, gen]);
-      od;
-    fi;
-  fi;
+  if IsEmpty(AsList(result)) and IsEmpty(waiting) then init(); fi; # initialize
   prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
   prev_secs:=TimeInSeconds();  
   main();
