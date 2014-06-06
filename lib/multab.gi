@@ -90,6 +90,12 @@ function(S,G,hom)
   fi;
 end);
 
+InstallMethod(SymmetryGroup,"for multab",
+        [IsMulTab],
+function(mt)
+  return Group(SmallGeneratingSet(Group(Symmetries(mt)))); #TODO this is a bit roundabout
+end);
+
 InstallMethod(Columns,"for multab",
         [IsMulTab],
 function(mt)

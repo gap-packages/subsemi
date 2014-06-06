@@ -23,6 +23,7 @@ DeclareAttribute("Indices", IsMulTab);
 DeclareAttribute("SortedElements", IsMulTab);
 DeclareAttribute("EquivalentGenerators", IsMulTab);
 DeclareAttribute("Symmetries", IsMulTab);
+DeclareAttribute("SymmetryGroup", IsMulTab);
 DeclareAttribute("OriginalName", IsMulTab);
 DeclareAttribute("LocalTables", IsMulTab);
 DeclareAttribute("GlobalTables", IsMulTab);
