@@ -53,7 +53,7 @@ function(mt,baseset,generators, waiting, result)
         fileextension, # reps for conjugacy class reps, subs otherwise
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
-        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main, init;
+        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main, init, normalizer;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -152,6 +152,12 @@ function(mt,baseset,generators, waiting, result)
       AddSet(result, bl);
       #REMAINDER
       diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
+      normalizer := Stabilizer(SymmetryGroup(mt), bl, OnFiniteSet);       
+      if Size(normalizer) > 1 then #do it only if it is nontrivial
+        #Print(Size(diff));
+        diff := List(Orbits(normalizer, diff, OnPoints ), x->x[1]);
+        #Print("->",Size(diff)," by " , Size(normalizer),"  ");  
+      fi;
       #RECURSION
       if isBreadthFirst then
         Perform(diff,
