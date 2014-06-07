@@ -40,11 +40,11 @@ local mt,inds;
   SetIndices(mt,inds);
   if hom = fail then
     #conjugations expressed as permutations of the set elements (indices of)
-    SetSymmetries(mt,List(G,
+    SetSymmetries(mt,Set(G,
             g->AsPermutation(TransformationOp(g,SortedElements(mt),\^))));
   else
     #same as above, except 
-    SetSymmetries(mt,List(G,
+    SetSymmetries(mt,Set(G,
             g->AsPermutation(TransformationOp(g,SortedElements(mt),
                     function(p,t)
                       return Image(hom,PreImagesRepresentative(hom,p)^t);
@@ -93,6 +93,7 @@ end);
 InstallMethod(SymmetryGroup,"for multab",
         [IsMulTab],
 function(mt)
+  if Size(Symmetries(mt)) = 1 then return Group(()); fi;  
   return Group(SmallGeneratingSet(Group(Symmetries(mt)))); #TODO this is a bit roundabout
 end);
 
