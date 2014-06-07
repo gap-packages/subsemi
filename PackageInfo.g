@@ -9,9 +9,9 @@ PackageName := "SubSemi",
 
 Subtitle := "Enumeration of subsemigroups",
 
-Version := "0.23",
+Version := "0.24",
 
-Date := "24/03/2014",
+Date := "07/06/2014",
 
 ArchiveURL := "https://bitbucket.org/dersu/subsemi",
 
