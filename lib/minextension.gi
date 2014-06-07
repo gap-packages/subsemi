@@ -113,7 +113,7 @@ function(mt,baseset,generators, waiting, result)
   init := function()
     result := HeavyBlistContainer();
     #the baseset might be closed, in that case it is a sub
-    if IsClosedSubTable(baseset, mt) then
+    if SizeBlist(baseset) > 0 and IsClosedSubTable(baseset, mt) then
       AddSet(result,ConjugacyClassRep(baseset,mt));
     fi;
     # fill up the waiting list with lists of 2 or 3 elements: 

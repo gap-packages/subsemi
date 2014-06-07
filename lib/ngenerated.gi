@@ -29,13 +29,13 @@ end;
 InstallGlobalFunction(SubSgpsByMinimalGenSets,
 function(mt)
   local layers,i;
-  layers := [AsSortedList(NGeneratedSubSgps(mt,0))];
-  i := 0;
-  Info(SubSemiInfoClass,1,String(i), " generators ", String(Size(layers[i+1])), " sgps");
-  while Size(layers[i+1]) > 0 do
+  layers := [AsSortedList(NGeneratedSubSgps(mt,1))];
+  i := 1;
+  Info(SubSemiInfoClass,1,String(i), " generators ", String(Size(layers[i])), " sgps");
+  while Size(layers[i]) > 0 do
     i := i+1;
     Add(layers, Difference(AsSortedList(NGeneratedSubSgps(mt,i)), Union(layers)));
-    Info(SubSemiInfoClass,1,String(i), " generators ", String(Size(layers[i+1])), " sgps");
+    Info(SubSemiInfoClass,1,String(i), " generators ", String(Size(layers[i])), " sgps");
   od;
   return layers;
 end);
