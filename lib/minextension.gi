@@ -144,7 +144,7 @@ function(mt,baseset,generators, waiting, result)
   #which search method are we doing?
   isBreadthFirst := IsQueue(waiting);
   if IsEmpty(AsList(result)) and IsEmpty(waiting) then init(); fi; # initialize
-  prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
+  prev_subs:=0;prev_counter:=0;counter:=0;
   prev_secs:=TimeInSeconds();  
   main();
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
