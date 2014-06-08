@@ -68,7 +68,16 @@ function(mtA,mtB)
   fi;
 end);
 
-#returns a mapping for the whole semigroup
+InstallGlobalFunction(IsIsomorphicMulTab,
+function(mtS,mtT)
+  if Size(mtS) = Size(mtT) 
+     and IsomorphismMulTabs(mtS, mtT)<> fail then
+    return true;
+  else
+    return false;
+  fi;
+end);
+
 InstallGlobalFunction(IsIsomorphicSemigroupByMulTabs,
 function(S,T)
   if Size(S) = Size(T) 
@@ -78,6 +87,26 @@ function(S,T)
     return false;
   fi;
 end);
+
+InstallGlobalFunction(SgpIsomorphismClasses,
+function(sgps)
+  local mts, classes, S, mtS, pos;
+  mts := [];
+  classes := [];
+  for S in sgps do
+    mtS := MulTab(S);
+    pos := First([1..Size(classes)],
+                 x -> IsIsomorphicMulTab(mts[x],mtS));
+    if pos = fail then
+      Add(classes, [S]);
+      Add(mts, mtS);
+    else
+      Add(classes[pos],S);
+    fi;
+  od;
+  return classes;
+end);
+
 
 #returns a mapping for the whole semigroup
 InstallGlobalFunction(IsomorphismSemigroupsByMulTabs,

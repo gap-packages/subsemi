@@ -64,6 +64,19 @@ BlistToTSGens := function(indsetfile,mt)
                        Semigroup(ElementsByIndicatorSet(x,mt)))));
 end;
 
+GensFileIsomClasses := function(filename)
+  local prefix, sgps, classes, digits,i;
+  prefix := filename{[1..Size(filename)-5]};
+  sgps := List(ReadGenerators(filename), Semigroup);
+  classes := SgpIsomorphismClasses(sgps);
+  classes := Filtered(classes, x -> Size(x) > 1);
+  digits := Size(String(Size(classes)));
+  for i in [1..Size(classes)] do
+    WriteGenerators(Concatenation(prefix,"_",PaddedNumString(i,digits),".isos"),
+            classes[i]);
+  od;
+end;
+
 # implementing ls <dir>/<prefix>*
 PrefixMatchedListDir := function(dir, prefix)
   return Filtered(IO_ListDir(dir),

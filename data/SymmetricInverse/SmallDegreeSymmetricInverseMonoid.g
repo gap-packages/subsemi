@@ -1,6 +1,7 @@
 BuildSubsOfSymmetricInverseMonoid := function(degree) 
   local S,G,mt,prefix;
   S := SymmetricInverseMonoid(degree);
+  SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
   G := SymmetricGroup(IsPermGroup,degree);
   mt := MulTab(S,G);
   prefix := Concatenation("I",String(degree),"_");
@@ -11,7 +12,11 @@ BuildSubsOfSymmetricInverseMonoid := function(degree)
   #converting to small generator sets
   Print("Converting to small generating sets  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),
-          function(x)Print(x,"\n");BlistToTSGens(x,mt);end);
+          function(x)
+    Print(x,"\n");
+    BlistToTSGens(x,mt);
+    GensFileIsomClasses(Concatenation(x,".gens"));
+  end);
 end;
 
 for i in [1..3] do  
