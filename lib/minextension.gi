@@ -44,13 +44,9 @@ end;
 InstallGlobalFunction(SubSgpsByMinExtensionsParametrized,
 function(mt,baseset,generators, waiting, result)
   local gen, # the generator to be added to the base
-        #result, # container for the end result, the subsemigroups
         counter, # counting the recursive calls
         prev_counter, # the value of counter at previous measurement (log, dump)
         log, # function logging some info to standart output
-        dump, # writing the found subsemigroups to a file
-        dumpcounter, # counting the number of dumps so far
-        fileextension, # reps for conjugacy class reps, subs otherwise
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
         gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main, init, normalizer;
@@ -72,29 +68,6 @@ function(mt,baseset,generators, waiting, result)
       Print("\c\n");
     fi;
     prev_subs:=Size(result);prev_counter:=counter;prev_secs:=TimeInSeconds();
-  end;
-  #-----------------------------------------------------------------------------
-  dump := function(isfinal) #write all the subsemigroups into a file
-    local r,l,i, S,ll,output;
-    prev_secs := TimeInSeconds();
-    if not HasOriginalName(mt) then
-      Info(SubSemiInfoClass,1,"No name, no dump!"); return;
-    fi;
-    dumpcounter := dumpcounter + 1;
-    if isfinal then #for the last one we do not count dumping
-      output := OutputTextFile(Concatenation(OriginalName(mt),
-                        fileextension), false);
-    else
-      output := OutputTextFile(Concatenation(OriginalName(mt),"_",
-                        String(dumpcounter),fileextension), false);
-    fi;
-    for r in AsList(result) do
-      AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
-    od;
-    CloseStream(output);
-    Info(SubSemiInfoClass,1,Concatenation("Dumping in ",
-          FormattedTimeString(TimeInSeconds()-prev_secs)));
-    prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------
   #binds the internals into global variables and saves the workspace
@@ -139,7 +112,6 @@ function(mt,baseset,generators, waiting, result)
          and (counter mod SubSemiOptions.LOGFREQ)=0 then
         log();
       fi;
-      if (counter mod SubSemiOptions.DUMPFREQ)=0 then dump(false); fi;
       if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then checkpoint(); fi;
       #calculating the new subsgp
       next := Retrieve(waiting);
@@ -171,18 +143,11 @@ function(mt,baseset,generators, waiting, result)
   # START
   #which search method are we doing?
   isBreadthFirst := IsQueue(waiting);
-  #do we have nontrivial symmetries?
-  if Size(Symmetries(mt)) = 1 then
-    fileextension := ".subs";
-  else
-    fileextension := ".reps";
-  fi;
   if IsEmpty(AsList(result)) and IsEmpty(waiting) then init(); fi; # initialize
   prev_subs:=0;prev_counter:=0;dumpcounter:=0;counter:=0;
   prev_secs:=TimeInSeconds();  
   main();
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
-  dump(true);#the final dump
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
   if isBreadthFirst then
     return rec(subsgps:=result, gensets:=gensets);

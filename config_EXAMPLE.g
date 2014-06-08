@@ -2,7 +2,6 @@
 #record containing options to change the behaviour of the reduction algorithm
 BindGlobal("SubSemiOptions",
         rec(LOGFREQ:=10000,
-            DUMPFREQ:=10000000,
             CHECKPOINTFREQ:=10000,         
             RESCUE:=true,
             DIAGONAL:=true,
