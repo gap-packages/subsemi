@@ -9,4 +9,5 @@
 ##
 
 DeclareGlobalFunction("IsomorphismMulTabs");
+DeclareGlobalFunction("IsIsomorphicSemigroupByMulTabs");
 DeclareGlobalFunction("IsomorphismSemigroupsByMulTabs");

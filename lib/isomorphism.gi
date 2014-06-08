@@ -8,6 +8,7 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+# returns fail or a permutation
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
   local L, # the mapping i->L[i]
@@ -64,6 +65,17 @@ function(mtA,mtB)
     return PermList(L);
   else
     return fail;
+  fi;
+end);
+
+#returns a mapping for the whole semigroup
+InstallGlobalFunction(IsIsomorphicSemigroupByMulTabs,
+function(S,T)
+  if Size(S) = Size(T) 
+     and IsomorphismMulTabs(MulTab(S), MulTab(T))<> fail then
+    return true;
+  else
+    return false;
   fi;
 end);
 
