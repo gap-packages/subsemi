@@ -20,5 +20,5 @@ BuildSubsOfFullTransformationSemigroup := function(degree)
 end;
 
 for i in [1..3] do  
-  BuildSubsOfSymmetricInverseMonoid(i);  
+  BuildSubsOfFullTransformationSemigroup(i);  
 od;
