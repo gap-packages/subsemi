@@ -72,8 +72,12 @@ GensFileIsomClasses := function(filename)
   classes := Filtered(classes, x -> Size(x) > 1);
   digits := Size(String(Size(classes)));
   for i in [1..Size(classes)] do
-    WriteGenerators(Concatenation(prefix,"_",PaddedNumString(i,digits),".isos"),
-            classes[i]);
+    if not WriteGenerators(
+               Concatenation(prefix,"_",PaddedNumString(i,digits),".isos"),
+               classes[i],
+               "w") then
+      Error(Concatenation("Failure when processing ",filename));
+    fi;
   od;
 end;
 
