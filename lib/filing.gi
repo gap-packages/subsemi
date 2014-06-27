@@ -65,19 +65,26 @@ BlistToTSGens := function(indsetfile,mt)
 end;
 
 GensFileIsomClasses := function(filename)
-  local prefix, sgps, classes, digits,i;
+  local prefix, sgps, classes, digits,i,al,k,kdigits;
   prefix := filename{[1..Size(filename)-5]};
   sgps := List(ReadGenerators(filename), Semigroup);
-  classes := SgpIsomorphismClasses(sgps);
-  classes := Filtered(classes, x -> Size(x) > 1);
-  digits := Size(String(Size(classes)));
-  for i in [1..Size(classes)] do
-    if not WriteGenerators(
-               Concatenation(prefix,"_",PaddedNumString(i,digits),".isos"),
-               classes[i],
-               "w") then
-      Error(Concatenation("Failure when processing ",filename));
-    fi;
+  #classifying by #idempotents
+  al := AssociativeList();
+  Perform(sgps, function(x) Collect(al, Size(Idempotents(x)),x);end);
+  kdigits := Size(String(Maximum(Keys(al))));
+  for k in Keys(al) do
+    classes := SgpIsomorphismClasses(al[k]);
+    classes := Filtered(classes, x -> Size(x) > 1);
+    digits := Size(String(Size(classes)));
+    for i in [1..Size(classes)] do
+      if not WriteGenerators(
+                 Concatenation(prefix,"_I",PaddedNumString(k,kdigits),"_",
+                         PaddedNumString(i,digits),".isos"),
+                 classes[i],
+                 "w") then
+        Error(Concatenation("Failure when processing ",filename));
+      fi;
+    od;
   od;
 end;
 
