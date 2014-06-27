@@ -32,6 +32,31 @@ BLSgpTag := function(bl,mt,ndigits)
   return SgpTag(Semigroup(ElementsByIndicatorSet(bl,mt)),ndigits);
 end;
 
+#list of indicatorsets,
+#tagger function : indicator set -> string (should work in all cases)
+#filename
+#separating indicatorsets into files by their tags
+FilingIndicatorSets := function(sets,taggerfunc,filename)
+  local classes, tag,s,sgp,counter;
+  counter := 0;
+  classes := AssociativeList(); # tags to open classes
+  for s in sets do
+    counter := counter +1;
+    tag := taggerfunc(s);
+    Collect(classes, tag, s);
+    if InfoLevel(SubSemiInfoClass)>0 ###########################################
+       and (counter mod SubSemiOptions.LOGFREQ)=0 then
+      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter)," ",
+           FormattedMemoryString(MemoryUsage(classes))," ",
+           FormattedBigNumberString(String(Size(Keys(classes))))," ",
+           FormattedPercentageString(Size(Keys(classes)),counter));
+    fi; ########################################################################
+  od;
+  #writing the classes out to files
+  Perform(Keys(classes), function(x)
+    SaveIndicatorSets(classes[x],Concatenation(filename,x));end);
+end;
+
 # a set of indicatorsets converted to small generating sets, classified
 # there is a file operation for each semigroup
 IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
