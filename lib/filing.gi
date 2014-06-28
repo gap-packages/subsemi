@@ -12,14 +12,21 @@ end;
 GreenTag := function (sgp,ndigits)
   return Concatenation("L",PaddedNumString(NrLClasses(sgp),ndigits),
                  "_R",PaddedNumString(NrRClasses(sgp),ndigits),
-                 "_D",PaddedNumString(NrDClasses(sgp),ndigits),
-                 "_I",PaddedNumString(NrIdempotents(sgp),ndigits));
+                 "_D",PaddedNumString(NrDClasses(sgp),ndigits));
 end;
 
 # tagging semigroup by size and Greens
 SgpTag := function (sgp,ndigits)
-  return Concatenation("S",PaddedNumString(Size(sgp),ndigits),
-                 "_",GreenTag(sgp,ndigits));
+  local tag;
+  tag := Concatenation("S",PaddedNumString(Size(sgp),ndigits),
+                 "_",GreenTag(sgp,ndigits),
+                 "_I",PaddedNumString(NrIdempotents(sgp),ndigits),
+                 "_");
+  if IsBand(sgp) then Append(tag,"b");fi;
+  if IsCommutativeSemigroup(sgp) then Append(tag,"c");fi;
+  if IsRegularSemigroup(sgp) then Append(tag,"r");fi;
+  if tag[Size(tag)] = '_' then Remove(tag); fi;
+  return tag;
 end;
 
 # tagging indicator set - includes converting to semigroup
