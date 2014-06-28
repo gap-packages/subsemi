@@ -65,7 +65,8 @@ FilingIndicatorSets := function(sets,taggerfunc,filename)
 end;
 
 # a set of indicatorsets converted to small generating sets, classified
-# there is a file operation for each semigroup
+# there is a file operation for each semigroup - this seems ok, probably
+# caching by to OS takes away the strain on the drive
 IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
   local tag,s,sgp,counter;
   counter := 0;
