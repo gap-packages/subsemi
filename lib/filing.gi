@@ -13,7 +13,7 @@ GreenTag := function (sgp,ndigits)
   return Concatenation("L",PaddedNumString(NrLClasses(sgp),ndigits),
                  "_R",PaddedNumString(NrRClasses(sgp),ndigits),
                  "_D",PaddedNumString(NrDClasses(sgp),ndigits),
-                 "_I",PaddedNumString(Size(Idempotents(sgp)),ndigits));
+                 "_I",PaddedNumString(NrIdempotents(sgp),ndigits));
 end;
 
 # tagging semigroup by size and Greens
