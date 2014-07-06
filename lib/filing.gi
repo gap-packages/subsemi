@@ -75,7 +75,7 @@ IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
     sgp := Semigroup(ElementsByIndicatorSet(s,mt));
     tag := SgpTag(sgp,ndigits);
     if not WriteGenerators(Concatenation(filename,tag,".gens"),
-               SmallGeneratingSet(sgp),"a") then
+               SmallSemigroupGeneratingSet(sgp),"a") then
       Error(tag);
     fi;
     if InfoLevel(SubSemiInfoClass)>0 ###########################################
