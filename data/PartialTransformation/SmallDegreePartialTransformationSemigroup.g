@@ -1,11 +1,11 @@
-BuildSubsOfSymmetricInverseMonoid := function(degree) 
+BuildSubsOfPartialTransformationSemigroup := function(degree) 
   local S,G,mt,prefix,subreps,ndigits;
-  S := SymmetricInverseMonoid(degree);
+  S := PartialTransformationSemigroup(degree);
   ndigits := Size(String(Size(S)));
   SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
   G := SymmetricGroup(IsPermGroup,degree);
   mt := MulTab(S,G);
-  prefix := Concatenation("I",String(degree),"_");
+  prefix := Concatenation("PT",String(degree),"_");
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
   IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);
@@ -14,6 +14,6 @@ BuildSubsOfSymmetricInverseMonoid := function(degree)
   Perform(PrefixMatchedListDir(".",prefix),GensFileIsomClasses);
 end;
 
-for i in [1..3] do  
-  BuildSubsOfSymmetricInverseMonoid(i);  
+for i in [1..2] do  
+  BuildSubsOfPartialTransformationSemigroup(i);  
 od;
