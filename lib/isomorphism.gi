@@ -45,7 +45,9 @@ function(mtA,mtB)
   #checking global invariants one by one
   if Size(Rows(mtA)) <> Size(Rows(mtB)) then return fail;fi;
   if DiagonalFrequencies(mtA) <> DiagonalFrequencies(mtB) then return fail;fi;
+  if IdempotentDiagonalFrequencies(mtA) <> IdempotentDiagonalFrequencies(mtB) then return fail;fi;
   if MulTabFrequencies(mtA) <> MulTabFrequencies(mtB) then return fail;fi;
+  if IdempotentFrequencies(mtA) <> IdempotentFrequencies(mtB) then return fail;fi;
   if IndexPeriodTypeFrequencies(mtA) <> IndexPeriodTypeFrequencies(mtB) then
     return fail;
   fi;
