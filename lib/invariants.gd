@@ -21,6 +21,8 @@ DeclareGlobalFunction("ElementProfile");
 #TABLE-LEVEL INVARIANTS
 DeclareGlobalFunction("MulTabFrequencies");
 DeclareGlobalFunction("DiagonalFrequencies");
+DeclareGlobalFunction("IdempotentFrequencies");
+DeclareGlobalFunction("IdempotentDiagonalFrequencies");
 DeclareGlobalFunction("IndexPeriodTypeFrequencies");
 DeclareGlobalFunction("ElementProfileLookup");
 DeclareGlobalFunction("ElementProfileTypes");

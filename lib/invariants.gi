@@ -87,6 +87,24 @@ end);
 InstallGlobalFunction(MulTabFrequencies,
 function(mt) return Frequencies(Flat(Rows(mt)));end);
 
+IdempotentsInMulTab := function(mt)
+  return Filtered(Indices(mt), x-> Rows(mt)[x][x]=x);
+end;
+
+InstallGlobalFunction(IdempotentDiagonalFrequencies,
+function(mt) 
+  local idempotents;
+  idempotents := IdempotentsInMulTab(mt);
+  return Frequencies(Filtered(DiagonalOfMat(Rows(mt)), x->x in idempotents));
+end);
+
+InstallGlobalFunction(IdempotentFrequencies,
+function(mt) 
+  local idempotents;
+  idempotents := IdempotentsInMulTab(mt);
+  return Frequencies(Filtered(Flat(Rows(mt)), x->x in idempotents));
+end);
+
 NumOfProfileClasses := function(mt)
   local al, bl;
   al := AssociativeList();

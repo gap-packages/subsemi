@@ -14,6 +14,6 @@ BuildSubsOfPartialTransformationSemigroup := function(degree)
   Perform(PrefixMatchedListDir(".",prefix),GensFileIsomClasses);
 end;
 
-for i in [1..2] do  
+for i in [1..3] do  
   BuildSubsOfPartialTransformationSemigroup(i);  
 od;
