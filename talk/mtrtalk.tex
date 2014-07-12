@@ -1,0 +1,840 @@
+\documentclass{beamer}
+
+\usepackage{colortbl}
+\usepackage{tikz}
+\usetikzlibrary{matrix,arrows,positioning,automata}
+
+\definecolor{lgr}{rgb}{0.8,0.8,0.8}
+
+%\newcommand{\cT}{{\cal T}}
+\newcommand{\cS}{{\cal S}}
+
+\newcommand{\compl}{\mathsf{c}}
+\usepackage[ruled,vlined]{algorithm2e}
+
+
+%------------------------------------------------------------------
+% wrapping text around figures
+%\usepackage{wrapfig}
+%------------------------------------------------------------------
+
+\newcommand{\B}[1]{\textbf{#1}}
+\DeclareMathOperator*{\LW}{\bigg\rmoustache_{\cL}}
+\newcommand{\cB}{{\cal B}}
+\newcommand{\cA}{{\cal A}}
+\newcommand{\cH}{{\cal H}}
+\newcommand{\cN}{{\cal N}}
+\newcommand{\cT}{{\cal T}}
+\newcommand{\cC}{{\cal C}}
+\newcommand{\sur}{\twoheadrightarrow}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\gap}{\vskip10pt}
+
+\setbeamertemplate{navigation symbols}{}
+
+
+\usetheme{Boadilla}
+\usecolortheme[rgb={.0,0.19,0.07}]{structure}
+%\setbeamerfont{}{structuresmallcapsserif}
+\useoutertheme{infolines}
+
+\newcommand{\Magma}{\textsc{Magma}}
+\newcommand{\GAP}{\textsc{GAP}}
+\newcommand{\SgpDec}{\textsc{SgpDec}}
+\newcommand{\Smallsemi}{\textsc{Smallsemi}}
+
+\newcommand{\jump}{\vskip6pt}
+\newcommand{\jmp}{\vskip3pt}
+
+
+\begin{document}
+
+\title[Subsemigroup Enumeration]{On Enumerating Subsemigroups of the Full Transformation Semigroup }
+\author[e-n@]{Attila Egri-Nagy\\\ \\joint work with James East (Univ. of Western Sydney) and James D. Mitchell (University of St. Andrews, Scotland)}
+\institute[UWS]{\includegraphics[width=.22\textwidth]{Logo1.jpg}}
+%\institute[UWS]{School of Computing, Engineering and Mathematics\\ University of Western Sydney}
+\date[NSAC 2013]{2013.06.08. Novi Sad Algebra Conference}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+\begin{frame}\frametitle{Motivation}
+Practical need: to have a library of small transformation semigroups.
+\jump\jump
+Personally, I am looking for interesting holonomy decompositions. 
+\end{frame}
+
+\begin{frame}\frametitle{Semigroup enumeration and classification}
+Problems:
+\begin{itemize}
+\item There are lots of semigroups.
+\item Most of them are 3-nilpotent, i.e.\ they satisfy the $xyz=0$ identity.
+\end{itemize}
+\jump
+
+\begin{quote}
+``So, whereas groups are
+gems, all of them precious, the garden of semigroups is filled with weeds. One
+needs to yank out these weeds to find the interesting semigroups.''
+\end{quote}
+Rhodes, J., Steinberg, B.: The q-theory of Finite Semigroups. Springer (2008)
+
+\jump
+\jump
+
+So, it is useless and hopeless. 
+\end{frame}
+
+\begin{frame}\frametitle{History of semigroup enumeration}
+\begin{enumerate}
+\item[1955] Forsythe, G. E., \textbf{\emph{SWAC computes 126 distinct semigroups of order 4}}, Proc. Amer. Math. Soc., 6 (1955), 443--447.
+\\\vskip6pt
+Tetsuya, K., Hashimoto, T., Akazawa, T., Shibata, R., Inui, T. and Tamura, T., \textbf{{All semigroups of order at most 5}}, \emph{J. Gakugei Tokushima Univ. Nat. Sci. Math.}, 6 (1955), 19--39.
+\item[1967] Plemmons, R. J., \textbf{There are 15973 semigroups of order 6}, \emph{Math. Algorithms}, 2 (1967), 2--17. 
+\item[1977]J\"urgensen, H. and Wick, P., \textbf{Die Halbgruppen der Ordnungen  $\mathbf{\leq}$ 7}, \emph{Semigroup Forum}, 14 (1) (1977), 69--79.
+\item[1994]Satoh, S., Yama, K. and Tokizawa, M., \textbf{Semigroups of order 8}, \emph{Semigroup Forum}, 49 (1) (1994), 7--29.  
+\end{enumerate}
+\end{frame}
+
+\begin{frame}\frametitle{Current state of semigroup enumeration}
+Inspired by the  \textsc{SmallGroups Library}\ for \GAP\ and \Magma\ there is now a \GAP\ package called \Smallsemi.
+\jump
+\Smallsemi\ provides a database of all the small semigroups up to order 8, tools for identifying semigroups and their properties (e.g.\ commutative, band, inverse, regular, etc., 16 of them in total ).  
+\jump
+The size of the compressed database is 22 Mbytes.
+\jump
+Andreas Distler, James D. Mitchell
+\jmp
+\url{http://www-groups.mcs.st-andrews.ac.uk/~jamesm/smallsemi/}
+\end{frame}
+
+\begin{frame}\frametitle{Number of semigroups of order $n$}
+\begin{center}
+\begin{tabular}{r|r|r|r}
+order & \#groups &\#semigroups &\#3-nilpotent semigroups \\
+\hline
+1&1&1 &0\\
+2&1&4 &0\\
+3&1&18&1\\
+4&2&126&8\\
+5&1&1,160&84\\
+6&2&15,973&2,660\\
+7&1&836,021&609,797\\
+8&5&1,843,120,128&1,831,687,022\\
+9&2&52,989,400,714,478&52,966,239,062,973
+\end{tabular}
+\end{center}
+The calculation was done by combining \GAP\ and a Constraint Satisfaction Problem (CSP) solver Minion \url{minion.sf.net}.
+\end{frame}
+
+\begin{frame}\frametitle{Enumerating transformation semigroups}
+Idea: Find the subsemigroups of the full transformation semigroup.
+\jump
+Straightforward brute-force algorithm: enumerate all subsets of $\cT_n$ and keep those that form a subsemigroup.
+\jump
+However, there are $2^{n^n}$ subsets of $\cT_n$.
+\begin{center}
+\renewcommand{\arraystretch}{1.5}
+
+\begin{tabular}{l|l|l}
+$n$&$n^n$&$2^{n^n}$\\
+\hline
+1 & 1 & 2 \\
+\hline
+2 & 4 & 16 \\
+\hline
+3 & 27 & 134217728 \\
+\hline\hline\hline
+4 & 256 & \parbox[l]{.5\textwidth}{11579208923731619542357098500\\86879078532699846656405640394\\57584007913129639936}\\
+\hline
+5 & 3125 & $2^{3125}$
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{We know lot more about groups}
+Subgroups of $\cS_n$
+
+\begin{tabular}{r|r|r}
+$n$ & \#distinct subgroups & \#conjugacy classes\\
+\hline
+1& 1 & 1\\
+2& 2&2\\
+3& 6&4\\
+4& 30&11\\
+5& 156&19\\
+6& 1455&56\\
+7& 11300&96\\
+8& 151221&296\\
+9& 1694723&554\\
+10& 29594446&1593\\
+11& 404126228&3094\\
+12& 10594925360&10723\\
+13& 175238308453&20832
+\end{tabular}
+
+A000638 and A005432 on \url{oeis.org}.
+\end{frame}
+
+\begin{frame}\frametitle{All subsemigroups of $\cT_2$}
+$1\mapsto[1,1]$, $2\mapsto[1,2]$, $3\mapsto[2,1]$, $4\mapsto[2,2]$ 
+\renewcommand{\arraystretch}{0.3}
+\begin{center}
+%{}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&1&4&4\\
+1&2&3&4\\
+1&3&2&4\\
+1&4&1&4\\
+\end{tabular},\ \ \ 
+%{3}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&1&\color{lgr}4&4\\
+1&2&\color{lgr}3&4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+1&4&\color{lgr}1&4\\
+\end{tabular},\ \ \ 
+%{3,1}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\color{lgr}1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&2&\color{lgr}3&4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&4&\color{lgr}1&4\\
+\end{tabular},\ \ \ 
+%{3,1,2}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\color{lgr}1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&\color{lgr}2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&4\\
+\end{tabular},\ \ \ 
+%{3,4}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&1&\color{lgr}4&\color{lgr}4\\
+1&2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&\color{lgr}4\\
+\end{tabular},\ \ \ 
+%{2,3}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&\color{lgr}1&\color{lgr}4&4\\
+\color{lgr}1&\color{lgr}2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+1&\color{lgr}4&\color{lgr}1&4\\
+\end{tabular},\ \ \ 
+%{3,4,2}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&\color{lgr}2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&\color{lgr}4\\
+\end{tabular},\ \ \ 
+%{1,4}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\color{lgr}1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&2&3&\color{lgr}4\\
+\color{lgr}1&3&2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&\color{lgr}4\\
+\end{tabular},\ \ \ 
+%{3,1,4}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\color{lgr}1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&\color{lgr}4\\
+\end{tabular}
+\end{center}
+
+%\end{frame}
+
+%\begin{frame}
+\begin{tikzpicture}[scale=.6,>=latex',line join=bevel,]
+
+  \pgfsetlinewidth{1bp}
+%%
+\pgfsetcolor{black}
+  % Edge: k13 -> k123
+  \draw [->] (76.664bp,71.831bp) .. controls (84.973bp,63.285bp) and (95.026bp,52.944bp)  .. (111.1bp,36.413bp);
+  % Edge: k23 -> k234
+  \draw [->] (211.4bp,71.831bp) .. controls (219.04bp,63.369bp) and (228.27bp,53.149bp)  .. (243.38bp,36.413bp);
+  % Edge: k3 -> k23
+  \draw [->] (288.46bp,143.83bp) .. controls (272.32bp,134.54bp) and (252.5bp,123.12bp)  .. (226.53bp,108.16bp);
+  % Edge: k -> k3
+  \draw [->] (373.08bp,215.83bp) .. controls (364.66bp,207.28bp) and (354.46bp,196.94bp)  .. (338.16bp,180.41bp);
+  % Edge: k34 -> k234
+  \draw [->] (313.08bp,71.831bp) .. controls (304.66bp,63.285bp) and (294.46bp,52.944bp)  .. (278.16bp,36.413bp);
+  % Edge: k14 -> k134
+  \draw [->] (462bp,143.83bp) .. controls (462bp,136.13bp) and (462bp,126.97bp)  .. (462bp,108.41bp);
+  % Edge: k3 -> k34
+  \draw [->] (322.78bp,143.83bp) .. controls (323.95bp,136.13bp) and (325.35bp,126.97bp)  .. (328.19bp,108.41bp);
+  % Edge: k -> k14
+  \draw [->] (408.92bp,215.83bp) .. controls (417.34bp,207.28bp) and (427.54bp,196.94bp)  .. (443.84bp,180.41bp);
+  % Edge: k3 -> k13
+  \draw [->] (254.81bp,144.02bp) .. controls (216.12bp,133.34bp) and (167.1bp,119.82bp)  .. (118.01bp,106.28bp);
+  % Edge: k23 -> k123
+  \draw [->] (178.35bp,71.831bp) .. controls (170.59bp,63.369bp) and (161.22bp,53.149bp)  .. (145.88bp,36.413bp);
+  % Edge: k3 -> k134
+  \draw [->] (355.83bp,143.83bp) .. controls (374.42bp,134.41bp) and (397.3bp,122.81bp)  .. (426.18bp,108.16bp);
+  % Node: k13
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (59bp,90bp) node {\scriptsize$\{1,3\}\mapsto\{[12],[22]\}$};
+\end{scope}
+  % Node: k34
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (331bp,90bp) node {\scriptsize$\{3,4\}\mapsto\{[11],[12]\}$};
+\end{scope}
+  % Node: k14
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (462bp,162bp) node {\scriptsize$\{1,4\}\mapsto\{[12],[21]\}$};
+\end{scope}
+  % Node: k23
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (195bp,90bp) node {\scriptsize$\{2,3\}\mapsto\{[11],[22]\}$};
+\end{scope}
+  % Node: k
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (391bp,234bp) node {\scriptsize$\{\}\mapsto\{[11],[12],[21],[22]\}$};
+\end{scope}
+  % Node: k234
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (260bp,18bp) node {\scriptsize$\{2,3,4\}$, \{[11]\}};
+\end{scope}
+  % Node: k3
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (320bp,162bp) node {\scriptsize$\{3\}\mapsto\{[11],[12],[22]\}$};
+\end{scope}
+  % Node: k123
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (129bp,18bp) node {\scriptsize$\{1,2,3\}\mapsto\{[22]\}$};
+\end{scope}
+  % Node: k134
+\begin{scope}
+  \definecolor{strokecol}{rgb}{0.0,0.0,0.0};
+  \pgfsetstrokecolor{strokecol}
+  \draw (462bp,90bp) node {\scriptsize$\{1,3,4\}\mapsto\{[12]\}$};
+\end{scope}
+%
+\end{tikzpicture}
+
+\end{frame}
+
+\begin{frame}\frametitle{Idea: systematic reduction of multiplication tables}
+Let $S$ be a semigroup, $n=|S|$. We fix an order on the semigroup elements, $s_1,\ldots, s_n$, thus we can easily refer to the elements by their indices. 
+\begin{definition}
+Then the  \emph{multiplication table} of $S$ is a $n\times n$ matrix $M$ with entries from $\{1,..,n\}$ such that $M_{i,j}=k$ if $s_is_j=s_k$. This table is often called the \emph{Cayley-table} of the semigroup.
+\end{definition}
+
+\begin{definition}[cut, closed cut]
+A \emph{cut} is a subset of the semigroup, $K\subseteq S$ a set elements that we cut from the $M$.  A cut is \emph{closed} if the table spanned by $S\setminus K$ is a multiplication table, i.e.\ it is closed under multiplication.
+\end{definition}
+%Why this approach? 
+%\jump
+%To keep it general and save time (well, in some sense).
+\end{frame}
+
+\begin{frame}\frametitle{Forbidden Elements}
+
+\begin{definition}[\textbf{Forbidden Elements}]
+$$F(K)=\{i\in S\setminus K \mid\ \exists j\in S\setminus K \text{ such that } M_{i,j}\in K \text{ or } M_{j,i}\in K\} $$
+\noindent i.e.\ those elements not in the cut, whose column or row contains an element in the cut.
+\end{definition}
+
+\end{frame}
+
+\begin{frame}\frametitle{Example: $\cS_3$}
+Consider $\cS_3$ with the ordering:  (), (2,3), (1,2), (1,2,3), (1,3,2), (1,3).
+
+The cut $K=\{2\}$ (i.e.\ removing (2,3)) is not a closed one. 
+
+$F(K)=\{3,4,5,6\}$
+
+$K$ extended by the forbidden elements  $K\cup F(K)=\{2,3,4,5,6\}$ is closed.
+
+\begin{center}
+\setlength{\fboxsep}{1pt}
+\begin{tabular}{cccccc}
+1&\color{lgr}2&3&4&5&6\\
+\color{lgr}2&\color{lgr}1&\color{lgr}4&\color{lgr}3&\color{lgr}6&\color{lgr}5\\
+3&\color{lgr}5&1&6&\color{white}\colorbox{black}{2}&4\\
+4&\color{lgr}6&\color{white}\colorbox{black}{2}&5&1&3\\
+5&\color{lgr}3&6&1&4&\color{white}\colorbox{black}{2}\\
+6&\color{lgr}4&5&\color{white}\colorbox{black}{2}&3&1\\
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}\frametitle{Problem}
+The closed cut $K\cup F(K)$ corresponds to the trivial subgroup.  However there are more closed cuts including $K$: $\{2,3,6\}$, $\{2,3,4,5\}$,$\{2,4,5,6\}$.
+\begin{center}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}c@{}c@{}}
+1&\color{lgr}2&\color{lgr}3&4&5&\color{lgr}6\\
+\color{lgr}2&\color{lgr}1&\color{lgr}4&\color{lgr}3&\color{lgr}6&\color{lgr}5\\
+\color{lgr}3&\color{lgr}5&\color{lgr}1&\color{lgr}6&\color{lgr}2&\color{lgr}4\\
+4&\color{lgr}6&\color{lgr}2&5&1&\color{lgr}3\\
+5&\color{lgr}3&\color{lgr}6&1&4&\color{lgr}2\\
+\color{lgr}6&\color{lgr}4&\color{lgr}5&\color{lgr}2&\color{lgr}3&\color{lgr}1\\
+\end{tabular}\ \ \ \ 
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}c@{}c@{}}
+1&\color{lgr}2&\color{lgr}3&\color{lgr}4&\color{lgr}5&6\\
+\color{lgr}2&\color{lgr}1&\color{lgr}4&\color{lgr}3&\color{lgr}6&\color{lgr}5\\
+\color{lgr}3&\color{lgr}5&\color{lgr}1&\color{lgr}6&\color{lgr}2&\color{lgr}4\\
+\color{lgr}4&\color{lgr}6&\color{lgr}2&\color{lgr}5&\color{lgr}1&\color{lgr}3\\
+\color{lgr}5&\color{lgr}3&\color{lgr}6&\color{lgr}1&\color{lgr}4&\color{lgr}2\\
+6&\color{lgr}4&\color{lgr}5&\color{lgr}2&\color{lgr}3&1\\
+\end{tabular}\ \ \ \ 
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}c@{}c@{}}
+1&\color{lgr}2&3&\color{lgr}4&\color{lgr}5&\color{lgr}6\\
+\color{lgr}2&\color{lgr}1&\color{lgr}4&\color{lgr}3&\color{lgr}6&\color{lgr}5\\
+3&\color{lgr}5&1&\color{lgr}6&\color{lgr}2&\color{lgr}4\\
+\color{lgr}4&\color{lgr}6&\color{lgr}2&\color{lgr}5&\color{lgr}1&\color{lgr}3\\
+\color{lgr}5&\color{lgr}3&\color{lgr}6&\color{lgr}1&\color{lgr}4&\color{lgr}2\\
+\color{lgr}6&\color{lgr}4&\color{lgr}5&\color{lgr}2&\color{lgr}3&\color{lgr}1\\
+\end{tabular}%\ \ \ \ 
+%\begin{tabular}{@{}c@{}c@{}c@{}c@{}c@{}c@{}}
+%1&\color{lgr}2&\color{lgr}3&4&5&\color{lgr}6\\
+%\color{lgr}2&\color{lgr}1&\color{lgr}4&\color{lgr}3&\color{lgr}6&\color{lgr}5\\
+%\color{lgr}3&\color{lgr}5&\color{lgr}1&\color{lgr}6&\color{lgr}2&\color{lgr}4\\
+%4&\color{lgr}6&\color{lgr}2&5&1&\color{lgr}3\\
+%5&\color{lgr}3&\color{lgr}6&1&4&\color{lgr}2\\
+%\color{lgr}6&\color{lgr}4&\color{lgr}5&\color{lgr}2&\color{lgr}3&\color{lgr}1\\
+%\end{tabular}
+\end{center} 
+
+This means that we have to extend the cut one by one with the elements from the completion. Therefore we are back to the brute-force algorithm (actually even less efficient).
+\end{frame}
+
+\begin{frame}\frametitle{Heuristics}
+\begin{enumerate}
+\item Diagonal closure.
+\item ``Rescuing''
+\item Conjugacy.
+\item Dynamic programming.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}[fragile]
+\begin{definition}[\textbf{diagonal completion of a cut}]
+$$D(K)=\{i\in S\setminus K \mid\ M_{i,i}\in K \} $$
+\noindent i.e.\ those elements not in the cut, whose diagonal contains an element in the cut.
+\end{definition}
+
+%\jump
+%Is it possible to have overlapping diagonal closures?
+\end{frame}
+
+\begin{frame}[fragile]\frametitle{The diagonal closure of a cut}
+Iterating 
+$$ \Delta(K):=K\cup D(K)$$
+Since cutting an element from a diagonal can be done only one way, we can extend the cut by its diagonal completion.
+\begin{algorithm}[H]
+\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+\SetKwData{finished}{finished}
+\SetKw{true}{true}
+\SetKw{false}{false}
+\Input{$M$ multiplication table, $K$ a cut}
+\Output{$K$ extended to $\Delta(K)$}
+\Repeat{\finished}{
+  \finished $\leftarrow$ \true\;
+  \For{$i\in S\setminus K$}{
+    \If{$M_{i,i}\in K$}{
+      $K\leftarrow K\cup \{i\}$\;
+      \finished $\leftarrow$ \false\;
+    }
+  }
+}
+\caption{Calculating the diagonal closure of a cut.}
+\label{alg:diagonalclosure}
+\end{algorithm}
+\end{frame}
+
+\begin{frame}
+Again using the multiplication table of $\cS_3$ if we cut by $K=\{5\}$ we get the following table:
+\begin{center}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}c@{}c@{}}
+1&2&3&4&\color{lgr}5&6\\
+2&1&4&3&\color{lgr}6&\color{white}\colorbox{black}{5}\\
+3&\color{white}\colorbox{black}{5}&1&6&\color{lgr}2&4\\
+4&6&2&\color{white}\colorbox{black}{5}&\color{lgr}1&3\\
+\color{lgr}5&\color{lgr}3&\color{lgr}6&\color{lgr}1&\color{lgr}4&\color{lgr}2\\
+6&4&\color{white}\colorbox{black}{5}&2&\color{lgr}3&1\\
+\end{tabular}
+\end{center}
+5 appears in the diagonal for element 4, so $\Delta(\{5\})=\{4,5\}$. In this particular case $\Delta(\{4\})$ is also $\{4,5\}$, but having the same closure is not a symmetric relation. For instance, $\Delta(\{1\})=\{1,2,3,6\}$ but $\Delta(\{6\})=\{6\}$. 
+
+\end{frame}
+
+\begin{frame}\frametitle{Exploiting symmetries}
+We use the most traditional approach to conjugacy for semigroups  and define \emph{G-conjugacy}. Elements $s,t\in S$ are $G$-conjugate, denoted by
+$$s\sim_G t, \text{ if } s=g^{-1}tg \text{ for some } g\in G.$$ 
+\jump
+Here we act on the transformation representation.
+%For full transformation semigroups we can use the symmetric groups, otherwise group components from the holonomy decomposition can be used (it is capable of detecting the symmetries of semigroups of order up to $\approx$100,000). 
+\jump
+Ways to use conjugacy:
+\begin{itemize}
+\item Whenever we find a subsemigroup we take the orbit under conjugation.
+\item For a non-semigroup subset we can also use the conjugacy class to prune the underlying search tree. 
+\item We start cutting only from conjugacy class representatives.
+\end{itemize}
+\ldots and of course we get the conjugacy classes as well.
+\end{frame}
+
+\begin{frame}\frametitle{Conjugacy classes of subsemigroups of $\cT_2$}
+\renewcommand{\arraystretch}{0.3}
+\begin{center}
+%{}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&1&4&4\\
+1&2&3&4\\
+1&3&2&4\\
+1&4&1&4\\
+\end{tabular}\\\jmp 
+%{3}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&1&\color{lgr}4&4\\
+1&2&\color{lgr}3&4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+1&4&\color{lgr}1&4\\
+\end{tabular}\\\jmp 
+%{1,4}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\color{lgr}1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&2&3&\color{lgr}4\\
+\color{lgr}1&3&2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&\color{lgr}4\\
+\end{tabular}\\\jmp
+
+%{3,1}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\color{lgr}1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&2&\color{lgr}3&4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&4&\color{lgr}1&4\\
+\end{tabular},\ \ \ 
+%{3,4}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&1&\color{lgr}4&\color{lgr}4\\
+1&2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&\color{lgr}4\\
+\end{tabular}\\\jmp
+
+%{2,3}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&\color{lgr}1&\color{lgr}4&4\\
+\color{lgr}1&\color{lgr}2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+1&\color{lgr}4&\color{lgr}1&4\\
+\end{tabular}\\\jmp 
+%{3,1,4}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\color{lgr}1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&\color{lgr}4\\
+\end{tabular}\ \ \ \ \ \ \ \ \ \ \ \ \ 
+%{3,4,2}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&\color{lgr}2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&\color{lgr}4\\
+\end{tabular},\ \ \ 
+%{3,1,2}
+\begin{tabular}{@{}c@{}c@{}c@{}c@{}}
+\color{lgr}1&\color{lgr}1&\color{lgr}4&\color{lgr}4\\
+\color{lgr}1&\color{lgr}2&\color{lgr}3&\color{lgr}4\\
+\color{lgr}1&\color{lgr}3&\color{lgr}2&\color{lgr}4\\
+\color{lgr}1&\color{lgr}4&\color{lgr}1&4\\
+\end{tabular},\ \ \ 
+
+
+\end{center}
+\end{frame}
+
+
+\begin{frame}\frametitle{``Rescuing elements''}
+Observation: There is a problem with trying to cut the identity from groups. After the diagonal closure the algorithm reverts back to full enumeration of the subsets of $S\setminus \Delta(K)$.
+\jump
+The ``rescue'' set of $s$ relative to cut $K$:
+$$ R(K,F(K),s):=\{i\in S\setminus K\mid M_{s,i}\in F(K) \text{ or } M_{i,s}\in F(K)\}$$
+
+What shall I remove if I want to keep $s$?
+
+\end{frame}
+
+\begin{frame}\frametitle{How to measure complexity/efficiency?}
+The number of visited cuts - the space complexity.
+\jump
+The number of visited cuts and the number of revisits.
+\jump
+\begin{tabular}{c|cc}
+$\cS_3$ & \#Cuts & \#Dups \\
+\hline
+basic  & 63,63 & 103,41\\
+$R$ &36,36 & 46,25\\
+$\Delta$ & 17,17 & 31,17 \\
+$\Delta R$ & 14,14 & 19,13
+\end{tabular}
+\jump
+
+\begin{tabular}{c|cc}
+$\cT_2$ & \#Cuts & \#Dups \\
+\hline
+basic  & 13,13 & 11,9\\
+$R$ &13,13 & 11,9\\
+$\Delta$ & 11,11 & 11,9 \\
+$\Delta R$ & 11,11 & 11,9
+\end{tabular}
+\end{frame}
+
+\begin{frame}
+\begin{tabular}{c|cc}
+$\text{Sing}_3$ & \#Cuts & \#Dups \\
+\hline
+basic  & ? & ?\\
+$\Delta$ & 88555,88555 & 691298,116767 \\
+$R$ &6782,6782 & 20608,3672\\
+$\Delta R$ & 3764,3764 & 11764,2166
+\end{tabular}
+\jump
+\begin{tabular}{c|cc}
+$\cT_3$ & \#Cuts & \#Dups \\
+\hline
+basic  & ? & ?\\
+$\Delta$ & 1505328,1505328 & 15670601,2629323 \\
+$R$ & 44291,44291 & 206865,35713\\
+$\Delta R$ &15664,15664 & 65104,11724
+\end{tabular}
+
+\end{frame}
+
+
+
+\begin{frame}\frametitle{Easy test cases: Cyclic Groups}
+
+Cyclic groups - the number of subgroups is the number of divisors.
+\jump
+Cyclic groups of prime order - just 2 subgroups, but there is a bit of surprise.
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c|}
+$n$ & 2 & 3 & 5 & 7 & 11 & 13 & 17 & 19 & 23 & 29 & 31 & 37  \\
+\hline
+\#cuts & 2 & 3&  3& 7& 3& 3& 7& 3& 7& 3& 48 & 3 
+\end{tabular}
+\jump
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c|}
+$n$ & 41 & 43 & 47 & 53 & 59 & 61 & 67 & 71 & 73 & 79 & 83 & 89  \\
+\hline
+\#cuts & 7 & 9 &  7& 3& 3& 3& 3& 7& 83 & 7& 3 & 51 
+\end{tabular}
+\jump
+\begin{tabular}{c|c|c|c|c|c|c|c|c|c|}
+$n$ & 97 & 101 & 103 & 107 & 109 & 113 & 127 & 131 & 137   \\
+\hline
+\#cuts & 7 & 3 &  7& 3& 9 & 11 & 786 & 3& 7
+\end{tabular}
+
+
+\end{frame}
+
+
+\begin{frame}\frametitle{$\cT_3$ data, the sizes of subsemigroups}
+
+\begin{tabular}{ccccc}
+\begin{tabular}{r|r}
+Order&\#occurences\\
+1&3\\
+2&10\\
+3&19\\
+4&28\\
+5&38\\
+6&42\\
+7&38\\
+8&30\\
+9&25\\
+10&14\\
+11&12
+\end{tabular}
+&&&&\begin{tabular}{r|r}
+Order&\#occurences\\
+12&7\\
+13&3\\
+14&1\\
+15&3\\
+16&2\\
+17&2\\
+21&1\\
+22&1\\
+23&1\\
+24&1\\
+27&1\\
+\end{tabular}
+\end{tabular}
+\end{frame}
+
+\begin{frame}\frametitle{Summary of Results}
+\begin{center}
+
+\begin{tabular}{|r|c|c|c|c|c|}
+\hline
+$n$ & 0 & 1 & 2 & 3 & 4 \\
+\hline
+$S_n$ & - & 1,1 & 2,2 & 6,4 & 30,11\\
+\hline
+$T_n$ &1,1 & 2,2 & 10,8 & 1299,283 & \\
+\hline
+$T_n\setminus S_n$ & 1,1 & 1,1 & 4,3 & 600,123& \\
+\hline
+\end{tabular}
+\end{center}
+A215650, A215651 \url{http://oeis.org}
+\end{frame}
+
+\begin{frame}{Progress with $\cT_4$}
+3788251 ($\approx$ 3.8 million) subsemigroups in 162331 in conjugacy classes.
+\jump
+213268743 ($\approx$ 213 million) cuts checked, more than 10GB data,  80323087 ($\approx$ 80 million) revisits.
+\jump
+\jump
+This data will be used to build the subsemigroup lattice from the bottom.
+\jump
+Also, once we have the subsemigroups of $\text{Sing}_4$, we can just them together with the subgroups and see what they generate.
+\jump
+Also, we can start from maximal subgroups.
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Distribution of elements in multiplication tables}
+$\cT_{1}$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+1 & 1\\
+\end{tabular}
+\jump
+$\cT_{2}$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+2 & 2\\
+6 & 2\\
+\end{tabular}
+\jump
+$\cT_{3}$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+6 & 6\\
+24 & 18\\
+87 & 3\\
+\end{tabular}
+\jump
+$\cT_{4}$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+24 & 24\\
+120 & 144\\
+408 & 36\\
+504 & 48\\
+2200 & 4\\
+\end{tabular}
+
+
+\end{frame}
+
+
+\begin{frame}
+$\cT_5$
+\begin{tabular}{r|r}
+Frequency & \#elements\\
+120 & 120\\
+720 & 1200\\
+2820 & 900\\
+3420 & 600\\
+11020 & 200\\
+16720 & 100\\
+84245 & 5\\
+\end{tabular}
+\jump
+$\cT_6$
+\begin{tabular}{r|r}
+%Frequency & \#elements\\
+\hline
+720 & 720\\
+5040 & 10800\\
+22320 & 16200\\
+26640 & 7200\\
+78480 & 1800\\
+95760 & 7200\\
+143280 & 1800\\
+363600 & 300\\
+445680 & 450\\
+795600 & 180\\
+4492656 & 6\\
+\end{tabular}
+
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Non-synchronising transformation semigroups}
+\begin{tabular}{c|r|r}
+& \#subsemigroups & \#conjugacy classes\\
+\hline
+$\cT_2$ & 2 & 2\\
+$\cT_3$ & 64 & 20\\
+$\cT_4$ & 58610 & 3085
+\end{tabular}
+\end{frame}
+
+\begin{frame}\frametitle{What to expect?}
+A database of all transformation semigroups on $n$ points.
+\begin{itemize}
+\item $n\leq 3$ we have the data, included in the \textsc{GAP} package \textsc{Semigroups}.
+\item $n=4$ It seems to be within reach with the same heuristics, just a bit more data juggling.
+\item $n=5$ Probably the same idea may work with more new heuristics and solving big data handling difficulties.
+\item $n=6$ Not with this idea.
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\begin{center}\Huge Thank You!\end{center}
+\normalsize
+
+Transformation (and other type) semigroups software
+\begin{center}
+\textsc{Semigroups}\ \ \url{http://www-circa.mcs.st-and.ac.uk/~jamesm/citrus.php}
+\end{center}
+
+Group \& semigroup decomposition software:
+\begin{center}
+\SgpDec\ \ \url{http://sgpdec.sf.net}
+\end{center}
+
+On computational semigroup theory:
+\begin{center}
+\url{http://compsemi.wordpress.com}
+\end{center}
+
+
+\end{frame}
+
+
+\end{document}
+
