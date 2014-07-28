@@ -27,6 +27,7 @@ SgpTag := function (sgp,ndigits)
   if IsBand(sgp) then Append(tag,"b");fi;
   if IsCommutativeSemigroup(sgp) then Append(tag,"c");fi;
   if IsRegularSemigroup(sgp) then Append(tag,"r");fi;
+  if IsMonoidAsSemigroup(sgp) then Append(tag,"m");fi;
   if tag[Size(tag)] = '_' then Remove(tag); fi;
   return tag;
 end;
