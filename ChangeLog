@@ -1,3 +1,5 @@
+0.28
+	SgpTag extended with the number of maximal D-classes and the number of edges in the Hasse diagram of D-classes. Fixing misleading peek in SubSgpsByMinExtensions.
 0.27
 	Added scripts for enumerating small-degree diagram semigroups. Improved filing.
 0.26
