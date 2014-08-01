@@ -1,0 +1,14 @@
+SubSemi
+
+GAP package for enumerating subsemigroups of semigroup.
+The code is highly experimental with no user documentation,
+only inline comments. The algorithms are described on a
+high level in the paper 'On Enumerating Transformation Semigroups'
+http://arxiv.org/abs/1403.0274
+
+Copyright (C) 2014 James East, Attila Egri-Nagy, James D. Mitchell
+
+SubSemi is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the
+Free Software Foundation; either version 2 of the License,
+or (at your option) any later version.
