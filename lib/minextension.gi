@@ -59,7 +59,7 @@ function(mt,baseset,generators, waiting, result)
                   counter-prev_counter)," ");
     Print(Size(waiting), " ");
     if Size(waiting) > 0 then
-      Print(TrueValuePositionsBlistString(Peek(waiting)[1])," ");
+      Print(TrueValuePositionsBlistString(Peek(waiting)[1]),Peek(waiting)[2]," ");
     fi;
     if (secs-prev_secs) > 0 then # printing speed only if it measurable
       Print(FormattedFloat(Float((Size(result)-prev_subs)/(secs-prev_secs))),
