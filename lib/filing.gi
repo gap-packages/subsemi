@@ -7,14 +7,28 @@
 PaddedNumString := function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
 end;
-  
+
+NrEdgesInHasseDiagramOfDClasses := function(sgp)
+  local hd;
+  #producing the Hasse diagram of DClasses (in a roundabout way)
+  hd := HasseDiagramBinaryRelation(
+                ReflexiveClosureBinaryRelation(
+                        TransitiveClosureBinaryRelation(
+                                BinaryRelationByListOfImages(
+                                        PartialOrderOfDClasses(sgp)))));
+  #calculating the number of edges (summing the sizes of the image sets)
+  return Sum(List(Source(hd), x-> Size(Images(hd,x))));;
+end;
+
 # semigroup -> string containing green info
 GreenTag := function (sgp,ndigits)
   return Concatenation("L",PaddedNumString(NrLClasses(sgp),ndigits),
                  "_R",PaddedNumString(NrRClasses(sgp),ndigits),
                  "_D",PaddedNumString(NrDClasses(sgp),ndigits),
                  "_RD",PaddedNumString(NrRegularDClasses(sgp),ndigits),
-                 "_M",PaddedNumString(Size(MaximalDClasses(sgp)),ndigits));
+                 "_M",PaddedNumString(Size(MaximalDClasses(sgp)),ndigits),
+                 "_E",PaddedNumString(NrEdgesInHasseDiagramOfDClasses(sgp),
+                         ndigits));
 end;
 
 # tagging semigroup by size and Greens
