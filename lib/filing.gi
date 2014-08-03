@@ -110,9 +110,14 @@ BlistToTSGens := function(indsetfile,mt)
 end;
 
 GensFileIsomClasses := function(filename)
-  local prefix, sgps, classes, digits,i;
+  local prefix, sgps, classes, digits,i,al,gens;
   prefix := filename{[1..Size(filename)-5]};
-  sgps := List(ReadGenerators(filename), Semigroup);
+  gens := ReadGenerators(filename);
+  al := AssociativeList();
+  Perform(gens,function(x)
+    Collect(al,IdempotentFrequencies(MulTab(Semigroup(x))),x);end);
+  sgps := List(Concatenation(Filtered(ValueSet(al),x->Size(x)>1)),
+               Semigroup);
   classes := SgpIsomorphismClasses(sgps);
   classes := Filtered(classes, x -> Size(x) > 1);
   digits := Size(String(Size(classes)));
