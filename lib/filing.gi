@@ -10,11 +10,17 @@ end;
   
 # semigroup -> string containing green info
 GreenTag := function (sgp,ndigits)
+  local s;
+  if GroupOfUnits(sgp) <> fail then
+    s := Concatenation("_G", Size(GroupOfUnits(sgp)));
+  else
+    s := "";
+  fi;
   return Concatenation("L",PaddedNumString(NrLClasses(sgp),ndigits),
                  "_R",PaddedNumString(NrRClasses(sgp),ndigits),
                  "_D",PaddedNumString(NrDClasses(sgp),ndigits),
                  "_RD",PaddedNumString(NrRegularDClasses(sgp),ndigits),
-                 "_M",PaddedNumString(Size(MaximalDClasses(sgp)),ndigits));
+                 "_M",PaddedNumString(Size(MaximalDClasses(sgp)),ndigits),s);
 end;
 
 # tagging semigroup by size and Greens
@@ -27,7 +33,7 @@ SgpTag := function (sgp,ndigits)
   if IsBand(sgp) then Append(tag,"b");fi;
   if IsCommutativeSemigroup(sgp) then Append(tag,"c");fi;
   if IsRegularSemigroup(sgp) then Append(tag,"r");fi;
-  if IsMonoidAsSemigroup(sgp) then Append(tag,"m");fi;
+  if IsMonoid(sgp) or IsMonoidAsSemigroup(sgp) then Append(tag,"m");fi;
   if tag[Size(tag)] = '_' then Remove(tag); fi;
   return tag;
 end;
