@@ -8,7 +8,8 @@ BuildSubsOfSymmetricInverseMonoid := function(degree)
   prefix := Concatenation("I",String(degree),"_");
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
-  IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);
+  IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits,
+          degree, SetDegreeOfPartialPermSemigroup); #semigroups issue #100
   #converting to small generator sets
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileIsomClasses);

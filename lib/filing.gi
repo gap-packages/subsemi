@@ -24,17 +24,18 @@ end;
 GreenTag := function (sgp,ndigits)
   local s;
   if GroupOfUnits(sgp) <> fail then
-    s := Concatenation("_G", Size(GroupOfUnits(sgp)));
+    s := Concatenation("_G", PaddedNumString(Size(GroupOfUnits(sgp)),ndigits));
   else
     s := "";
   fi;
+
   return Concatenation("L",PaddedNumString(NrLClasses(sgp),ndigits),
                  "_R",PaddedNumString(NrRClasses(sgp),ndigits),
                  "_D",PaddedNumString(NrDClasses(sgp),ndigits),
                  "_RD",PaddedNumString(NrRegularDClasses(sgp),ndigits),
                  "_M",PaddedNumString(Size(MaximalDClasses(sgp)),ndigits),
                  "_E",PaddedNumString(NrEdgesInHasseDiagramOfDClasses(sgp),
-                         ndigits));
+                         ndigits),s);
 end;
 
 # tagging semigroup by size and Greens
@@ -90,12 +91,13 @@ end;
 # a set of indicatorsets converted to small generating sets, classified
 # there is a file operation for each semigroup - this seems ok, probably
 # caching by to OS takes away the strain on the drive
-IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
+IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits, deg, degsetter)
   local tag,s,sgp,counter;
   counter := 0;
   for s in sets do
     counter := counter +1;
     sgp := Semigroup(ElementsByIndicatorSet(s,mt));
+    degsetter(sgp, deg);
     tag := SgpTag(sgp,ndigits);
     if not WriteGenerators(Concatenation(filename,tag,".gens"),
                SmallSemigroupGeneratingSet(sgp),"a") then
