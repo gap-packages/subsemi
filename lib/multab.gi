@@ -50,6 +50,20 @@ local mt,inds;
                       return Image(hom,PreImagesRepresentative(hom,p)^t);
                     end))));
   fi;
+  #adding it as a group as well, not just a list of permutations
+  if hom = fail then
+    #conjugations expressed as permutations of the set elements (indices of)
+    SetSymmetryGroup(mt,Group(List(Generators(G),
+            g->AsPermutation(TransformationOp(g,SortedElements(mt),\^)))));
+  else
+    #same as above, except 
+    SetSymmetryGroup(mt,Group(List(Generators(G),
+            g->AsPermutation(TransformationOp(g,SortedElements(mt),
+                    function(p,t)
+                      return Image(hom,PreImagesRepresentative(hom,p)^t);
+                    end)))));
+  fi;
+
   if  name <> fail then SetOriginalName(mt,name);fi;
   return mt;
 end);
@@ -122,6 +136,15 @@ local  min, new, g;
   return min;
 end);
 
+#nauty stuff
+#InstallGlobalFunction(ConjugacyClassRep,
+#function(indset,mt)
+#  return BlistList(Indices(mt),
+#                 SmallestImageSet(SymmetryGroup(mt), ListBlist(Indices(mt),indset)));
+#end);
+
+
+
 # we are trying to be clever with conjugacy class representative calculator
 # the idea is to calculate the representative directly by finding the minimal element
 InstallMethod(MinimumConjugates,"for multab",
@@ -139,20 +162,19 @@ end);
 # but in practice this is not fast at all (maybe splitting sizewise?)
 InstallGlobalFunction(ConjugacyClassRepClever,
 function(indset,mt)
-  local  min, new, g, symmetries,mi, i;
-  symmetries := [];
-  min := Size(Indices(mt))+1;
-  for i in Positions(indset, true) do
-    mi := MinimumConjugates(mt)[i];
-    if min = mi then
-      Perform(MinimumConjugators(mt)[i], function(x) AddSet(symmetries, x);end);
-    elif min > mi then
-      symmetries := [];
-      min := mi;
-      Perform(MinimumConjugators(mt)[i], function(x) AddSet(symmetries, x);end);
-    fi;
-  od;
+  local  min,new, g, symmetries,mins, set, minconjs;
+  if SizeBlist(indset) = 0 then return indset; fi; #clear the empty case
+  set := List(Positions(indset, true));
+  mins := List(set, x -> MinimumConjugates(mt)[x]);
+  minconjs := List(Positions(mins,Minimum(mins)),
+                   x->MinimumConjugators(mt)[set[x]]);
+  if Sum(List(minconjs,Size)) >= Size(Symmetries(mt)) then
+    symmetries := Symmetries(mt); #we have little chance for less symm's
+  else
+    symmetries := Set(Concatenation(minconjs));
+  fi;
   #doing the same with the reduced set of symmetries
+  #Print(List(Positions(mins,min),x->set[x]), " " ,Size(symmetries)," ");
   min := indset;
   for g in symmetries do
     new := OnFiniteSet(indset,g);
