@@ -53,15 +53,15 @@ local mt,inds;
   #adding it as a group as well, not just a list of permutations
   if hom = fail then
     #conjugations expressed as permutations of the set elements (indices of)
-    SetSymmetryGroup(mt,Group(List(Generators(G),
-            g->AsPermutation(TransformationOp(g,SortedElements(mt),\^)))));
-  else
+#    SetSymmetryGroup(mt,Group(List(Generators(G),
+#            g->AsPermutation(TransformationOp(g,SortedElements(mt),\^)))));
+#  else
     #same as above, except 
-    SetSymmetryGroup(mt,Group(List(Generators(G),
-            g->AsPermutation(TransformationOp(g,SortedElements(mt),
-                    function(p,t)
-                      return Image(hom,PreImagesRepresentative(hom,p)^t);
-                    end)))));
+    # SetSymmetryGroup(mt,Group(List(Generators(G),
+    #         g->AsPermutation(TransformationOp(g,SortedElements(mt),
+    #                 function(p,t)
+    #                   return Image(hom,PreImagesRepresentative(hom,p)^t);
+    #                 end)))));
   fi;
 
   if  name <> fail then SetOriginalName(mt,name);fi;
