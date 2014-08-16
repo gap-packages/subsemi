@@ -1,5 +1,5 @@
 ##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "0.28">
+##  <!ENTITY VERSION "0.29">
 ##  <!ENTITY COPYRIGHTYEARS "2013-2014">
 ##  <#/GAPDoc>
 
@@ -9,9 +9,9 @@ PackageName := "SubSemi",
 
 Subtitle := "Enumeration of subsemigroups",
 
-Version := "0.28",
+Version := "0.29",
 
-Date := "01/08/2014",
+Date := "16/08/2014",
 
 ArchiveURL := "https://bitbucket.org/dersu/subsemi",
 
