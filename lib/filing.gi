@@ -91,13 +91,13 @@ end;
 # a set of indicatorsets converted to small generating sets, classified
 # there is a file operation for each semigroup - this seems ok, probably
 # caching by to OS takes away the strain on the drive
-IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits, deg, degsetter)
+IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
   local tag,s,sgp,counter;
   counter := 0;
   for s in sets do
     counter := counter +1;
     sgp := Semigroup(ElementsByIndicatorSet(s,mt));
-    degsetter(sgp, deg);
+    DisplayString(sgp); #to avoid GroupOfUnits crashing #101 
     tag := SgpTag(sgp,ndigits);
     if not WriteGenerators(Concatenation(filename,tag,".gens"),
                SmallSemigroupGeneratingSet(sgp),"a") then
