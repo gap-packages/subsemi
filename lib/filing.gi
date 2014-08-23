@@ -119,24 +119,28 @@ BlistToTSGens := function(indsetfile,mt)
 end;
 
 GensFileIsomClasses := function(filename)
-  local prefix, sgps, classes, digits,i,al,gens;
+  local prefix, sgps, idpclasses, digits,i,al,iso, counter,sgpclasses,class;
   prefix := filename{[1..Size(filename)-5]};
-  gens := ReadGenerators(filename);
+  counter:=1;
   al := AssociativeList();
-  Perform(gens,function(x)
+  #memory saving idea - not storing all semigroups
+  # frequency profiles -> generator sets
+  Perform(ReadGenerators(filename),function(x)
     Collect(al,IdempotentFrequencies(MulTab(Semigroup(x))),x);end);
-  sgps := List(Concatenation(Filtered(ValueSet(al),x->Size(x)>1)),
-               Semigroup);
-  classes := SgpIsomorphismClasses(sgps);
-  classes := Filtered(classes, x -> Size(x) > 1);
-  digits := Size(String(Size(classes)));
-  for i in [1..Size(classes)] do
-    if not WriteGenerators(
-               Concatenation(prefix,"_",PaddedNumString(i,digits),".isos"),
-               classes[i],
-               "w") then
-      Error(Concatenation("Failure when processing ",filename));
-    fi;
+  idpclasses := Filtered(ValueSet(al),x->Size(x)>1);
+  digits := Size(String(Size(idpclasses))); #just an upper bound  
+  for class in idpclasses do
+    sgps := List(class, Semigroup);
+    sgpclasses := Filtered(SgpIsomorphismClasses(sgps), x -> Size(x) > 1);
+    for iso in sgpclasses do
+      if not WriteGenerators(
+                 Concatenation(prefix,"_",
+                         PaddedNumString(counter,digits),".isos"),
+                 iso,"w") then
+        Error(Concatenation("Failure when processing ",filename));
+      fi;
+      counter := counter + 1;
+    od;
   od;
 end;
 
