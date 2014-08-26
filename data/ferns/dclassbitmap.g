@@ -16,11 +16,11 @@ end;
 
 DClassesBitmapFiles := function(S, prefix)
   local Dclasses,i,ndigits;
-  Dclasses := GreensDClasses(S);
-  ndigits := Size(String(Size(Dclasses)));
-  for i in [1..Size(Dclasses)] do
-    DClassBitmapFile(Dclasses[i],
+  ndigits := Size(String(NrDClasses(S)));
+  for i in [1..NrDClasses(S)] do
+    DClassBitmapFile(DClasses(S)[i],
             Concatenation(prefix,"_", PaddedNumString(i,ndigits)));
+    S := Semigroup(Generators(S)); #silly but avoids memory crash
   od;
 end;
 
