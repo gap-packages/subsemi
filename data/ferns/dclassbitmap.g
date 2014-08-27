@@ -20,7 +20,7 @@ DClassesBitmapFiles := function(S, prefix)
   for i in [1..NrDClasses(S)] do
     DClassBitmapFile(DClasses(S)[i],
             Concatenation(prefix,"_", PaddedNumString(i,ndigits)));
-    S := Semigroup(Generators(S)); #silly but avoids memory crash
+    S := Semigroup(GeneratorsOfSemigroup(S)); #silly but avoids memory crash
   od;
 end;
 
