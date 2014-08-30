@@ -25,3 +25,4 @@ DClassesBitmapFiles := function(S, prefix)
 end;
 
 
+for i in [16..42] do DClassesBitmapFiles(JonesMonoid(i), Concatenation("J",PaddedNumString(i,2))); Display(i);od;
