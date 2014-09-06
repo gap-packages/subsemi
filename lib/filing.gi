@@ -10,15 +10,15 @@ end;
 
 NrEdgesInHasseDiagramOfDClasses := function(sgp)
   local hd;
-  #producing the Hasse diagram of DClasses (in a roundabout way)
+  #producing the Hasse diagram of DClasses
   hd := HasseDiagramBinaryRelation(
-                ReflexiveClosureBinaryRelation(
-                        TransitiveClosureBinaryRelation(
-                                BinaryRelationByListOfImages(
-                                        PartialOrderOfDClasses(sgp)))));
+                BinaryRelationByListOfImages(
+                        DirectedGraphReflexiveTransitiveClosure(
+                                PartialOrderOfDClasses(sgp))));
   #calculating the number of edges (summing the sizes of the image sets)
   return Sum(List(Source(hd), x-> Size(Images(hd,x))));;
 end;
+
 
 # semigroup -> string containing green info
 GreenTag := function (sgp,ndigits)
