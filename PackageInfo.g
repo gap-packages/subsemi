@@ -74,9 +74,9 @@ PackageDoc := rec(
 
 
 Dependencies := rec(
- GAP := ">= 4.6",
+ GAP := ">= 4.7",
  NeededOtherPackages := [["GAPDoc", ">=1.5"],
-                   ["semigroups", ">=1.4"],
+                   ["semigroups", ">=2.1"],
                    ["sgpdec", ">=0.7"],
                    ["dust", ">=0.1.16"]
                    ],
