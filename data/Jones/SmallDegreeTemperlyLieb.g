@@ -8,6 +8,7 @@ BuildSubsOfJonesMonoid := function(degree)
   prefix := Concatenation("J",String(degree),"_");
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
+  SaveIndicatorSets(subreps, Concatenation("J", String(degree), ".reps"));
   IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileIsomClasses);
