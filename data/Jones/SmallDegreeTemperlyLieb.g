@@ -9,11 +9,11 @@ BuildSubsOfJonesMonoid := function(degree)
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
   SaveIndicatorSets(subreps, Concatenation("J", String(degree), ".reps"));
-  IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
+  IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileIsomClasses);
 end;
 
-for i in [1..9] do  
+for i in [1..5] do  
   BuildSubsOfJonesMonoid(i);  
 od;
