@@ -12,3 +12,4 @@ ReadPackage("SubSemi","/lib/invariants.gd");
 ReadPackage("SubSemi","/lib/isomorphism.gd");
 ReadPackage("SubSemi","/lib/minextension.gd");
 ReadPackage("SubSemi","/lib/ngenerated.gd");
+ReadPackage("SubSemi","/lib/ui.gd");
