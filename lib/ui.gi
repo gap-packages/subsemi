@@ -7,6 +7,7 @@
 ## Copyright (C) 2014  Attila Egri-Nagy
 ##
 
+# returning all nonempty subsemigroups of semigroup S
 InstallGlobalFunction(AllSubsemigroups,
 function(S)
   local mt; # multiplication table
