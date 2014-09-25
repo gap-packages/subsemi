@@ -110,12 +110,16 @@ IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
   od;
 end;
 
+
+BlistToSmallGenSet := function(indset, mt)
+  return SmallSemigroupGeneratingSet(ElementsByIndicatorSet(indset,mt));
+end;
+
 # convert the raw bitlists to set of small generators
 BlistToTSGens := function(indsetfile,mt)
   WriteGenerators(Concatenation(indsetfile,".gens"),
           List(LoadIndicatorSets(indsetfile),
-               x->SmallSemigroupGeneratingSet(
-                       Semigroup(ElementsByIndicatorSet(x,mt)))));
+               x->BlistToSmallGenSet(x,mt)));
 end;
 
 GensFileIsomClasses := function(filename)
