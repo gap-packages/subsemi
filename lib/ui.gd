@@ -8,4 +8,4 @@
 ##
 
 DeclareGlobalFunction("AllSubsemigroups");
-DeclareGlobalFunction("ConjugacyClassesSubsemigroups");
+DeclareGlobalFunction("ConjugacyClassRepSubsemigroups");
