@@ -311,8 +311,10 @@ function (sgp)
   fi;
 end);
 
-#it is not sorted or anything
-#0 indicate missing element, of course the subarray may not be closed
+# returns the subarray of the multiplication table mt spanned by 
+# elements in L (positive integers as indices)
+# the order of the elements in L kept
+# 0 indicate any product outside L (since subarrays may not be closed)
 InstallGlobalFunction(SubArray,
 function(mt, L)
   local sa,i,j;
