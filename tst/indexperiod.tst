@@ -16,7 +16,7 @@ gap> IndPer := function(t)
 > end;;
 gap> CheckAIP := function(mt)
 >  return ForAll(Indices(mt),
->                i->AbstractIndexPeriod(mt,i)=IndPer(SortedElements(mt)[i]));
+>                i->AbstractIndexPeriod(Rows(mt),i)=IndPer(SortedElements(mt)[i]));
 > end;;
 gap> CheckAIP(MulTab(FullTransformationSemigroup(4)));
 true

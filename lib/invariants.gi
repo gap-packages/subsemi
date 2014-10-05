@@ -31,14 +31,14 @@ InstallGlobalFunction(ColumnFrequencies,
 function(mt,k) return Frequencies(Columns(mt)[k]);end);
 
 InstallGlobalFunction(AbstractIndexPeriod,
-function(mt,k)
+function(rows,k)
 local orbit, set,i,p,m;
   orbit := [k];
   set := [];
   m:=k;
   repeat
     AddSet(set,m);
-    m := Rows(mt)[m][k];
+    m := rows[m][k];
     Add(orbit,m);
   until m in set;
   i := Position(orbit,m);
@@ -49,7 +49,7 @@ InstallGlobalFunction(ElementProfile,
 function(mt,k)
   return [Frequency(mt,k),
           DiagonalFrequency(mt,k),
-          AbstractIndexPeriod(mt,k),
+          AbstractIndexPeriod(Rows(mt),k),
           ColumnFrequencies(mt,k),
           RowFrequencies(mt,k)];
 end);
@@ -61,7 +61,7 @@ function(mt) return Frequencies(DiagonalOfMat(Rows(mt)));end);
 
 InstallGlobalFunction(IndexPeriodTypeFrequencies,
 function(mt)
-  return Collected(List(Indices(mt),x->AbstractIndexPeriod(mt,x)));
+  return Collected(List(Indices(mt),x->AbstractIndexPeriod(Rows(mt),x)));
 end);
 
 InstallGlobalFunction(ElementProfileLookup,
