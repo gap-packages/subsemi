@@ -8,6 +8,11 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+# A backtrack algorithm to build a map from multiplication table A (mtA) to
+# multiplication table B (mtB). The map is built in L, i->L[i].
+# mtA, mtB: matrices or MulTab objects
+# Aprofs, Bprofs: for each element we associate a profile object (provided 
+# by the caller), and this profile information is used for restricting search
 SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
   local L, # the mapping i->L[i]
         N, # the number of elements of the semigroups
@@ -66,14 +71,20 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
   fi;
 end;
 
-# returns fail or a permutation
+# trying the represent semigroup (multiplication table) A as a subtable
+# of B
+# A,B: positive integer matrices representing multiplication tables
+# or MulTab objects
 InstallGlobalFunction(EmbedAbstractSemigroup,
-function(mtA,mtB)
+function(A,B)
   local Aips,Bips, #lookup arrays i->IndexPeriod(i)
+        mtA, mtB, #matrices
         map; #the resulting map from the search
-  #for lining-up the elements we need the profiles
+  if IsMulTab(A) then mtA := Rows(A); else mtA := A; fi;
+  if IsMulTab(B) then mtB := Rows(B); else mtB := B; fi;
+  #for embeddings we only use the index-period information
   Aips := List([1..Size(mtA)], x->AbstractIndexPeriod(mtA,x));
-  Bips := List(Indices(mtB), x->AbstractIndexPeriod(Rows(mtB),x));
+  Bips := List([1..Size(mtB)], x->AbstractIndexPeriod(mtB,x));
   map := SubTableMatchingSearch(mtA,mtB,Aips,Bips);
   if map = fail then
     return fail;
@@ -82,7 +93,9 @@ function(mtA,mtB)
   fi;
 end);
 
-# returns fail or a permutation
+# mtA, mtB: MulTab objects 
+# returns a permutation of the element indices of mtA if isomorphism
+# can be established, otherwise returns fail
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
   local Aprofs,Bprofs, #lookup arrays i->ElementProfile(i)
