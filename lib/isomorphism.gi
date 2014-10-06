@@ -8,12 +8,9 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-# returns fail or a permutation
-InstallGlobalFunction(IsomorphismMulTabs,
-function(mtA,mtB)
+SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
   local L, # the mapping i->L[i]
         N, # the number of elements of the semigroups
-        Aprofs,Bprofs, #lookup tables i->ElementProfile(i)
         Bprofs2elts, #lookup table a profile in mtB -> elements of mtB
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
@@ -42,6 +39,30 @@ function(mtA,mtB)
       Remove(L); Remove(used, Position(used,i)); #UNDO extending
     od;
   end;
+  #-----------------------------------------------------------------------------
+  #just another quick invariant
+  if AsSet(Aprofs) <> AsSet(Bprofs) then return fail;fi;
+  Bprofs2elts := AssociativeList();
+  Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts, Bprofs[x], x);end);
+  #now the backtrack
+  N := Size(Rows(mtA));
+  used := [];
+  found := false;
+  L := [];
+  BackTrack();
+  if Size(L)=N then
+    return L;
+  else
+    return fail;
+  fi;
+end;
+
+# returns fail or a permutation
+InstallGlobalFunction(IsomorphismMulTabs,
+function(mtA,mtB)
+  local Aprofs,Bprofs, #lookup arrays i->ElementProfile(i)
+        map; #the resulting map from the search
+  #-----------------------------------------------------------------------------
   #checking global invariants one by one
   if Size(Rows(mtA)) <> Size(Rows(mtB)) then return fail;fi;
   if DiagonalFrequencies(mtA) <> DiagonalFrequencies(mtB) then return fail;fi;
@@ -54,20 +75,11 @@ function(mtA,mtB)
   #for lining-up the elements we need the profiles
   Aprofs := List(Indices(mtA), x->ElementProfile(mtA,x));
   Bprofs := List(Indices(mtB), x->ElementProfile(mtB,x));
-  #just another quick invariant
-  if AsSet(Aprofs) <> AsSet(Bprofs) then return fail;fi;
-  Bprofs2elts := AssociativeList();
-  Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts, Bprofs[x], x);end);
-  #now the backtrack
-  N := Size(Rows(mtA));
-  used := [];
-  found := false;
-  L := [];
-  BackTrack();
-  if Size(L)=N then
-    return PermList(L);
-  else
+  map := SubTableMatchingSearch(mtA,mtB,Aprofs,Bprofs);
+  if map = fail then
     return fail;
+  else
+    return PermList(map);
   fi;
 end);
 
