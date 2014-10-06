@@ -315,14 +315,20 @@ end);
 # elements in L (positive integers as indices)
 # the order of the elements in L kept
 # 0 indicate any product outside L (since subarrays may not be closed)
+# mt can be just a matrix, or a MulTab object 
 InstallGlobalFunction(SubArray,
 function(mt, L)
-  local sa,i,j;
+  local sa,i,j,tab;
+  if IsMulTab(mt) then
+    tab := Rows(mt);
+  else
+    tab := mt;
+  fi;
   sa := [];
   for i in L do
     Add(sa,List(L,
-            function(j) if Rows(mt)[i][j] in L then 
-                          return Rows(mt)[i][j]; 
+            function(j) if tab[i][j] in L then 
+                          return tab[i][j]; 
                         else 
                           return 0;fi;end));
   od;
