@@ -52,11 +52,12 @@ function(mtA,mtB)
     return fail;
   fi;
   #for lining-up the elements we need the profiles
-  Aprofs := ElementProfileLookup(mtA);
-  Bprofs := ElementProfileLookup(mtB);
+  Aprofs := List(Indices(mtA), x->ElementProfile(mtA,x));
+  Bprofs := List(Indices(mtB), x->ElementProfile(mtB,x));
   #just another quick invariant
-  if AsSet(ValueSet(Aprofs)) <> AsSet(ValueSet(Bprofs)) then return fail;fi;
-  Bprofs2elts := ReversedAssociativeList(Bprofs);
+  if AsSet(Aprofs) <> AsSet(Bprofs) then return fail;fi;
+  Bprofs2elts := AssociativeList();
+  Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts, Bprofs[x], x);end);
   #now the backtrack
   N := Size(Rows(mtA));
   used := [];
