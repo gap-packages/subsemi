@@ -40,8 +40,6 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
     od;
   end;
   #-----------------------------------------------------------------------------
-  #just another quick invariant
-  if AsSet(Aprofs) <> AsSet(Bprofs) then return fail;fi;
   Bprofs2elts := AssociativeList();
   Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts, Bprofs[x], x);end);
   #now the backtrack
@@ -75,6 +73,8 @@ function(mtA,mtB)
   #for lining-up the elements we need the profiles
   Aprofs := List(Indices(mtA), x->ElementProfile(mtA,x));
   Bprofs := List(Indices(mtB), x->ElementProfile(mtB,x));
+  #just another quick invariant
+  if AsSet(Aprofs) <> AsSet(Bprofs) then return fail;fi;
   map := SubTableMatchingSearch(mtA,mtB,Aprofs,Bprofs);
   if map = fail then
     return fail;
