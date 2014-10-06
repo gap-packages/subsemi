@@ -50,15 +50,14 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
              x-> Size(Aprofs2elts[x]) <= Size(Bprofs2elts[x])) then
     return fail; #not enough elements of some type to represent A
   fi;
-  #now the backtrack
+  # figuring out target size
   if IsMulTab(mtA) then
     N := Size(Rows(mtA));
   else
     N := Size(mtA);
   fi;
-  used := [];
-  found := false;
-  L := [];
+  #now the backtrack
+  used := []; found := false; L := [];
   BackTrack();
   if Size(L)=N then
     return L;
@@ -66,6 +65,22 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
     return fail;
   fi;
 end;
+
+# returns fail or a permutation
+InstallGlobalFunction(EmbedAbstractSemigroup,
+function(mtA,mtB)
+  local Aips,Bips, #lookup arrays i->IndexPeriod(i)
+        map; #the resulting map from the search
+  #for lining-up the elements we need the profiles
+  Aips := List([1..Size(mtA)], x->AbstractIndexPeriod(mtA,x));
+  Bips := List(Indices(mtB), x->AbstractIndexPeriod(Rows(mtB),x));
+  map := SubTableMatchingSearch(mtA,mtB,Aips,Bips);
+  if map = fail then
+    return fail;
+  else
+    return map;
+  fi;
+end);
 
 # returns fail or a permutation
 InstallGlobalFunction(IsomorphismMulTabs,
