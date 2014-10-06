@@ -51,7 +51,11 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
     return fail; #not enough elements of some type to represent A
   fi;
   #now the backtrack
-  N := Size(Rows(mtA));
+  if IsMulTab(mtA) then
+    N := Size(Rows(mtA));
+  else
+    N := Size(mtA);
+  fi;
   used := [];
   found := false;
   L := [];
