@@ -11,6 +11,7 @@
 SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
   local L, # the mapping i->L[i]
         N, # the number of elements of the semigroups
+        Aprofs2elts, #lookup table a profile in mtA -> elements of mtA
         Bprofs2elts, #lookup table a profile in mtB -> elements of mtB
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
@@ -40,8 +41,15 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
     od;
   end;
   #-----------------------------------------------------------------------------
+  #checking for enough profile types
+  Aprofs2elts := AssociativeList();
+  Perform([1..Size(Aprofs)], function(x) Collect(Aprofs2elts, Aprofs[x], x);end);
   Bprofs2elts := AssociativeList();
   Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts, Bprofs[x], x);end);
+  if not ForAll(Keys(Aprofs2elts),
+             x-> Size(Aprofs2elts[x]) <= Size(Bprofs2elts[x])) then
+    return fail; #not enough elements of some type to represent A
+  fi;
   #now the backtrack
   N := Size(Rows(mtA));
   used := [];
