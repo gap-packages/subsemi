@@ -26,6 +26,7 @@ local test,infolevel;
           "gensets",
           "invariants",
           "isomorphism",
+          "embedding",
           "T3",
           "I3"
           ] do
