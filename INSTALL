@@ -1,0 +1,9 @@
+INSTALLATION
+
+Clone the repository or unpack the archive into the pkg/ folder
+of your gap installation. Copy and edit config_EXAMPLE.g into config.g,
+then
+
+LoadPackage("SubSemi");
+
+To test the installation call SubSemiTestInstall().
