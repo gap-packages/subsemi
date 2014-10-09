@@ -52,7 +52,8 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
   Bprofs2elts := AssociativeList();
   Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts, Bprofs[x], x);end);
   if not ForAll(Keys(Aprofs2elts),
-             x-> Size(Aprofs2elts[x]) <= Size(Bprofs2elts[x])) then
+             x-> (Bprofs2elts[x]<> fail)
+             and Size(Aprofs2elts[x]) <= Size(Bprofs2elts[x])) then
     return fail; #not enough elements of some type to represent A
   fi;
   # figuring out target size
