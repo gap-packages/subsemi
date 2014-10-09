@@ -2,7 +2,7 @@
 # returns an n-generating set for each, not necessarily minimal
 NGeneratedSubSgpGenSets := function(mt,n)
   local ntuple, db, gensets, rep;
-  db := HeavyBlistContainer();
+  db := LightBlistContainer();
   gensets := [];
   for ntuple in IteratorOfCombinations(Indices(mt),n) do
     rep := ConjugacyClassRep(SgpInMulTab(BlistList(Indices(mt),ntuple),mt),mt);
@@ -18,7 +18,7 @@ end;
 # returns an n-generating set for each, not necessarily minimal
 NGeneratedSubSgps := function(mt,n)
   local ntuple, db;
-  db := HeavyBlistContainer();
+  db := LightBlistContainer();
   for ntuple in IteratorOfCombinations(Indices(mt),n) do
     AddSet(db,ConjugacyClassRep(SgpInMulTab(BlistList(Indices(mt),ntuple),mt),mt));
   od;
