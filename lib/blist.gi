@@ -123,7 +123,11 @@ end);
 InstallMethod(ElementsByIndicatorSet, "for boolean list and a list of elements",
         [IsList, IsList],
 function(indset, elements)
-  return List(ListBlist([1..Size(indset)],indset),x->elements[x]);
+  if IsBlist(indset) then
+    return List(ListBlist([1..Size(indset)],indset),x->elements[x]);
+  else
+    return List(indset,x->elements[x]);
+  fi;
 end);
 
 InstallMethod(IndicatorSetOfElements,
