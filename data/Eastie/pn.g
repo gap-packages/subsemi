@@ -2,7 +2,8 @@ mt2 := MulTab(PartitionMonoid(2));;
 mt3 := MulTab(PartitionMonoid(3),S3);;
 
 P3sub2gensets := NGeneratedSubSgpGenSets(mt3,2);;
-fltd := Filtered(P3sub2gensets, x->SizeBlist(SgpInMulTab(x,mt3))>=15);;
+fltd := Filtered(P3sub2gensets,
+                x->SizeBlist(SgpInMulTab(x,mt3))>=Size(PartitionMonoid(2)));;
 results := Filtered(fltd,
                    x-> fail<>EmbedAbstractSemigroup(mt2,
                            MulTab(Semigroup(ElementsByIndicatorSet(x,mt3)))));;
