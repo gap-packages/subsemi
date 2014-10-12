@@ -4,6 +4,7 @@ mt5 := MulTab(BrauerMonoid(5),S5);;
 B5sub2gensets := NGeneratedSubSgpGenSets(mt5,2);;
 fltd := Filtered(B5sub2gensets,
                 x->SizeBlist(SgpInMulTab(x,mt5))>=Size(BrauerMonoid(3)));;
+Print(Size(fltd), " candidate 2-generated subs","\n");
 results := Filtered(fltd,
                    x-> fail<>EmbedAbstractSemigroup(mt3,
                            MulTab(Semigroup(ElementsByIndicatorSet(x,mt5)))));;
