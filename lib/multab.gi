@@ -29,11 +29,17 @@ end);
 # G - a group of automorphisms of the multiplicative elements
 # name - fail if no need for naming (search algorithm will not dump)
 # hom - a Rees factor homomorphism
+# isanti - flag to make anti multiplication table
 InstallGlobalFunction(CreateMulTab,
-function(sortedelements, G, name, hom)
+function(sortedelements, G, name, hom, isanti)
 local mt,inds;
   mt := Objectify(MulTabType, rec());
-  SetRows(mt,ProductTableOfElements(sortedelements));
+  SetIsAnti(mt,isanti);
+  if isanti then
+    SetRows(mt,TransposedMat(ProductTableOfElements(sortedelements)));
+  else
+    SetRows(mt,ProductTableOfElements(sortedelements));
+  fi;
   SetSortedElements(mt,sortedelements);
   inds := [1..Size(sortedelements)];
   MakeImmutable(inds);
@@ -71,26 +77,37 @@ end);
 InstallOtherMethod(MulTab,"for closed ordered list of multiplicative elements",
 [IsSortedList],
 function(l)
-  return CreateMulTab(l, Group(()), fail, fail);
+  return CreateMulTab(l, Group(()), fail, fail,false);
 end);
 
 InstallMethod(MulTab, "for a semigroup",
 [IsSemigroup],
 function(S)
   if HasName(S) then
-    return CreateMulTab(AsSortedList(S), Group(()),Name(S),fail);
+    return CreateMulTab(AsSortedList(S), Group(()),Name(S),fail,false);
   else
-    return CreateMulTab(AsSortedList(S), Group(()),fail,fail);
+    return CreateMulTab(AsSortedList(S), Group(()),fail,fail,false);
   fi;
 end);
+
+InstallMethod(AntiMulTab, "for a semigroup",
+[IsSemigroup],
+function(S)
+  if HasName(S) then
+    return CreateMulTab(AsSortedList(S), Group(()), Name(S),fail,true);
+  else
+    return CreateMulTab(AsSortedList(S), Group(()),fail,fail,true);
+  fi;
+end);
+
 
 InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
 [IsSemigroup,IsGroup],
 function(S,G)
   if HasName(S) then
-    return CreateMulTab(AsSortedList(S), G, Name(S),fail);
+    return CreateMulTab(AsSortedList(S), G, Name(S),fail,false);
   else
-    return CreateMulTab(AsSortedList(S), G,fail,fail);
+    return CreateMulTab(AsSortedList(S), G,fail,fail,false);
   fi;
 end);
 
@@ -98,9 +115,9 @@ InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
 [IsSemigroup,IsGroup,IsMapping],
 function(S,G,hom)
   if HasName(S) then
-    return CreateMulTab(AsSortedList(S), G, Name(S),hom);
+    return CreateMulTab(AsSortedList(S), G, Name(S),hom,false);
   else
-    return CreateMulTab(AsSortedList(S), G,fail,hom);
+    return CreateMulTab(AsSortedList(S), G,fail,hom,false);
   fi;
 end);
 
@@ -196,10 +213,12 @@ end);
 InstallMethod(ViewObj, "for a multab",
 [IsMulTab],
 function(mt)
+  local str;
+  if IsAnti(mt) then str := "<anti-"; else str := "<"; fi;
   if HasOriginalName(mt) then
-    Print("<multiplication table of ",OriginalName(mt),">");
+    Print(str,"multiplication table of ",OriginalName(mt),">");
   else
-    Print("<multiplication table of ",Size(mt)," elements>");
+    Print(str,"multiplication table of ",Size(mt)," elements>");
   fi;
 end);
 

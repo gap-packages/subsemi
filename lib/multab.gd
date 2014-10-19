@@ -13,9 +13,12 @@ BindGlobal("MulTabFamily",NewFamily("MulTabFamily",IsMulTab));
 BindGlobal("MulTabType", NewType(MulTabFamily,IsMulTab));
 
 DeclareOperation("MulTab",[IsSemigroup]);
+DeclareOperation("AntiMulTab",[IsSemigroup]);
 DeclareGlobalFunction("CreateMulTab");
 DeclareGlobalFunction("ProductTableOfElements");
 DeclareGlobalFunction("SubArray");
+
+DeclareProperty("IsAnti", IsMulTab);
 
 DeclareAttribute("Rows", IsMulTab);
 DeclareAttribute("Columns", IsMulTab);
