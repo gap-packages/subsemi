@@ -15,6 +15,7 @@ BindGlobal("MulTabType", NewType(MulTabFamily,IsMulTab));
 DeclareOperation("MulTab",[IsSemigroup]);
 DeclareOperation("AntiMulTab",[IsSemigroup]);
 DeclareGlobalFunction("CreateMulTab");
+DeclareGlobalFunction("CopyMulTab");
 DeclareGlobalFunction("ProductTableOfElements");
 DeclareGlobalFunction("SubArray");
 
