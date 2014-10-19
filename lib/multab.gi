@@ -60,6 +60,26 @@ local mt,inds;
   return mt;
 end);
 
+# allowed copying: straight -> straight
+#                  straight -> anti
+InstallGlobalFunction(CopyMulTab,
+function(multab, isanti)
+local mt;
+  mt := Objectify(MulTabType, rec());
+  if IsAnti(multab) and isanti then return fail;fi;
+  SetIsAnti(mt,isanti);
+  if isanti then
+    SetRows(mt,Columns(multab));
+  else
+    SetRows(mt,Rows(multab));
+  fi;
+  SetSortedElements(mt,SortedElements(multab));
+  SetIndices(mt,Indices(multab));
+  SetSymmetries(mt, Symmetries(multab));
+  SetOriginalName(mt,OriginalName(multab));
+  return mt;
+end);
+
 InstallOtherMethod(MulTab,"for closed ordered list of multiplicative elements",
 [IsSortedList],
 function(l)
