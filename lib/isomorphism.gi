@@ -151,8 +151,30 @@ function(sgps)
   classes := [];
   for S in sgps do
     mtS := MulTab(S);
+    antimtS := AntiMulTab(S);
     pos := First([1..Size(classes)],
                  x -> IsIsomorphicMulTab(mts[x],mtS));
+    if pos = fail then
+      Add(classes, [S]);
+      Add(mts, mtS);
+    else
+      Add(classes[pos],S);
+    fi;
+  od;
+  return classes;
+end);
+
+InstallGlobalFunction(SgpAntiAndIsomorphismClasses,
+function(sgps)
+  local mts, classes, S, mtS, antimtS, pos;
+  mts := [];
+  classes := [];
+  for S in sgps do
+    mtS := MulTab(S);
+    antimtS := AntiMulTab(S);
+    pos := First([1..Size(classes)],
+                 x -> IsIsomorphicMulTab(mts[x],mtS)
+                 or IsIsomorphicMulTab(mts[x],antimtS));
     if pos = fail then
       Add(classes, [S]);
       Add(mts, mtS);

@@ -122,7 +122,7 @@ BlistToTSGens := function(indsetfile,mt)
                x->BlistToSmallGenSet(x,mt)));
 end;
 
-GensFileIsomClasses := function(filename)
+GensFileAntiAndIsomClasses := function(filename)
   local prefix, sgps, idpclasses, digits,i,al,iso, counter,sgpclasses,class;
   prefix := filename{[1..Size(filename)-5]};
   counter:=1;
@@ -135,11 +135,11 @@ GensFileIsomClasses := function(filename)
   digits := Size(String(Size(idpclasses))); #just an upper bound  
   for class in idpclasses do
     sgps := List(class, Semigroup);
-    sgpclasses := Filtered(SgpIsomorphismClasses(sgps), x -> Size(x) > 1);
+    sgpclasses := Filtered(SgpAntiAndIsomorphismClasses(sgps),x->Size(x)>1);
     for iso in sgpclasses do
       if not WriteGenerators(
                  Concatenation(prefix,"_",
-                         PaddedNumString(counter,digits),".isos"),
+                         PaddedNumString(counter,digits),".ais"),
                  iso,"w") then
         Error(Concatenation("Failure when processing ",filename));
       fi;
