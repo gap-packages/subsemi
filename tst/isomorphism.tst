@@ -2,6 +2,8 @@ gap> START_TEST("SubSemi package: isomorphism.tst");
 gap> LoadPackage("SubSemi", false);;
 gap> SemigroupsStartTest();
 gap> S := RandomTransformationSemigroup(3,4);;
+gap> Rows(MulTab(S))=Columns(AntiMulTab(S));
+true
 gap> classes := ConjugacyClassOfTransformationCollection(S,S5);;
 gap> i := Random([1..Size(classes)]);;
 gap> j := Random([1..Size(classes)]);;
