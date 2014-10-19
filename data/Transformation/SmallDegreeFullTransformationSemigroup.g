@@ -13,7 +13,7 @@ BuildSubsOfFullTransformationSemigroup := function(degree)
   # last 2 args: workaround for semigroups issue #100 on wrong degrees for trivial monoids 
   #converting to small generator sets
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
-  Perform(PrefixMatchedListDir(".",prefix),GensFileIsomClasses);
+  Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
 end;
 
 for i in [1..3] do  
