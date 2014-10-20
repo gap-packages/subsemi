@@ -30,3 +30,29 @@ K42SubReps := function()
   od;
   CloseStream(output);
 end;
+
+K43SubFromUpperTorsos := function(filename)
+  local U, , result, mt, gens, time;
+  SetInfoLevel(SubSemiInfoClass,0);
+  time := TimeInSeconds();;
+  result := [];
+  mt := MulTab(K43,S4);
+  gens := IndicatorSetOfElements(K42, SortedElements(mt));
+  torsos := LoadIndicatorSets(filename);
+  for U in torsos do
+    Append(result, AsList(SubSgpsByMinClosuresParametrized(mt, U, gens, Stack(),[])));
+  od;
+  SaveIndicatorSets(result,Concatenation(input,"M"));;
+  PrintTo(Concatenation(input,"F"),String(TimeInSeconds()-time));;
+end;
+  
+
+mt := MulTab(K43,S4);;
+filter := IndicatorSetOfElements(AsList(K42),SortedElements(mt));
+
+result := [];
+for T in subs do
+  Append(result, AsList(SubSgpsByMinExtensionsParametrized(mt, T, filter, Stack())));
+od;
+
+end;
