@@ -1,3 +1,5 @@
+0.32
+	Adding functions for testing anti-isomorphism. Bugfix in SubTableMatchingSearch (checking for missing profiles). Fixes in scripts.
 0.31
 	Reviewing the isomorphism checking code. A bit of abstraction turned it into an embedding algorithm. Many functions became (pseudo)polymorphic, so they take both plain matrices and MulTab objects. A 'user interface' is fitted: high-level functions AllSubsemigroups and ConjugacyClassRepSubsemigroups.
 0.30
