@@ -61,7 +61,7 @@ local mt,inds;
 end);
 
 # allowed copying: straight -> straight
-#                  straight -> anti
+#                  straight -> anti #TODO think about this
 InstallGlobalFunction(CopyMulTab,
 function(multab, isanti)
 local mt;
@@ -75,8 +75,10 @@ local mt;
   fi;
   SetSortedElements(mt,SortedElements(multab));
   SetIndices(mt,Indices(multab));
-  SetSymmetries(mt, Symmetries(multab));
-  SetOriginalName(mt,OriginalName(multab));
+  SetSymmetries(mt, Symmetries(multab)); # TODO is this correct? symmetries are the same?
+  if HasOriginalName(multab) then 
+    SetOriginalName(mt,OriginalName(multab));
+  fi;
   return mt;
 end);
 

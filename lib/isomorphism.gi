@@ -170,7 +170,7 @@ function(sgps)
   classes := [];
   for S in sgps do
     mtS := MulTab(S);
-    antimtS := AntiMulTab(S);
+    antimtS := CopyMulTab(mtS,true); #copying as anti, no recalc
     pos := First([1..Size(classes)],
                  x -> IsIsomorphicMulTab(mts[x],mtS)
                  or IsIsomorphicMulTab(mts[x],antimtS));
