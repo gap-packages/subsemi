@@ -31,10 +31,36 @@ K42SubReps := function()
   CloseStream(output);
 end;
 
-K43SubFromUpperTorsos := function(filename)
-  local U, , result, mt, gens, time;
-  SetInfoLevel(SubSemiInfoClass,0);
-  time := TimeInSeconds();;
+#takes couple of days, requires at least 4GB RAM
+K43modK42subs := function()
+local rfh, T, mtT, reps,mtK43, preimgs, elts, itf, otf, s, indset, torso;
+  rfh := ReesFactorHomomorphism(K42);
+  T := Range(rfh);
+  SetName(T,"K43modK42");
+  mtT := MulTab(T,S4,rfh);
+  reps := SubSgpsByMinExtensions(mtT);
+  SaveIndicatorSets(reps, "K43modK42.reps");
+  mtK43 := MulTab(K43);
+  preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
+  elts := List(preimgs, function(x) if Size(x)> 1 then return fail; else return x[1];fi;end);
+  itf := InputTextFile("K43modK42.reps");
+  otf := OutputTextFile("K43modK42.uppertorsos",false);
+  s := ReadLine(itf);
+  repeat
+    NormalizeWhitespace(s);
+    indset := AsBlist(DecodeBitString(s));
+    torso := ElementsByIndicatorSet(indset,elts);
+    if fail in torso then Remove(torso,Position(torso,fail));fi;
+    WriteLine(otf,EncodeBitString(AsBitString(
+            IndicatorSetOfElements(torso,mtK43))));
+    s := ReadLine(itf);
+  until s=fail;
+end;
+
+K43SubsFromUpperTorsos := function(filename)
+  local U, result, mt, gens, time;
+  SetInfoLevel(SubSemiInfoClass,0);#because this is used in parallel
+  time := TimeInSeconds();
   result := [];
   mt := MulTab(K43,S4);
   gens := IndicatorSetOfElements(K42, SortedElements(mt));
@@ -45,14 +71,16 @@ K43SubFromUpperTorsos := function(filename)
   SaveIndicatorSets(result,Concatenation(input,"M"));;
   PrintTo(Concatenation(input,"F"),String(TimeInSeconds()-time));;
 end;
-  
 
-mt := MulTab(K43,S4);;
-filter := IndicatorSetOfElements(AsList(K42),SortedElements(mt));
-
-result := [];
-for T in subs do
-  Append(result, AsList(SubSgpsByMinExtensionsParametrized(mt, T, filter, Stack())));
-od;
-
+K43SubsOneShot := function()
+  local mtT4, mtK43, reps, output, r;
+  mtT4 := MulTab(T4,S4);
+  mtK43 := MulTab(K43,S4);
+  reps := AsList(SubSgpsByMinExtensions(mtK43));
+  output := OutputTextFile("K43_T4.reps", false);
+  for r in List(reps,
+          x->ReCodeIndicatorSet(x,mtK43,mtT4)) do
+    AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
+  od;
+  CloseStream(output);
 end;
