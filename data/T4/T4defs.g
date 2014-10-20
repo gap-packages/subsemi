@@ -42,7 +42,9 @@ local rfh, T, mtT, reps,mtK43, preimgs, elts, itf, otf, s, indset, torso;
   SaveIndicatorSets(reps, "K43modK42.reps");
   mtK43 := MulTab(K43);
   preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
-  elts := List(preimgs, function(x) if Size(x)> 1 then return fail; else return x[1];fi;end);
+  elts := List(preimgs,
+               function(x) 
+                 if Size(x)> 1 then return fail;else return x[1];fi;end);
   itf := InputTextFile("K43modK42.reps");
   otf := OutputTextFile("K43modK42.uppertorsos",false);
   s := ReadLine(itf);
@@ -58,7 +60,7 @@ local rfh, T, mtT, reps,mtK43, preimgs, elts, itf, otf, s, indset, torso;
 end;
 
 K43SubsFromUpperTorsos := function(filename)
-  local U, result, mt, gens, time;
+  local U, result, mt, gens, time, torsos;
   SetInfoLevel(SubSemiInfoClass,0);#because this is used in parallel
   time := TimeInSeconds();
   result := [];
@@ -66,10 +68,11 @@ K43SubsFromUpperTorsos := function(filename)
   gens := IndicatorSetOfElements(K42, SortedElements(mt));
   torsos := LoadIndicatorSets(filename);
   for U in torsos do
-    Append(result, AsList(SubSgpsByMinClosuresParametrized(mt, U, gens, Stack(),[])));
+    Append(result, AsList(
+            SubSgpsByMinExtensionsParametrized(mt, U, gens, Stack(),[])));
   od;
-  SaveIndicatorSets(result,Concatenation(input,"M"));;
-  PrintTo(Concatenation(input,"F"),String(TimeInSeconds()-time));;
+  SaveIndicatorSets(result,Concatenation(filename,"M"));;
+  PrintTo(Concatenation(filename,"F"),String(TimeInSeconds()-time));;
 end;
 
 K43SubsOneShot := function()
@@ -83,4 +86,17 @@ K43SubsOneShot := function()
     AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
   od;
   CloseStream(output);
+end;
+
+P_T4 := function()
+local mtT4, I, uts, id;
+  mtT4 := MulTab(T4,S4);
+  I := SemigroupIdealByGenerators(T4, [Transformation([1,2,3,3])]); #K43
+  uts := UpperTorsos(I,S4);
+  #remove emptyset
+  Remove(uts, Position(uts, EmptySet(mtT4)));
+  #remove trivial group
+  id := BlistList(Indices(mtT4), [Position(SortedElements(mtT4),IdentityTransformation)]);
+  Remove(uts, Position(uts, id));
+  SaveIndicatorSets(SubSgpsByUpperTorsos(I,S4,uts),"P_T4.reps");
 end;
