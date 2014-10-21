@@ -66,7 +66,7 @@ K43SubsFromUpperTorsos := function(filename)
   time := TimeInSeconds();
   result := [];
   mt := MulTab(K43,S4);
-  gens := IndicatorSetOfElements(K42, SortedElements(mt));
+  gens := IndicatorSetOfElements(AsList(K42), SortedElements(mt));
   torsos := LoadIndicatorSets(filename);
   for U in torsos do
     Append(result, AsList(
