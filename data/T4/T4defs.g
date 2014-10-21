@@ -32,6 +32,7 @@ K42SubReps := function()
 end;
 
 #takes couple of days, requires at least 4GB RAM
+#there are a few more reps than uppertorsos
 K43modK42subs := function()
 local rfh, T, mtT, reps,mtK43, preimgs, elts, itf, otf, s, indset, torso;
   rfh := ReesFactorHomomorphism(K42);
