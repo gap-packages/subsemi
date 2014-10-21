@@ -9,5 +9,6 @@ XLOADER="Read(\\\"T4defs.g\\\");" #escape character madness
 #split -n 128 K43modK42.su
 
 rm UTtasks;
-for i in UT*; do echo "echo \"$XLOADER K43SubsFromUpperTorsos(\\\"$i\\\");\" | gap  -m 8g" >> UTtasks; done; 
+for i in UT*; do echo "echo \"$XLOADER K43SubsFromUpperTorsos(\\\"$i\\\");\" | gap  -m 7g" >> UTtasks; done;
+parallel < UTtasks
 
