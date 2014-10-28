@@ -49,7 +49,8 @@ function(mt,baseset,generators, waiting, result)
         log, # function logging some info to standart output
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
-        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main, init, normalizer;
+        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main,init,
+        normalizer,seed;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -85,20 +86,23 @@ function(mt,baseset,generators, waiting, result)
   #-----------------------------------------------------------------------------
   init := function()
     result := HeavyBlistContainer();
-    #the baseset might be closed, in that case it is a sub
-    if SizeBlist(baseset) > 0 and IsClosedSubTable(baseset, mt) then
-      AddSet(result,ConjugacyClassRep(baseset,mt));
+    #if baseset not empty then close it and add it as a sub
+    if SizeBlist(baseset) > 0 then
+      seed := ConjugacyClassRep(SgpInMulTab(baseset,mt),mt);
+      AddSet(result, seed);
+    else
+      seed := baseset; 
     fi;
     # fill up the waiting list with lists of 2 or 3 elements: 
     # 1: baseset, 2: gen the element to be extended with, 3: generating set (opt)
     if isBreadthFirst then
       gensets := [];
       for gen in ListBlist(Indices(mt),generators) do
-        Store(waiting, [baseset, gen,[gen]]);
+        Store(waiting, [seed, gen,[gen]]);
       od;
     else
       for gen in ListBlist(Indices(mt),generators) do
-        Store(waiting, [baseset, gen]);
+        Store(waiting, [seed, gen]);
       od;
     fi;
   end;
