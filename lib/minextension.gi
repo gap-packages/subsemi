@@ -38,9 +38,14 @@ ResumeMinExtensions := function()
                  SUBSEMI_MinExtensionsCheckPointData.result
                  );
 end;
+
+# returns all extensions of the given baseset (empty baseset not collected,
+# but the closure of the baseset is added to the final result)
 # mt - MulTab, multiplication table
 # baseset - the elements already in
 # generators - the set of possible extending elements from
+# waiting - the new and yet unchecked extensions in a stack or a queue
+# result - the collected subs so far in a collection admitting AddSet
 InstallGlobalFunction(SubSgpsByMinExtensionsParametrized,
 function(mt,baseset,generators, waiting, result)
   local gen, # the generator to be added to the base
