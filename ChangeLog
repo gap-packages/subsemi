@@ -1,3 +1,5 @@
+0.33
+	Working on the Sub(T4) recalculation script. Bugfix: general subsets have to be closed by SubSgpsByMinExtensions.
 0.32
 	Adding functions for testing anti-isomorphism. Bugfix in SubTableMatchingSearch (checking for missing profiles). Fixes in scripts.
 0.31
