@@ -76,6 +76,18 @@ K43SubsFromUpperTorsos := function(filename)
   PrintTo(Concatenation(filename,"F"),String(TimeInSeconds()-time));;
 end;
 
+K43sharp := function()
+local mtK43, mtT4, K43reps, K43_T4reps;
+  mtK43 := MulTab(K43);
+  mtT4 := MulTab(T4);
+  K43reps := LoadIndicatorSets("K43.reps");
+  K43_T4reps := List(K43reps, x->ReCodeIndicatorSet(x,mtK43,mtT4)); 
+  SaveIndicatorSets(K43_T4reps,"K43_T4.reps");
+  id := Position(SortedElements(mtT4), IdentityTransformation);
+  Perform(K43_T4reps, function(x) x[id]:=true;end);
+  SaveIndicatorSets(K43_T4reps,"K43sharp_T4.reps");
+end;
+
 K43SubsOneShot := function()
   local mtT4, mtK43, reps, output, r;
   mtT4 := MulTab(T4,S4);
@@ -90,7 +102,7 @@ K43SubsOneShot := function()
 end;
 
 P_T4 := function()
-local mtT4, I, uts, id;
+local mtT4, I, uts, id, result;
   mtT4 := MulTab(T4,S4);
   I := SemigroupIdealByGenerators(T4, [Transformation([1,2,3,3])]); #K43
   uts := UpperTorsos(I,S4);
@@ -99,5 +111,7 @@ local mtT4, I, uts, id;
   #remove trivial group
   id := BlistList(Indices(mtT4), [Position(SortedElements(mtT4),IdentityTransformation)]);
   Remove(uts, Position(uts, id));
-  SaveIndicatorSets(SubSgpsByUpperTorsos(I,S4,uts),"P_T4.reps");
+  result := SubSgpsByUpperTorsos(I,S4,uts);
+  Add(result,id);
+  SaveIndicatorSets(result,"P_T4.reps");
 end;
