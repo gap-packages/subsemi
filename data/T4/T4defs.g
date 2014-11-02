@@ -77,7 +77,7 @@ K43SubsFromUpperTorsos := function(filename)
 end;
 
 K43sharp := function()
-local mtK43, mtT4, K43reps, K43_T4reps;
+local mtK43, mtT4, K43reps, K43_T4reps, id;
   mtK43 := MulTab(K43);
   mtT4 := MulTab(T4);
   K43reps := LoadIndicatorSets("K43.reps");
