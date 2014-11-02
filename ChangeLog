@@ -1,0 +1,66 @@
+0.33
+	Working on the Sub(T4) recalculation script. Bugfix: general subsets have to be closed by SubSgpsByMinExtensions.
+0.32
+	Adding functions for testing anti-isomorphism. Bugfix in SubTableMatchingSearch (checking for missing profiles). Fixes in scripts.
+0.31
+	Reviewing the isomorphism checking code. A bit of abstraction turned it into an embedding algorithm. Many functions became (pseudo)polymorphic, so they take both plain matrices and MulTab objects. A 'user interface' is fitted: high-level functions AllSubsemigroups and ConjugacyClassRepSubsemigroups.
+0.30
+	GensFileIsomClasses rewritten.
+0.29
+	Further extensions to SgpTag.
+0.28
+	SgpTag extended with the number of maximal D-classes and the number of edges in the Hasse diagram of D-classes. Fixing misleading peek in SubSgpsByMinExtensions.
+0.27
+	Added scripts for enumerating small-degree diagram semigroups. Improved filing.
+0.26
+	Improved semigroup tagging and new memory-efficient filing function.
+0.25
+	Improving the calculation of isomorphism classes: preclassifying by the number of idempotents.
+0.24
+	Further tree pruning in SubSgpsByMinExtensions by the normalizer of the subsemigroup (James). Checkpointing added. Several small corrections, commenting.
+0.23
+	SubSemiTestAll/TestInstall now separated. Symmetric inverse semigroup test added. Unnecessary (used only once) functions removed.
+0.22
+	Improved filing script.
+0.21
+	SubSgpsByUpperTorsos is the correct function name.
+0.20
+	Separating upper torso calculation. It is now possible not to calculate the ideal again (empty upper torso can be removed).
+0.19
+	BUGFIX: in minextensions.gi, removing the generators already in the baseset caused losses in the torso calculation.
+0.18
+	IsomorphismSemigroups -> IsomorphismSemigroupsByMulTabs, following upstream changes.
+0.17
+	NilPotencyDegreeByMulTabs added.
+0.16
+	IndicatorSetByElements (and similar functions in the gang) can now take multiplication tables as arguments instead of the sorted elements. Just for convenience.
+0.15
+	Reviewing the isomorphism code. ElementProfileLookup added. Improving Is3NilPotent.
+0.14
+	Just renaming to follow the paper's terminology: minimal closures to minimal extensions.
+0.13
+	Removing equivalent generators is done only once for the minimal closure method.
+0.12
+	Added possibility to search for minimal generating sets as well. This required the minimal closure search to change to breadth-first. Depth-first is still possible.
+0.11
+	Reviewing closures. Finetuning logging and dumping in SubSgpsByMinClosures. FullSet, EmptySet now attributes.
+0.10
+	1Extension renamed to MinClosure.
+0.9
+	IsClosedSubTable added. SubSgpsBy1ExtensionsParametrized added enabling faster torso combinations. The empty semigroup is returned now as a subsemigroup.
+0.8
+	IsomorphismMulTabs, IsomorphismSemigroups added.
+0.7
+	SgpInMulTab can be given different closure functions.
+0.6
+	Alternative closure method added, further work on combining ideals, simplifications.
+0.5
+	Lot of work on enumerating by parallel search for ideals.
+0.4
+	MulTab now is an attribute storing object, so no more record references.
+0.3
+	Adding invariants for both element and multiplication table level.
+0.2
+	Adding test cases, checking against brute-force methods. Converting between the indicator set (bitlist) and the subsets of semigroups.
+0.1
+	Working 1-extension method transferred, but poor package structure, no test cases yet.

@@ -1,0 +1,391 @@
+################################################################################
+##
+## SubSemi
+##
+## Multiplication table for magmas
+##
+## Copyright (C) 2013  Attila Egri-Nagy
+##
+
+#mulitplication table based on the order of the magma elements in list,
+#indices are assigned to elements
+InstallGlobalFunction(ProductTableOfElements,
+function(M) #magma in a list
+local n, rows,i,j;
+  n := Size(M);
+  #nxn matrix (intialized with invalid value zero)
+  rows := List([1..n], x->ListWithIdenticalEntries(n,0));
+  #just a double loop to have all products
+  for i in [1..n] do
+    for j in [1..n] do
+      rows[i][j] := Position(M, M[i]*M[j]);
+    od;
+  od;
+  return rows;
+end);
+
+### CONSTRUCTORS ###############################################################
+# sortedelements - a sorted list of multiplicative elements
+# G - a group of automorphisms of the multiplicative elements
+# name - fail if no need for naming (search algorithm will not dump)
+# hom - a Rees factor homomorphism
+# isanti - flag to make anti multiplication table
+InstallGlobalFunction(CreateMulTab,
+function(sortedelements, G, name, hom, isanti)
+local mt,inds;
+  mt := Objectify(MulTabType, rec());
+  SetIsAnti(mt,isanti);
+  if isanti then
+    SetRows(mt,TransposedMat(ProductTableOfElements(sortedelements)));
+  else
+    SetRows(mt,ProductTableOfElements(sortedelements));
+  fi;
+  SetSortedElements(mt,sortedelements);
+  inds := [1..Size(sortedelements)];
+  MakeImmutable(inds);
+  SetIndices(mt,inds);
+  if hom = fail then
+    #conjugations expressed as permutations of the set elements (indices of)
+    SetSymmetries(mt,Set(G,
+            g->AsPermutation(TransformationOp(g,SortedElements(mt),\^))));
+  else
+    #same as above, except 
+    SetSymmetries(mt,Set(G,
+            g->AsPermutation(TransformationOp(g,SortedElements(mt),
+                    function(p,t)
+                      return Image(hom,PreImagesRepresentative(hom,p)^t);
+                    end))));
+  fi;
+  if  name <> fail then SetOriginalName(mt,name);fi;
+  return mt;
+end);
+
+# allowed copying: straight -> straight
+#                  straight -> anti #TODO think about this
+InstallGlobalFunction(CopyMulTab,
+function(multab, isanti)
+local mt;
+  mt := Objectify(MulTabType, rec());
+  if IsAnti(multab) and isanti then return fail;fi;
+  SetIsAnti(mt,isanti);
+  if isanti then
+    SetRows(mt,Columns(multab));
+  else
+    SetRows(mt,Rows(multab));
+  fi;
+  SetSortedElements(mt,SortedElements(multab));
+  SetIndices(mt,Indices(multab));
+  SetSymmetries(mt, Symmetries(multab)); # TODO is this correct? symmetries are the same?
+  if HasOriginalName(multab) then 
+    SetOriginalName(mt,OriginalName(multab));
+  fi;
+  return mt;
+end);
+
+InstallOtherMethod(MulTab,"for closed ordered list of multiplicative elements",
+[IsSortedList],
+function(l)
+  return CreateMulTab(l, Group(()), fail, fail,false);
+end);
+
+InstallMethod(MulTab, "for a semigroup",
+[IsSemigroup],
+function(S)
+  if HasName(S) then
+    return CreateMulTab(AsSortedList(S), Group(()),Name(S),fail,false);
+  else
+    return CreateMulTab(AsSortedList(S), Group(()),fail,fail,false);
+  fi;
+end);
+
+InstallMethod(AntiMulTab, "for a semigroup",
+[IsSemigroup],
+function(S)
+  if HasName(S) then
+    return CreateMulTab(AsSortedList(S), Group(()), Name(S),fail,true);
+  else
+    return CreateMulTab(AsSortedList(S), Group(()),fail,fail,true);
+  fi;
+end);
+
+
+InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
+[IsSemigroup,IsGroup],
+function(S,G)
+  if HasName(S) then
+    return CreateMulTab(AsSortedList(S), G, Name(S),fail,false);
+  else
+    return CreateMulTab(AsSortedList(S), G,fail,fail,false);
+  fi;
+end);
+
+InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
+[IsSemigroup,IsGroup,IsMapping],
+function(S,G,hom)
+  if HasName(S) then
+    return CreateMulTab(AsSortedList(S), G, Name(S),hom,false);
+  else
+    return CreateMulTab(AsSortedList(S), G,fail,hom,false);
+  fi;
+end);
+
+InstallMethod(SymmetryGroup,"for multab",
+        [IsMulTab],
+function(mt)
+  if Size(Symmetries(mt)) = 1 then return Group(()); fi;  
+  return Group(SmallGeneratingSet(Group(Symmetries(mt)))); #TODO this is a bit roundabout
+end);
+
+InstallMethod(Columns,"for multab",
+        [IsMulTab],
+function(mt)
+  return TransposedMat(Rows(mt));
+end);
+
+InstallGlobalFunction(ConjugacyClassOfSet,
+function(indset,mt)
+  return Set(Symmetries(mt), g->OnFiniteSet(indset,g));
+end);
+
+#the minimal one is the representative
+InstallGlobalFunction(ConjugacyClassRep,
+function(indset,mt)
+local  min, new, g;
+  min := indset;
+  for g in Symmetries(mt) do
+    new := OnFiniteSet(indset,g);
+    if new < min then
+      min := new;
+    fi;
+  od;
+  return min;
+end);
+
+#nauty stuff
+#InstallGlobalFunction(ConjugacyClassRep,
+#function(indset,mt)
+#  return BlistList(Indices(mt),
+#                 SmallestImageSet(SymmetryGroup(mt), ListBlist(Indices(mt),indset)));
+#end);
+
+
+
+# we are trying to be clever with conjugacy class representative calculator
+# the idea is to calculate the representative directly by finding the minimal element
+InstallMethod(MinimumConjugates,"for multab",
+        [IsMulTab],
+function(mt) return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y))); end);
+
+InstallMethod(MinimumConjugators,"for multab",
+        [IsMulTab],
+function(mt)
+  local minimums;
+  minimums := MinimumConjugates(mt); 
+  return List(Indices(mt), x ->  Filtered(Symmetries(mt), y -> x^y=minimums[x]));
+end);
+
+# but in practice this is not fast at all (maybe splitting sizewise?)
+InstallGlobalFunction(ConjugacyClassRepClever,
+function(indset,mt)
+  local  min,new, g, symmetries,mins, set, minconjs;
+  if SizeBlist(indset) = 0 then return indset; fi; #clear the empty case
+  set := List(Positions(indset, true));
+  mins := List(set, x -> MinimumConjugates(mt)[x]);
+  minconjs := List(Positions(mins,Minimum(mins)),
+                   x->MinimumConjugators(mt)[set[x]]);
+  if Sum(List(minconjs,Size)) >= Size(Symmetries(mt)) then
+    symmetries := Symmetries(mt); #we have little chance for less symm's
+  else
+    symmetries := Set(Concatenation(minconjs));
+  fi;
+  #doing the same with the reduced set of symmetries
+  #Print(List(Positions(mins,min),x->set[x]), " " ,Size(symmetries)," ");
+  min := indset;
+  for g in symmetries do
+    new := OnFiniteSet(indset,g);
+    if new < min then
+      min := new;
+    fi;
+  od;
+  return min;
+end);
+
+
+### DISPLAY ####################################################################
+InstallOtherMethod(Size, "for a multab",
+[IsMulTab],
+function(mt)
+  return Size(Indices(mt));
+end);
+
+InstallMethod(ViewObj, "for a multab",
+[IsMulTab],
+function(mt)
+  local str;
+  if IsAnti(mt) then str := "<anti-"; else str := "<"; fi;
+  if HasOriginalName(mt) then
+    Print(str,"multiplication table of ",OriginalName(mt),">");
+  else
+    Print(str,"multiplication table of ",Size(mt)," elements>");
+  fi;
+end);
+
+#experimental
+InstallMethod(EquivalentGenerators,"for a multab",
+        [IsMulTab],
+function(mt)
+local al,i;
+  al := AssociativeList();
+  for i in Indices(mt) do Assign(al,i,SgpInMulTab([i],mt));od;
+  al := ReversedAssociativeList(al);
+  return Filtered(ValueSet(al), x->Length(x)>1);
+end);
+
+InstallGlobalFunction(RemoveEquivalentGenerators,
+function(indset,mt)
+  local class, flag, i, set;
+  set := ShallowCopy(indset);
+  for class in EquivalentGenerators(mt) do #keep max one from each equiv class
+    flag := false;
+    for i in class  do
+      if set[i] then
+        if flag then set[i] := false; else flag := true;fi;
+      fi;
+    od;
+  od;
+  return set;
+end);
+
+
+InstallMethod(GlobalTables,"for multab",
+        [IsMulTab],
+function(mt)
+  local i,j, boolfunctab,val, L;
+  boolfunctab := List(Indices(mt),x -> []);
+  for i in Indices(mt) do
+    for j in Indices(mt) do
+      val := Rows(mt)[i][j];
+      if (not val = i) and (not val = j) then
+        AddSet(boolfunctab[val],AsSortedList([i,j]));
+      fi;
+    od;
+  od;
+  #processing to make it more compact
+  #this magically puts diagonal closure there  easily as it is the first entry int the second part, cool stuff
+  L := List(Indices(mt),x -> []);
+  for i in Indices(mt) do
+    for j in AsSet(List(boolfunctab[i], x->x[1])) do
+      Add(L[i], [j, List(Filtered(boolfunctab[i],x->x[1]=j),y->y[2])]);
+    od;
+  od;
+  return L;
+end);
+
+#backward thinking
+InstallMethod(LocalTables,"for multab", [IsMulTab],
+function(mt)
+  local i,j, tab,val, vals,row,col;
+  tab := List(Indices(mt),x -> []);
+  for i in Indices(mt) do
+    row := Rows(mt)[i];
+    col := Columns(mt)[i];
+    vals := Unique(Union(row,col));
+    for val in vals do
+      Add(tab[i],[val,Unique(Union(Positions(row,val),Positions(col,val)))]);
+    od;
+  od;
+  return tab;
+end);
+
+InstallMethod(FullSet,"for multab", [IsMulTab],
+function(mt)
+  return BlistList(Indices(mt),Indices(mt));
+end);
+
+InstallMethod(EmptySet,"for multab", [IsMulTab],
+function(mt)
+  return BlistList(Indices(mt),[]);
+end);
+
+# S,S^1,S^2,...,S^n=S^{n+1}
+InstallMethod(ConvergingSets,"for multab and list",
+        [IsMulTab,IsList],
+function(mt,l)
+  local tr,img;
+  tr := [];
+  img := l;
+  repeat
+    Add(tr, img, 1);
+    img := AsSet(Concatenation(
+                   List(Columns(mt){tr[1]}, x->AsSet(x{tr[1]}))));
+  until img=tr[1];
+  return Reversed(tr);
+end);
+
+InstallOtherMethod(ConvergingSets,"for multab", [IsMulTab],
+function(mt)
+  return ConvergingSets(mt,Indices(mt));
+end);
+
+InstallGlobalFunction(NilpotencyDegreeByMulTabs,
+function (sgp)
+  local sets;
+  sets := ConvergingSets(MulTab(sgp));
+  if Size( sets[Size(sets)]) = 1  then
+    return Size(sets);
+  else
+    return fail;
+  fi;
+end);
+
+# returns the subarray of the multiplication table mt spanned by 
+# elements in L (positive integers as indices)
+# the order of the elements in L kept
+# 0 indicate any product outside L (since subarrays may not be closed)
+# mt can be just a matrix, or a MulTab object 
+InstallGlobalFunction(SubArray,
+function(mt, L)
+  local sa,i,j,tab;
+  if IsMulTab(mt) then
+    tab := Rows(mt);
+  else
+    tab := mt;
+  fi;
+  sa := [];
+  for i in L do
+    Add(sa,List(L,
+            function(j) if tab[i][j] in L then 
+                          return tab[i][j]; 
+                        else 
+                          return 0;fi;end));
+  od;
+  return sa;                  
+end);
+
+#just for convenience, TODO: include it properly
+SmallGenSetSgpFromIndicatorSet := function(indset,mt)
+  return SmallGeneratingSet(Semigroup(
+                 ElementsByIndicatorSet(indset,SortedElements(mt))
+                 ));
+end;
+
+#CONVENIENCE
+InstallOtherMethod(ElementsByIndicatorSet, "for boolean list and multab",
+        [IsList, IsMulTab],
+function(indset, mt)
+  return ElementsByIndicatorSet(indset, SortedElements(mt));
+end);
+
+InstallOtherMethod(IndicatorSetOfElements,
+        "for a list of elements and multab",
+        [IsList,IsMulTab],
+function(elms, mt)
+  return IndicatorSetOfElements(elms, SortedElements(mt));
+end);
+
+InstallOtherMethod(ReCodeIndicatorSet,
+        "for a boolean list, a source and destiantion multabs",
+        [IsList,IsMulTab,IsMulTab],
+function(indset,srcmt, destmt)
+  return IndicatorSetOfElements(ElementsByIndicatorSet(indset,srcmt),destmt);
+end);
