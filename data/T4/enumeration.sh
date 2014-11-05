@@ -13,7 +13,7 @@ XLOADER="Read(\\\"T4defs.g\\\");" #escape character madness
 echo $LOADER"P_T4();" | gap
 
 #subs of K43 mod K42
-echo $LOADER"K43modK42subs();" | gap
+echo $LOADER"K43modK42subs();" | gap -q -m 7g
 sort -u K43modK42.uppertorsos > K43modK42.suts
 
 ###### extending the uppertorsos from K43/K42 ##################################
