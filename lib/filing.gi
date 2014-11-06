@@ -120,6 +120,35 @@ BlistToTSGens := function(indsetfile,mt)
                x->BlistToSmallGenSet(x,mt)));
 end;
 
+#TODO the two functions below are copy-paste twins, better abstraction needed
+#assumed input is .ais files
+GensFileIsomClasses := function(filename)
+  local prefix, sgps, idpclasses, digits,i,al,iso, counter,sgpclasses,class;
+  prefix := filename{[1..Size(filename)-4]};
+  counter:=1;
+  al := AssociativeList();
+  #memory saving idea - not storing all semigroups
+  # frequency profiles -> generator sets
+  Perform(ReadGenerators(filename),function(x)
+    Collect(al,IdempotentFrequencies(MulTab(Semigroup(x))),x);end);
+  idpclasses := Filtered(ValueSet(al),x->Size(x)>1);
+  digits := Size(String(Size(idpclasses))); #just an upper bound  
+  for class in idpclasses do
+    sgps := List(class, Semigroup);
+    sgpclasses := Filtered(SgpIsomorphismClasses(sgps),x->Size(x)>1);
+    for iso in sgpclasses do
+      if not WriteGenerators(
+                 Concatenation(prefix,"_",
+                         PaddedNumString(counter,digits),".iso"),
+                 iso,"w") then
+        Error(Concatenation("Failure when processing ",filename));
+      fi;
+      counter := counter + 1;
+    od;
+  od;
+end;
+
+#assumed input is .gens files
 GensFileAntiAndIsomClasses := function(filename)
   local prefix, sgps, idpclasses, digits,i,al,iso, counter,sgpclasses,class;
   prefix := filename{[1..Size(filename)-5]};
@@ -155,5 +184,7 @@ end;
 
 PostfixMatchedListDir := function(dir, postfix)
   return Filtered(IO_ListDir(dir),
-                 x->ForAll([1..Length(postfix)], y->Size(x)>=Size(postfix) and x[Size(x)-Size(postfix)+y]=postfix[y]));
+                 x->ForAll([1..Length(postfix)],
+                         y->Size(x)>=Size(postfix)
+                            and x[Size(x)-Size(postfix)+y]=postfix[y]));
 end;
