@@ -19,7 +19,6 @@ NrEdgesInHasseDiagramOfDClasses := function(sgp)
   return Sum(List(Source(hd), x-> Size(Images(hd,x))));;
 end;
 
-
 # semigroup -> string containing green info
 GreenTag := function (sgp,ndigits)
   local s;
@@ -110,7 +109,6 @@ IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
   od;
 end;
 
-
 BlistToSmallGenSet := function(indset, mt)
   return SmallSemigroupGeneratingSet(ElementsByIndicatorSet(indset,mt));
 end;
@@ -148,8 +146,14 @@ GensFileAntiAndIsomClasses := function(filename)
   od;
 end;
 
+### getting some file lists - bit clumsy methods TODO check io package for this
 # implementing ls <dir>/<prefix>*
 PrefixMatchedListDir := function(dir, prefix)
   return Filtered(IO_ListDir(dir),
                  x->ForAll([1..Length(prefix)], y->x[y]=prefix[y]));
+end;
+
+PostfixMatchedListDir := function(dir, postfix)
+  return Filtered(IO_ListDir(dir),
+                 x->ForAll([1..Length(postfix)], y->Size(x)>=Size(postfix) and x[Size(x)-Size(postfix)+y]=postfix[y]));
 end;
