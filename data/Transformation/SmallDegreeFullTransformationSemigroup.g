@@ -9,11 +9,9 @@ BuildSubsOfFullTransformationSemigroup := function(degree)
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
   IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
-#          degree,SetDegreeOfTransformationSemigroup);
-  # last 2 args: workaround for semigroups issue #100 on wrong degrees for trivial monoids 
-  #converting to small generator sets
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
+  Perform(PostfixMatchedListDir(".","ais"),GensFileIsomClasses);
 end;
 
 for i in [1..3] do  
