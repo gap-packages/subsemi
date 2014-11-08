@@ -175,6 +175,26 @@ GensFileAntiAndIsomClasses := function(filename)
   od;
 end;
 
+#assumed input is an .ais file
+AntiAndIsomClassToIsomClasses := function(filename)
+  local prefix, sgps, digits,i,iso,sgpclasses, counter;
+  prefix := filename{[1..Size(filename)-4]};
+  sgps := List(ReadGenerators(filename), Semigroup);
+  sgpclasses := SgpIsomorphismClasses(sgps);
+  if Size(sgpclasses) = 1 then return; fi; #no anti-isomorphism
+  digits := Size(String(Size(sgpclasses))); #just an upper bound  
+  counter:=1;
+  for iso in sgpclasses do
+    if not WriteGenerators(
+               Concatenation(prefix,"_",
+                       PaddedNumString(counter,digits),".iso"),
+               iso,"w") then
+      Error(Concatenation("Failure when processing ",filename));
+    fi;
+    counter := counter + 1;
+  od;  
+end;
+
 #the frequency distribution vector
 SizeDistDataOfSgpIndicatorSets := function(subreps)
   local collected, sizes, N, result; 
