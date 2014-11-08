@@ -8,6 +8,7 @@ BuildSubsOfFullTransformationSemigroup := function(degree)
   prefix := Concatenation("T",String(degree),"_");
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
+  SaveIndicatorSets(subreps,Concatenation(prefix{[1..Size(prefix)-1]},".reps"));
   IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
