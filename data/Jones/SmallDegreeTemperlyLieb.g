@@ -12,7 +12,7 @@ BuildSubsOfJonesMonoid := function(degree)
   IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
-  Perform(PostfixMatchedListDir(".","ais"),GensFileIsomClasses);
+  Perform(PostfixMatchedListDir(".","ais"),AntiAndIsomClassToIsomClasses);
 end;
 
 for i in [1..5] do  
