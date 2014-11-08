@@ -175,6 +175,18 @@ GensFileAntiAndIsomClasses := function(filename)
   od;
 end;
 
+#the frequency distribution vector
+SizeDistDataOfSgpIndicatorSets := function(subreps)
+  local collected, sizes, N, result; 
+  sizes := List(subreps, SizeBlist);
+  N := Maximum(sizes);
+  collected := Collected(sizes);
+  result := ListWithIdenticalEntries(N,0);
+  Perform(collected, function(x) result[x[1]]:=x[2];end);
+  Add(result, 1,1); # for the empty set
+  return result;
+end;
+
 ### getting some file lists - bit clumsy methods TODO check io package for this
 # implementing ls <dir>/<prefix>*
 PrefixMatchedListDir := function(dir, prefix)
