@@ -210,13 +210,16 @@ end;
 ### getting some file lists - bit clumsy methods TODO check io package for this
 # implementing ls <dir>/<prefix>*
 PrefixMatchedListDir := function(dir, prefix)
-  return Filtered(IO_ListDir(dir),
-                 x->ForAll([1..Length(prefix)], y->x[y]=prefix[y]));
+  return Filtered(IO_ListDir(dir), x->1=PositionSublist(x,prefix));
 end;
 
 PostfixMatchedListDir := function(dir, postfix)
-  return Filtered(IO_ListDir(dir),
-                 x->ForAll([1..Length(postfix)],
-                         y->Size(x)>=Size(postfix)
-                            and x[Size(x)-Size(postfix)+y]=postfix[y]));
+  return Filtered(IO_ListDir(dir),x-> x = postfix or (Size(x)>=Size(postfix)
+                 and Size(x)-Size(postfix)+1
+                     =PositionSublist(x, postfix, Size(x)-Size(postfix))));
+end;
+
+PrefixPostfixMatchedListDir := function(dir, prefix, postfix)
+  return Intersection(PrefixMatchedListDir(dir,prefix),
+                 PostfixMatchedListDir(dir,postfix));
 end;
