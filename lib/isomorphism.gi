@@ -2,10 +2,10 @@
 ##
 ## SubSemi
 ##
-## Deciding isomorphism of multiplication tables,
+## Deciding embedding and isomorphism of multiplication tables,
 ## and based on that of semigroups.
 ##
-## Copyright (C) 2013  Attila Egri-Nagy
+## Copyright (C) 2013-14  Attila Egri-Nagy
 ##
 
 # A backtrack algorithm to build a map from multiplication table A (mtA) to
@@ -22,11 +22,11 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
         used, # keeping track of what elements we used when building up L
         found; # flag for exiting from backtrack gracefully (keeping  L)
   #-----------------------------------------------------------------------------
-  BackTrack := function() # receiving L and used as parameters
+  BackTrack := function() # parameters: L, used
     local k,i,candidates,X,Y;
     if Size(L)=N then found := true; return; fi;
     k := Size(L)+1; # the index of the next element
-    # getting elements of B with matching profiles, not used yet
+    # getting elements of B with profiles matching profile of A, not used yet
     candidates := Difference(AsSet(Bprofs2elts[Aprofs[k]]),used);
     if IsEmpty(candidates) then return; fi;
     for i in candidates do
@@ -52,7 +52,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
   Bprofs2elts := AssociativeList();
   Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts, Bprofs[x], x);end);
   if not ForAll(Keys(Aprofs2elts),
-             x-> (Bprofs2elts[x]<> fail)
+             x-> (Bprofs2elts[x] <> fail)
              and Size(Aprofs2elts[x]) <= Size(Bprofs2elts[x])) then
     return fail; #not enough elements of some type to represent A
   fi;
