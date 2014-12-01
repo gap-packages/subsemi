@@ -1,3 +1,5 @@
+0.34
+	Isomorphism, anti-isomorphism filing done properly in small degree scripts and in GensFileAntiAndIsomClasses.
 0.33
 	Working on the Sub(T4) recalculation script. Bugfix: general subsets have to be closed by SubSgpsByMinExtensions.
 0.32
