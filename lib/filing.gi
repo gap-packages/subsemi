@@ -150,13 +150,15 @@ end;
 
 #assumed input is .gens files
 GensFileAntiAndIsomClasses := function(filename)
-  local prefix, sgps, idpclasses, digits,i,al,iso, counter,sgpclasses,class;
+  local prefix,sgps,idpclasses,digits,i,al,iso,counter,sgpclasses,class,gensets;
+  gensets := ReadGenerators(filename); 
+  if Size(gensets)=1 then return; fi; #nothing to do
   prefix := filename{[1..Size(filename)-5]};
   counter:=1;
   al := AssociativeList();
   #memory saving idea - not storing all semigroups
   # frequency profiles -> generator sets
-  Perform(ReadGenerators(filename),function(x)
+  Perform(gensets,function(x)
     Collect(al,IdempotentFrequencies(MulTab(Semigroup(x))),x);end);
   idpclasses := Filtered(ValueSet(al),x->Size(x)>1);
   digits := Size(String(Size(idpclasses))); #just an upper bound  
