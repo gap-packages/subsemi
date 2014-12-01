@@ -202,35 +202,3 @@ function(S,T)
   mappingfunc := function(s) return image[Position(source,s)];end;
   return MappingByFunction(S,T,mappingfunc);
 end);
-
-# given a list of semigroups returns isomorphism class representatives
-IsomorphismClassesSgpsReps := function(sgps)
-  local fullcheck,al, k,tmp, result, sgp;
-  #-----------------------------------------------------------------------------
-  fullcheck := function(semis) # tried to improve this by precalc mts, no good
-    local reps,S;
-    reps:=[];
-    for S in semis do
-      if First(reps,T->IsomorphismMulTabs(MulTab(S),MulTab(T))<>fail)=fail then
-        Add(reps,S); #adding it if it is not isomorphic to any sgp in reps
-      fi;
-    od;
-    return reps;
-  end;
-  #-----------------------------------------------------------------------------
-  #we want to prefilter by table profiles
-  al := AssociativeList();
-  for sgp in sgps do
-    Collect(al,MulTabProfile(MulTab(sgp)) ,sgp);
-  od;
-  result := [];
-  for k in Keys(al) do
-    tmp := al[k];
-    if Size(tmp) = 1 then
-      Append(result, tmp);
-    else
-      Append(result,fullcheck(tmp));
-    fi;
-  od;
-  return result;
-end;
