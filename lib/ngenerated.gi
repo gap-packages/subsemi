@@ -20,10 +20,11 @@ NGeneratedSubSgps := function(mt,n)
   local ntuple, db;
   db := LightBlistContainer();
   for ntuple in IteratorOfCombinations(Indices(mt),n) do
-    AddSet(db,ConjugacyClassRep(SgpInMulTab(BlistList(Indices(mt),ntuple),mt),mt));
+    AddSet(db,ConjugacyClassRep(BlistList(Indices(mt),ntuple),mt));
   od;
-  return AsList(db);
+  return Set(AsList(db), x->ConjugacyClassRep(x,mt));
 end;
+
 
 #put the first n layers together, and find the layers
 InstallGlobalFunction(SubSgpsByMinimalGenSets,
