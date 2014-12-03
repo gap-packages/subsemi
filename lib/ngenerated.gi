@@ -8,7 +8,8 @@ NSubsets := function(mt,n)
     AddSet(db,ConjugacyClassRep(BlistList(Indices(mt),ntuple),mt));
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      Print("#", FormattedPercentageString(counter, Binomial(Size(Indices(mt)),n)),
+      Print("#", FormattedBigNumberString(counter)," ",
+            FormattedPercentageString(counter, Binomial(Size(Indices(mt)),n)),
             " ",Size(db),"\n");
     fi;
     counter := counter + 1;
