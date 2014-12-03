@@ -1,3 +1,5 @@
+0.35
+	Bugfix: no formatting in SaveIndicatorSets. Code clean-up for n-generated subsemigroups.
 0.34
 	Isomorphism, anti-isomorphism filing done properly in small degree scripts and in GensFileAntiAndIsomClasses.
 0.33
