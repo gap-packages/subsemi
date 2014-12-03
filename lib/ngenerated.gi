@@ -2,7 +2,7 @@
 # returns an n-generating set for each, not necessarily minimal
 NSubsets := function(mt,n)
   local ntuple, db, counter;
-  counter := 0;
+  counter := 1;
   db := LightBlistContainer();
   for ntuple in IteratorOfCombinations(Indices(mt),n) do
     AddSet(db,ConjugacyClassRep(BlistList(Indices(mt),ntuple),mt));
