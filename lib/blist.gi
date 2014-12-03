@@ -168,6 +168,7 @@ InstallGlobalFunction(SaveIndicatorSets,
 function(indsets, filename)
   local output,r;
   output := OutputTextFile(filename, false);
+  SetPrintFormattingStatus(output,false); #no formatting, line breaks
   for r in indsets do
     AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
   od;
