@@ -113,13 +113,6 @@ BlistToSmallGenSet := function(indset, mt)
   return SmallSemigroupGeneratingSet(ElementsByIndicatorSet(indset,mt));
 end;
 
-# convert the raw bitlists to set of small generators
-BlistToTSGens := function(indsetfile,mt)
-  WriteGenerators(Concatenation(indsetfile,".gens"),
-          List(LoadIndicatorSets(indsetfile),
-               x->BlistToSmallGenSet(x,mt)));
-end;
-
 #TODO the two functions below are copy-paste twins, better abstraction needed
 #assumed input is .ais files
 GensFileIsomClasses := function(filename)
