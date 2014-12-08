@@ -16,8 +16,8 @@ results := Filtered(fltd,
 SetPrintFormattingStatus("*stdout*",false);
 c := 1;;
 for gens in results do
-  Print(c,"\n");c:=c+1;;
-  Print("Generators: ", ElementsByIndicatorSet(gens,mt3),"\n");
+  Print(c,"\n");
+  #Print("Generators: ", ElementsByIndicatorSet(gens,mt3),"\n");
   Print("Size of the generated sub in P3: ",
         SizeBlist(SgpInMulTab(gens,mt3)),"\n");
   Display("EMBEDDING OF P2");
@@ -27,4 +27,12 @@ for gens in results do
     Print(SortedElements(mt2)[i]," -> ", SortedElements(mtsub)[emb[i]],"\n");
   od;
   Print("\n");
+  #just printing the generators
+  for i in [1..Size(P2gens)] do
+      gindx := Position(SortedElements(mt2),P2gens[i]);#pos of ith generator
+      PrintTo(Concatenation("P2gen",String(i),"mapped",String(c),".tikz"),
+              TikzStringForBipartition(SortedElements(mtsub)[emb[gindx]],
+                      rec(labels:=false)));
+  od;
+  c:=c+1;
 od;
