@@ -1,15 +1,17 @@
+# just checking - it is known that there are no solutions here
 mt3 := MulTab(BrauerMonoid(3));;
 mt5 := MulTab(BrauerMonoid(5),S5);;
 
-B5sub2gensets := NGeneratedSubSgpGenSets(mt5,2);;
-fltd := Filtered(B5sub2gensets,
-                x->SizeBlist(SgpInMulTab(x,mt5))>=Size(BrauerMonoid(3)));;
+B5_2gensubs := NGeneratedSubSgps(mt5,2);;
+fltd := Filtered(B5_2gensubs,
+                x->SizeBlist(x)>=Size(BrauerMonoid(3)));;
 Print(Size(fltd), " candidate 2-generated subs","\n");
 results := Filtered(fltd,
                    x-> fail<>EmbedAbstractSemigroup(mt3,
                            MulTab(Semigroup(ElementsByIndicatorSet(x,mt5)))));;
 
 SetPrintFormattingStatus("*stdout*",false);
+if IsEmpty(results) then Print("NONE\n");fi;
 c := 1;;
 for gens in results do
   Print(c,"\n");c:=c+1;;

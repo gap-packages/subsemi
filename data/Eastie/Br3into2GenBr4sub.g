@@ -2,9 +2,9 @@
 mt3 := MulTab(BrauerMonoid(3));;
 mt4 := MulTab(BrauerMonoid(4),S4);;
 
-B4sub2gensets := NGeneratedSubSgpGenSets(mt4,2);;
-fltd := Filtered(B4sub2gensets,
-                x->SizeBlist(SgpInMulTab(x,mt4))>=Size(BrauerMonoid(3)));;
+B4_2gensubs := NGeneratedSubSgps(mt4,2);;
+fltd := Filtered(B4_2gensubs,
+                x->SizeBlist(x)>=Size(BrauerMonoid(3)));;
 Print(Size(fltd), " candidate 2-generated subs","\n");
 results := Filtered(fltd,
                    x-> fail<>EmbedAbstractSemigroup(mt3,
