@@ -1,9 +1,14 @@
 mt2 := MulTab(PartitionMonoid(2));;
 mt3 := MulTab(PartitionMonoid(3),S3);;
 
-P3sub2gensets := NGeneratedSubSgpGenSets(mt3,2);;
-fltd := Filtered(P3sub2gensets,
-                x->SizeBlist(SgpInMulTab(x,mt3))>=Size(PartitionMonoid(2)));;
+#print the generators of P2
+P2gens := Generators(PartitionMonoid(2));
+Perform([1..Size(P2gens)], function(x)
+  PrintTo(Concatenation("P2gen",String(x),".tikz"),TikzStringForBipartition(P2gens[x],rec(labels:=false)));end);
+
+P3sub2gens := NGeneratedSubSgps(mt3,2);;
+fltd := Filtered(P3sub2gens,
+                x->SizeBlist(x)>=Size(PartitionMonoid(2)));;
 results := Filtered(fltd,
                    x-> fail<>EmbedAbstractSemigroup(mt2,
                            MulTab(Semigroup(ElementsByIndicatorSet(x,mt3)))));;
