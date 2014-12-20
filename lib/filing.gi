@@ -218,3 +218,17 @@ PrefixPostfixMatchedListDir := function(dir, prefix, postfix)
   return Intersection(PrefixMatchedListDir(dir,prefix),
                  PostfixMatchedListDir(dir,postfix));
 end;
+
+ClassifySubsemigroups := function(S, G , prefix) 
+  local mt,subreps,ndigits;
+  ndigits := Size(String(Size(S)));
+  SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
+  mt := MulTab(S,G);
+  Print("Calculating and classifying ",prefix,"\n\c");
+  subreps := AsList(SubSgpsByMinExtensions(mt));
+  SaveIndicatorSets(subreps,Concatenation(prefix{[1..Size(prefix)-1]},".reps"));
+  IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
+  Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
+  Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
+  Perform(PostfixMatchedListDir(".","ais"),AntiAndIsomClassToIsomClasses);
+end;
