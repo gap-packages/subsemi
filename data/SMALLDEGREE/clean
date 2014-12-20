@@ -1,1 +1,4 @@
-rm T*
+rm *.gens
+rm *.iso
+rm *.ais
+rm *.reps
