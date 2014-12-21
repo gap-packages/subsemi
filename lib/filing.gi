@@ -230,5 +230,6 @@ ClassifySubsemigroups := function(S, G , prefix)
   IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
-  Perform(PostfixMatchedListDir(".","ais"),AntiAndIsomClassToIsomClasses);
+  Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
+          AntiAndIsomClassToIsomClasses);
 end;
