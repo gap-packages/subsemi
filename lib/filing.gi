@@ -234,11 +234,14 @@ ClassifySubsemigroups := function(S, G , prefix)
           AntiAndIsomClassToIsomClasses);
 end;
 
+# input: classified .gens files having the same prefix
+# key1, key2: which data items to plot agains, e.g "S", "D" produces heatmap
+# showing the distribution of subsemigroups of all possible size and #D-class pairs
 SgpHeatMap := function(prefix, key1, key2)
 local tag1,tag2,is,s,sum, filename, al, alltags, maxi,maxj, i ,j, bl;
   sum := 0; maxi := 0; maxj := 0; 
-  al := AssociativeList();
-  bl := AssociativeList();
+  al := AssociativeList(); # truncated .gens filename -> number of lines
+  bl := AssociativeList(); # [int,int] -> int (sparse matrix)
   Perform(PrefixPostfixMatchedListDir(".", prefix, ".gens"),
           function(x) Assign(al, x, Size(ReadGenerators(x)));end);
   TransformKeys(al, x-> x{[Length(prefix)..Length(x)-4]}); # in general this is super crazy, but here keys will remain unique
