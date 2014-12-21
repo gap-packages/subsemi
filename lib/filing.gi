@@ -233,3 +233,26 @@ ClassifySubsemigroups := function(S, G , prefix)
   Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
           AntiAndIsomClassToIsomClasses);
 end;
+
+SgpHeatMap := function(prefix, key1, key2)
+local tag1,tag2,is,s,sum, filename, al, alltags;
+  sum := 0;
+  al := AssociativeList();
+  Perform(PrefixPostfixMatchedListDir(".", prefix, ".gens"),
+          function(x) Assign(al, x, Size(ReadGenerators(x)));end);
+  TransformKeys(al, x-> x{[Length(prefix)..Length(x)-4]}); # in general this is super crazy, but here keys will remain unique
+  filename := Concatenation(prefix,key1,"vs",key2,".dat");
+  PrintTo(filename,""); #erasing
+  alltags := Set(Concatenation(List(Keys(al), x->Set(SplitString(x,"_.")))));
+  for tag1 in Filtered(alltags, x->key1=Maximum(SplitString(x,"0123456789"))) do 
+    for tag2 in Filtered(alltags, x->key2=Maximum(SplitString(x,"0123456789"))) do
+      is := Intersection(Filtered(Keys(al), x->fail<>PositionSublist(x,tag1)) ,
+                    Filtered(Keys(al), x->fail<>PositionSublist(x,tag2)));
+      Display(is);
+      s := Sum(List(is,x->al[x]));
+      sum := sum + s;
+      AppendTo(filename,Filtered(tag1, IsDigitChar)," ",Filtered(tag2, IsDigitChar)," ", s, "\n");
+    od;
+  od;
+  Display(sum);
+end;
