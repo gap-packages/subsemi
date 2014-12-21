@@ -246,9 +246,9 @@ local tag1,tag2,is,s,sum, filename, al, alltags;
   alltags := Set(Concatenation(List(Keys(al), x->Set(SplitString(x,"_.")))));
   for tag1 in Filtered(alltags, x->key1=Maximum(SplitString(x,"0123456789"))) do 
     for tag2 in Filtered(alltags, x->key2=Maximum(SplitString(x,"0123456789"))) do
-      is := Intersection(Filtered(Keys(al), x->fail<>PositionSublist(x,tag1)) ,
-                    Filtered(Keys(al), x->fail<>PositionSublist(x,tag2)));
-      Display(is);
+      is := Intersection(Filtered(Keys(al), x->fail<>PositionSublist(x,Concatenation("_",tag1))) ,
+                    Filtered(Keys(al), x->fail<>PositionSublist(x,Concatenation("_",tag2))));
+      if not IsEmpty(is) then Display(is); fi;
       s := Sum(List(is,x->al[x]));
       sum := sum + s;
       AppendTo(filename,Filtered(tag1, IsDigitChar)," ",Filtered(tag2, IsDigitChar)," ", s, "\n");
