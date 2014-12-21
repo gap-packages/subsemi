@@ -235,9 +235,10 @@ ClassifySubsemigroups := function(S, G , prefix)
 end;
 
 SgpHeatMap := function(prefix, key1, key2)
-local tag1,tag2,is,s,sum, filename, al, alltags;
-  sum := 0;
+local tag1,tag2,is,s,sum, filename, al, alltags, maxi,maxj, i ,j, bl;
+  sum := 0; maxi := 0; maxj := 0; 
   al := AssociativeList();
+  bl := AssociativeList();
   Perform(PrefixPostfixMatchedListDir(".", prefix, ".gens"),
           function(x) Assign(al, x, Size(ReadGenerators(x)));end);
   TransformKeys(al, x-> x{[Length(prefix)..Length(x)-4]}); # in general this is super crazy, but here keys will remain unique
@@ -251,7 +252,21 @@ local tag1,tag2,is,s,sum, filename, al, alltags;
       if not IsEmpty(is) then Display(is); fi;
       s := Sum(List(is,x->al[x]));
       sum := sum + s;
-      AppendTo(filename,Filtered(tag1, IsDigitChar)," ",Filtered(tag2, IsDigitChar)," ", s, "\n");
+      i := Int(Filtered(tag1, IsDigitChar));
+      if i > maxi then maxi := i; fi;
+      j := Int(Filtered(tag2, IsDigitChar));
+      if j > maxj then maxj := j; fi;
+      Assign(bl, [i,j], s);
+
+    od;
+  od;
+  for i in [1..maxi] do
+    for j in [1..maxj] do
+      if ContainsKey(bl,[i,j]) then
+        AppendTo(filename,i," ",j," ", bl[[i,j]], "\n");
+      else
+        AppendTo(filename,i," ",j," 0\n");
+      fi;
     od;
   od;
   Display(sum);
