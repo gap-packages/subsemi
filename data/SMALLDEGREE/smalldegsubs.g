@@ -5,6 +5,14 @@ for degree in [1..3] do
           Concatenation("T",String(degree),"_"));  
 od;
 
+###PARTIAL TRANSFORMATION#######################################################
+for degree in [1..3] do  
+  ClassifySubsemigroups(PartialTransformationSemigroup(degree),
+          SymmetricGroup(IsPermGroup, degree),
+          Concatenation("PT",String(degree),"_"));  
+od;
+
+
 ###PARTIAL PERMUTATION##########################################################
 for degree in [1..3] do  
   ClassifySubsemigroups(SymmetricInverseMonoid(degree),
