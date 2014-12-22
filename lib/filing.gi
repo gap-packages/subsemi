@@ -237,6 +237,10 @@ end;
 # input: classified .gens files having the same prefix
 # key1, key2: which data items to plot agains, e.g "S", "D" produces heatmap
 # showing the distribution of subsemigroups of all possible size and #D-class pairs
+# gnuplot> set palette defined (0 1 1 1, 0 0 0 0.5, 1 0 0 1, 2 0 0.5 1, 3 0 1 1, 4 0.5 1 0.5, 5 1 1 0, 6 1 0.5 0, 7 1 0 0, 8 0.5 0 0)
+# gnuplot> set xlab "size"
+# gnuplot> set ylab "#D-classes"
+# gnuplot> plot "J5SvsD.dat" with image title "J5"
 SgpHeatMap := function(prefix, key1, key2)
 local tag1,tag2,is,s,sum, filename, al, alltags, maxi,maxj, i ,j, bl;
   sum := 0; maxi := 0; maxj := 0; 
