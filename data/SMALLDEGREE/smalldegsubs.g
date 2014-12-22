@@ -20,6 +20,13 @@ for degree in [1..3] do
           Concatenation("I",String(degree),"_"));  
 od;
 
+###PARTIAL PERMUTATION##########################################################
+for degree in [1..3] do  
+  ClassifySubsemigroups(DualSymmetricInverseMonoid(degree),
+          SymmetricGroup(IsPermGroup, degree),
+          Concatenation("DI",String(degree),"_"));  
+od;
+
 
 ###TEMPERLEY-LIEB###############################################################
 for degree in [1..5] do  
