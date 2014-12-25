@@ -1,4 +1,5 @@
-# boolean matrix approach - lot more than the relabelling symmetries
+# matrix approach - lot more than the relabelling symmetries, and it is not the same
+# UPDATE: the multiplication is not in the boolean algebra, hence the difference
 matrices := Tuples(Tuples([0*Z(2),Z(2)^0],2),2);
 
 S := Semigroup(matrices);
