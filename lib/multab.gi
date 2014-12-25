@@ -46,8 +46,12 @@ local mt,inds;
   SetIndices(mt,inds);
   if hom = fail then
     #conjugations expressed as permutations of the set elements (indices of)
-    SetSymmetries(mt,Set(G,
-            g->AsPermutation(TransformationOp(g,SortedElements(mt),\^))));
+    if Size(G) > 1 then
+      SetSymmetries(mt,Set(G,
+              g->AsPermutation(TransformationOp(g,SortedElements(mt),\^))));
+    else
+      SetSymmetries(mt, [()]);
+    fi;
   else
     #same as above, except 
     SetSymmetries(mt,Set(G,
