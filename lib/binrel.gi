@@ -22,4 +22,4 @@ function(rel, perm)
 end);
 #registering it as a method
 InstallOtherMethod(\^, "for relabelling list based binary relations",
-        [IsBinaryRelation, IsPerm], ConjugateBinaryRelations);
+        [IsBinaryRelation, IsPerm], ConjugateBinaryRelation);
