@@ -27,3 +27,10 @@ syntax: glob
 *.vrb
 *.reps
 *.subs
+*.ais
+*.iso
+*.gens
+*.dat
+*.tikz
+*.pbm
+
