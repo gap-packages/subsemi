@@ -1,3 +1,11 @@
+###BINARY RELATION##############################################################
+B2 := Semigroup([
+              BinaryRelationOnPoints([[2],[1]]),
+              BinaryRelationOnPoints([[1,1],[]]),
+              BinaryRelationOnPoints([[1,2],[1]]),
+              BinaryRelationOnPoints([[1,2],[]])]);
+#ClassifySubsemigroups(B2, SymmetricGroup(IsPermGroup,2),"B2_");
+
 ###TRANSFORMATION###############################################################
 for degree in [1..3] do  
   ClassifySubsemigroups(FullTransformationSemigroup(degree),

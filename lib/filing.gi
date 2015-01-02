@@ -191,15 +191,21 @@ AntiAndIsomClassToIsomClasses := function(filename)
 end;
 
 #the frequency distribution vector
-SizeDistDataOfSgpIndicatorSets := function(subreps)
-  local collected, sizes, N, result; 
+SizeDistOfIndicatorSets := function(subreps, filename)
+  local sizes, N, al, i; 
   sizes := List(subreps, SizeBlist);
   N := Maximum(sizes);
-  collected := Collected(sizes);
-  result := ListWithIdenticalEntries(N,0);
-  Perform(collected, function(x) result[x[1]]:=x[2];end);
-  Add(result, 1,1); # for the empty set
-  return result;
+  
+  al := AssociativeList();
+  Perform(Collected(sizes), function(x) Assign(al, x[1], x[2]);end);
+  PrintTo(filename,""); # erasing
+  for i in [0..N] do
+    if ContainsKey(al, i) then
+      AppendTo(filename, String(i)," ",String(al[i]),"\n");
+    else
+      AppendTo(filename, String(i)," 0\n");
+    fi;
+  od;
 end;
 
 ### getting some file lists - bit clumsy methods TODO check io package for this
@@ -232,6 +238,7 @@ ClassifySubsemigroups := function(S, G , prefix)
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
   Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
           AntiAndIsomClassToIsomClasses);
+  SizeDistOfIndicatorSets(subreps, Concatenation(prefix,"sizedist.dat"));
 end;
 
 # input: classified .gens files having the same prefix
