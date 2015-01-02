@@ -6,6 +6,25 @@
 ##
 ## Copyright (C) 2013-2014  Attila Egri-Nagy
 ##
+InstallImmediateMethod(IsBinaryRelationSemigroup,IsSemigroup and HasGeneratorsOfSemigroup,0,
+function(S) return IsBinaryRelationOnPointsRep(
+                           Representative(GeneratorsOfSemigroup(S)));end);
+
+InstallMethod(GroupOfUnits, "for a semigroup of binary relations",
+[IsBinaryRelationSemigroup],
+function(S)
+  local units, U, id;
+
+  if MultiplicativeNeutralElement(S)=fail then
+    return fail;
+  fi;
+  id := MultiplicativeNeutralElement(S);
+  units := Filtered(S, x->ForAny(S, y-> y*x=id and x*y=id));
+  U := Semigroup(units);
+  SetIsGroupAsSemigroup(U,true);
+  return U;
+end);
+
 
 InstallGlobalFunction(ConjugateBinaryRelation,
 function(rel, perm)
