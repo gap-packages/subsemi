@@ -2,3 +2,4 @@ rm *.gens
 rm *.iso
 rm *.ais
 rm *.reps
+rm *.dat
