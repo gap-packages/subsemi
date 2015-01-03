@@ -32,6 +32,19 @@ function(binrel)
                  rec(a11:=a11,a12:=a12,a21:=a21,a22:=a22));
 end);
 
+BinRelOrbit := function(binrel)
+  local orbit, x;
+  orbit := [];
+  x := binrel;
+  while not x in orbit do AddSet(orbit,x); x := x*binrel; od;
+  return orbit;
+end;
+
 InstallGlobalFunction(CombinePartitionedBinaryRelations,
 function(alpha, beta)
+  local a11, a12, a21, a22;
+  
+  #a11
+  
 end);
+
