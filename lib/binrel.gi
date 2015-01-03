@@ -42,3 +42,8 @@ end);
 #registering it as a method
 InstallOtherMethod(\^, "for relabelling list based binary relations",
         [IsBinaryRelation, IsPerm], ConjugateBinaryRelation);
+
+UnionOfBinaryRelations := function(br1, br2)
+  return BinaryRelationOnPoints(List([1..DegreeOfBinaryRelation(br1)],
+                 x->Union(Successors(br1)[x], Successors(br2)[x])));
+end;

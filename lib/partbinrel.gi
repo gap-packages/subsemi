@@ -28,5 +28,10 @@ function(binrel)
     a21[i] := Filtered(successors[i], x-> x <= half);
     a22[i] := Filtered(successors[i], x-> x > half);  
   od;
-  return [a11,a12,a21,a22];
+  return Objectify(PartitionedBinaryRelationType,
+                 rec(a11:=a11,a12:=a12,a21:=a21,a22:=a22));
+end);
+
+InstallGlobalFunction(CombinePartitionedBinaryRelations,
+function(alpha, beta)
 end);
