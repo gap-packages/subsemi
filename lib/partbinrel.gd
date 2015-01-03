@@ -14,9 +14,13 @@ DeclareCategory("IsPartitionedBinaryRelation", IsMultiplicativeElementWithOne
 
 DeclareCategoryCollections("IsPartitionedBinaryRelation");
 
+DeclareRepresentation( "IsPartitionedBinaryRelationRep",
+                       IsComponentObjectRep,
+                       [ "a11","a12","a21","a22"]);
+
 BindGlobal("PartitionedBinaryRelationFamily",
         NewFamily("PartitionedBinaryRelationFamily",
-                IsPartitionedBinaryRelation,
+                IsPartitionedBinaryRelation and IsPartitionedBinaryRelationRep,
                 CanEasilySortElements,
                 CanEasilySortElements));
 
@@ -24,3 +28,4 @@ BindGlobal("PartitionedBinaryRelationType",
         NewType(PartitionedBinaryRelationFamily,IsPartitionedBinaryRelation));
 
 DeclareGlobalFunction("PartitionedBinaryRelation");
+DeclareGlobalFunction("CombinePartitionedBinaryRelations");
