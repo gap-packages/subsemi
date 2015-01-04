@@ -28,4 +28,5 @@ BindGlobal("PartitionedBinaryRelationType",
         NewType(PartitionedBinaryRelationFamily,IsPartitionedBinaryRelation));
 
 DeclareOperation("PartitionedBinaryRelation",[IsBinaryRelation]);
+DeclareGlobalFunction("DegreeOfPartitionedBinaryRelation");
 DeclareGlobalFunction("CombinePartitionedBinaryRelations");
