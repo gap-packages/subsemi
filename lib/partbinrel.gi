@@ -8,7 +8,8 @@
 ## Copyright (C) 2015  Attila Egri-Nagy
 ##
 
-InstallGlobalFunction(PartitionedBinaryRelation,
+InstallMethod(PartitionedBinaryRelation, "for a binary relation on 2n points",
+        [IsBinaryRelation],
 function(binrel)
   local a11, a12, a21, a22, deg, half, successors,i;
   deg := DegreeOfBinaryRelation(binrel);
@@ -28,11 +29,18 @@ function(binrel)
     a21[i] := Filtered(successors[i], x-> x <= half);
     a22[i] := Filtered(successors[i], x-> x > half);  
   od;
+  return PartitionedBinaryRelation(
+                 BinaryRelationOnPoints(a11),
+                 BinaryRelationOnPoints(a12),
+                 BinaryRelationOnPoints(a21),
+                 BinaryRelationOnPoints(a22));
+end);
+
+InstallOtherMethod(PartitionedBinaryRelation, "for 4 binary relations",
+        [IsBinaryRelation,IsBinaryRelation,IsBinaryRelation,IsBinaryRelation],
+function(a11, a12, a21, a22)
   return Objectify(PartitionedBinaryRelationType,
-                 rec(a11:=BinaryRelationOnPoints(a11),
-                     a12:=BinaryRelationOnPoints(a12),
-                     a21:=BinaryRelationOnPoints(a21),
-                     a22:=BinaryRelationOnPoints(a22)));
+                 rec(a11:=a11,a12:=a12,a21:=a21,a22:=a22));    
 end);
 
 BinRelOrbit := function(binrel)
@@ -69,9 +77,7 @@ function(alpha, beta)
   tmp := List(bas, x->Product([beta!.a21, alpha!.a22, x, beta!.a12]));
   Perform(tmp, function(x) a22 := UnionOfBinaryRelations(a22,x); end);
 
-  return Objectify(PartitionedBinaryRelationType,
-                 rec(a11:=a11,a12:=a12,a21:=a21,a22:=a22));
-  
+  return PartitionedBinaryRelation(a11,a12,a21,a22);
 end);
 
 InstallMethod(\*, "for partitioned binary relations",
