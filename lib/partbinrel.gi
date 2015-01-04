@@ -80,6 +80,9 @@ function(alpha, beta)
   return PartitionedBinaryRelation(a11,a12,a21,a22);
 end);
 
+InstallGlobalFunction(DegreeOfPartitionedBinaryRelation,
+        pbr->DegreeOfBinaryRelation(pbr!.a11)/2);
+
 InstallMethod(\*, "for partitioned binary relations",
         [IsPartitionedBinaryRelation, IsPartitionedBinaryRelation],
         CombinePartitionedBinaryRelations);
