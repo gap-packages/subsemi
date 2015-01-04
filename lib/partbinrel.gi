@@ -29,7 +29,10 @@ function(binrel)
     a22[i] := Filtered(successors[i], x-> x > half);  
   od;
   return Objectify(PartitionedBinaryRelationType,
-                 rec(a11:=a11,a12:=a12,a21:=a21,a22:=a22));
+                 rec(a11:=BinaryRelationOnPoints(a11),
+                     a12:=BinaryRelationOnPoints(a12),
+                     a21:=BinaryRelationOnPoints(a21),
+                     a22:=BinaryRelationOnPoints(a22)));
 end);
 
 BinRelOrbit := function(binrel)
@@ -42,9 +45,32 @@ end;
 
 InstallGlobalFunction(CombinePartitionedBinaryRelations,
 function(alpha, beta)
-  local a11, a12, a21, a22;
+  local a11, a12, a21, a22,abs,bas, tmp;
   
+  abs := BinRelOrbit(alpha!.a22 * beta!.a11);
+  bas := BinRelOrbit(beta!.a11 * alpha!.a22);
   #a11
+  a11 := alpha!.a11;
+  tmp := List(abs, x->Product([alpha!.a12, beta!.a11, x, alpha!.a21]));
+  Perform(tmp, function(x) a11 := UnionOfBinaryRelations(a11,x); end);
+  
+  #a12
+  a12 := alpha!.a12 * beta!.a12;
+  tmp := List(bas, x->Product([alpha!.a12, x, beta!.a12]));
+  Perform(tmp, function(x) a12 := UnionOfBinaryRelations(a12,x); end);
+  
+  #a21
+  a21 := beta!.a21 * alpha!.a21;
+  tmp := List(abs, x->Product([beta!.a21, x, alpha!.a21]));
+  Perform(tmp, function(x) a21 := UnionOfBinaryRelations(a21,x); end);
+  
+  #a22
+  a22 := beta!.a22;
+  tmp := List(bas, x->Product([beta!.a21, alpha!.a22, x, beta!.a12]));
+  Perform(tmp, function(x) a22 := UnionOfBinaryRelations(a22,x); end);
+
+  return Objectify(PartitionedBinaryRelationType,
+                 rec(a11:=a11,a12:=a12,a21:=a21,a22:=a22));
   
 end);
 
