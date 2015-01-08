@@ -285,3 +285,32 @@ local tag1,tag2,is,s,sum, filename, al, alltags, maxi,maxj, i ,j, bl;
   od;
   Display(sum);
 end;
+
+# I semigroup or ideal, J an ideal of I
+# output: .reps file containing Sub(I/J), also as upper torsos 
+ImodJSubs := function(I,J,Iname, Jname)
+local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
+  rfh := ReesFactorHomomorphism(J);
+  T := Range(rfh);
+  SetName(T,Concatenation(Iname,"mod",Jname));
+  mtT := MulTab(T,G,rfh);
+  reps := SubSgpsByMinExtensions(mtT);
+  SaveIndicatorSets(reps, Concatenation(Name(T),".reps"));
+  mtI := MulTab(I);
+  preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
+  elts := List(preimgs,
+               function(x) 
+                 if Size(x)> 1 then return fail;else return x[1];fi;end);
+  itf := InputTextFile(Concatenation(Name(T),".reps"));
+  otf := OutputTextFile(Concatenation(Name(T),".uppertorsos"),false);
+  s := ReadLine(itf);
+  repeat
+    NormalizeWhitespace(s);
+    indset := AsBlist(DecodeBitString(s));
+    torso := ElementsByIndicatorSet(indset,elts);
+    if fail in torso then Remove(torso,Position(torso,fail));fi;
+    WriteLine(otf,EncodeBitString(AsBitString(
+            IndicatorSetOfElements(torso,mtI))));
+    s := ReadLine(itf);
+  until s=fail;
+end;
