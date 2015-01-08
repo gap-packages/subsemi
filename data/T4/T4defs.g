@@ -33,32 +33,7 @@ end;
 
 #takes couple of days, requires at least 4GB RAM
 #there are a few more reps than uppertorsos
-K43modK42subs := function()
-local rfh, T, mtT, reps,mtK43, preimgs, elts, itf, otf, s, indset, torso;
-  rfh := ReesFactorHomomorphism(K42);
-  T := Range(rfh);
-  SetName(T,"K43modK42");
-  mtT := MulTab(T,S4,rfh);
-  reps := SubSgpsByMinExtensions(mtT);
-  SaveIndicatorSets(reps, "K43modK42.reps");
-  mtK43 := MulTab(K43);
-  preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
-  elts := List(preimgs,
-               function(x) 
-                 if Size(x)> 1 then return fail;else return x[1];fi;end);
-  itf := InputTextFile("K43modK42.reps");
-  otf := OutputTextFile("K43modK42.uppertorsos",false);
-  s := ReadLine(itf);
-  repeat
-    NormalizeWhitespace(s);
-    indset := AsBlist(DecodeBitString(s));
-    torso := ElementsByIndicatorSet(indset,elts);
-    if fail in torso then Remove(torso,Position(torso,fail));fi;
-    WriteLine(otf,EncodeBitString(AsBitString(
-            IndicatorSetOfElements(torso,mtK43))));
-    s := ReadLine(itf);
-  until s=fail;
-end;
+K43modK42subs := function() ImodJSubs(K43, K42, Name(K43),Name(K42)); end;
 
 K43SubsFromUpperTorsos := function(filename)
   local U, result, mt, gens, time, torsos;
