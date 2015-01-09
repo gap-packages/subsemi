@@ -9,21 +9,25 @@
 export LOADER="Read(\"J6defs.g\");"      #variables and functions needed 
 export XLOADER="Read(\\\"J6defs.g\\\");" #escape character madness
 
-
-echo "Modding finished..."
-
+echo $LOADER"I1CmodI2Csubs();" | gap -q -m 2g # fast
 sort -u I1CmodI2C.uppertorsos > I1CmodI2C.suts
-
-#echo $LOADER"I1CSubsFromUpperTorsos(\"I1CmodI2C.suts\");" | gap -q -m 7g -K 14g
-
 ###### extending the uppertorsos from I1C/I2C ##################################
 rm UT*
-split -l 10000 K43modK42.suts UT
+split -l 100 I1CmodI2C.suts UT
 rm UTtasks;
-for i in UT*; do echo "echo \"$XLOADER I1CSubsFromUpperTorsos(\\\"$i\\\");\" | gap  -q -m 3g" >> UTtasks; done;
+for i in UT*; do echo "echo \"$XLOADER I1CSubsFromUpperTorsos(\\\"$i\\\");\" | gap  -q -m 7g" >> UTtasks; done;
 parallel < UTtasks
-cat UT*M > I1C.reps
+cat UT*M > I1CminusI2C.reps #since it surely contains sg from I1C/I2C;
 
-#echo $LOADER"K43sharp();" | gap -10g
+echo $LOADER"I2CmodI3Csubs();" | gap -q -m 7g -K 14g # 8hours
+sort -u I2CmodI3C.uppertorsos > I2CmodI3C.suts
+###### extending the uppertorsos from I2C/I3C ##################################
+rm UT*
+split -l 10000 I2CmodI3C.suts UT
+rm UTtasks;
+for i in UT*; do echo "echo \"$XLOADER I2CSubsFromUpperTorsos(\\\"$i\\\");\" | gap  -q -m 7g" >> UTtasks; done;
+parallel < UTtasks
+cat UT*M > I2CminusI3C.reps #since it surely contains sg from I2C/I3C;
 
-#cat K43_T4.reps K43sharp_T4.reps P_T4.reps > T4.reps
+
+
