@@ -36,19 +36,7 @@ end;
 K43modK42subs := function() ImodJSubs(K43, K42, Name(K43),Name(K42),S4); end;
 
 K43SubsFromUpperTorsos := function(filename)
-  local U, result, mt, gens, time, torsos;
-  SetInfoLevel(SubSemiInfoClass,0);#because this is used in parallel
-  time := TimeInSeconds();
-  result := [];
-  mt := MulTab(K43,S4);
-  gens := IndicatorSetOfElements(AsList(K42), SortedElements(mt));
-  torsos := LoadIndicatorSets(filename);
-  for U in torsos do
-    Append(result, AsList(
-            SubSgpsByMinExtensionsParametrized(mt, U, gens, Stack(),[])));
-  od;
-  SaveIndicatorSets(result,Concatenation(filename,"M"));;
-  PrintTo(Concatenation(filename,"F"),String(TimeInSeconds()-time));;
+  ISubsFromJUpperTorsos(K43,K42,filename,S4);
 end;
 
 K43sharp := function()
