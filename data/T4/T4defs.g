@@ -51,6 +51,7 @@ local mtK43, mtT4, K43reps, K43_T4reps, id;
   SaveIndicatorSets(K43_T4reps,"K43sharp_T4.reps");
 end;
 
+#it would be nice to calculate this as a control recalc
 K43SubsOneShot := function()
   local mtT4, mtK43, reps, output, r;
   mtT4 := MulTab(T4,S4);
