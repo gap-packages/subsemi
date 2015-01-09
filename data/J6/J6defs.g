@@ -14,3 +14,10 @@ I2C:=SemigroupIdealByGenerators(I1C, [Representative(DClassesJ6[3])]);
 GeneratorsOfSemigroup(I2C);
 I3C:=SemigroupIdealByGenerators(I2C, [Representative(DClassesJ6[4])]);
 GeneratorsOfSemigroup(I3C);
+
+I1CmodI2Csubs := function() ImodJSubs(I1C,I2C,"I1C","I2C",G);end;
+I2CmodI3Csubs := function() ImodJSubs(I2C,I3C,"I2C","I3C",G);end;
+
+I1CSubsFromUpperTorsos := function(filename)
+  ISubsFromJUpperTorsos(I1C,I2C,filename,G);
+end;
