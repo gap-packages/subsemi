@@ -57,6 +57,7 @@ K43SubsOneShot := function()
   mtT4 := MulTab(T4,S4);
   mtK43 := MulTab(K43,S4);
   reps := AsList(SubSgpsByMinExtensions(mtK43));
+  SaveIndicatorSets(reps,"K43.reps");
   output := OutputTextFile("K43_T4.reps", false);
   for r in List(reps,
           x->ReCodeIndicatorSet(x,mtK43,mtT4)) do
