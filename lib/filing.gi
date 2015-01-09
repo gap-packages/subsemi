@@ -287,8 +287,9 @@ local tag1,tag2,is,s,sum, filename, al, alltags, maxi,maxj, i ,j, bl;
 end;
 
 # I semigroup or ideal, J an ideal of I
-# output: .reps file containing Sub(I/J), also as upper torsos 
-ImodJSubs := function(I,J,Iname, Jname)
+# output: .reps file containing Sub(I/J), also as upper torsos
+# G - the symmetries
+ImodJSubs := function(I,J,Iname, Jname,G)
 local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
   rfh := ReesFactorHomomorphism(J);
   T := Range(rfh);
@@ -313,4 +314,20 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
             IndicatorSetOfElements(torso,mtI))));
     s := ReadLine(itf);
   until s=fail;
+end;
+
+ISubsFromJUpperTorsos := function(I,J,uppertorsosfile,G)
+  local U, result, mt, gens, time, torsos;
+  SetInfoLevel(SubSemiInfoClass,0);#because this is used in parallel
+  time := TimeInSeconds();
+  result := [];
+  mt := MulTab(I,G);
+  gens := IndicatorSetOfElements(AsList(J), SortedElements(mt));
+  torsos := LoadIndicatorSets(uppertorsosfile);
+  for U in torsos do
+    Append(result, AsList(
+            SubSgpsByMinExtensionsParametrized(mt, U, gens, Stack(),[])));
+  od;
+  SaveIndicatorSets(result,Concatenation(uppertorsosfile,"M"));;
+  PrintTo(Concatenation(uppertorsosfile,"F"),String(TimeInSeconds()-time));
 end;
