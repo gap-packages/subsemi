@@ -33,7 +33,7 @@ end;
 
 #takes couple of days, requires at least 4GB RAM
 #there are a few more reps than uppertorsos
-K43modK42subs := function() ImodJSubs(K43, K42, Name(K43),Name(K42)); end;
+K43modK42subs := function() ImodJSubs(K43, K42, Name(K43),Name(K42),S4); end;
 
 K43SubsFromUpperTorsos := function(filename)
   local U, result, mt, gens, time, torsos;
