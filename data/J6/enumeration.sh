@@ -16,7 +16,7 @@ rm UT*
 split -l 100 I1CmodI2C.suts UT
 rm UTtasks;
 for i in UT*; do echo "echo \"$XLOADER I1CSubsFromUpperTorsos(\\\"$i\\\");\" | gap  -q -m 7g" >> UTtasks; done;
-parallel < UTtasks
+parallel --joblog I1C.log < UTtasks
 cat UT*M > I1CminusI2C.reps #since it surely contains sg from I1C/I2C;
 
 echo $LOADER"I2CmodI3Csubs();" | gap -q -m 7g -K 14g # 8hours
@@ -26,7 +26,7 @@ rm UT*
 split -l 10000 I2CmodI3C.suts UT
 rm UTtasks;
 for i in UT*; do echo "echo \"$XLOADER I2CSubsFromUpperTorsos(\\\"$i\\\");\" | gap  -q -m 7g" >> UTtasks; done;
-parallel < UTtasks
+parallel --joblog I2C.log < UTtasks
 cat UT*M > I2CminusI3C.reps #since it surely contains sg from I2C/I3C;
 
 
