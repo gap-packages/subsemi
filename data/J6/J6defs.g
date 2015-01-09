@@ -21,3 +21,7 @@ I2CmodI3Csubs := function() ImodJSubs(I2C,I3C,"I2C","I3C",G);end;
 I1CSubsFromUpperTorsos := function(filename)
   ISubsFromJUpperTorsos(I1C,I2C,filename,G);
 end;
+
+I2CSubsFromUpperTorsos := function(filename)
+  ISubsFromJUpperTorsos(I2C,I3C,filename,G);
+end;
