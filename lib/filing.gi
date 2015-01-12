@@ -191,6 +191,14 @@ AntiAndIsomClassToIsomClasses := function(filename)
 end;
 
 #the frequency distribution vector
+# gnuplot code:
+# set terminal tikz size 14cm,7cm
+# set style fill transparent solid 0.5 border
+# set output "T4size6peaks.tikz"
+# set xlab "size of semigroup"
+# set xrange [-1:140]
+# set grid
+# plot "T4sizedist.dat" with boxes lc rgb"black" title "Sub(T4)"
 SizeDistOfIndicatorSets := function(subreps, filename)
   local sizes, N, al, i; 
   sizes := List(subreps, SizeBlist);
