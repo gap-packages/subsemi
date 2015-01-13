@@ -1,5 +1,7 @@
 LoadPackage("subsemi");
 
+SemigroupsOptionsRec.hashlen:=rec(L:=257,M:=257, S:=257);
+
 # VARIABLES for T4 and its subs
 S4 := SymmetricGroup(IsPermGroup,4);
 S4_T4 := Semigroup([Transformation([2,1,3,4]),Transformation([2,3,4,1])]);
@@ -79,4 +81,21 @@ local mtT4, I, uts, id, result;
   result := SubSgpsByUpperTorsos(I,S4,uts);
   Add(result,id);
   SaveIndicatorSets(result,"P_T4.reps");
+end;
+
+P_T4_Sorter := function()
+  local sgps, reps, al, mtT4;
+  reps := LoadIndicatorSets("P_T4.reps");
+  Display("# Loading P_T4.reps DONE");
+  mtT4 := MulTab(T4,S4);
+  sgps := List(reps, x-> Semigroup(ElementsByIndicatorSet(x,mtT4)));
+  Display("# Converting to semigroups DONE");
+  al := AssociativeList();
+  Perform(sgps, function(sgp) 
+    Collect(al, 
+            StructureDescription(Group(
+                    List( Filtered(AsList(sgp),
+                            y -> PermList(ImageListOfTransformation(y,4)) <>fail),
+                          z->PermList(ImageListOfTransformation(z,4)) ) ) ) ,sgp); end );
+  return al;
 end;
