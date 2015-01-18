@@ -318,8 +318,10 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
     indset := AsBlist(DecodeBitString(s));
     torso := ElementsByIndicatorSet(indset,elts);
     if fail in torso then Remove(torso,Position(torso,fail));fi;
-    WriteLine(otf,EncodeBitString(AsBitString(
-            IndicatorSetOfElements(torso,mtI))));
+    if not IsEmpty(torso) then
+      WriteLine(otf,EncodeBitString(AsBitString(
+              IndicatorSetOfElements(torso,mtI))));
+    fi;
     s := ReadLine(itf);
   until s=fail;
 end;
