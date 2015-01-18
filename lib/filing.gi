@@ -341,3 +341,20 @@ ISubsFromJUpperTorsos := function(I,J,uppertorsosfile,G)
   SaveIndicatorSets(result,Concatenation(uppertorsosfile,"M"));;
   PrintTo(Concatenation(uppertorsosfile,"F"),String(TimeInSeconds()-time));
 end;
+
+# TODO this does not go to conjugacy class representative
+ReCodeRepsFile := function(infile, outfile, mt, MT)
+local itf, otf, s, indset;  
+  itf := InputTextFile(infile);
+  otf := OutputTextFile(outfile,false);
+  s := ReadLine(itf);
+  repeat
+    NormalizeWhitespace(s);
+    indset := AsBlist(DecodeBitString(s));
+    WriteLine(otf,EncodeBitString(AsBitString(
+            ReCodeIndicatorSet(indset,
+                    SortedElements(mt),
+                    SortedElements(MT)))));
+    s := ReadLine(itf);
+  until s=fail;
+end;
