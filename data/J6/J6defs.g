@@ -25,3 +25,14 @@ end;
 I2CSubsFromUpperTorsos := function(filename)
   ISubsFromJUpperTorsos(I2C,I3C,filename,G);
 end;
+
+I3CSubs := function()
+local mt, reps, MT, REPS;
+  mt := MulTab(I3C,G);
+  reps := AsList(SubSgpsByMinExtensions(mt));
+  MT := MulTab(J6,G);
+  REPS := List(reps, x -> ReCodeIndicatorSet(x,
+                SortedElements(mt),
+                SortedElements(MT)));
+  SaveIndicatorSets(REPS, "I3C_J6.reps");
+end;
