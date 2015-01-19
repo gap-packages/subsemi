@@ -8,7 +8,7 @@
 
 MAXMEM="15g"  #for single process
 CORES="4" #number of cores
-SMALLMEM="3750m" #for parallel processing
+SMALLMEM="3800m" #for parallel processing
 
 LOADER="Read(\"T4defs.g\");"      #variables and functions needed 
 XLOADER="Read(\\\"T4defs.g\\\");" #escape character madness
@@ -25,7 +25,7 @@ sort -u K43modK42.uppertorsos > K43modK42.suts
 
 ###### extending the uppertorsos from K43/K42 ##################################
 rm UT*
-split -l 10000 K43modK42.suts UT
+split -l 2000 K43modK42.suts UT
 rm UTtasks;
 for i in UT*; do echo "echo \"$XLOADER K43SubsFromUpperTorsos(\\\"$i\\\");\" | gap  -q -m $SMALLMEM" >> UTtasks; done;
 parallel --jobs $CORES --job-log K43modK42.log < UTtasks
