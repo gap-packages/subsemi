@@ -199,11 +199,9 @@ end;
 # set xrange [-1:140]
 # set grid
 # plot "T4sizedist.dat" with boxes lc rgb"black" title "Sub(T4)"
-SizeDistOfIndicatorSets := function(subreps, filename)
-  local sizes, N, al, i; 
-  sizes := List(subreps, SizeBlist);
+GNUPlotDataFromSizeVector := function(sizes, filename)
+  local N, al, i; 
   N := Maximum(sizes);
-  
   al := AssociativeList();
   Perform(Collected(sizes), function(x) Assign(al, x[1], x[2]);end);
   PrintTo(filename,""); # erasing
@@ -246,7 +244,8 @@ ClassifySubsemigroups := function(S, G , prefix)
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
   Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
           AntiAndIsomClassToIsomClasses);
-  SizeDistOfIndicatorSets(subreps, Concatenation(prefix,"sizedist.dat"));
+  GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
+          Concatenation(prefix,"sizedist.dat"));
 end;
 
 # input: classified .gens files having the same prefix
