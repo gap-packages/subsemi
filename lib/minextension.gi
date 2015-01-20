@@ -55,7 +55,7 @@ function(mt,baseset,generators, waiting, result)
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
         gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main,init,
-        normalizer,seed;
+        normalizer,seed, peeked;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -65,7 +65,10 @@ function(mt,baseset,generators, waiting, result)
                   counter-prev_counter)," ");
     Print(Size(waiting), " ");
     if Size(waiting) > 0 then
-      Print(TrueValuePositionsBlistString(Peek(waiting)[1]),Peek(waiting)[2]," ");
+      peeked := Peek(waiting);
+      if peeked <> fail then
+        Print(TrueValuePositionsBlistString(peeked[1]),"+",peeked[2]," ");
+      fi;
     fi;
     if (secs-prev_secs) > 0 then # printing speed only if it measurable
       Print(FormattedFloat(Float((Size(result)-prev_subs)/(secs-prev_secs))),
