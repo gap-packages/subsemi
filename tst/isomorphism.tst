@@ -1,6 +1,5 @@
 gap> START_TEST("SubSemi package: isomorphism.tst");
 gap> LoadPackage("SubSemi", false);;
-gap> SemigroupsStartTest();
 gap> S := RandomTransformationSemigroup(3,4);;
 gap> Rows(MulTab(S))=Columns(AntiMulTab(S));
 true
@@ -15,5 +14,4 @@ gap> Rows(mtJ)= ProductTableOfElements(Permuted(ShallowCopy(SortedElements(mtI))
 true
 
 #
-gap> SemigroupsStopTest();
 gap> STOP_TEST( "SubSemi package: isomorphism.tst", 10000);

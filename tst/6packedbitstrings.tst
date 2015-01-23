@@ -1,6 +1,5 @@
 gap> START_TEST("SubSemi package: 6packedbitstring.tst");
 gap> LoadPackage("SubSemi", false);;
-gap> SemigroupsStartTest();
 gap> EncodeBitString("");
 ""
 gap> B := "01";;
@@ -26,5 +25,4 @@ gap> ForAll(EnumeratorOfCartesianProduct([B,B,B,B,B,B,B,B,B,B,B,B]),
 true
 
 #
-gap> SemigroupsStopTest();
 gap> STOP_TEST( "SubSemi package: 6packedbitstring.tst", 10000);

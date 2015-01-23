@@ -1,6 +1,5 @@
 gap> START_TEST("SubSemi package: indexperiod.tst");
 gap> LoadPackage("SubSemi", false);;
-gap> SemigroupsStartTest();
 gap> IndPer := function(t)
 > local orbit, set, u, i;
 >  orbit := [t];
@@ -22,5 +21,4 @@ gap> CheckAIP(MulTab(FullTransformationSemigroup(4)));
 true
 
 #
-gap> SemigroupsStopTest();
 gap> STOP_TEST( "SubSemi package: indexperiod.tst", 10000);

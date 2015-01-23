@@ -1,6 +1,5 @@
 gap> START_TEST("SubSemi package: embedding.tst");
 gap> LoadPackage("SubSemi", false);;
-gap> SemigroupsStartTest();
 gap> EmbedAbstractSemigroup([[1,2],[2,2]],[[1,2,3],[2,2,3],[3,3,3]]);
 [ 1, 2 ]
 gap> T3 := FullTransformationSemigroup(3);;
@@ -12,5 +11,4 @@ gap> ForAll(AllSubsemigroups(TL3), x-> EmbedAbstractSemigroup(Rows(MulTab(Semigr
 true
 
 #
-gap> SemigroupsStopTest();
 gap> STOP_TEST( "SubSemi package: embedding.tst", 10000);
