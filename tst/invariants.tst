@@ -1,6 +1,5 @@
 gap> START_TEST("SubSemi package: invariants.tst");
 gap> LoadPackage("SubSemi", false);;
-gap> SemigroupsStartTest();
 gap> mt := MulTab(FullTransformationSemigroup(4));;
 gap> MulTabProfile(mt);
 [ [ [ 24, 24 ], [ 120, 144 ], [ 408, 36 ], [ 504, 48 ], [ 2200, 4 ] ], 
@@ -44,5 +43,4 @@ gap> MulTabProfile(mt);
       [ 2200, 10, [ 1, 1 ], [ [ 256, 1 ] ], [ [ 64, 4 ] ] ] ] ]
 
 #
-gap> SemigroupsStopTest();
 gap> STOP_TEST( "SubSemi package: invariants.tst", 10000);

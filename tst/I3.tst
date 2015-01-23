@@ -1,6 +1,5 @@
 gap> START_TEST("SubSemi package: I3.tst");
 gap> LoadPackage("SubSemi", false);;
-gap> SemigroupsStartTest();
 gap> I3 := SymmetricInverseSemigroup(3);;
 gap> S3 := SymmetricGroup(3);;
 gap> mt := MulTab(I3,S3);;
@@ -19,5 +18,4 @@ gap> I3conjclasses = AsSortedList(Unique(AsList(SubSgpsByIdeals(K30,S3))));
 true
 
 #
-gap> SemigroupsStopTest();
 gap> STOP_TEST( "SubSemi package: I3.tst", 100000);
