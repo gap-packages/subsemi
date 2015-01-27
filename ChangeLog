@@ -1,3 +1,5 @@
+0.36
+	New dependency: graphs package. Working on enumerating scripts and related changes.
 0.35
 	Bugfix: no formatting in SaveIndicatorSets. Code clean-up for n-generated subsemigroups.
 0.34
