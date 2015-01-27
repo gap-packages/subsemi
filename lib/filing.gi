@@ -13,7 +13,7 @@ NrEdgesInHasseDiagramOfDClasses := function(sgp)
   #producing the Hasse diagram of DClasses
   hd := HasseDiagramBinaryRelation(
                 BinaryRelationByListOfImages(
-                        DirectedGraphReflexiveTransitiveClosure(
+                        DigraphReflexiveTransitiveClosure(
                                 PartialOrderOfDClasses(sgp))));
   #calculating the number of edges (summing the sizes of the image sets)
   return Sum(List(Source(hd), x-> Size(Images(hd,x))));;
