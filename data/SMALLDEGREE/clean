@@ -1,5 +1,5 @@
-rm *.gens
-rm *.iso
-rm *.ais
-rm *.reps
-rm *.dat
+find . -name '*.iso' -delete
+find . -name '*.gens' -delete
+find . -name '*.ais' -delete
+find . -name '*.reps' -delete
+find . -name '*.dat' -delete
