@@ -54,7 +54,7 @@ local rfh, T, mtT, reps,mtI43, preimgs, elts, itf, otf, s, indset, torso;
     torso := ElementsByIndicatorSet(indset,elts);
     if fail in torso then Remove(torso,Position(torso,fail));fi;
     WriteLine(otf,EncodeBitString(AsBitString(
-            IndicatorSetOfElements(torso,mtI43))));
+            IndicatorFunction(torso,mtI43))));
     s := ReadLine(itf);
   until s=fail;
 end;
@@ -65,7 +65,7 @@ I43SubsFromUpperTorsos := function(filename)
   time := TimeInSeconds();
   result := [];
   mt := MulTab(I43,S4);
-  gens := IndicatorSetOfElements(AsList(I42), SortedElements(mt));
+  gens := IndicatorFunction(AsList(I42), SortedElements(mt));
   torsos := LoadIndicatorSets(filename);
   for U in torsos do
     Append(result, AsList(

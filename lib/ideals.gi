@@ -46,7 +46,7 @@ function(I)
   subs := AsList(SubSgpsByMinExtensions(mtT));
   realsubs := List(subs, x->ElementsByIndicatorSet(x,SortedElements(mtT)));
   torsos := Set(realsubs, x->RFHNonZeroPreImages(x,rfh));
-  Tsubs := List(torsos, x->IndicatorSetOfElements(x,SortedElements(mtS)));
+  Tsubs := List(torsos, x->IndicatorFunction(x,SortedElements(mtS)));
   
   Add(Isubs,emptyset);
   Add(Tsubs,emptyset);
@@ -127,7 +127,7 @@ local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
   Perform(tmp, function(x) if fail in x then
       Remove(x, Position(x,fail));fi;end);
   mtS := MulTab(Parent(I),G); 
-  return  List(Unique(tmp),x-> IndicatorSetOfElements(x,mtS));
+  return  List(Unique(tmp),x-> IndicatorFunction(x,mtS));
 end;
 
 # calculates all sub conjugacy reps of S/I then extends all upper torsos
@@ -139,7 +139,7 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
   S := Parent(I);
   mtS := MulTab(S,G); 
   extended := List(uppertorsos, x-> SgpInMulTab(x,mtS));
-  filter := IndicatorSetOfElements(AsList(I),SortedElements(mtS));
+  filter := IndicatorFunction(AsList(I),SortedElements(mtS));
   result := [];
   Perform(extended, function(x)
     Append(result,AsList(

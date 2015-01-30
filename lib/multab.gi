@@ -380,16 +380,16 @@ function(indset, mt)
   return ElementsByIndicatorSet(indset, SortedElements(mt));
 end);
 
-InstallOtherMethod(IndicatorSetOfElements,
+InstallOtherMethod(IndicatorFunction,
         "for a list of elements and multab",
         [IsList,IsMulTab],
 function(elms, mt)
-  return IndicatorSetOfElements(elms, SortedElements(mt));
+  return IndicatorFunction(elms, SortedElements(mt));
 end);
 
 InstallOtherMethod(ReCodeIndicatorSet,
         "for a boolean list, a source and destiantion multabs",
         [IsList,IsMulTab,IsMulTab],
 function(indset,srcmt, destmt)
-  return IndicatorSetOfElements(ElementsByIndicatorSet(indset,srcmt),destmt);
+  return IndicatorFunction(ElementsByIndicatorSet(indset,srcmt),destmt);
 end);

@@ -18,7 +18,7 @@ DeclareGlobalFunction("AsBlist");
 DeclareGlobalFunction("AsBitString");
 
 DeclareOperation("ElementsByIndicatorSet",[IsList,IsList]); #todo IsBlist does not work
-DeclareOperation("IndicatorSetOfElements",[IsList,IsList]);
+DeclareOperation("IndicatorFunction",[IsList,IsList]);
 DeclareOperation("ReCodeIndicatorSet",[IsList,IsList,IsList]);
 
 DeclareGlobalFunction("LoadIndicatorSets");

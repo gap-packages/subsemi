@@ -130,7 +130,7 @@ function(indset, elements)
   fi;
 end);
 
-InstallMethod(IndicatorSetOfElements,
+InstallMethod(IndicatorFunction,
         "for a list of elements and a list (of the universe)",
         [IsList,IsList],
 function(elms, universe)
@@ -146,7 +146,7 @@ InstallMethod(ReCodeIndicatorSet,
         "for a boolean list, a source and destiantion list of elements",
         [IsList,IsList,IsList],
 function(indset,src, dest)
-  return IndicatorSetOfElements(ElementsByIndicatorSet(indset,src),dest);
+  return IndicatorFunction(ElementsByIndicatorSet(indset,src),dest);
 end);
 
 InstallGlobalFunction(LoadIndicatorSets,
