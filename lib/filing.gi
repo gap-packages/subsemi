@@ -3,6 +3,9 @@
 # the tagging function gives a string, that goes into 
 # the filename, thus we get separate files for the classes
 
+################################################################################
+### TAGGING ####################################################################
+################################################################################
 # just to have padded zeros
 PaddedNumString := function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
@@ -63,6 +66,8 @@ BLSgpTag := function(bl,mt,ndigits)
   return SgpTag(Semigroup(ElementsByIndicatorSet(bl,mt)),ndigits);
 end;
 
+################################################################################
+### FILING IN
 #list of indicatorsets,
 #tagger function : indicator set -> string (should work in all cases)
 #filename
@@ -345,7 +350,7 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
     if fail in torso then Remove(torso,Position(torso,fail));fi;
     if not IsEmpty(torso) then
       WriteLine(otf,EncodeBitString(AsBitString(
-              IndicatorSetOfElements(torso,mtI))));
+              IndicatorFunction(torso,mtI))));
     fi;
     s := ReadLine(itf);
   until s=fail;
@@ -357,7 +362,7 @@ ISubsFromJUpperTorsos := function(I,J,uppertorsosfile,G)
   time := TimeInSeconds();
   result := [];
   mt := MulTab(I,G);
-  gens := IndicatorSetOfElements(AsList(J), SortedElements(mt));
+  gens := IndicatorFunction(AsList(J), SortedElements(mt));
   torsos := LoadIndicatorSets(uppertorsosfile);
   for U in torsos do
     Append(result, AsList(
