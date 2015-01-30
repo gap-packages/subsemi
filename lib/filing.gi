@@ -67,7 +67,7 @@ end;
 #tagger function : indicator set -> string (should work in all cases)
 #filename
 #separating indicatorsets into files by their tags
-# the memory usage is minimal, but puts strain on the filesystem
+# the memory usage is minimal, but puts strain on the kernel I/O
 FilingIndicatorSets := function(infile,taggerfunc)
   local s,itf, otf, indset;
   itf := InputTextFile(infile);
@@ -110,6 +110,30 @@ IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
     fi; ########################################################################
   od;
 end;
+
+IndicatorSetFileTOClassifiedSmallGenSetfiles := function(infile,mt,prefix,ndigits)
+  local tag,s,sgp,counter,itf;
+  counter := 0;
+  itf := InputTextFile(infile);
+  s := ReadLine(itf);
+  repeat
+    NormalizeWhitespace(s);
+    counter := counter +1;
+    sgp := Semigroup(ElementsByIndicatorSet(AsBlist(DecodeBitString(s)),mt));
+    DisplayString(sgp); #to avoid GroupOfUnits crashing #101 
+    tag := SgpTag(sgp,ndigits);
+    if not WriteGenerators(Concatenation(prefix,tag,".gens"),
+               SmallSemigroupGeneratingSet(sgp),"a") then
+      Error(tag);
+    fi;
+    if InfoLevel(SubSemiInfoClass)>0 ###########################################
+       and (counter mod SubSemiOptions.LOGFREQ)=0 then
+      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter)," of ",infile);
+    fi; ########################################################################
+    s := ReadLine(itf);
+  until s=fail;
+end;
+
 
 BlistToSmallGenSet := function(indset, mt)
   return SmallSemigroupGeneratingSet(ElementsByIndicatorSet(indset,mt));
