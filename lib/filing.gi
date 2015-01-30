@@ -67,25 +67,26 @@ end;
 #tagger function : indicator set -> string (should work in all cases)
 #filename
 #separating indicatorsets into files by their tags
-FilingIndicatorSets := function(sets,taggerfunc,filename)
-  local classes, tag,s,sgp,counter;
-  counter := 0;
-  classes := AssociativeList(); # tags to open classes
-  for s in sets do
-    counter := counter +1;
-    tag := taggerfunc(s);
-    Collect(classes, tag, s);
-    if InfoLevel(SubSemiInfoClass)>0 ###########################################
-       and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter)," ",
-           FormattedMemoryString(MemoryUsage(classes))," ",
-           FormattedBigNumberString(String(Size(Keys(classes))))," ",
-           FormattedPercentageString(Size(Keys(classes)),counter));
-    fi; ########################################################################
-  od;
-  #writing the classes out to files
-  Perform(Keys(classes), function(x)
-    SaveIndicatorSets(classes[x],Concatenation(filename,x));end);
+# the memory usage is minimal, but puts strain on the filesystem
+FilingIndicatorSets := function(infile,taggerfunc)
+  local s,itf, otf, indset;
+  itf := InputTextFile(infile);
+  s := ReadLine(itf);
+  repeat
+    NormalizeWhitespace(s);
+    indset := AsBlist(DecodeBitString(s));
+    otf := OutputTextFile(taggerfunc(indset),true); 
+    if not WriteLine(otf,s) then
+      Error();
+    fi;
+    CloseStream(otf);
+    s := ReadLine(itf);
+  until s=fail;
+end;
+
+FilingIndicatorSetsBysize := function(infile,ndigits)
+  FilingIndicatorSets(infile,
+          x->Concatenation("S",PaddedNumString(SizeBlist(x),ndigits)));
 end;
 
 # a set of indicatorsets converted to small generating sets, classified
