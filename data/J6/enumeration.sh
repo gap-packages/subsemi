@@ -34,7 +34,7 @@ for i in U2*; do echo "echo \"$XLOADER I2CSubsFromUpperTorsos(\\\"$i\\\");\" | g
 parallel --jobs $CORES --joblog I2C.log < U2tasks
 cat U2*M > I2CminusI3C.reps #since it surely contains sg from I2C/I3C;
 
-echo $LOADER"ReCodeToJ6();" | gap -q -m $SMALLMEM
+echo $LOADER"RecodeToJ6();" | gap -q -m $SMALLMEM
 
 cat I3C_J6.reps I2CminusI3C_J6.reps I1CminusI2C_J6.reps > I1C_J6.reps
 

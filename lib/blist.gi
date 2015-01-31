@@ -142,7 +142,7 @@ end);
 
 #from one multab  to another (for subs and supers)
 #indicatorset in source to indicatorset in destination
-InstallMethod(ReCodeIndicatorSet,
+InstallMethod(RecodeIndicatorSet,
         "for a boolean list, a source and destiantion list of elements",
         [IsList,IsList,IsList],
 function(indset,src, dest)

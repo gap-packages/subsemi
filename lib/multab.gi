@@ -387,7 +387,7 @@ function(elms, mt)
   return IndicatorFunction(elms, SortedElements(mt));
 end);
 
-InstallOtherMethod(ReCodeIndicatorSet,
+InstallOtherMethod(RecodeIndicatorSet,
         "for a boolean list, a source and destiantion multabs",
         [IsList,IsMulTab,IsMulTab],
 function(indset,srcmt, destmt)

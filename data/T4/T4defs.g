@@ -22,8 +22,8 @@ K42SubReps := function()
   mtK42 := MulTab(K42,S4);
   reps := AsList(SubSgpsByMinExtensions(mtK42));
   SaveIndicatorSets(reps, "K42.reps");
-  ReCodeRepsFile("K42.reps","K42_K43.reps", mtK42, mtK43);
-  ReCodeRepsFile("K42.reps","K42_T4.reps", mtK42, mtT4);
+  RecodeRepsFile("K42.reps","K42_K43.reps", mtK42, mtK43);
+  RecodeRepsFile("K42.reps","K42_T4.reps", mtK42, mtT4);
 end;
 
 #takes couple of days, requires at least 4GB RAM
@@ -40,7 +40,7 @@ local mtK43, mtT4, K43reps, K43_T4reps, id;
   mtK43 := MulTab(K43);
   mtT4 := MulTab(T4);
   K43reps := LoadIndicatorSets("K43.reps");
-  K43_T4reps := List(K43reps, x->ReCodeIndicatorSet(x,mtK43,mtT4)); 
+  K43_T4reps := List(K43reps, x->RecodeIndicatorSet(x,mtK43,mtT4)); 
   SaveIndicatorSets(K43_T4reps,"K43_T4.reps");
   id := Position(SortedElements(mtT4), IdentityTransformation);
   Perform(K43_T4reps, function(x) x[id]:=true;end);
@@ -54,7 +54,7 @@ K43SubsOneShot := function()
   mtK43 := MulTab(K43,S4);
   reps := AsList(SubSgpsByMinExtensions(mtK43));
   SaveIndicatorSets(reps,"K43.reps");
-  ReCodeRepsFile("K43.reps","K43_T4.reps", mtK43, mtT4);
+  RecodeRepsFile("K43.reps","K43_T4.reps", mtK43, mtT4);
 end;
 
 P_T4 := function()

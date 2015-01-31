@@ -373,7 +373,7 @@ ISubsFromJUpperTorsos := function(I,J,uppertorsosfile,G)
 end;
 
 # TODO this does not go to conjugacy class representative
-ReCodeRepsFile := function(infile, outfile, mt, MT)
+RecodeRepsFile := function(infile, outfile, mt, MT)
 local itf, otf, s, indset;  
   itf := InputTextFile(infile);
   otf := OutputTextFile(outfile,false);
@@ -382,7 +382,7 @@ local itf, otf, s, indset;
     NormalizeWhitespace(s);
     indset := AsBlist(DecodeBitString(s));
     WriteLine(otf,EncodeBitString(AsBitString(
-            ReCodeIndicatorSet(indset,
+            RecodeIndicatorSet(indset,
                     SortedElements(mt),
                     SortedElements(MT)))));
     s := ReadLine(itf);
