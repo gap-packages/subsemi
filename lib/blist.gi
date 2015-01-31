@@ -141,15 +141,15 @@ function(elms, universe)
 end);
 
 #from one multab  to another (for subs and supers)
-#indicatorset in source to indicatorset in destination
-InstallMethod(RecodeIndicatorSet,
+#IndicatorFunction in source to IndicatorFunction in destination
+InstallMethod(RecodeIndicatorFunction,
         "for a boolean list, a source and destiantion list of elements",
         [IsList,IsList,IsList],
 function(indset,src, dest)
   return IndicatorFunction(SetByIndicatorFunction(indset,src),dest);
 end);
 
-InstallGlobalFunction(LoadIndicatorSets,
+InstallGlobalFunction(LoadIndicatorFunctions,
 function(filename)
   local result,itf,s;
   itf := InputTextFile(filename);
@@ -164,7 +164,7 @@ function(filename)
   return result;
 end);
 
-InstallGlobalFunction(SaveIndicatorSets,
+InstallGlobalFunction(SaveIndicatorFunctions,
 function(indsets, filename)
   local output,r;
   output := OutputTextFile(filename, false);

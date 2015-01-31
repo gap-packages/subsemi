@@ -31,10 +31,10 @@ local mt, reps, MT, REPS;
   mt := MulTab(I3C,G);
   reps := AsList(SubSgpsByMinExtensions(mt));
   MT := MulTab(J6,G);
-  REPS := List(reps, x -> RecodeIndicatorSet(x,
+  REPS := List(reps, x -> RecodeIndicatorFunction(x,
                 SortedElements(mt),
                 SortedElements(MT)));
-  SaveIndicatorSets(REPS, "I3C_J6.reps");
+  SaveIndicatorFunctions(REPS, "I3C_J6.reps");
 end;
 
 RecodeToJ6 := function()
