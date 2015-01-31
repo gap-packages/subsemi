@@ -40,6 +40,6 @@ end;
 RecodeToJ6 := function()
   local mtJ6;
   mtJ6 := MulTab(J6);
-  RecodeRepsFile("I1CminusI2C.reps"," I1CminusI2C_J6.reps", MulTab(I1C), mtJ6);
-  RecodeRepsFile("I2CminusI3C.reps"," I2CminusI3C_J6.reps", MulTab(I2C), mtJ6);
+  RecodeIndicatorFunctionFile("I1CminusI2C.reps"," I1CminusI2C_J6.reps", MulTab(I1C), mtJ6);
+  RecodeIndicatorFunctionFile("I2CminusI3C.reps"," I2CminusI3C_J6.reps", MulTab(I2C), mtJ6);
 end;

@@ -94,9 +94,8 @@ TextProcessor := function(infile, processor)
   CloseStream(itf);
 end;
 
-#list of IndicatorFunctions,
+#still generic
 #tagger function : indicator set -> string (should work in all cases)
-#filename
 #separating IndicatorFunctions into files by their tags
 # the memory usage is minimal, but puts strain on the kernel I/O
 FilingIndicatorFunctions := function(infile,taggerfunc)
@@ -130,6 +129,24 @@ FilingIndicatorFunctionsBySgpTag := function(infile,mt,prefix,ndigits)
              return true;
            end);
 end;  
+
+RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
+  local otf;  
+  otf := OutputTextFile(outfile,false);
+  TextProcessor(infile,
+          function(s)
+            local indfunc;
+            indfunc := AsBlist(DecodeBitString(s));
+            if not  WriteLine(otf,EncodeBitString(AsBitString(
+                       RecodeIndicatorFunction(indfunc,
+                               SortedElements(mt),
+                               SortedElements(MT))))) then
+              return false;
+            fi;
+            return true;
+          end);
+  CloseStream(otf);
+end;
 
 #used in ui.gi
 BlistToSmallGenSet := function(indfunc, mt)
@@ -363,21 +380,4 @@ ISubsFromJUpperTorsos := function(I,J,uppertorsosfile,G)
   od;
   SaveIndicatorFunctions(result,Concatenation(uppertorsosfile,"M"));;
   PrintTo(Concatenation(uppertorsosfile,"F"),String(TimeInSeconds()-time));
-end;
-
-# TODO this does not go to conjugacy class representative
-RecodeRepsFile := function(infile, outfile, mt, MT)
-local itf, otf, s, indfunc;  
-  itf := InputTextFile(infile);
-  otf := OutputTextFile(outfile,false);
-  s := ReadLine(itf);
-  repeat
-    NormalizeWhitespace(s);
-    indfunc := AsBlist(DecodeBitString(s));
-    WriteLine(otf,EncodeBitString(AsBitString(
-            RecodeIndicatorFunction(indfunc,
-                    SortedElements(mt),
-                    SortedElements(MT)))));
-    s := ReadLine(itf);
-  until s=fail;
 end;
