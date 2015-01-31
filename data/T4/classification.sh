@@ -14,5 +14,5 @@ XLOADER="Read(\\\"T4defs.g\\\");" #escape character madness
 echo "FilingIndicatorFunctionsBySize(\"T4.reps\",3);" | gap -q
 
 for i in S*; do echo "echo \"$XLOADER FilingIndicatorFunctionsBySgpTag(\\\"$i\\\", MulTab(T4,S4), \\\"T4_\\\", 3);\" | gap  -q " >> tasksS; done;
-parallel --jobs $CORES --job-log T4classifying.log < tasksS
+parallel --jobs $CORES --joblog T4classifying.log < tasksS
 
