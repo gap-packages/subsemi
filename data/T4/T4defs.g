@@ -77,7 +77,7 @@ P_T4_Sorter := function()
   reps := LoadIndicatorFunctions("P_T4.reps");
   Display("# Loading P_T4.reps DONE");
   mtT4 := MulTab(T4,S4);
-  sgps := List(reps, x-> Semigroup(ElementsByIndicatorFunction(x,mtT4)));
+  sgps := List(reps, x-> Semigroup(SetByIndicatorFunction(x,mtT4)));
   Display("# Converting to semigroups DONE");
   al := AssociativeList();
   Perform(sgps, function(sgp) 
