@@ -67,69 +67,23 @@ BLSgpTag := function(bl,mt,ndigits)
 end;
 
 ################################################################################
-### FILING IN
-#list of IndicatorFunctions,
-#tagger function : indicator set -> string (should work in all cases)
-#filename
-#separating IndicatorFunctions into files by their tags
-# the memory usage is minimal, but puts strain on the kernel I/O
-FilingIndicatorFunctions := function(infile,taggerfunc)
-  local s,itf, otf, indset;
-  itf := InputTextFile(infile);
-  s := ReadLine(itf);
-  repeat
-    NormalizeWhitespace(s);
-    indset := AsBlist(DecodeBitString(s));
-    otf := OutputTextFile(taggerfunc(indset),true); 
-    if not WriteLine(otf,s) then
-      Error();
-    fi;
-    CloseStream(otf);
-    s := ReadLine(itf);
-  until s=fail;
-end;
+### FILING INDICATOR FUNCTIONS #################################################
+################################################################################
 
-FilingIndicatorFunctionsBysize := function(infile,ndigits)
-  FilingIndicatorFunctions(infile,
-          x->Concatenation("S",PaddedNumString(SizeBlist(x),ndigits)));
-end;
-
-# a set of IndicatorFunctions converted to small generating sets, classified
-# there is a file operation for each semigroup - this seems ok, probably
-# caching by to OS takes away the strain on the drive
-IndicatorFunctionsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
-  local tag,s,sgp,counter;
-  counter := 0;
-  for s in sets do
-    counter := counter +1;
-    sgp := Semigroup(SetByIndicatorFunction(s,mt));
-    DisplayString(sgp); #to avoid GroupOfUnits crashing #101 
-    tag := SgpTag(sgp,ndigits);
-    if not WriteGenerators(Concatenation(filename,tag,".gens"),
-               SmallSemigroupGeneratingSet(sgp),"a") then
-      Error(tag);
-    fi;
-    if InfoLevel(SubSemiInfoClass)>0 ###########################################
-       and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter));
-    fi; ########################################################################
-  od;
-end;
-
-IndicatorFunctionFileTOClassifiedSmallGenSetfiles := function(infile,mt,prefix,ndigits)
-  local tag,s,sgp,counter,itf;
+#generic function for processing a textfile line by line
+#infile - the name of the input file
+#processor - a function that takes a line of infile and retruns true if it was 
+#properly processed
+TextProcessor := function(infile, processor)
+  local s,counter,itf;
   counter := 0;
   itf := InputTextFile(infile);
   s := ReadLine(itf);
   repeat
     NormalizeWhitespace(s);
-    counter := counter +1;
-    sgp := Semigroup(SetByIndicatorFunction(AsBlist(DecodeBitString(s)),mt));
-    DisplayString(sgp); #to avoid GroupOfUnits crashing #101 
-    tag := SgpTag(sgp,ndigits);
-    if not WriteGenerators(Concatenation(prefix,tag,".gens"),
-               SmallSemigroupGeneratingSet(sgp),"a") then
-      Error(tag);
+    counter := counter + 1;
+    if not processor(s) then
+      Error(s);
     fi;
     if InfoLevel(SubSemiInfoClass)>0 ###########################################
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
@@ -137,11 +91,49 @@ IndicatorFunctionFileTOClassifiedSmallGenSetfiles := function(infile,mt,prefix,n
     fi; ########################################################################
     s := ReadLine(itf);
   until s=fail;
+  CloseStream(itf);
 end;
 
+#list of IndicatorFunctions,
+#tagger function : indicator set -> string (should work in all cases)
+#filename
+#separating IndicatorFunctions into files by their tags
+# the memory usage is minimal, but puts strain on the kernel I/O
+FilingIndicatorFunctions := function(infile,taggerfunc)
+  TextProcessor(infile, function(s)
+                          local indfunc,otf;
+                          indfunc := AsBlist(DecodeBitString(s));
+                          otf := OutputTextFile(taggerfunc(indfunc),true); 
+                          if not WriteLine(otf,s) then return false; fi;
+                          CloseStream(otf);
+                          return true;
+                        end);
+end;
 
-BlistToSmallGenSet := function(indset, mt)
-  return SmallSemigroupGeneratingSet(SetByIndicatorFunction(indset,mt));
+FilingIndicatorFunctionsBySize := function(infile,ndigits)
+  FilingIndicatorFunctions(infile,
+          x->Concatenation("S",PaddedNumString(SizeBlist(x),ndigits)));
+end;
+
+FilingIndicatorFunctionsBySgpTag := function(infile,mt,prefix,ndigits)
+  TextProcessor(infile,
+          function(s)
+             local sgp, tag;
+             sgp := Semigroup(SetByIndicatorFunction(
+                            AsBlist(DecodeBitString(s)),mt));
+             DisplayString(sgp); #to avoid GroupOfUnits crashing #101 
+             tag := SgpTag(sgp,ndigits);
+             if not WriteGenerators(Concatenation(prefix,tag,".gens"),
+                        SmallSemigroupGeneratingSet(sgp),"a") then
+               return false;
+             fi;
+             return true;
+           end);
+end;  
+
+#used in ui.gi
+BlistToSmallGenSet := function(indfunc, mt)
+  return SmallSemigroupGeneratingSet(SetByIndicatorFunction(indfunc,mt));
 end;
 
 #TODO the two functions below are copy-paste twins, better abstraction needed
@@ -263,14 +255,15 @@ PrefixPostfixMatchedListDir := function(dir, prefix, postfix)
 end;
 
 ClassifySubsemigroups := function(S, G , prefix) 
-  local mt,subreps,ndigits;
+  local mt,subreps,ndigits, repsfile;
   ndigits := Size(String(Size(S)));
   SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
   mt := MulTab(S,G);
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
-  SaveIndicatorFunctions(subreps,Concatenation(prefix{[1..Size(prefix)-1]},".reps"));
-  IndicatorFunctionsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
+  repsfile := Concatenation(prefix{[1..Size(prefix)-1]},".reps");
+  SaveIndicatorFunctions(subreps, repsfile);
+  FilingIndicatorFunctionsBySgpTag(repsfile,mt,prefix,ndigits);
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
   Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
@@ -328,7 +321,7 @@ end;
 # output: .reps file containing Sub(I/J), also as upper torsos
 # G - the symmetries
 ImodJSubs := function(I,J,Iname, Jname,G)
-local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
+local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indfunc, torso;
   rfh := ReesFactorHomomorphism(J);
   T := Range(rfh);
   SetName(T,Concatenation(Iname,"mod",Jname));
@@ -345,8 +338,8 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
   s := ReadLine(itf);
   repeat
     NormalizeWhitespace(s);
-    indset := AsBlist(DecodeBitString(s));
-    torso := SetByIndicatorFunction(indset,elts);
+    indfunc := AsBlist(DecodeBitString(s));
+    torso := SetByIndicatorFunction(indfunc,elts);
     if fail in torso then Remove(torso,Position(torso,fail));fi;
     if not IsEmpty(torso) then
       WriteLine(otf,EncodeBitString(AsBitString(
@@ -374,15 +367,15 @@ end;
 
 # TODO this does not go to conjugacy class representative
 RecodeRepsFile := function(infile, outfile, mt, MT)
-local itf, otf, s, indset;  
+local itf, otf, s, indfunc;  
   itf := InputTextFile(infile);
   otf := OutputTextFile(outfile,false);
   s := ReadLine(itf);
   repeat
     NormalizeWhitespace(s);
-    indset := AsBlist(DecodeBitString(s));
+    indfunc := AsBlist(DecodeBitString(s));
     WriteLine(otf,EncodeBitString(AsBitString(
-            RecodeIndicatorFunction(indset,
+            RecodeIndicatorFunction(indfunc,
                     SortedElements(mt),
                     SortedElements(MT)))));
     s := ReadLine(itf);
