@@ -20,7 +20,7 @@ local test,infolevel;
   SetInfoLevel(SubSemiInfoClass, 0);
   for test in [
           "6packedbitstrings",
-          "indicatorset",
+          "indicatorfunction",
           "indexperiod",
           "closures",
           "gensets",
