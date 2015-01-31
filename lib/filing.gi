@@ -153,26 +153,36 @@ BlistToSmallGenSet := function(indfunc, mt)
   return SmallSemigroupGeneratingSet(SetByIndicatorFunction(indfunc,mt));
 end;
 
-#TODO the two functions below are copy-paste twins, better abstraction needed
-#assumed input is .ais files
-GensFileIsomClasses := function(filename)
+################################################################################
+### ISOMORPHISM ################################################################
+################################################################################
+
+#generic function
+ClassProcessor := function(filename, classifierfunc, ext, preprocess)
   local prefix, sgps, idpclasses, digits,i,al,iso, counter,sgpclasses,class;
-  prefix := filename{[1..Size(filename)-4]};
-  counter:=1;
-  al := AssociativeList();
+  prefix := filename{[1..Maximum(Positions(filename,'.'))-1]};
+  counter:=1;  
   #memory saving idea - not storing all semigroups
   # frequency profiles -> generator sets
-  Perform(ReadGenerators(filename),function(x)
-    Collect(al,IdempotentFrequencies(MulTab(Semigroup(x))),x);end);
-  idpclasses := Filtered(ValueSet(al),x->Size(x)>1);
-  digits := Size(String(Size(idpclasses))); #just an upper bound  
+  if preprocess then
+    al := AssociativeList();
+    Perform(ReadGenerators(filename),function(x)
+      Collect(al,IdempotentFrequencies(MulTab(Semigroup(x))),x);end);
+    idpclasses := Filtered(ValueSet(al),x->Size(x)>1);
+    if IsEmpty(idpclasses) then return; fi;
+  else
+    idpclasses := [ReadGenerators(filename)];
+  fi;
+  #now going through the prefiltered classes
+  digits := Size(String(Maximum(List(idpclasses,Size))));
+  counter:=1;  
   for class in idpclasses do
     sgps := List(class, Semigroup);
-    sgpclasses := Filtered(SgpIsomorphismClasses(sgps),x->Size(x)>1);
+    sgpclasses := Filtered(classifierfunc(sgps),x->Size(x)>1);
     for iso in sgpclasses do
       if not WriteGenerators(
                  Concatenation(prefix,"_",
-                         PaddedNumString(counter,digits),".iso"),
+                         PaddedNumString(counter,digits),ext),
                  iso,"w") then
         Error(Concatenation("Failure when processing ",filename));
       fi;
@@ -181,54 +191,22 @@ GensFileIsomClasses := function(filename)
   od;
 end;
 
-#assumed input is .gens files
+GensFileIsomClasses := function(filename)
+  ClassProcessor(filename, SgpIsomorphismClasses, ".iso", true);
+end;
+
 GensFileAntiAndIsomClasses := function(filename)
-  local prefix,sgps,idpclasses,digits,i,al,iso,counter,sgpclasses,class,gensets;
-  gensets := ReadGenerators(filename); 
-  if Size(gensets)=1 then return; fi; #nothing to do
-  prefix := filename{[1..Size(filename)-5]};
-  counter:=1;
-  al := AssociativeList();
-  #memory saving idea - not storing all semigroups
-  # frequency profiles -> generator sets
-  Perform(gensets,function(x)
-    Collect(al,IdempotentFrequencies(MulTab(Semigroup(x))),x);end);
-  idpclasses := Filtered(ValueSet(al),x->Size(x)>1);
-  digits := Size(String(Size(idpclasses))); #just an upper bound  
-  for class in idpclasses do
-    sgps := List(class, Semigroup);
-    sgpclasses := Filtered(SgpAntiAndIsomorphismClasses(sgps),x->Size(x)>1);
-    for iso in sgpclasses do
-      if not WriteGenerators(
-                 Concatenation(prefix,"_",
-                         PaddedNumString(counter,digits),".ais"),
-                 iso,"w") then
-        Error(Concatenation("Failure when processing ",filename));
-      fi;
-      counter := counter + 1;
-    od;
-  od;
+  ClassProcessor(filename, SgpAntiAndIsomorphismClasses, ".ais", true);
 end;
 
-#assumed input is an .ais file
+# assume .ais files as input
 AntiAndIsomClassToIsomClasses := function(filename)
-  local prefix, sgps, digits,i,iso,sgpclasses, counter;
-  prefix := filename{[1..Size(filename)-4]};
-  sgps := List(ReadGenerators(filename), Semigroup);
-  sgpclasses := SgpIsomorphismClasses(sgps);
-  if Size(sgpclasses) = 1 then return; fi; #no anti-isomorphism
-  digits := Size(String(Size(sgpclasses))); #just an upper bound  
-  counter:=1;
-  for iso in sgpclasses do
-    if not WriteGenerators(
-               Concatenation(prefix,"_",
-                       PaddedNumString(counter,digits),".iso"),
-               iso,"w") then
-      Error(Concatenation("Failure when processing ",filename));
-    fi;
-    counter := counter + 1;
-  od;  
+  ClassProcessor(filename, SgpIsomorphismClasses, ".iso", false);
 end;
+
+################################################################################
+### GNUPLOT ####################################################################
+################################################################################
 
 #the frequency distribution vector
 # gnuplot code:
@@ -269,24 +247,6 @@ end;
 PrefixPostfixMatchedListDir := function(dir, prefix, postfix)
   return Intersection(PrefixMatchedListDir(dir,prefix),
                  PostfixMatchedListDir(dir,postfix));
-end;
-
-ClassifySubsemigroups := function(S, G , prefix) 
-  local mt,subreps,ndigits, repsfile;
-  ndigits := Size(String(Size(S)));
-  SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
-  mt := MulTab(S,G);
-  Print("Calculating and classifying ",prefix,"\n\c");
-  subreps := AsList(SubSgpsByMinExtensions(mt));
-  repsfile := Concatenation(prefix{[1..Size(prefix)-1]},".reps");
-  SaveIndicatorFunctions(subreps, repsfile);
-  FilingIndicatorFunctionsBySgpTag(repsfile,mt,prefix,ndigits);
-  Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
-  Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
-  Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
-          AntiAndIsomClassToIsomClasses);
-  GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
-          Concatenation(prefix,"sizedist.dat"));
 end;
 
 # input: classified .gens files having the same prefix
@@ -381,3 +341,26 @@ ISubsFromJUpperTorsos := function(I,J,uppertorsosfile,G)
   SaveIndicatorFunctions(result,Concatenation(uppertorsosfile,"M"));;
   PrintTo(Concatenation(uppertorsosfile,"F"),String(TimeInSeconds()-time));
 end;
+
+################################################################################
+### COMPREHENSIVE ##############################################################
+################################################################################
+
+ClassifySubsemigroups := function(S, G , prefix) 
+  local mt,subreps,ndigits, repsfile;
+  ndigits := Size(String(Size(S)));
+  SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
+  mt := MulTab(S,G);
+  Print("Calculating and classifying ",prefix,"\n\c");
+  subreps := AsList(SubSgpsByMinExtensions(mt));
+  repsfile := Concatenation(prefix{[1..Size(prefix)-1]},".reps");
+  SaveIndicatorFunctions(subreps, repsfile);
+  FilingIndicatorFunctionsBySgpTag(repsfile,mt,prefix,ndigits);
+  Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
+  Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
+  Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
+          AntiAndIsomClassToIsomClasses);
+  GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
+          Concatenation(prefix,"sizedist.dat"));
+end;
+
