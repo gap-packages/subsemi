@@ -51,7 +51,7 @@ local rfh, T, mtT, reps,mtI43, preimgs, elts, itf, otf, s, indset, torso;
   repeat
     NormalizeWhitespace(s);
     indset := AsBlist(DecodeBitString(s));
-    torso := ElementsByIndicatorSet(indset,elts);
+    torso := SetByIndicatorFunction(indset,elts);
     if fail in torso then Remove(torso,Position(torso,fail));fi;
     WriteLine(otf,EncodeBitString(AsBitString(
             IndicatorFunction(torso,mtI43))));

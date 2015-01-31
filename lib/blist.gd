@@ -17,7 +17,7 @@ DeclareGlobalFunction("DecodeBitString");
 DeclareGlobalFunction("AsBlist");
 DeclareGlobalFunction("AsBitString");
 
-DeclareOperation("ElementsByIndicatorSet",[IsList,IsList]); #todo IsBlist does not work
+DeclareOperation("SetByIndicatorFunction",[IsList,IsList]); #todo IsBlist does not work
 DeclareOperation("IndicatorFunction",[IsList,IsList]);
 DeclareOperation("ReCodeIndicatorSet",[IsList,IsList,IsList]);
 

@@ -58,12 +58,12 @@ end;
 
 # tagging indicator set - includes converting to semigroup
 BLGreenTag := function(bl,mt,ndigits)
-  return GreenTag(Semigroup(ElementsByIndicatorSet(bl,mt)),ndigits);
+  return GreenTag(Semigroup(SetByIndicatorFunction(bl,mt)),ndigits);
 end;
 
 # tagging indicator set - includes converting to semigroup
 BLSgpTag := function(bl,mt,ndigits)
-  return SgpTag(Semigroup(ElementsByIndicatorSet(bl,mt)),ndigits);
+  return SgpTag(Semigroup(SetByIndicatorFunction(bl,mt)),ndigits);
 end;
 
 ################################################################################
@@ -102,7 +102,7 @@ IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
   counter := 0;
   for s in sets do
     counter := counter +1;
-    sgp := Semigroup(ElementsByIndicatorSet(s,mt));
+    sgp := Semigroup(SetByIndicatorFunction(s,mt));
     DisplayString(sgp); #to avoid GroupOfUnits crashing #101 
     tag := SgpTag(sgp,ndigits);
     if not WriteGenerators(Concatenation(filename,tag,".gens"),
@@ -124,7 +124,7 @@ IndicatorSetFileTOClassifiedSmallGenSetfiles := function(infile,mt,prefix,ndigit
   repeat
     NormalizeWhitespace(s);
     counter := counter +1;
-    sgp := Semigroup(ElementsByIndicatorSet(AsBlist(DecodeBitString(s)),mt));
+    sgp := Semigroup(SetByIndicatorFunction(AsBlist(DecodeBitString(s)),mt));
     DisplayString(sgp); #to avoid GroupOfUnits crashing #101 
     tag := SgpTag(sgp,ndigits);
     if not WriteGenerators(Concatenation(prefix,tag,".gens"),
@@ -141,7 +141,7 @@ end;
 
 
 BlistToSmallGenSet := function(indset, mt)
-  return SmallSemigroupGeneratingSet(ElementsByIndicatorSet(indset,mt));
+  return SmallSemigroupGeneratingSet(SetByIndicatorFunction(indset,mt));
 end;
 
 #TODO the two functions below are copy-paste twins, better abstraction needed
@@ -346,7 +346,7 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
   repeat
     NormalizeWhitespace(s);
     indset := AsBlist(DecodeBitString(s));
-    torso := ElementsByIndicatorSet(indset,elts);
+    torso := SetByIndicatorFunction(indset,elts);
     if fail in torso then Remove(torso,Position(torso,fail));fi;
     if not IsEmpty(torso) then
       WriteLine(otf,EncodeBitString(AsBitString(
