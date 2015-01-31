@@ -120,7 +120,7 @@ function(bitstr)
 end);
 
 ### CONVERTING TO SET ELEMENTS #################################################
-InstallMethod(ElementsByIndicatorSet, "for boolean list and a list of elements",
+InstallMethod(SetByIndicatorFunction, "for boolean list and a list of elements",
         [IsList, IsList],
 function(indset, elements)
   if IsBlist(indset) then
@@ -146,7 +146,7 @@ InstallMethod(ReCodeIndicatorSet,
         "for a boolean list, a source and destiantion list of elements",
         [IsList,IsList,IsList],
 function(indset,src, dest)
-  return IndicatorFunction(ElementsByIndicatorSet(indset,src),dest);
+  return IndicatorFunction(SetByIndicatorFunction(indset,src),dest);
 end);
 
 InstallGlobalFunction(LoadIndicatorSets,

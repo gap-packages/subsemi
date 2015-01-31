@@ -44,7 +44,7 @@ function(I)
   T := Range(rfh); #T=S\I
   mtT := MulTab(T);
   subs := AsList(SubSgpsByMinExtensions(mtT));
-  realsubs := List(subs, x->ElementsByIndicatorSet(x,SortedElements(mtT)));
+  realsubs := List(subs, x->SetByIndicatorFunction(x,SortedElements(mtT)));
   torsos := Set(realsubs, x->RFHNonZeroPreImages(x,rfh));
   Tsubs := List(torsos, x->IndicatorFunction(x,SortedElements(mtS)));
   
@@ -123,7 +123,7 @@ local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
   #from preimageset to elements, getting rid of zero by failing it
   elts := List(preimgs,function(x) if Size(x)> 1 then return fail;
                                    else return x[1];fi;end);
-  tmp := List(Treps, x->ElementsByIndicatorSet(x,elts));
+  tmp := List(Treps, x->SetByIndicatorFunction(x,elts));
   Perform(tmp, function(x) if fail in x then
       Remove(x, Position(x,fail));fi;end);
   mtS := MulTab(Parent(I),G); 

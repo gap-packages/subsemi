@@ -6,7 +6,7 @@ TestAgainstBruteForce := function(M)
   Perform(l1,Sort);
   Sort(l1);
   l2 := List(AsList(SubSgpsByMinExtensions(mt)),
-             b->ElementsByIndicatorSet(b,mt));
+             b->SetByIndicatorFunction(b,mt));
   Perform(l2,Sort);
   Sort(l2);
   return l1 = l2;

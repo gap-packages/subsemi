@@ -369,15 +369,15 @@ end);
 #just for convenience, TODO: include it properly
 SmallGenSetSgpFromIndicatorSet := function(indset,mt)
   return SmallGeneratingSet(Semigroup(
-                 ElementsByIndicatorSet(indset,SortedElements(mt))
+                 SetByIndicatorFunction(indset,SortedElements(mt))
                  ));
 end;
 
 #CONVENIENCE
-InstallOtherMethod(ElementsByIndicatorSet, "for boolean list and multab",
+InstallOtherMethod(SetByIndicatorFunction, "for boolean list and multab",
         [IsList, IsMulTab],
 function(indset, mt)
-  return ElementsByIndicatorSet(indset, SortedElements(mt));
+  return SetByIndicatorFunction(indset, SortedElements(mt));
 end);
 
 InstallOtherMethod(IndicatorFunction,
@@ -391,5 +391,5 @@ InstallOtherMethod(ReCodeIndicatorSet,
         "for a boolean list, a source and destiantion multabs",
         [IsList,IsMulTab,IsMulTab],
 function(indset,srcmt, destmt)
-  return IndicatorFunction(ElementsByIndicatorSet(indset,srcmt),destmt);
+  return IndicatorFunction(SetByIndicatorFunction(indset,srcmt),destmt);
 end);
