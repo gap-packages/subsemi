@@ -38,7 +38,7 @@ function(I)
   mtI := MulTab(I);
   #recoding the subsemigroups of ideal as subsgps of the original
   Isubs := List(AsList(SubSgpsByMinExtensions(mtI)),
-              x->RecodeIndicatorSet(x,SortedElements(mtI),SortedElements(mtS)));
+              x->RecodeIndicatorFunction(x,SortedElements(mtI),SortedElements(mtS)));
   
   rfh := ReesFactorHomomorphism(I);
   T := Range(rfh); #T=S\I

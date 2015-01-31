@@ -21,7 +21,7 @@ K42SubReps := function()
   mtK43 := MulTab(K43,S4);
   mtK42 := MulTab(K42,S4);
   reps := AsList(SubSgpsByMinExtensions(mtK42));
-  SaveIndicatorSets(reps, "K42.reps");
+  SaveIndicatorFunctions(reps, "K42.reps");
   RecodeRepsFile("K42.reps","K42_K43.reps", mtK42, mtK43);
   RecodeRepsFile("K42.reps","K42_T4.reps", mtK42, mtT4);
 end;
@@ -39,12 +39,12 @@ K43sharp := function()
 local mtK43, mtT4, K43reps, K43_T4reps, id;
   mtK43 := MulTab(K43);
   mtT4 := MulTab(T4);
-  K43reps := LoadIndicatorSets("K43.reps");
-  K43_T4reps := List(K43reps, x->RecodeIndicatorSet(x,mtK43,mtT4)); 
-  SaveIndicatorSets(K43_T4reps,"K43_T4.reps");
+  K43reps := LoadIndicatorFunctions("K43.reps");
+  K43_T4reps := List(K43reps, x->RecodeIndicatorFunction(x,mtK43,mtT4)); 
+  SaveIndicatorFunctions(K43_T4reps,"K43_T4.reps");
   id := Position(SortedElements(mtT4), IdentityTransformation);
   Perform(K43_T4reps, function(x) x[id]:=true;end);
-  SaveIndicatorSets(K43_T4reps,"K43sharp_T4.reps");
+  SaveIndicatorFunctions(K43_T4reps,"K43sharp_T4.reps");
 end;
 
 #it would be nice to calculate this as a control recalc
@@ -53,7 +53,7 @@ K43SubsOneShot := function()
   mtT4 := MulTab(T4,S4);
   mtK43 := MulTab(K43,S4);
   reps := AsList(SubSgpsByMinExtensions(mtK43));
-  SaveIndicatorSets(reps,"K43.reps");
+  SaveIndicatorFunctions(reps,"K43.reps");
   RecodeRepsFile("K43.reps","K43_T4.reps", mtK43, mtT4);
 end;
 
@@ -69,15 +69,15 @@ local mtT4, I, uts, id, result;
   Remove(uts, Position(uts, id));
   result := SubSgpsByUpperTorsos(I,S4,uts);
   Add(result,id);
-  SaveIndicatorSets(result,"P_T4.reps");
+  SaveIndicatorFunctions(result,"P_T4.reps");
 end;
 
 P_T4_Sorter := function()
   local sgps, reps, al, mtT4;
-  reps := LoadIndicatorSets("P_T4.reps");
+  reps := LoadIndicatorFunctions("P_T4.reps");
   Display("# Loading P_T4.reps DONE");
   mtT4 := MulTab(T4,S4);
-  sgps := List(reps, x-> Semigroup(ElementsByIndicatorSet(x,mtT4)));
+  sgps := List(reps, x-> Semigroup(ElementsByIndicatorFunction(x,mtT4)));
   Display("# Converting to semigroups DONE");
   al := AssociativeList();
   Perform(sgps, function(sgp) 

@@ -68,12 +68,12 @@ end;
 
 ################################################################################
 ### FILING IN
-#list of indicatorsets,
+#list of IndicatorFunctions,
 #tagger function : indicator set -> string (should work in all cases)
 #filename
-#separating indicatorsets into files by their tags
+#separating IndicatorFunctions into files by their tags
 # the memory usage is minimal, but puts strain on the kernel I/O
-FilingIndicatorSets := function(infile,taggerfunc)
+FilingIndicatorFunctions := function(infile,taggerfunc)
   local s,itf, otf, indset;
   itf := InputTextFile(infile);
   s := ReadLine(itf);
@@ -89,15 +89,15 @@ FilingIndicatorSets := function(infile,taggerfunc)
   until s=fail;
 end;
 
-FilingIndicatorSetsBysize := function(infile,ndigits)
-  FilingIndicatorSets(infile,
+FilingIndicatorFunctionsBysize := function(infile,ndigits)
+  FilingIndicatorFunctions(infile,
           x->Concatenation("S",PaddedNumString(SizeBlist(x),ndigits)));
 end;
 
-# a set of indicatorsets converted to small generating sets, classified
+# a set of IndicatorFunctions converted to small generating sets, classified
 # there is a file operation for each semigroup - this seems ok, probably
 # caching by to OS takes away the strain on the drive
-IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
+IndicatorFunctionsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
   local tag,s,sgp,counter;
   counter := 0;
   for s in sets do
@@ -116,7 +116,7 @@ IndicatorSetsTOClassifiedSmallGenSet := function(sets,mt,filename,ndigits)
   od;
 end;
 
-IndicatorSetFileTOClassifiedSmallGenSetfiles := function(infile,mt,prefix,ndigits)
+IndicatorFunctionFileTOClassifiedSmallGenSetfiles := function(infile,mt,prefix,ndigits)
   local tag,s,sgp,counter,itf;
   counter := 0;
   itf := InputTextFile(infile);
@@ -269,8 +269,8 @@ ClassifySubsemigroups := function(S, G , prefix)
   mt := MulTab(S,G);
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
-  SaveIndicatorSets(subreps,Concatenation(prefix{[1..Size(prefix)-1]},".reps"));
-  IndicatorSetsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
+  SaveIndicatorFunctions(subreps,Concatenation(prefix{[1..Size(prefix)-1]},".reps"));
+  IndicatorFunctionsTOClassifiedSmallGenSet(subreps,mt,prefix,ndigits);#,
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
   Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
@@ -334,7 +334,7 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indset, torso;
   SetName(T,Concatenation(Iname,"mod",Jname));
   mtT := MulTab(T,G,rfh);
   reps := SubSgpsByMinExtensions(mtT);
-  SaveIndicatorSets(reps, Concatenation(Name(T),".reps"));
+  SaveIndicatorFunctions(reps, Concatenation(Name(T),".reps"));
   mtI := MulTab(I);
   preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
   elts := List(preimgs,
@@ -363,12 +363,12 @@ ISubsFromJUpperTorsos := function(I,J,uppertorsosfile,G)
   result := [];
   mt := MulTab(I,G);
   gens := IndicatorFunction(AsList(J), SortedElements(mt));
-  torsos := LoadIndicatorSets(uppertorsosfile);
+  torsos := LoadIndicatorFunctions(uppertorsosfile);
   for U in torsos do
     Append(result, AsList(
             SubSgpsByMinExtensionsParametrized(mt, U, gens, Stack(),[])));
   od;
-  SaveIndicatorSets(result,Concatenation(uppertorsosfile,"M"));;
+  SaveIndicatorFunctions(result,Concatenation(uppertorsosfile,"M"));;
   PrintTo(Concatenation(uppertorsosfile,"F"),String(TimeInSeconds()-time));
 end;
 
@@ -382,7 +382,7 @@ local itf, otf, s, indset;
     NormalizeWhitespace(s);
     indset := AsBlist(DecodeBitString(s));
     WriteLine(otf,EncodeBitString(AsBitString(
-            RecodeIndicatorSet(indset,
+            RecodeIndicatorFunction(indset,
                     SortedElements(mt),
                     SortedElements(MT)))));
     s := ReadLine(itf);
