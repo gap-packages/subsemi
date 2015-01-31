@@ -18,13 +18,13 @@ I42SubReps := function()
   reps := AsList(SubSgpsByMinExtensions(mtI42));
   output := OutputTextFile("I42_I43.reps", false);
   for r in List(reps,
-          x->ConjugacyClassRep(ReCodeIndicatorSet(x,mtI42,mtI43),mtI43)) do
+          x->ConjugacyClassRep(RecodeIndicatorSet(x,mtI42,mtI43),mtI43)) do
     AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
   od;
   CloseStream(output);
   output := OutputTextFile("I42_I4.reps", false);
   for r in List(reps,
-          x->ConjugacyClassRep(ReCodeIndicatorSet(x,mtI42,mtI4),mtI4)) do
+          x->ConjugacyClassRep(RecodeIndicatorSet(x,mtI42,mtI4),mtI4)) do
     AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
   od;
   CloseStream(output);
@@ -80,7 +80,7 @@ local mtI43, mtI4, I43reps, I43_I4reps, id;
   mtI43 := MulTab(I43);
   mtI4 := MulTab(I4);
   I43reps := LoadIndicatorSets("I43.reps");
-  I43_I4reps := List(I43reps, x->ReCodeIndicatorSet(x,mtI43,mtI4)); 
+  I43_I4reps := List(I43reps, x->RecodeIndicatorSet(x,mtI43,mtI4)); 
   SaveIndicatorSets(I43_I4reps,"I43_I4.reps");
   id := Position(SortedElements(mtI4), Identity(I4));
   Perform(I43_I4reps, function(x) x[id]:=true;end);
@@ -94,7 +94,7 @@ I43SubsOneShot := function()
   reps := AsList(SubSgpsByMinExtensions(mtI43));
   output := OutputTextFile("I43_I4.reps", false);
   for r in List(reps,
-          x->ReCodeIndicatorSet(x,mtI43,mtI4)) do
+          x->RecodeIndicatorSet(x,mtI43,mtI4)) do
     AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
   od;
   CloseStream(output);

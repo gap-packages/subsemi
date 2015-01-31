@@ -31,15 +31,15 @@ local mt, reps, MT, REPS;
   mt := MulTab(I3C,G);
   reps := AsList(SubSgpsByMinExtensions(mt));
   MT := MulTab(J6,G);
-  REPS := List(reps, x -> ReCodeIndicatorSet(x,
+  REPS := List(reps, x -> RecodeIndicatorSet(x,
                 SortedElements(mt),
                 SortedElements(MT)));
   SaveIndicatorSets(REPS, "I3C_J6.reps");
 end;
 
-ReCodeToJ6 := function()
+RecodeToJ6 := function()
   local mtJ6;
   mtJ6 := MulTab(J6);
-  ReCodeRepsFile("I1CminusI2C.reps"," I1CminusI2C_J6.reps", MulTab(I1C), mtJ6);
-  ReCodeRepsFile("I2CminusI3C.reps"," I2CminusI3C_J6.reps", MulTab(I2C), mtJ6);
+  RecodeRepsFile("I1CminusI2C.reps"," I1CminusI2C_J6.reps", MulTab(I1C), mtJ6);
+  RecodeRepsFile("I2CminusI3C.reps"," I2CminusI3C_J6.reps", MulTab(I2C), mtJ6);
 end;
