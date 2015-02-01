@@ -43,3 +43,12 @@ RecodeToJ6 := function()
   RecodeIndicatorFunctionFile("I1CminusI2C.reps"," I1CminusI2C_J6.reps", MulTab(I1C), mtJ6);
   RecodeIndicatorFunctionFile("I2CminusI3C.reps"," I2CminusI3C_J6.reps", MulTab(I2C), mtJ6);
 end;
+
+K43sharp := function()
+  local mtJ6, id, I1Creps;
+  mtJ6 := MulTab(J6);
+  id := Position(SortedElements(mtJ6), One(J6));
+  I1Creps := LoadIndicatorFunctions("I1C_J6.reps");
+  Perform(I1Creps, function(x) x[id]:=true;end);
+  SaveIndicatorFunctions(I1Creps,"I1Csharp_J6.reps");
+end;
