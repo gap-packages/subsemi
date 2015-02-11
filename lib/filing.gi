@@ -262,7 +262,12 @@ local tag1,tag2,is,s,sum, filename, al, alltags, maxi,maxj, i ,j, bl;
   al := AssociativeList(); # truncated .gens filename -> number of lines
   bl := AssociativeList(); # [int,int] -> int (sparse matrix)
   Perform(PrefixPostfixMatchedListDir(".", prefix, ".gens"),
-          function(x) Assign(al, x, Size(ReadGenerators(x)));end);
+          function(x)
+            local file;
+            file := IO_File(x);
+            Assign(al, x, Size(IO_ReadLines(file)));
+            IO_Close(file);
+          end);
   TransformKeys(al, x-> x{[Length(prefix)..Length(x)-4]}); # in general this is super crazy, but here keys will remain unique
   filename := Concatenation(prefix,key1,"vs",key2,".dat");
   PrintTo(filename,""); #erasing
