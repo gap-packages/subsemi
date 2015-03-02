@@ -23,8 +23,8 @@ ClosureByIncrements := function(base,extension,mt)
     i := Position(waiting,true); # it is not empty, so this is ok, not a queue
     for j in Indices(mt) do
       if closure[j] then
-        diff[tab[j][i]] := true; #scanning the ith column 
-        diff[tab[i][j]] := true; #scanning the ith row 
+        diff[tab[j][i]] := true; #scanning the ith column
+        diff[tab[i][j]] := true; #scanning the ith row
       fi;
     od;
     diff[tab[i][i]] := true; # adding the diagonal
@@ -103,7 +103,7 @@ end);
 
 IsMaximalSubSgp := function(set,mt)
   local diff, full;
-  diff := ShallowCopy(Indices(mt)); 
+  diff := ShallowCopy(Indices(mt));
   SubtractSet(diff, AsSet(ListBlist(Indices(mt), set)));
   if IsEmpty(diff) then return false; fi;
   full := BlistList(Indices(mt),Indices(mt));
@@ -120,17 +120,13 @@ end);
 #this may not be a closure
 InstallGlobalFunction(MissingElements,
 function(gens,mt)
-  local i,j,rows,completion;
+  local completion, rows;
   rows := Rows(mt);
   completion := [];
-  for i in Indices(mt) do
-    for j in Indices(mt) do
-      if gens[i] and gens[j] then
-        if not gens[rows[i][j]] then
-          AddSet(completion,rows[i][j]);
-        fi;
-      fi;
-    od;
-  od;
+  Perform(Combinations(ListBlist(Indices(mt), gens),2),
+          function(p)
+            if (not gens[rows[p[1]][p[2]]]) then
+              AddSet(completion,rows[p[1]][p[2]]);
+            fi;end);
   return completion;
 end);
