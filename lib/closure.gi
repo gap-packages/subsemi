@@ -123,7 +123,7 @@ function(gens,mt)
   local completion, rows;
   rows := Rows(mt);
   completion := [];
-  Perform(Combinations(ListBlist(Indices(mt), gens),2),
+  Perform(Tuples(ListBlist(Indices(mt), gens),2),
           function(p)
             if (not gens[rows[p[1]][p[2]]]) then
               AddSet(completion,rows[p[1]][p[2]]);
