@@ -354,7 +354,7 @@ end;
 ClassifySubsemigroups := function(S, G , prefix) 
   local mt,subreps,ndigits, repsfile;
   ndigits := Size(String(Size(S)));
-  SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
+  #SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
   mt := MulTab(S,G);
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
