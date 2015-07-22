@@ -8,7 +8,7 @@ gap> K33 := SemigroupIdealByGenerators(I3, [PartialPerm([1,2,3])]);;
 gap> K32 := SemigroupIdealByGenerators(I3, [PartialPerm([1,2,0])]);;
 gap> K31 := SemigroupIdealByGenerators(I3, [PartialPerm([1,0,0])]);;
 gap> K30 := SemigroupIdealByGenerators(I3, [PartialPerm([0,0,0])]);;
-gap> I3conjclasses =  AsSortedList(AsList(SubSgpsByIdeals(K33,S3)));
+gap> I3conjclasses = AsSortedList(AsList(SubSgpsByIdeals(K33,S3)));
 true
 gap> I3conjclasses = AsSortedList(AsList(SubSgpsByIdeals(K32,S3)));
 true

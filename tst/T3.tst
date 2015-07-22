@@ -12,7 +12,7 @@ true
 gap> K33 := SemigroupIdealByGenerators(T3, [Transformation([1,2,3])]);;
 gap> K32 := SemigroupIdealByGenerators(T3, [Transformation([1,1,2])]);; 
 gap> K31 := SemigroupIdealByGenerators(T3, [Transformation([1,1,1])]);; 
-gap> T3conjclasses =  AsSortedList(AsList(SubSgpsByIdeals(K31,S3)));
+gap> T3conjclasses = AsSortedList(AsList(SubSgpsByIdeals(K31,S3)));
 true
 gap> T3conjclasses = AsSortedList(AsList(SubSgpsByIdeals(K32,S3)));
 true
