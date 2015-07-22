@@ -21,16 +21,16 @@ end);
 #this uses EnumeratorOfCartesianProduct
 InstallGlobalFunction(BFSubSemis,
 function(S)
-local trans, ssgs, bitlist, bl, elms,i, nonsgs, duplicates,n;
+local trans, ssgs, bitlists, bl, elms,i, nonsgs, duplicates,n;
   trans := AsSortedList(S);
   n := Size(trans);
   nonsgs := 0;
   duplicates := 0;
   ssgs := [];
   #all bitstrings corresponding to all subsets
-  bitlist := EnumeratorOfCartesianProduct(List([1..n], x->[false,true]));
+  bitlists := EnumeratorOfCartesianProduct(List([1..n], x->[false,true]));
   for i in [1..2^n] do
-    bl := bitlist[i];
+    bl := bitlists[i];
     elms := Set(Filtered([1..n], x->bl[x]), y->trans[y]);
     if IsSG(elms) then
       if elms in ssgs then
