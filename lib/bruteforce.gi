@@ -30,9 +30,8 @@ local trans, ssgs, bitlist, bl, elms,i, nonsgs, duplicates,n;
   #all bitstrings corresponding to all subsets
   bitlist := EnumeratorOfCartesianProduct(List([1..n], x->[false,true]));
   for i in [1..2^n] do
-    elms := [];
     bl := bitlist[i];
-    Perform([1..n], function(x) if bl[x] then Add(elms, trans[x]);fi;end);
+    elms := Set(Filtered([1..n], x->bl[x]), y->trans[y]);
     if IsSG(elms) then
       if elms in ssgs then
         duplicates := duplicates + 1;
