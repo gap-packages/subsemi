@@ -11,17 +11,17 @@
 #indices are assigned to elements
 InstallGlobalFunction(ProductTableOfElements,
 function(M) #magma in a list
-local n, rows,i,j;
+local n, mat,i,j;
   n := Size(M);
-  #nxn matrix (intialized with invalid value zero)
-  rows := List([1..n], x->ListWithIdenticalEntries(n,0));
+  #nxn matrix (initialized with invalid value zero)
+  mat := NullMat(n,n);
   #just a double loop to have all products
   for i in [1..n] do
     for j in [1..n] do
-      rows[i][j] := Position(M, M[i]*M[j]);
+      mat[i][j] := Position(M, M[i]*M[j]);
     od;
   od;
-  return rows;
+  return mat;
 end);
 
 ### CONSTRUCTORS ###############################################################
