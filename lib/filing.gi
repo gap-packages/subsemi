@@ -12,15 +12,9 @@ PaddedNumString := function(n,ndigits)
 end;
 
 NrEdgesInHasseDiagramOfDClasses := function(sgp)
-  local hd;
-  #producing the Hasse diagram of DClasses
-  hd := HasseDiagramBinaryRelation(
-                AsBinaryRelation(
-                        DigraphReflexiveTransitiveClosure(
-                                Digraph(
-                                        PartialOrderOfDClasses(sgp)))));
-  #calculating the number of edges (summing the sizes of the image sets)
-  return Sum(List(Source(hd), x-> Size(Images(hd,x))));;
+  #getting the 1s out of the longest distances in the digraph
+  return Size(Positions(Flat(DigraphLongestDistances(
+                 Digraph(PartialOrderOfDClasses(sgp)))),1));
 end;
 
 # semigroup -> string containing green info
