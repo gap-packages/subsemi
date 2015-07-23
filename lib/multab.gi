@@ -123,7 +123,8 @@ function(S,G)
   fi;
 end);
 
-InstallOtherMethod(MulTab, "for a semigroup and an automorphism  group",
+InstallOtherMethod(MulTab,
+        "for a semigroup an automorphism  group, and a homomorphism",
 [IsSemigroup,IsGroup,IsMapping],
 function(S,G,hom)
   if HasName(S) then
@@ -388,7 +389,7 @@ function(elms, mt)
 end);
 
 InstallOtherMethod(RecodeIndicatorFunction,
-        "for a boolean list, a source and destiantion multabs",
+        "for a boolean list, a source and destination multabs",
         [IsList,IsMulTab,IsMulTab],
 function(indset,srcmt, destmt)
   return IndicatorFunction(SetByIndicatorFunction(indset,srcmt),destmt);
