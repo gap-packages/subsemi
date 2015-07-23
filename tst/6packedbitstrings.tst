@@ -6,23 +6,27 @@ gap> B := "01";;
 gap> ForAll(EnumeratorOfCartesianProduct([B]),
 >     bs -> bs = DecodeBitString(EncodeBitString(bs)));
 true
-gap> ForAll(EnumeratorOfCartesianProduct([B,B,B,B]),
+gap> ForAll(EnumeratorOfCartesianProduct(ListWithIdenticalEntries(4,B)),
 >     bs -> bs = DecodeBitString(EncodeBitString(bs)));
 true
-gap> ForAll(EnumeratorOfCartesianProduct([B,B,B,B,B,B,B,B,B,B,B,B]),
+gap> ForAll(EnumeratorOfCartesianProduct(ListWithIdenticalEntries(6,B)),
+>     bs -> bs = DecodeBitString(EncodeBitString(bs)));
+true
+gap> ForAll(EnumeratorOfCartesianProduct(ListWithIdenticalEntries(7,B)),
+>     bs -> bs = DecodeBitString(EncodeBitString(bs)));
+true
+gap> ForAll(EnumeratorOfCartesianProduct(ListWithIdenticalEntries(12,B)),
+>     bs -> bs = DecodeBitString(EncodeBitString(bs)));
+true
+gap> ForAll(EnumeratorOfCartesianProduct(ListWithIdenticalEntries(15,B)),
 >     bs -> bs = DecodeBitString(EncodeBitString(bs)));
 true
 
 # now code key specific
 gap> EncodeBitString("00000010101011001111111101");
-"AVz=01"
+"+Knz01"
 gap> Concatenation(List(EnumeratorOfCartesianProduct([B,B,B,B,B,B]),EncodeBitString));
-"AgQwIoY6EkU2Msc_CiSyKqa8GmW4Oue+BhRxJpZ7FlV3Ntd-DjTzLrb9HnX5Pvf="
-
-#
-gap> ForAll(EnumeratorOfCartesianProduct([B,B,B,B,B,B,B,B,B,B,B,B]),
->     bs -> bs = AsBitString(AsBlist(bs)));
-true
+"+VFk8cNs4ZJoBgRw2XHm=ePu6aLqDiTy-WGl9dOt5_KpChSx3YInAfQv7bMrEjUz"
 
 #
 gap> STOP_TEST( "SubSemi package: 6packedbitstring.tst", 10000);

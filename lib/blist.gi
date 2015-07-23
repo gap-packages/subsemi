@@ -38,8 +38,11 @@ end);
 ### BITLIST - BITSTRING - COMPRESSED STRING ####################################
 #the idea is to pack 6 bits into a single character by using this lookup string
 #trailing bits are just written out (that is why no 1s and 0s in the key)
-CODEKEY := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=";
+CODEKEY := SortedList( 
+  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=");
 MakeReadOnlyGlobal("CODEKEY");
+EXPONENTS := [5,4,3,2,1,0];
+MakeReadOnlyGlobal("EXPONENTS");
 
 InstallGlobalFunction(EncodeBitString,
 function (bitstr)
@@ -49,7 +52,7 @@ function (bitstr)
   for i in [1..k] do
     chunk := List(bitstr{[(6*(i-1))+1..6*i]},
                   function(x)if x='0' then return 0; else return 1;fi;end);
-    Add(str,CODEKEY[Sum(List([0..5],x->2^x*chunk[x+1]))+1]);
+    Add(str,CODEKEY[Sum(List(EXPONENTS,x->2^x*chunk[x+1]))+1]);
   od;
   return Concatenation(str,bitstr{[6*k+1..Length(bitstr)]});
 end);
@@ -63,16 +66,16 @@ function(str)
       Add(bitstr, c);
     else
       p := Position(CODEKEY,c);
-      l := "";
-      for i in Reversed([0..5]) do
+      l := EmptyPlist(6);
+      for i in EXPONENTS do
         if p > 2^i then
-          Add(l,'1');
+          l[i+1] := '1';
           p := p - 2^i;
         else
-          Add(l,'0');
+          l[i+1] := '0';
         fi;
       od;
-      Append(bitstr, Reversed(l));
+      Append(bitstr,l);
     fi;
   od;
   return bitstr;
