@@ -1,3 +1,5 @@
+0.38
+	Introducing the Classify function to abstract several isomorphism class functions.
 0.37
 	Several improvements of filing and scripts for enumeration/classification. Improving bitstring encoding, NOT BACKWARD COMPATIBLE! New calculation for the number of edges in the Hasse diagram.
 0.36
