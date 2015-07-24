@@ -146,42 +146,13 @@ end);
 
 InstallGlobalFunction(SgpIsomorphismClasses,
 function(sgps)
-  local mts, classes, S, mtS, pos;
-  mts := [];
-  classes := [];
-  for S in sgps do
-    mtS := MulTab(S);
-    pos := First([1..Size(classes)],
-                 x -> IsIsomorphicMulTab(mts[x],mtS));
-    if pos = fail then
-      Add(classes, [S]);
-      Add(mts, mtS);
-    else
-      Add(classes[pos],S);
-    fi;
-  od;
-  return classes;
+  return Classify(sgps, MulTab, IsIsomorphicMulTab);
 end);
 
 InstallGlobalFunction(SgpAntiAndIsomorphismClasses,
 function(sgps)
-  local mts, classes, S, mtS, antimtS, pos;
-  mts := [];
-  classes := [];
-  for S in sgps do
-    mtS := MulTab(S);
-    antimtS := CopyMulTab(mtS,true); #copying as anti, no recalc
-    pos := First([1..Size(classes)],
-                 x -> IsIsomorphicMulTab(mts[x],mtS)
-                 or IsIsomorphicMulTab(mts[x],antimtS));
-    if pos = fail then
-      Add(classes, [S]);
-      Add(mts, mtS);
-    else
-      Add(classes[pos],S);
-    fi;
-  od;
-  return classes;
+  return Classify(sgps, MulTab, function(x,y) return IsIsomorphicMulTab(x,y)
+                    or IsIsomorphicMulTab(x,CopyMulTab(y,true));end);
 end);
 
 
