@@ -1,3 +1,4 @@
+ReadPackage("SubSemi","/lib/classifier.gi");
 ReadPackage("SubSemi","/lib/semigroup.gi");
 ReadPackage("SubSemi","/lib/ideals.gi");
 ReadPackage("SubSemi","/lib/util.gi");
