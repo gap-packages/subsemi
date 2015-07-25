@@ -113,7 +113,6 @@ FilingIndicatorFunctionsBySgpTag := function(infile,mt,prefix,ndigits)
              local sgp, tag;
              sgp := Semigroup(SetByIndicatorFunction(
                             AsBlist(DecodeBitString(s)),mt));
-             DisplayString(sgp); #to avoid GroupOfUnits crashing #101 
              tag := SgpTag(sgp,ndigits);
              if not WriteGenerators(Concatenation(prefix,tag,".gens"),
                         SmallSemigroupGeneratingSet(sgp),"a") then
