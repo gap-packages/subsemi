@@ -148,8 +148,10 @@ end);
 InstallGlobalFunction(IsomorphismSemigroupsByMulTabs,
 function(S,T)
   local mtS, mtT, perm,source, image, mappingfunc;
-  if Size(S) <> Size(T) then return fail; fi;
-  if NrIdempotents(S) <> NrIdempotents(T) then return fail; fi;
+  if Size(S) <> Size(T)
+     or NrIdempotents(S) <> NrIdempotents(T) then
+    return fail;
+  fi;
   #calculating multiplication tables
   mtS := MulTab(S);
   mtT := MulTab(T);
