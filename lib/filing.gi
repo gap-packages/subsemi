@@ -65,7 +65,7 @@ end;
 
 #generic function for processing a textfile line by line
 #infile - the name of the input file
-#processor - a function that takes a line of infile and retruns true if it was 
+#processor - a function that takes a line of infile and returns true if it was 
 #properly processed
 TextProcessor := function(infile, processor)
   local s,counter,itf;
@@ -83,7 +83,7 @@ TextProcessor := function(infile, processor)
       Info(SubSemiInfoClass,1,FormattedBigNumberString(counter)," of ",infile);
     fi; ########################################################################
     s := ReadLine(itf);
-  until s=fail;
+  until s=fail; #TODO any check for failing before end of file?
   CloseStream(itf);
 end;
 
