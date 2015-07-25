@@ -71,6 +71,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
     return fail;
   fi;
 end;
+MakeReadOnlyGlobal("SubTableMatchingSearch");
 
 # trying the represent semigroup (multiplication table) A as a subtable
 # of B
