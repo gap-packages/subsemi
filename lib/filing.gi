@@ -25,7 +25,6 @@ GreenTag := function (sgp,ndigits)
   else
     s := "";
   fi;
-
   return Concatenation("L",PaddedNumString(NrLClasses(sgp),ndigits),
                  "_R",PaddedNumString(NrRClasses(sgp),ndigits),
                  "_D",PaddedNumString(NrDClasses(sgp),ndigits),
@@ -186,16 +185,23 @@ ClassProcessor := function(filename, classifierfunc, ext, preprocess)
 end;
 
 GensFileIsomClasses := function(filename)
-  ClassProcessor(filename, SgpIsomorphismClasses, ".iso", true);
+  ClassProcessor(filename, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
+          ".iso", true);
 end;
 
 GensFileAntiAndIsomClasses := function(filename)
-  ClassProcessor(filename, SgpAntiAndIsomorphismClasses, ".ais", true);
+  local f;
+  f := sgps -> Classify(sgps, MulTab,
+               function(x,y)
+                 return IsIsomorphicMulTab(x,y)
+                        or IsIsomorphicMulTab(x,CopyMulTab(y,true));end);
+  ClassProcessor(filename, f, ".ais", true);
 end;
 
 # assume .ais files as input
 AntiAndIsomClassToIsomClasses := function(filename)
-  ClassProcessor(filename, SgpIsomorphismClasses, ".iso", false);
+  ClassProcessor(filename, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
+          ".iso", false);
 end;
 
 ################################################################################

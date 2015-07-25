@@ -144,18 +144,6 @@ function(S,T)
   fi;
 end);
 
-InstallGlobalFunction(SgpIsomorphismClasses,
-function(sgps)
-  return Classify(sgps, MulTab, IsIsomorphicMulTab);
-end);
-
-InstallGlobalFunction(SgpAntiAndIsomorphismClasses,
-function(sgps)
-  return Classify(sgps, MulTab, function(x,y) return IsIsomorphicMulTab(x,y)
-                    or IsIsomorphicMulTab(x,CopyMulTab(y,true));end);
-end);
-
-
 #returns a mapping for the whole semigroup
 InstallGlobalFunction(IsomorphismSemigroupsByMulTabs,
 function(S,T)

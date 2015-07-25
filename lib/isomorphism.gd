@@ -11,7 +11,5 @@
 DeclareGlobalFunction("IsomorphismMulTabs");
 DeclareGlobalFunction("EmbedAbstractSemigroup");
 DeclareGlobalFunction("IsIsomorphicMulTab");
-DeclareGlobalFunction("SgpIsomorphismClasses");
-DeclareGlobalFunction("SgpAntiAndIsomorphismClasses");
 DeclareGlobalFunction("IsIsomorphicSemigroupByMulTabs");
 DeclareGlobalFunction("IsomorphismSemigroupsByMulTabs");
