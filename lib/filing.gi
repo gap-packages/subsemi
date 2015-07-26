@@ -367,4 +367,3 @@ ClassifySubsemigroups := function(S, G , prefix)
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
 end;
-
