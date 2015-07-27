@@ -1,6 +1,6 @@
 LoadPackage("subsemi");
 
-SemigroupsOptionsRec.hashlen:=rec(L:=257,M:=257, S:=257);
+#SemigroupsOptionsRec.hashlen:=rec(L:=257,M:=257, S:=257); need to figure out what happened to this
 
 # VARIABLES for T4 and its subs
 S4 := SymmetricGroup(IsPermGroup,4);
