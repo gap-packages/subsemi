@@ -9,7 +9,7 @@ T4 := FullTransformationSemigroup(4);
 K43 := SingularTransformationSemigroup(4);
 GeneratorsOfSemigroup(K43);
 SetName(K43,"K43");
-K42 := SemigroupIdealByGenerators(K43,[Transformation([1,2,2,2])]);
+K42 := SemigroupIdeal(K43,[Transformation([1,2,2,2])]);
 GeneratorsOfSemigroup(K42);
 SetName(K42,"K42");
 
@@ -60,7 +60,7 @@ end;
 P_T4 := function()
 local mtT4, I, uts, id, result;
   mtT4 := MulTab(T4,S4);
-  I := SemigroupIdealByGenerators(T4, [Transformation([1,2,3,3])]); #K43
+  I := SemigroupIdeal(T4, [Transformation([1,2,3,3])]); #K43
   uts := UpperTorsos(I,S4);
   #remove emptyset
   Remove(uts, Position(uts, EmptySet(mtT4)));
