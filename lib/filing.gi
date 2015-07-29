@@ -20,9 +20,9 @@ TransitiveReduction := function(rel)
 end;
 
 NrEdgesInHasseDiagramOfDClasses := function(sgp)
-  #getting the 1s out of the longest distances in the digraph
-  return Size(Positions(Flat(DigraphLongestDistances(
-                 Digraph(PartialOrderOfDClasses(sgp)))),1));
+  return Sum(List(TransitiveReduction(
+                 ReflexiveReduction(PartialOrderOfDClasses(sgp))),
+                 Length));
 end;
 
 # semigroup -> string containing green info
