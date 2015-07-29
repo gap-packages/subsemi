@@ -11,6 +11,14 @@ PaddedNumString := function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
 end;
 
+ReflexiveReduction := function(rel)
+  return List([1..Length(rel)], x -> Filtered(rel[x], y -> not x = y));
+end;
+
+TransitiveReduction := function(rel)
+  return List([1..Length(rel)], x -> Difference(rel[x], Union(rel{rel[x]})));
+end;
+
 NrEdgesInHasseDiagramOfDClasses := function(sgp)
   #getting the 1s out of the longest distances in the digraph
   return Size(Positions(Flat(DigraphLongestDistances(
