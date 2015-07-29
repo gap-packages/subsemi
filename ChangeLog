@@ -1,5 +1,7 @@
+0.40
+	Doing the reflexive transitive reduction of the partial order in filing -> no direct dependence on the digraphs package. Inverse semigroups are also classified.
 0.39
-	Making tests short-circuit in isomorphism code. Making more tests based on Green's classes data.	
+	Making tests short-circuit in isomorphism code. Making more tests based on Green's classes data.
 0.38
 	Introducing the Classify function to abstract several isomorphism class functions.
 0.37
