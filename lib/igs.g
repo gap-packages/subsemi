@@ -68,8 +68,9 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
       Info(SubSemiInfoClass,1,FormattedBigNumberString(counter),
-           " igs:", FormattedBigNumberString(Size(irredgensets)),
-           " db:", FormattedBigNumberString(Size(log)),
+           " igs:", Size(irredgensets)," ~ ",
+           FormattedBigNumberString(Size(irredgensets)),
+           " db:", Size(log), " ~ ", FormattedBigNumberString(Size(log)),
            " stack:",String(Size(candidates)),
            " ", Peek(candidates));
     fi;#########################################################################
@@ -97,7 +98,7 @@ IGS := function(mt,potgens)
   local stack;
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, []);
-  return IGSParametrized(mt, potgens, HeavyBlistContainer(),stack,[]);
+  return IGSParametrized(mt, potgens, LightBlistContainer(),stack,[]);
 end;
 
 #
@@ -105,7 +106,7 @@ IGSFromSet := function(mt,set,potgens)
   local stack;
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, set);
-  return IGSParametrized(mt, potgens, HeavyBlistContainer(),stack,[]);
+  return IGSParametrized(mt, potgens, LightBlistContainer(),stack,[]);
 end;
 
 # resuming an interrupted calculation by using global variables
