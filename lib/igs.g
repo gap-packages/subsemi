@@ -9,12 +9,12 @@ IsIGS := function(gens,mt,S)
   #local gensblist,x;
   if Size(gens) < 2 then return true; fi;
   #can we omit a generator?
-  # no speedup with the following code 
+  # no speedup with the following code
   #gensblist := BlistList(Indices(mt), gens);
   #for x in gens do
   #  gensblist[x]:=false;
   #  if SizeBlist(S) = SizeBlist(SgpInMulTab(gensblist,mt)) then
-  #    return false; 
+  #    return false;
   #  fi;
   #  gensblist[x]:=true;
   #od;
@@ -97,6 +97,8 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
   return List(irredgensets, x->List(x,y->SortedElements(mt)[y]));
 end;
 
+# mt - multiplication table
+# potgens - potential generators, e.g. Indices(mt) for all elements
 IGS := function(mt,potgens)
   local stack;
   stack := DuplicateFreeStack();#since different cands may have the same rep
@@ -104,6 +106,7 @@ IGS := function(mt,potgens)
   return IGSParametrized(mt, potgens, HeavyBlistContainer(),stack,[]);
 end;
 
+#
 IGSFromSet := function(mt,set,potgens)
   local stack;
   stack := DuplicateFreeStack();#since different cands may have the same rep
@@ -111,6 +114,8 @@ IGSFromSet := function(mt,set,potgens)
   return IGSParametrized(mt, potgens, HeavyBlistContainer(),stack,[]);
 end;
 
+# resuming an interrupted calculation by using global variables
+# these variables get updated at each checkpoint
 ResumeIGS := function()
   return IGSParametrized(SUBSEMI_IGSCheckPointData.mt,
                  SUBSEMI_IGSCheckPointData.potgens,
