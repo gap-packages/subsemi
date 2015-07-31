@@ -13,6 +13,7 @@ ReadPackage("SubSemi","/lib/minextension.gi");
 ReadPackage("SubSemi","/lib/ngenerated.gi");
 ReadPackage("SubSemi","/lib/filing.gi");
 ReadPackage("SubSemi","/lib/ui.gi");
+ReadPackage("SubSemi","/lib/igs.g");
 
 ReadPackage("SubSemi","/tst/testfunctions.g");
 ReadPackage("SubSemi","/tst/againstbf.g");

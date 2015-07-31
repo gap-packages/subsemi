@@ -40,7 +40,7 @@ end;
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
 IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
-  local H,set,counter,blistrep,diff,normalizer,n;
+  local H,set,counter,blistrep,diff,normalizer,n, l;
   counter := 0;
   n := Size(Indices(mt));
   while not IsEmpty(candidates) do
@@ -56,17 +56,9 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
           diff := Difference(potgens,ListBlist(Indices(mt),H));#set);
           # orbit reps by the normalizer, making diff smaller
           normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
-          if Size(normalizer) > 1 then
-            #Print(Size(diff),"->"); #TODO: this reduces a lot, but not #steps
-            diff := List(Orbits(normalizer, diff), x->x[1]);
-            #Print(Size(diff),"\n");
-          fi;
-          set := ShallowCopy(set); #reusing set saves a little
-          Perform(diff, function(x)
-            AddSet(set,x);
-            Store(candidates, SetConjugacyClassRep(set,mt));
-            Remove(set, Position(set,x));
-          end);
+          diff := List(Orbits(normalizer, diff), x->x[1]);
+          l := Set(diff, x-> SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
+          Perform(l, function(y) Store(candidates,y);end);
         fi;
       fi;
     fi;
