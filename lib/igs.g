@@ -40,11 +40,12 @@ end;
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
 IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
-  local H,set,counter,blistrep,diff,normalizer,n, l;
+  local H,set,counter,blistrep,diff,normalizer,n, l,m;
   counter := 0;
   n := Size(Indices(mt));
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
+    m := Size(set);    
     H := SgpInMulTab(set,mt);
     if IsIGS(set,mt,H) then #consider only irreducibles
       blistrep := BlistList(Indices(mt),set);
@@ -57,6 +58,12 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
           # orbit reps by the normalizer, making diff smaller, avoid dups
           normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
           diff := List(Orbits(normalizer, diff), x->x[1]);
+          if m > 2 then 
+            diff := Filtered(diff,
+                          x -> ForAll(Combinations(set,m-1),
+                                  y-> not SgpInMulTab(Concatenation(y,[x]),mt)[Difference(set,y)[1]]));
+          fi;
+          
           #it is enough the compile a List, rather than a Set
           l := List(diff,
                     x->SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
