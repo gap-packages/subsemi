@@ -37,13 +37,13 @@ local  min, new, g;
 end;
 
 CanWeAdd := function(gens, newgen, mt)
-  local g,l, i;
-  l := ShallowCopy(gens);
+  local g,l,i;
+  l := ShallowCopy(gens); #defensive copying
   for i  in [1..Size(gens)] do
-    g := l[i];
-    l[i] := newgen;
+    g := l[i]; #remembering the knocked out old generator
+    l[i] := newgen; #putting in the new generator
     if SgpInMulTab(l,mt)[g] then return false; fi;
-    l[i] := g; 
+    l[i] := g; #undo
   od;
   return true;
 end;
@@ -64,17 +64,18 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
       if SizeBlist(H) = n then
         AddSet(irredgensets, set);
       else
-        diff := Difference(potgens,ListBlist(Indices(mt),H));#set);
+        diff := Difference(potgens,ListBlist(Indices(mt),H));
         # orbit reps by the normalizer, making diff smaller, avoid dups
         normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
         diff := List(Orbits(normalizer, diff), x->x[1]);
+        # checking whether adding elements from diff would yield igs' or not
         diff := Filtered(diff, x-> CanWeAdd(set, x, mt));
         #it is enough the compile a List, rather than a Set
         l := List(diff,
                   x->SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
         Perform(l, function(y) Store(candidates,y);end);
       fi;
-    fi;    
+    fi;
     counter := counter + 1;#####################################################
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
