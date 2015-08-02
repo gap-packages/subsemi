@@ -69,9 +69,7 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         # orbit reps by the normalizer, making diff smaller, avoid dups
         normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
         diff := List(Orbits(normalizer, diff), x->x[1]);
-        if m > 0 then 
-          diff := Filtered(diff, x-> CanWeAdd(set, x, mt));
-        fi;        
+        diff := Filtered(diff, x-> CanWeAdd(set, x, mt));
         #it is enough the compile a List, rather than a Set
         l := List(diff,
                   x->SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
