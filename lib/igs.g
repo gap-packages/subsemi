@@ -36,6 +36,18 @@ local  min, new, g;
   return min;
 end;
 
+CanWeAdd := function(gens, newgen, mt)
+  local g,l, i;
+  l := ShallowCopy(gens);
+  for i  in [1..Size(gens)] do
+    g := l[i];
+    l[i] := newgen;
+    if SgpInMulTab(l,mt)[g] then return false; fi;
+    l[i] := g; 
+  od;
+  return true;
+end;
+
 #this also keeps track of the irreducible generating sets in a logged database
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
@@ -47,30 +59,25 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
     set := Retrieve(candidates);
     m := Size(set);    
     H := SgpInMulTab(set,mt);
-    #if IsIGS(set,mt,H) then #consider only irreducibles
-      blistrep := BlistList(Indices(mt),set);
-      if not blistrep in log then
-        AddSet(log,blistrep);
-        if SizeBlist(H) = n then
-          AddSet(irredgensets, set);
-        else
-          diff := Difference(potgens,ListBlist(Indices(mt),H));#set);
-          # orbit reps by the normalizer, making diff smaller, avoid dups
-          normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
-          diff := List(Orbits(normalizer, diff), x->x[1]);
-          if m >= 2 then 
-            diff := Filtered(diff,
-                          x -> ForAll(Combinations(set,m-1),
-                                  y-> not SgpInMulTab(Concatenation(y,[x]),mt)[Difference(set,y)[1]]));
-          fi;
-          
-          #it is enough the compile a List, rather than a Set
-          l := List(diff,
-                    x->SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
-          Perform(l, function(y) Store(candidates,y);end);
-        fi;
+    blistrep := BlistList(Indices(mt),set);
+    if not blistrep in log then
+      AddSet(log,blistrep);
+      if SizeBlist(H) = n then
+        AddSet(irredgensets, set);
+      else
+        diff := Difference(potgens,ListBlist(Indices(mt),H));#set);
+        # orbit reps by the normalizer, making diff smaller, avoid dups
+        normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
+        diff := List(Orbits(normalizer, diff), x->x[1]);
+        if m > 0 then 
+          diff := Filtered(diff, x-> CanWeAdd(set, x, mt));
+        fi;        
+        #it is enough the compile a List, rather than a Set
+        l := List(diff,
+                  x->SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
+        Perform(l, function(y) Store(candidates,y);end);
       fi;
-    #fi;
+    fi;    
     counter := counter + 1;#####################################################
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
