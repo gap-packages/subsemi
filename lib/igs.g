@@ -52,12 +52,11 @@ end;
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
 IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
-  local H,set,counter,blistrep,diff,normalizer,n, l,m;
+  local H,set,counter,blistrep,diff,normalizer,n, l;
   counter := 0;
   n := Size(Indices(mt));
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
-    m := Size(set);    
     H := SgpInMulTab(set,mt);
     blistrep := BlistList(Indices(mt),set);
     if not blistrep in log then
