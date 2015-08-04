@@ -70,6 +70,7 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         diff := List(Orbits(normalizer, diff), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
         diff := Filtered(diff, x-> CanWeAdd(set, x, mt));
+        #if IsEmpty(diff) then Print("Yay!"); Display(set); fi;
         #it is enough the compile a List, rather than a Set
         l := List(diff,
                   x->SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
