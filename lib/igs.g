@@ -104,11 +104,12 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
   Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
        String(Size(irredgensets)),
        " in ",String(counter)," steps");########################################
-  return rec(igss := List(irredgensets, x->List(x,y->SortedElements(mt)[y])),
-             deadends := deadends,
+  return rec(igss := List(irredgensets, x->SetByIndicatorFunction(x,mt)),
+             deadends := List(deadends, x->SetByIndicatorFunction(x,mt)),
              pigss := List(
-                     Filtered(List(AsList(log), x->ListBlist(Indices(mt),x)), x -> not (x in irredgensets)),
-                     x->List(x,y->SortedElements(mt)[y])));
+                     Filtered(List(AsList(log), x->ListBlist(Indices(mt),x)),
+                             x -> not (x in irredgensets)),
+                     x->SetByIndicatorFunction(x,mt)));
 end;
 
 # mt - multiplication table
