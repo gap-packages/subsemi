@@ -52,9 +52,10 @@ end;
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
 IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
-  local H,set,counter,blistrep,diff,normalizer,n, l;
+  local H,set,counter,blistrep,diff,normalizer,n, l, deadends;
   counter := 0;
   n := Size(Indices(mt));
+  deadends := [];
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
@@ -70,7 +71,8 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         diff := List(Orbits(normalizer, diff), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
         diff := Filtered(diff, x-> CanWeAdd(set, x, mt));
-        #if IsEmpty(diff) then Print("Yay!"); Display(set); fi;
+        #if diff is empty then there is no way to extend the set irreducibly
+        if IsEmpty(diff) then AddSet(deadends, set); fi;
         #it is enough the compile a List, rather than a Set
         l := List(diff,
                   x->SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
@@ -102,7 +104,11 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
   Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
        String(Size(irredgensets)),
        " in ",String(counter)," steps");########################################
-  return List(irredgensets, x->List(x,y->SortedElements(mt)[y]));
+  return rec(igss := List(irredgensets, x->List(x,y->SortedElements(mt)[y])),
+             deadends := deadends,
+             pigss := List(
+                     Filtered(List(AsList(log), x->ListBlist(Indices(mt),x)), x -> not (x in irredgensets)),
+                     x->List(x,y->SortedElements(mt)[y])));
 end;
 
 # mt - multiplication table
