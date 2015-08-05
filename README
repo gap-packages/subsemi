@@ -1,4 +1,4 @@
-SubSemi
+# SubSemi
 
 GAP package for enumerating subsemigroups of semigroup, deciding isomorphisms
 and constructing embeddings. The algorithms assume that the elements of the
