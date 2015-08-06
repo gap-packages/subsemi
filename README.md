@@ -1,4 +1,4 @@
-SubSemi
+# SubSemi
 
 GAP package for enumerating subsemigroups of semigroup, deciding isomorphisms
 and constructing embeddings. The algorithms assume that the elements of the
@@ -7,17 +7,14 @@ to relatively small semigroups.
 
 Indeed, the original motivation for developing the package was the computational
 enumeration of transformation semigroups up to degree 4. Instructions for
-recomputing those results can be found in the 
-
-data/T4
-data/Transformation 
-
-folders. 
+recomputing those results can be found in the data/T4 folder. 
 
 The code is highly experimental with no user documentation,
 only inline comments. The algorithms are described on a
-high level in the paper 'On Enumerating Transformation Semigroups'
+high level in the preprint 'On Enumerating Transformation Semigroups'
 http://arxiv.org/abs/1403.0274
+
+The enumeration was extended to other diagram semigroups, see the data/SMALLDEGREE folder and the preprint http://arxiv.org/abs/1502.07150 'Finite Diagram Semigroups: Extending the Computational Horizon'. 
 
 Copyright (C) 2014 James East, Attila Egri-Nagy, James D. Mitchell
 
