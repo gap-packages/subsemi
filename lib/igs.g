@@ -36,6 +36,7 @@ local  min, new, g;
   return min;
 end;
 
+#TODO here we can optimize by precalculated cyclic groups
 CanWeAdd := function(gens, newgen, mt)
   local g,l,i;
   l := ShallowCopy(gens); #defensive copying
