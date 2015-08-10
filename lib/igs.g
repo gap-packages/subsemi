@@ -41,7 +41,6 @@ CanWeAdd := function(gens, newgen, cyclics, mt)
   local g,l,i;
   #first the cheap check: any old gen contained in the cyclic group of newgen?
   if (ForAny(gens, x-> cyclics[newgen][x])) then
-    Print("Y\c");
     return false;
   fi;
   l := ShallowCopy(gens); #defensive copying
