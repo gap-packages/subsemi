@@ -150,3 +150,25 @@ conjcls := function(R,mt)
   return Set(Difference(Indices(mt), R),
              x->SetConjugacyClassRep(UnionSet(R,[x]),mt));
 end;
+
+step := function(igs, mt)
+  local cls;
+  cls := Union(Set(igs, x->conjcls(x,mt)));
+  return Filtered(cls, x->IsIGS(x,mt,SgpInMulTab(x,mt)));
+end;
+
+process := function(mt)
+  local igs, res, sols;
+  igs := [[]];
+  sols := [];
+  res := [];
+  repeat
+    igs := step(igs,mt);
+    Print("Found igs:", Size(igs), "\n");
+    sols := Filtered(igs, x-> Size(mt)=SizeBlist(SgpInMulTab(x,mt)));
+    Print("Found sols:", Size(sols), "\n");
+    igs := Difference(igs,sols);
+    Add(res, sols);
+  until IsEmpty(igs);
+  return Union(res);
+end;
