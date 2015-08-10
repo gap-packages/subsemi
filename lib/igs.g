@@ -144,3 +144,9 @@ ResumeIGS := function()
                  SUBSEMI_IGSCheckPointData.candidates,
                  SUBSEMI_IGSCheckPointData.irredgensets);
 end;
+
+#experimental
+conjcls := function(R,mt)
+  return Set(Difference(Indices(mt), R),
+             x->SetConjugacyClassRep(UnionSet(R,[x]),mt));
+end;
