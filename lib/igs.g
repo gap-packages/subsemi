@@ -37,8 +37,13 @@ local  min, new, g;
 end;
 
 #TODO here we can optimize by precalculated cyclic groups
-CanWeAdd := function(gens, newgen, mt)
+CanWeAdd := function(gens, newgen, cyclics, mt)
   local g,l,i;
+  #first the cheap check: any old gen contained in the cyclic group of newgen?
+  if (ForAny(gens, x-> cyclics[newgen][x])) then
+    Print("Y\c");
+    return false;
+  fi;
   l := ShallowCopy(gens); #defensive copying
   for i  in [1..Size(gens)] do
     g := l[i]; #remembering the knocked out old generator
@@ -53,10 +58,11 @@ end;
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
 IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
-  local H,set,counter,blistrep,diff,normalizer,n, l, deadends;
+  local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics;
   counter := 0;
   n := Size(Indices(mt));
   deadends := [];
+  cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
@@ -71,7 +77,7 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
         diff := List(Orbits(normalizer, diff), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
-        diff := Filtered(diff, x-> CanWeAdd(set, x, mt));
+        diff := Filtered(diff, x-> CanWeAdd(set, x, cyclics, mt));
         #if diff is empty then there is no way to extend the set irreducibly
         if IsEmpty(diff) then AddSet(deadends, set); fi;
         #it is enough the compile a List, rather than a Set
