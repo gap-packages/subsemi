@@ -154,6 +154,7 @@ end;
 step := function(igs, mt)
   local cls;
   cls := Union(Set(igs, x->conjcls(x,mt)));
+  Print("Found cls:", Size(cls), "\n");
   return Filtered(cls, x->IsIGS(x,mt,SgpInMulTab(x,mt)));
 end;
 
