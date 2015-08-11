@@ -152,6 +152,19 @@ function(indset,mt)
   return Set(Symmetries(mt), g->OnFiniteSet(indset,g));
 end);
 
+InstallMethod(MinimumConjugates,"for a multab",
+        [IsMulTab],
+function(mt)
+  return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y)));
+end);
+
+InstallMethod(MinimumConjugators,"for a multab",
+        [IsMulTab],
+function(mt)
+  return List(Indices(mt), x -> Filtered(Symmetries(mt),
+                 y -> x^y=MinimumConjugates(mt)[x]));
+end);
+
 #the minimal one is the representative
 InstallGlobalFunction(ConjugacyClassRep,
 function(indset,mt)

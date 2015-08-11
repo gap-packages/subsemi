@@ -11,18 +11,12 @@ IsIGS := function(gens,mt,S)
                  SizeBlist(S)=SizeBlist(SgpInMulTab(Difference(gens,[x]),mt)));
 end;
 
-minconjsdata := function(mt)
-  local mins, conjgrs;
-  mins := List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y)));
-  conjgrs := List(Indices(mt), x -> Filtered(Symmetries(mt), y -> x^y=mins[x]));
-  return rec(mins := mins, conjgrs := conjgrs);
-end;
-
-filtrdsymms := function(set, data)
-  local min, symms;
-  min := Minimum(List(set, x->data.mins[x]));
-  return Union(Set(Filtered(set, x-> data.mins[x]=min),
-                 y->data.conjgrs[y]));
+filtrdsymms := function(set, mt)
+  local min, mins, conjgrs;
+  mins := MinimumConjugates(mt);
+  conjgrs := MinimumConjugators(mt);
+  min := Minimum(List(set, x->mins[x]));
+  return Union(Set(Filtered(set, x-> mins[x]=min), y->conjgrs[y]));
 end;
 
 InstallMethod(MinimumConjugators,"for multab",
@@ -68,12 +62,11 @@ end;
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
 IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
-  local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics, ll, data;
+  local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics, ll;
   counter := 0;
   n := Size(Indices(mt));
   deadends := [];
   cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
-  data := minconjsdata(mt);
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
@@ -93,7 +86,7 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         if IsEmpty(diff) then AddSet(deadends, set); fi;
         #it is enough the compile a List, rather than a Set
         ll := List(diff, x->Set(Concatenation(set,[x])));
-        l := List(ll, x->SetConjugacyClassRep(x,filtrdsymms(x,data)));
+        l := List(ll, x->SetConjugacyClassRep(x,filtrdsymms(x,mt)));
         Perform(l, function(y) Store(candidates,y);end);
       fi;
     fi;
