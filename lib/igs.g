@@ -153,7 +153,7 @@ ExtdConjugacyClassReps := function(A,mt)
              x->SetConjugacyClassRep(Union(A,[x]),mt));
 end;
 
-step := function(igs, mt)
+ExtendIGS := function(igs, mt)
   local cls;
   cls := Union(Set(igs, x->ExtdConjugacyClassReps(x,mt)));
   Print("Found cls:", Size(cls), "\n");
@@ -166,12 +166,12 @@ process := function(mt)
   sols := [];
   res := [];
   repeat
-    igs := step(igs,mt);
+    igs := ExtendIGS(igs,mt);
     Print("Found igs:", Size(igs), "\n");
     sols := Filtered(igs, x-> Size(mt)=SizeBlist(SgpInMulTab(x,mt)));
     Print("Found sols:", Size(sols), "\n");
     igs := Difference(igs,sols);
     Add(res, sols);
   until IsEmpty(igs);
-  return Union(res);
+  return res;
 end;
