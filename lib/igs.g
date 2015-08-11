@@ -11,9 +11,32 @@ IsIGS := function(gens,mt,S)
                  SizeBlist(S)=SizeBlist(SgpInMulTab(Difference(gens,[x]),mt)));
 end;
 
+minconjsdata := function(mt)
+  local mins, conjgrs;
+  mins := List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y)));
+  conjgrs := List(Indices(mt), x -> Filtered(Symmetries(mt), y -> x^y=mins[x]));
+  return rec(mins := mins, conjgrs := conjgrs);
+end;
+
+filtrdsymms := function(set, data)
+  local min, symms;
+  min := Minimum(List(set, x->data.mins[x]));
+  return Union(Set(Filtered(set, x-> data.mins[x]=min),
+                 y->data.conjgrs[y]));
+end;
+
+InstallMethod(MinimumConjugators,"for multab",
+        [IsMulTab],
+        function(mt)
+  local minimums;
+  minimums := MinimumConjugates(mt); 
+  return List(Indices(mt), x ->  Filtered(Symmetries(mt), y -> x^y=minimums[x]));
+end);
+
+
 # conjugacy class rep defined for list of integers
 SetConjugacyClassRep := function(set,symmetries)
-local  min, new, g;
+  local  min, new, g;
   min := AsSet(set);
   for g in symmetries do
     new := OnSets(set,g);
@@ -45,11 +68,12 @@ end;
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
 IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
-  local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics;
+  local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics, ll, data;
   counter := 0;
   n := Size(Indices(mt));
   deadends := [];
   cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
+  data := minconjsdata(mt);
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
@@ -68,8 +92,8 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         #if diff is empty then there is no way to extend the set irreducibly
         if IsEmpty(diff) then AddSet(deadends, set); fi;
         #it is enough the compile a List, rather than a Set
-        l := List(diff,
-                  x->SetConjugacyClassRep(Set(Concatenation(set,[x])),Symmetries(mt)));
+        ll := List(diff, x->Set(Concatenation(set,[x])));
+        l := List(ll, x->SetConjugacyClassRep(x,filtrdsymms(x,data)));
         Perform(l, function(y) Store(candidates,y);end);
       fi;
     fi;
