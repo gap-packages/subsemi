@@ -6,19 +6,7 @@ BindGlobal("SUBSEMI_IGSCheckPointData", rec());
 # gens - list, mt - MulTab, S - bitlist
 # condition: S = SgpInMulTab(gens,mt); - not checked
 IsIGS := function(gens,mt,S)
-  #local gensblist,x;
   if Size(gens) < 2 then return true; fi;
-  #can we omit a generator?
-  # no speedup with the following code
-  #gensblist := BlistList(Indices(mt), gens);
-  #for x in gens do
-  #  gensblist[x]:=false;
-  #  if SizeBlist(S) = SizeBlist(SgpInMulTab(gensblist,mt)) then
-  #    return false;
-  #  fi;
-  #  gensblist[x]:=true;
-  #od;
-  #return true;
   return not ForAny(gens,x->
                  SizeBlist(S)=SizeBlist(SgpInMulTab(Difference(gens,[x]),mt)));
 end;
