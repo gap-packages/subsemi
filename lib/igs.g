@@ -12,10 +12,10 @@ IsIGS := function(gens,mt,S)
 end;
 
 # conjugacy class rep defined for list of integers
-SetConjugacyClassRep := function(set,mt)
+SetConjugacyClassRep := function(set,symmetries)
 local  min, new, g;
   min := AsSet(set);
-  for g in Symmetries(mt) do
+  for g in symmetries do
     new := OnSets(set,g);
     if new < min then
       min := new;
@@ -69,7 +69,7 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         if IsEmpty(diff) then AddSet(deadends, set); fi;
         #it is enough the compile a List, rather than a Set
         l := List(diff,
-                  x->SetConjugacyClassRep(Set(Concatenation(set,[x])),mt));
+                  x->SetConjugacyClassRep(Set(Concatenation(set,[x])),Symmetries(mt)));
         Perform(l, function(y) Store(candidates,y);end);
       fi;
     fi;
@@ -138,7 +138,7 @@ end;
 # output: conjugacy class representatives of sets of size |R|+1
 ExtdConjugacyClassReps := function(A,mt)
   return Set(Difference(Indices(mt), A),
-             x->SetConjugacyClassRep(Union(A,[x]),mt));
+             x->SetConjugacyClassRep(Union(A,[x]),Symmetries(mt)));
 end;
 
 ExtendIGS := function(igs, mt)
