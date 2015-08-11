@@ -124,8 +124,9 @@ end;
 # mt - multiplication table
 # output: conjugacy class representatives of sets of size |R|+1
 ExtdConjugacyClassReps := function(A,mt)
-  return Set(Difference(Indices(mt), A),
-             x->SetConjugacyClassRep(Union(A,[x]),Symmetries(mt)));
+  local exts;
+  exts := List(Difference(Indices(mt), A), x->Union(A,[x])); 
+  return Set(exts, x->SetConjugacyClassRep(x,filtrdsymms(x,mt)));
 end;
 
 ExtendIGS := function(igs, mt)
