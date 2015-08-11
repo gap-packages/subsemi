@@ -158,25 +158,52 @@ function(mt)
   return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y)));
 end);
 
-InstallMethod(MinimumConjugators,"for a multab",
+InstallMethod(MinimumConjugators,"for multab",
         [IsMulTab],
 function(mt)
-  return List(Indices(mt), x -> Filtered(Symmetries(mt),
-                 y -> x^y=MinimumConjugates(mt)[x]));
+  local minimums;
+  minimums := MinimumConjugates(mt); 
+  return List(Indices(mt), x ->  Filtered(Symmetries(mt), y -> x^y=minimums[x]));
 end);
 
-#the minimal one is the representative
-InstallGlobalFunction(ConjugacyClassRep,
-function(indset,mt)
-local  min, new, g;
-  min := indset;
-  for g in Symmetries(mt) do
-    new := OnFiniteSet(indset,g);
+filtrdsymms := function(set, mt)
+  local min, mins, conjgrs;
+  mins := MinimumConjugates(mt);
+  conjgrs := MinimumConjugators(mt);
+  min := Minimum(List(set, x->mins[x]));
+  return Union(Set(Filtered(set, x-> mins[x]=min), y->conjgrs[y]));
+end;
+
+# conjugacy class rep defined for list of integers
+SetConjugacyClassRep := function(set,symmetries)
+  local  min, new, g;
+  min := AsSet(set);
+  for g in symmetries do
+    new := OnSets(set,g);
     if new < min then
       min := new;
     fi;
   od;
   return min;
+end;
+
+
+#the minimal one is the representative
+InstallGlobalFunction(ConjugacyClassRep,
+function(indset,mt)
+  local set, rep;
+  set := ListBlist(Indices(mt), indset);
+  rep := SetConjugacyClassRep(set, filtrdsymms(set,mt));
+  return BlistList(Indices(mt), rep);
+# local  min, new, g;
+#   min := indset;
+#   for g in Symmetries(mt) do
+#     new := OnFiniteSet(indset,g);
+#     if new < min then
+#       min := new;
+#     fi;
+#   od;
+#   return min;
 end);
 
 ### DISPLAY ####################################################################

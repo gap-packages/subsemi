@@ -11,36 +11,6 @@ IsIGS := function(gens,mt,S)
                  SizeBlist(S)=SizeBlist(SgpInMulTab(Difference(gens,[x]),mt)));
 end;
 
-filtrdsymms := function(set, mt)
-  local min, mins, conjgrs;
-  mins := MinimumConjugates(mt);
-  conjgrs := MinimumConjugators(mt);
-  min := Minimum(List(set, x->mins[x]));
-  return Union(Set(Filtered(set, x-> mins[x]=min), y->conjgrs[y]));
-end;
-
-InstallMethod(MinimumConjugators,"for multab",
-        [IsMulTab],
-        function(mt)
-  local minimums;
-  minimums := MinimumConjugates(mt); 
-  return List(Indices(mt), x ->  Filtered(Symmetries(mt), y -> x^y=minimums[x]));
-end);
-
-
-# conjugacy class rep defined for list of integers
-SetConjugacyClassRep := function(set,symmetries)
-  local  min, new, g;
-  min := AsSet(set);
-  for g in symmetries do
-    new := OnSets(set,g);
-    if new < min then
-      min := new;
-    fi;
-  od;
-  return min;
-end;
-
 #TODO here we can optimize by precalculated cyclic groups
 CanWeAdd := function(gens, newgen, cyclics, mt)
   local g,l,i;
