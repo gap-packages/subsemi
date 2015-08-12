@@ -1,3 +1,5 @@
+0.41
+	Implementing a more efficient conjugacy class representative calculation. Many changes around the independent generator set code.
 0.40
 	Doing the reflexive transitive reduction of the partial order in filing -> no direct dependence on the digraphs package. Inverse semigroups are also classified.
 0.39
