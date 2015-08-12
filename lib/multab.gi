@@ -147,23 +147,27 @@ function(mt)
   return TransposedMat(Rows(mt));
 end);
 
+### CONJUGATION ################################################################
+# the conjugacy class is calculated by applying all symmetries
 InstallGlobalFunction(ConjugacyClassOfSet,
 function(indset,mt)
   return Set(Symmetries(mt), g->OnFiniteSet(indset,g));
 end);
 
+#for each element what is the smallest element in order that is conjugate to it?
 InstallMethod(MinimumConjugates,"for a multab",
         [IsMulTab],
 function(mt)
   return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y)));
 end);
 
+#for minimal conjugates, what is the symmetry that takes an element to its min?
 InstallMethod(MinimumConjugators,"for multab",
         [IsMulTab],
 function(mt)
   local minimums;
-  minimums := MinimumConjugates(mt); 
-  return List(Indices(mt), x ->  Filtered(Symmetries(mt), y -> x^y=minimums[x]));
+  minimums := MinimumConjugates(mt);
+  return List(Indices(mt), x -> Filtered(Symmetries(mt), y -> x^y=minimums[x]));
 end);
 
 filtrdsymms := function(set, mt)
@@ -187,7 +191,6 @@ SetConjugacyClassRep := function(set,symmetries)
   return min;
 end;
 
-
 #the minimal one is the representative
 InstallGlobalFunction(ConjugacyClassRep,
 function(indset,mt)
@@ -195,15 +198,6 @@ function(indset,mt)
   set := ListBlist(Indices(mt), indset);
   rep := SetConjugacyClassRep(set, filtrdsymms(set,mt));
   return BlistList(Indices(mt), rep);
-# local  min, new, g;
-#   min := indset;
-#   for g in Symmetries(mt) do
-#     new := OnFiniteSet(indset,g);
-#     if new < min then
-#       min := new;
-#     fi;
-#   od;
-#   return min;
 end);
 
 ### DISPLAY ####################################################################
