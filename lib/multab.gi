@@ -170,7 +170,7 @@ function(mt)
   return List(Indices(mt), x -> Filtered(Symmetries(mt), y -> x^y=minimums[x]));
 end);
 
-filtrdsymms := function(set, mt)
+PossibleMinConjugators:= function(set, mt)
   local min, mins, conjgrs;
   mins := MinimumConjugates(mt);
   conjgrs := MinimumConjugators(mt);
@@ -196,7 +196,7 @@ InstallGlobalFunction(ConjugacyClassRep,
 function(indset,mt)
   local set, rep;
   set := ListBlist(Indices(mt), indset);
-  rep := SetConjugacyClassRep(set, filtrdsymms(set,mt));
+  rep := SetConjugacyClassRep(set, PossibleMinConjugators(set,mt));
   return BlistList(Indices(mt), rep);
 end);
 

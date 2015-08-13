@@ -56,7 +56,7 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         if IsEmpty(diff) then AddSet(deadends, set); fi;
         #it is enough the compile a List, rather than a Set
         ll := List(diff, x->Set(Concatenation(set,[x])));
-        l := List(ll, x->SetConjugacyClassRep(x,filtrdsymms(x,mt)));
+        l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
         Perform(l, function(y) Store(candidates,y);end);
       fi;
     fi;
@@ -126,14 +126,14 @@ end;
 ExtdConjugacyClassReps := function(A,mt)
   local exts;
   exts := List(Difference(Indices(mt), A), x->Union(A,[x])); 
-  return Set(exts, x->SetConjugacyClassRep(x,filtrdsymms(x,mt)));
+  return Set(exts, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
 end;
 
 ExtendIGS := function(igs, mt)
   local cls;
   cls := Union(Set(igs, x->ExtdConjugacyClassReps(x,mt)));
   Print("Found cls:", Size(cls), "\n");
-  return Filtered(cls, x->IsIGS(x,mt,SgpInMulTab(x,mt)));
+  return Filtered(cls, x->IsIGS(x,mt,SgpInMulTab(x,mt)));#should filter for solutions at the same time
 end;
 
 process := function(mt)
