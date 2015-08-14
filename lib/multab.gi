@@ -174,7 +174,7 @@ PossibleMinConjugators:= function(set, mt)
   local min, mins, conjgrs;
   mins := MinimumConjugates(mt);
   conjgrs := MinimumConjugators(mt);
-  min := Minimum(List(set, x->mins[x]));
+  min := Minimum(Set(set, x->mins[x]));
   return Union(Set(Filtered(set, x-> mins[x]=min), y->conjgrs[y]));
 end;
 
