@@ -14,3 +14,5 @@ ReadPackage("SubSemi","/lib/isomorphism.gd");
 ReadPackage("SubSemi","/lib/minextension.gd");
 ReadPackage("SubSemi","/lib/ngenerated.gd");
 ReadPackage("SubSemi","/lib/ui.gd");
+ReadPackage("SubSemi","/lib/binrel.gd");
+ReadPackage("SubSemi","/lib/partbinrel.gd");
