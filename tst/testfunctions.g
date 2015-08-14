@@ -27,6 +27,7 @@ local test,infolevel;
           "invariants",
           "isomorphism",
           "embedding",
+          "conjugacy",
           "T3",
           "I3"
           ] do
