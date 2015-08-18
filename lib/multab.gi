@@ -270,7 +270,7 @@ function(mt)
   return L;
 end);
 
-#backward thinking
+#local table: the positions of elements in a given ith column and row
 InstallMethod(LocalTables,"for multab", [IsMulTab],
 function(mt)
   local i,j, tab,val, vals,row,col;
