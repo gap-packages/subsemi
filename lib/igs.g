@@ -22,7 +22,7 @@ CanWeAdd := function(gens, newgen, cyclics, mt)
   for i  in [1..Size(gens)] do
     g := l[i]; #remembering the knocked out old generator
     l[i] := newgen; #putting in the new generator
-    if IsInClosure(EmptySet(mt),l,g,mt) then return false; fi; # SgpInMulTab(l,mt)[g] then return false; fi;
+    if IsInClosure(EmptySet(mt),l,g,mt) then return false; fi;
     l[i] := g; #undo
   od;
   return true;

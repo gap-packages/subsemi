@@ -7,10 +7,11 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+#TODO duplicated code, do proper abstraction!
 IsInClosure := function(base,extension,elt,mt)
   local waiting,diff,closure,i,j,tab;
   tab := Rows(mt);
-  if IsBlist(extension) then #to make it type agnostic
+  if IsBlist(extension) then #to make it type agnostic TODO extract this aspect
     waiting := ShallowCopy(extension);
   else
     waiting := BlistList(Indices(mt),extension);
