@@ -7,6 +7,36 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+IsInClosure := function(base,extension,elt,mt)
+  local waiting,diff,closure,i,j,tab;
+  tab := Rows(mt);
+  if IsBlist(extension) then #to make it type agnostic
+    waiting := ShallowCopy(extension);
+  else
+    waiting := BlistList(Indices(mt),extension);
+  fi;
+  closure := ShallowCopy(base);
+  diff := BlistList(Indices(mt),[]);
+  while SizeBlist(waiting) > 0 do
+    i := Position(waiting,true); # it is not empty, so this is ok, not a queue
+    for j in Indices(mt) do
+      if closure[j] then
+        diff[tab[j][i]] := true; #scanning the ith column
+        diff[tab[i][j]] := true; #scanning the ith row
+      fi;
+    od;
+    diff[tab[i][i]] := true; # adding the diagonal
+    SubtractBlist(diff,closure); #now it is a real diff
+    UniteBlist(waiting, diff);
+    SubtractBlist(diff,waiting);#cleaning for reusing diff object
+    closure[i] := true; #adding i
+    if (elt = i) then return true; fi;
+    waiting[i] := false; #removing i from the waiting
+  od;
+  return false;
+end;
+
+
 #the closure of base the extension to closure (subsgp)
 # when adding a new point we check for new entries (filtered out by exisitng positions)
 ClosureByIncrements := function(base,extension,mt)
