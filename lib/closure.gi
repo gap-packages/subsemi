@@ -94,11 +94,7 @@ end;
 ClosureByComplement := function(base,extension,mt)
   local complement,closure,i,globtab,flag;
   globtab := GlobalTables(mt);
-  if IsBlist(extension) then #to make it type agnostic
-    closure := UnionBlist([base,extension]);
-  else
-    closure := UnionBlist([base,BlistList(Indices(mt),extension)]);
-  fi;
+  closure := UnionBlist([base, MutableBlist(extension, Indices(mt))]);
   complement := DifferenceBlist(FullSet(mt), closure);
   flag := true; # true means we still have work to do
   while flag do
