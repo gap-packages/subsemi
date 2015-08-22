@@ -7,15 +7,20 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+#returning a mutable bitlist from a bitlist or a list of pos integers
+MutableBlist := function(set, universe)
+  if IsBlist(set) then #to make it type agnostic
+    return ShallowCopy(set);
+  else
+    return BlistList(universe,set);
+  fi;
+end;
+
 #TODO duplicated code, do proper abstraction!
 IsInClosure := function(base,extension,elt,mt)
   local waiting,diff,closure,i,j,tab;
   tab := Rows(mt);
-  if IsBlist(extension) then #to make it type agnostic TODO extract this aspect
-    waiting := ShallowCopy(extension);
-  else
-    waiting := BlistList(Indices(mt),extension);
-  fi;
+  waiting := MutableBlist(extension, Indices(mt));
   closure := ShallowCopy(base);
   diff := BlistList(Indices(mt),[]);
   while SizeBlist(waiting) > 0 do
@@ -43,11 +48,7 @@ end;
 ClosureByIncrements := function(base,extension,mt)
   local waiting,diff,closure,i,j,tab;
   tab := Rows(mt);
-  if IsBlist(extension) then #to make it type agnostic
-    waiting := ShallowCopy(extension);
-  else
-    waiting := BlistList(Indices(mt),extension);
-  fi;
+  waiting := MutableBlist(extension, Indices(mt));
   closure := ShallowCopy(base);
   diff := BlistList(Indices(mt),[]);
   while SizeBlist(waiting) > 0 do
@@ -72,11 +73,7 @@ end;
 ClosureByIncrementsAndLocalTables := function(base,extension,mt)
   local waiting,closure,i,v,tab;
   tab := LocalTables(mt);
-  if IsBlist(extension) then #to make it type agnostic
-    waiting := ShallowCopy(extension);
-  else
-    waiting := BlistList(Indices(mt),extension);
-  fi;
+  waiting := MutableBlist(extension, Indices(mt));
   closure := ShallowCopy(base);
   while SizeBlist(waiting) > 0 do
     i := Position(waiting,true); # it is not empty, so this is ok
