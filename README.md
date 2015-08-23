@@ -5,7 +5,7 @@ and constructing embeddings. The algorithms assume that the elements of the
 semigroups can be fully calculated, therefore their applicability is limited
 to relatively small semigroups.
 
-Indeed, the original motivation for developing the package was the computational
+The original motivation for developing the package was the computational
 enumeration of transformation semigroups up to degree 4. Instructions for
 recomputing those results can be found in the data/T4 folder. 
 
@@ -15,6 +15,10 @@ high level in the preprint 'On Enumerating Transformation Semigroups'
 http://arxiv.org/abs/1403.0274
 
 The enumeration was extended to other diagram semigroups, see the data/SMALLDEGREE folder and the preprint http://arxiv.org/abs/1502.07150 'Finite Diagram Semigroups: Extending the Computational Horizon'. 
+
+## Installation
+
+Just cloning the repository under GAP/pkg/ and copying (and possibly editing) config_EXAMPLE.g to config.g.
 
 Copyright (C) 2014 James East, Attila Egri-Nagy, James D. Mitchell
 
