@@ -1,8 +1,17 @@
-#the refined version of the most useful algorithm
+################################################################################
+##
+## SubSemi
+##
+## Finding independent generating sets.
+##
+## Copyright (C) 2015  Attila Egri-Nagy
+##
 
+#global chackpoint data structure is bound here
 BindGlobal("SUBSEMI_IGSCheckPointData", rec());
 
-### more clever enumeration with SUBSEMI #######################################
+# Deciding whether gens is an independent generating set, by taking all
+# of its subsets missing a single generator.
 # gens - list, mt - MulTab, S - bitlist
 # condition: S = SgpInMulTab(gens,mt); - not checked
 IsIGS := function(gens,mt,S)
@@ -11,10 +20,12 @@ IsIGS := function(gens,mt,S)
                  SizeBlist(S)=SizeBlist(SgpInMulTab(Difference(gens,[x]),mt)));
 end;
 
-#TODO here we can optimize by precalculated cyclic groups
+#can we add newgen to gens that it still remains independent
+#TODO this is actually very similar to IsIGS, could be written as one function
 CanWeAdd := function(gens, newgen, cyclics, mt)
   local g,l,i;
   #first the cheap check: any old gen contained in the cyclic group of newgen?
+  #experiments show that this helps a little, maybe asymptotically vanishing
   if (ForAny(gens, x-> cyclics[newgen][x])) then
     return false;
   fi;
@@ -120,12 +131,15 @@ ResumeIGS := function()
                  SUBSEMI_IGSCheckPointData.irredgensets);
 end;
 
+################################################################################
+# another way: trying to do by cardinality
+
 # R - a set of elements in the multiplication table
 # mt - multiplication table
 # output: conjugacy class representatives of sets of size |R|+1
 ExtdConjugacyClassReps := function(A,mt)
   local exts;
-  exts := List(Difference(Indices(mt), A), x->Union(A,[x])); 
+  exts := List(Difference(Indices(mt), A), x->Union(A,[x]));
   return Set(exts, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
 end;
 
