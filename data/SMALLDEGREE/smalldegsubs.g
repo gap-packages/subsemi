@@ -1,3 +1,7 @@
+###PARTITONED BINARY RELATION###################################################
+PBR1 := PartitionedBinaryRelationMonoid(1);
+ClassifySubsemigroupsBySize(PBR1, SymmetricGroup(IsPermGroup,1),"PBR1_");
+
 ###BINARY RELATION##############################################################
 B2 := Semigroup([
               BinaryRelationOnPoints([[2],[1]]),
