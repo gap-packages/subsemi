@@ -1,6 +1,6 @@
 # filing - to separate bitlists into different classes based on the output
 # of some given function
-# the tagging function gives a string, that goes into 
+# the tagging function gives a string, that goes into
 # the filename, thus we get separate files for the classes
 
 ################################################################################
@@ -74,7 +74,7 @@ end;
 
 #generic function for processing a textfile line by line
 #infile - the name of the input file
-#processor - a function that takes a line of infile and returns true if it was 
+#processor - a function that takes a line of infile and returns true if it was
 #properly processed
 TextProcessor := function(infile, processor)
   local s,counter,itf;
@@ -104,7 +104,7 @@ FilingIndicatorFunctions := function(infile,taggerfunc)
   TextProcessor(infile, function(s)
                           local indfunc,otf;
                           indfunc := AsBlist(DecodeBitString(s));
-                          otf := OutputTextFile(taggerfunc(indfunc),true); 
+                          otf := OutputTextFile(taggerfunc(indfunc),true);
                           if not WriteLine(otf,s) then return false; fi;
                           CloseStream(otf);
                           return true;
@@ -129,10 +129,10 @@ FilingIndicatorFunctionsBySgpTag := function(infile,mt,prefix,ndigits)
              fi;
              return true;
            end);
-end;  
+end;
 
 RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
-  local otf;  
+  local otf;
   otf := OutputTextFile(outfile,false);
   TextProcessor(infile,
           function(s)
@@ -162,7 +162,7 @@ end;
 ClassProcessor := function(filename, classifierfunc, ext, preprocess)
   local prefix, sgps, idpclasses, digits,i,al,iso, counter,sgpclasses,class;
   prefix := filename{[1..Maximum(Positions(filename,'.'))-1]};
-  counter:=1;  
+  counter:=1;
   #memory saving idea - not storing all semigroups
   # frequency profiles -> generator sets
   if preprocess then
@@ -176,7 +176,7 @@ ClassProcessor := function(filename, classifierfunc, ext, preprocess)
   fi;
   #now going through the prefiltered classes
   digits := Size(String(Maximum(List(idpclasses,Size))));
-  counter:=1;  
+  counter:=1;
   for class in idpclasses do
     sgps := List(class, Semigroup);
     sgpclasses := Filtered(classifierfunc(sgps),x->Size(x)>1);
@@ -226,7 +226,7 @@ end;
 # set grid
 # plot "T4sizedist.dat" with boxes lc rgb"black" title "Sub(T4)"
 GNUPlotDataFromSizeVector := function(sizes, filename)
-  local N, al, i; 
+  local N, al, i;
   N := Maximum(sizes);
   al := AssociativeList();
   Perform(Collected(sizes), function(x) Assign(al, x[1], x[2]);end);
@@ -266,7 +266,7 @@ end;
 # gnuplot> plot "J5SvsD.dat" with image title "J5"
 SgpHeatMap := function(prefix, key1, key2)
 local tag1,tag2,is,s,sum, filename, al, alltags, maxi,maxj, i ,j, bl;
-  sum := 0; maxi := 0; maxj := 0; 
+  sum := 0; maxi := 0; maxj := 0;
   al := AssociativeList(); # truncated .gens filename -> number of lines
   bl := AssociativeList(); # [int,int] -> int (sparse matrix)
   Perform(PrefixPostfixMatchedListDir(".", prefix, ".gens"),
@@ -280,7 +280,7 @@ local tag1,tag2,is,s,sum, filename, al, alltags, maxi,maxj, i ,j, bl;
   filename := Concatenation(prefix,key1,"vs",key2,".dat");
   PrintTo(filename,""); #erasing
   alltags := Set(Concatenation(List(Keys(al), x->Set(SplitString(x,"_.")))));
-  for tag1 in Filtered(alltags, x->key1=Maximum(SplitString(x,"0123456789"))) do 
+  for tag1 in Filtered(alltags, x->key1=Maximum(SplitString(x,"0123456789"))) do
     for tag2 in Filtered(alltags, x->key2=Maximum(SplitString(x,"0123456789"))) do
       is := Intersection(Filtered(Keys(al), x->fail<>PositionSublist(x,Concatenation("_",tag1))) ,
                     Filtered(Keys(al), x->fail<>PositionSublist(x,Concatenation("_",tag2))));
@@ -321,7 +321,7 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indfunc, torso;
   mtI := MulTab(I);
   preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
   elts := List(preimgs,
-               function(x) 
+               function(x)
                  if Size(x)> 1 then return fail;else return x[1];fi;end);
   itf := InputTextFile(Concatenation(Name(T),".reps"));
   otf := OutputTextFile(Concatenation(Name(T),".uppertorsos"),false);
@@ -359,10 +359,10 @@ end;
 ### COMPREHENSIVE ##############################################################
 ################################################################################
 
-ClassifySubsemigroups := function(S, G , prefix) 
+ClassifySubsemigroups := function(S, G , prefix)
   local mt,subreps,ndigits, repsfile;
   ndigits := Size(String(Size(S)));
-  #SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S)); 
+  #SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S));
   mt := MulTab(S,G);
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
@@ -373,6 +373,21 @@ ClassifySubsemigroups := function(S, G , prefix)
   Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
   Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
           AntiAndIsomClassToIsomClasses);
+  GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
+          Concatenation(prefix,"sizedist.dat"));
+end;
+
+# TODO just a copy-paste for the moment
+ClassifySubsemigroupsBySize := function(S, G , prefix)
+  local mt,subreps,ndigits, repsfile;
+  ndigits := Size(String(Size(S)));
+  #SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S));
+  mt := MulTab(S,G);
+  Print("Calculating and classifying ",prefix,"\n\c");
+  subreps := AsList(SubSgpsByMinExtensions(mt));
+  repsfile := Concatenation(prefix{[1..Size(prefix)-1]},".reps");
+  SaveIndicatorFunctions(subreps, repsfile);
+  FilingIndicatorFunctionsBySize(repsfile,ndigits);
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
 end;
