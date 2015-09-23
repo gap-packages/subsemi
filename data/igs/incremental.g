@@ -4,7 +4,7 @@ IsSymGWithDegree := function(gens, deg)
   local G;
   G := Group(gens);
   return NrMovedPoints(G) = deg
-         and IsSymmetricGroup(G);
+         and IsNaturalSymmetricGroup(G);
 end;
 
 IsIncrementalSymmetricGrpGenSet := function(gens)
