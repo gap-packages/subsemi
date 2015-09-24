@@ -2,6 +2,10 @@
 
 AllBut := function(A,a) return Difference(A,[a]);end;
 
+GetMaximals := function(gens)
+  return Set(gens, x-> Group(AllBut(gens,x)));
+end;
+
 IsSymGWithDegree := function(gens, deg)
   local G;
   G := Group(gens);
