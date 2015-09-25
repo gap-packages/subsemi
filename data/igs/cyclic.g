@@ -1,5 +1,5 @@
 # #distinct independent generator sets of the cyclic groups
-l := List([1..11],
+l := List([1..13],
           function(x)
             local G, mt;
             G := CyclicGroup(IsPermGroup,x);

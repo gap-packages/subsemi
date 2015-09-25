@@ -16,7 +16,7 @@ end;
 
 # first 5 entries of A001691 calculated in an inefficient manner
 # taking all sets of cardinality 2 and check
-gensets := List([1..5],
+gensets := List([1..7],
                 x->Filtered(Combinations(AllPermsDegn(x),2),
                         y->IsSn(y,x)));
 Display(List(gensets,Size));
@@ -29,6 +29,6 @@ ConjClRep := function(P, G)
   return Minimum(Set(AsList(G), x-> Set(P, y->y^x)));
 end;
 
-Display(List([1..5],
+Display(List([1..7],
         x->Size(Set(gensets[x],
                 y->ConjClRep(y,SymmetricGroup(IsPermGroup,x))))));
