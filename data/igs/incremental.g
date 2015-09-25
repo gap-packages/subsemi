@@ -6,6 +6,11 @@ GetMaximals := function(gens)
   return Set(gens, x-> Group(AllBut(gens,x)));
 end;
 
+GetAll := function(gens)
+  return Set(Filtered(Combinations(gens), x -> not IsEmpty(x)),
+             Group);
+end;
+
 IsSymGWithDegree := function(gens, deg)
   local G;
   G := Group(gens);
