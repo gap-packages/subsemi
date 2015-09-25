@@ -17,6 +17,7 @@ IsIncrementalSymmetricGrpGenSet := function(gens)
   return ForAny(gens, x-> IsSymGWithDegree(Difference(gens,[x]),deg));
 end;
 
+#calculating actual isomorphism to S_{n-1}
 IsIncrementalSymmetricGrpGenSetSlow := function(gens)
   local G,target;
   G := Group(gens);
@@ -26,7 +27,6 @@ IsIncrementalSymmetricGrpGenSetSlow := function(gens)
   target := SymmetricGroup(IsPermGroup, NrMovedPoints(G) - 1);
   return ForAny(gens, x-> fail <> IsomorphismGroups(target,Group(Difference(gens,[x]))));
 end;
-
 
 IsStronglyIncrementalSymmetricGrpGenSet := function(gens)
   local G,deg,target;
