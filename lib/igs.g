@@ -104,9 +104,11 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
                      x->SetByIndicatorFunction(x,mt)));
 end;
 
+IGS := function(mt) return IGSWithGens(mt, Indices(mt)); end;
+
 # mt - multiplication table
 # potgens - potential generators, e.g. Indices(mt) for all elements
-IGS := function(mt,potgens)
+IGSWithGens := function(mt,potgens)
   local stack;
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, []);

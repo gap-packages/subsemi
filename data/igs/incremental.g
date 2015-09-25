@@ -1,5 +1,11 @@
 #incremental generating sets for Sn
 
+AllBut := function(A,a) return Difference(A,[a]);end;
+
+GetMaximals := function(gens)
+  return Set(gens, x-> Group(AllBut(gens,x)));
+end;
+
 IsSymGWithDegree := function(gens, deg)
   local G;
   G := Group(gens);
@@ -14,7 +20,7 @@ IsIncrementalSymmetricGrpGenSet := function(gens)
     Error("Not natural symmetric group generators!");
   fi;
   deg := NrMovedPoints(G) - 1;
-  return ForAny(gens, x-> IsSymGWithDegree(Difference(gens,[x]),deg));
+  return ForAny(gens, x-> IsSymGWithDegree(AllBut(gens,x),deg));
 end;
 
 #calculating actual isomorphism to S_{n-1}
@@ -25,7 +31,7 @@ IsIncrementalSymmetricGrpGenSetSlow := function(gens)
     Error("Not natural symmetric group generators!");
   fi;
   target := SymmetricGroup(IsPermGroup, NrMovedPoints(G) - 1);
-  return ForAny(gens, x-> fail <> IsomorphismGroups(target,Group(Difference(gens,[x]))));
+  return ForAny(gens, x-> fail <> IsomorphismGroups(target,Group(AllBut(gens,x))));
 end;
 
 IsStronglyIncrementalSymmetricGrpGenSet := function(gens)
@@ -34,7 +40,7 @@ IsStronglyIncrementalSymmetricGrpGenSet := function(gens)
   if not IsSymmetricGroup(G) then Error("Not symmetric group generators!");fi;
   deg := SymmetricDegree(G);
   target := SymmetricGroup(IsPermGroup,deg-1);
-  return ForAll(gens, x-> fail <> IsomorphismGroups(target,Group(Difference(gens,[x]))));
+  return ForAll(gens, x-> fail <> IsomorphismGroups(target,Group(AllBut(gens,x))));
 end;
 
 IsRecursivelyIncrementalSymmetricGrpGenSet := function(gens)
@@ -45,5 +51,5 @@ IsRecursivelyIncrementalSymmetricGrpGenSet := function(gens)
   deg := SymmetricDegree(G);
   if deg = 1 then return true;fi;
   target := SymmetricGroup(IsPermGroup,deg-1);
-  return ForAll(gens, x-> IsRecursivelyIncrementalSymmetricGrpGenSet(Difference(gens,[x])));
+  return ForAll(gens, x-> IsRecursivelyIncrementalSymmetricGrpGenSet(AllBut(gens,x)));
 end;
