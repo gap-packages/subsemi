@@ -104,8 +104,6 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
                      x->SetByIndicatorFunction(x,mt)));
 end;
 
-IGS := function(mt) return IGSWithGens(mt, Indices(mt)); end;
-
 # mt - multiplication table
 # potgens - potential generators, e.g. Indices(mt) for all elements
 IGSWithGens := function(mt,potgens)
@@ -114,6 +112,8 @@ IGSWithGens := function(mt,potgens)
   Store(stack, []);
   return IGSParametrized(mt, potgens, LightBlistContainer(),stack,[]);
 end;
+
+IGS := function(mt) return IGSWithGens(mt, Indices(mt)); end;
 
 #
 IGSFromSet := function(mt,set,potgens)
