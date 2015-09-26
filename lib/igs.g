@@ -10,6 +10,10 @@
 #global chackpoint data structure is bound here
 BindGlobal("SUBSEMI_IGSCheckPointData", rec());
 
+IsIndependentSet := function(A)
+  return ForAll(A,x-> not (x in Group(Difference(A,[x]))));
+end;
+
 # Deciding whether gens is an independent generating set, by taking all
 # of its subsets missing a single generator.
 # gens - list, mt - MulTab, S - bitlist
