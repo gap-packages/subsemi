@@ -11,7 +11,8 @@
 BindGlobal("SUBSEMI_IGSCheckPointData", rec());
 
 IsIndependentSet := function(A)
-  return ForAll(A,x-> not (x in Group(Difference(A,[x]))));
+  return IsDuplicateFreeList(A) and
+         ForAll(A,x-> not (x in Group(Difference(A,[x]))));
 end;
 
 # Deciding whether gens is an independent generating set, by taking all
