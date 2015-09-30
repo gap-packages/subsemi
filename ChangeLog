@@ -1,3 +1,5 @@
+0.42
+	Making the small degree diagram semigroup classification self-contained (included a partitioned binary relation implementation). Several little improvements for calculating independent sets.
 0.41
 	Implementing a more efficient conjugacy class representative calculation. Many changes around the independent generator set code.
 0.40
