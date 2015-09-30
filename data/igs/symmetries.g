@@ -12,3 +12,8 @@ end;
 SymmGroupOfSetOfPermsBF := function(S,G)
   return Group(Filtered(G, g-> Set(S) =  OnSetOfPermsByConj(Set(S),g)));
 end;
+
+#creating a set with the given symmetry group
+SymmSet := function(perms, G)
+  return Union(List(perms, x->ConjugacyClassOfTransformation(x,G)));
+end;
