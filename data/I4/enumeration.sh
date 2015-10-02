@@ -24,6 +24,6 @@ for i in UT*; do echo "echo \"$XLOADER I43SubsFromUpperTorsos(\\\"$i\\\");\" | g
 parallel < UTtasks
 cat UT*M > I43.reps
 
-echo $LOADER"I43sharp();" | gap -30g
+echo $LOADER"I43sharp();" | gap -m 30g
 
 cat I43_I4.reps I43sharp_I4.reps P_I4.reps > I4.reps
