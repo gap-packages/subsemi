@@ -10,9 +10,15 @@
 ## Extra functions for binary relations. (probably should go to GAP lib)
 ##
 
-InstallImmediateMethod(IsBinaryRelationSemigroup,IsSemigroup and HasGeneratorsOfSemigroup,0,
-function(S) return IsBinaryRelationOnPointsRep(
-                           Representative(GeneratorsOfSemigroup(S)));end);
+InstallImmediateMethod(IsBinaryRelationSemigroup,
+        IsSemigroup and HasGeneratorsOfSemigroup,0,
+function(S)
+  #TODO the next line is a very crude fix for a problem in I43modI42subs
+  #with semigroups 2.6, where does the empty semigroup come from?
+  if IsEmpty(GeneratorsOfSemigroup(S)) then return false; fi;
+  return IsBinaryRelationOnPointsRep(
+                 Representative(GeneratorsOfSemigroup(S)));
+end);
 
 InstallMethod(GroupOfUnits, "for a semigroup of binary relations",
 [IsBinaryRelationSemigroup],
