@@ -109,29 +109,24 @@ end;
 #this also keeps track of the irreducible generating sets in a logged database
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
-IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
-  local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics, ll;
+IGSParametrized := function(mt, potgens,iss,candidates)
+  local H,set,counter,blistrep,diff,normalizer,n, l, cyclics, ll;
   counter := 0;
   n := Size(Indices(mt));
-  deadends := [];
   cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
     blistrep := BlistList(Indices(mt),set);
-    if not blistrep in log then
-      AddSet(log,blistrep);
-      if SizeBlist(H) = n then
-        AddSet(irredgensets, set);
-      else
+    if not blistrep in iss then
+      AddSet(iss,blistrep);
+      if SizeBlist(H) < n then
         diff := Difference(potgens,ListBlist(Indices(mt),H));
         # orbit reps by the normalizer, making diff smaller, avoid dups
         normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
         diff := List(Orbits(normalizer, diff), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
         diff := Filtered(diff, x-> CanWeAdd(set, x, cyclics, mt));
-        #if diff is empty then there is no way to extend the set irreducibly
-        if IsEmpty(diff) then AddSet(deadends, set); fi;
         #it is enough the compile a List, rather than a Set
         ll := List(diff, x->Set(Concatenation(set,[x])));
         l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
@@ -142,18 +137,16 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
       Info(SubSemiInfoClass,1,FormattedBigNumberString(counter),
-           " igs:", Size(irredgensets)," ~ ",
-           FormattedBigNumberString(Size(irredgensets)),
-           " db:", Size(log), " ~ ", FormattedBigNumberString(Size(log)),
+           " iss:", Size(iss)," ~ ",
+           FormattedBigNumberString(Size(iss)),
            " stack:",String(Size(candidates)),
            " ", Peek(candidates));
     fi;#########################################################################
     if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then
       SUBSEMI_IGSCheckPointData.candidates := candidates;
-      SUBSEMI_IGSCheckPointData.log := log;
       SUBSEMI_IGSCheckPointData.mt := mt;
       SUBSEMI_IGSCheckPointData.potgens := potgens;
-      SUBSEMI_IGSCheckPointData.irredgensets := irredgensets;
+      SUBSEMI_IGSCheckPointData.iss := iss;
       SaveWorkspace(Concatenation("IGScheckpoint",
               String(IO_gettimeofday().tv_sec),".ws"));
       Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved after ",
@@ -161,14 +154,9 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
     fi;
   od;
   Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
-       String(Size(irredgensets)),
+       String(Size(iss)),
        " in ",String(counter)," steps");########################################
-  return rec(igss := List(irredgensets, x->SetByIndicatorFunction(x,mt)),
-             deadends := List(deadends, x->SetByIndicatorFunction(x,mt)),
-             pigss := List(
-                     Filtered(List(AsList(log), x->ListBlist(Indices(mt),x)),
-                             x -> not (x in irredgensets)),
-                     x->SetByIndicatorFunction(x,mt)));
+  return  List(AsList(iss), x->SetByIndicatorFunction(x,mt));
 end;
 
 # mt - multiplication table
@@ -177,7 +165,7 @@ IGSWithGens := function(mt,potgens)
   local stack;
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, []);
-  return IGSParametrized(mt, potgens, LightBlistContainer(),stack,[]);
+  return IGSParametrized(mt, potgens, LightBlistContainer(),stack);
 end;
 
 IGS := function(mt) return IGSWithGens(mt, Indices(mt)); end;
@@ -197,7 +185,7 @@ ResumeIGS := function()
                  SUBSEMI_IGSCheckPointData.potgens,
                  SUBSEMI_IGSCheckPointData.log,
                  SUBSEMI_IGSCheckPointData.candidates,
-                 SUBSEMI_IGSCheckPointData.irredgensets);
+                 SUBSEMI_IGSCheckPointData.iss);
 end;
 
 ################################################################################
