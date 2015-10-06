@@ -179,9 +179,9 @@ end;
 # these variables get updated at each checkpoint
 ResumeIGS := function(ISfunc)
   return ISfunc(SUBSEMI_IGSCheckPointData.mt,
-                 SUBSEMI_IGSCheckPointData.potgens,
-                 SUBSEMI_IGSCheckPointData.candidates,
-                 SUBSEMI_IGSCheckPointData.iss);
+                SUBSEMI_IGSCheckPointData.potgens,
+                SUBSEMI_IGSCheckPointData.iss,
+                SUBSEMI_IGSCheckPointData.candidates);
 end;
 
 ################################################################################
