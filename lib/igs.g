@@ -53,10 +53,9 @@ IsCanonicalAddition := function(gens, newgen, mt)
   return newgen = Maximum(rep)^(Inverse(p));
 end;
 
-#this also keeps track of the irreducible generating sets in a logged database
-#(even if they are not the full ones)
+# canonical construction path method
 #potgens should be a subset of FullSet(mt)
-ISParametrized := function(mt, potgens, candidates, iss)
+ISCanCons := function(mt, potgens, iss, candidates)
   local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics, ll;
   counter := 0;
   n := Size(Indices(mt));
@@ -90,7 +89,6 @@ ISParametrized := function(mt, potgens, candidates, iss)
     fi;#########################################################################
     if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then
       SUBSEMI_IGSCheckPointData.candidates := candidates;
-      #SUBSEMI_IGSCheckPointData.log := log;
       SUBSEMI_IGSCheckPointData.mt := mt;
       SUBSEMI_IGSCheckPointData.potgens := potgens;
       SUBSEMI_IGSCheckPointData.iss := iss;
@@ -106,10 +104,9 @@ ISParametrized := function(mt, potgens, candidates, iss)
   return  List(AsList(iss), x->SetByIndicatorFunction(x,mt));
 end;
 
-#this also keeps track of the irreducible generating sets in a logged database
-#(even if they are not the full ones)
+# keeping a database for checking against
 #potgens should be a subset of FullSet(mt)
-IGSParametrized := function(mt, potgens,iss,candidates)
+ISDatabase := function(mt, potgens,iss,candidates)
   local H,set,counter,blistrep,diff,normalizer,n, l, cyclics, ll;
   counter := 0;
   n := Size(Indices(mt));
@@ -161,29 +158,28 @@ end;
 
 # mt - multiplication table
 # potgens - potential generators, e.g. Indices(mt) for all elements
-IGSWithGens := function(mt,potgens)
+ISWithGens := function(mt,potgens,ISfunc)
   local stack;
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, []);
-  return IGSParametrized(mt, potgens, LightBlistContainer(),stack);
+  return ISfunc(mt, potgens, LightBlistContainer(),stack);
 end;
 
-IGS := function(mt) return IGSWithGens(mt, Indices(mt)); end;
+IS := function(mt,ISfunc) return ISWithGens(mt, Indices(mt),ISfunc); end;
 
 #
-IGSFromSet := function(mt,set,potgens)
+IGSFromSet := function(mt,set,potgens,ISfunc)
   local stack;
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, set);
-  return IGSParametrized(mt, potgens, LightBlistContainer(),stack,[]);
+  return ISfunc(mt, potgens, LightBlistContainer(),stack,[]);
 end;
 
 # resuming an interrupted calculation by using global variables
 # these variables get updated at each checkpoint
-ResumeIGS := function()
-  return IGSParametrized(SUBSEMI_IGSCheckPointData.mt,
+ResumeIGS := function(ISfunc)
+  return ISfunc(SUBSEMI_IGSCheckPointData.mt,
                  SUBSEMI_IGSCheckPointData.potgens,
-                 SUBSEMI_IGSCheckPointData.log,
                  SUBSEMI_IGSCheckPointData.candidates,
                  SUBSEMI_IGSCheckPointData.iss);
 end;
