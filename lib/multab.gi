@@ -191,6 +191,21 @@ SetConjugacyClassRep := function(set,symmetries)
   return min;
 end;
 
+# conjugacy class rep defined for list of integers
+SetConjugacyClassConjugator := function(set,symmetries)
+  local  min, new,i, conjugator;
+  min := AsSet(set);
+  for i in [1..Length(symmetries)] do
+    new := OnSets(set,symmetries[i]);
+    if new < min then
+      min := new;
+      conjugator := symmetries[i];
+    fi;
+  od;
+  return conjugator;
+end;
+
+
 #the minimal one is the representative
 InstallGlobalFunction(ConjugacyClassRep,
 function(indset,mt)
