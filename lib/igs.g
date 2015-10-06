@@ -50,7 +50,7 @@ IsCanonicalAddition := function(gens, newgen, mt)
   set := Set(Union(gens,[newgen]));
   p := SetConjugacyClassConjugator(set, PossibleMinConjugators(set,mt));
   rep := OnSets(set, p);
-  return newgen = Minimum(rep)^(Inverse(p));
+  return newgen = Maximum(rep)^(Inverse(p));
 end;
 
 #this also keeps track of the irreducible generating sets in a logged database
@@ -66,25 +66,23 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
     blistrep := BlistList(Indices(mt),set);
-    if not blistrep in log then
-      AddSet(log,blistrep);
-      if SizeBlist(H) = n then
-        AddSet(irredgensets, set);
-      else
-        diff := Difference(potgens,ListBlist(Indices(mt),H));
-        # orbit reps by the normalizer, making diff smaller, avoid dups
-        normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
-        diff := List(Orbits(normalizer, diff), x->x[1]);
-        # checking whether adding elements from diff would yield igs' or not
-        diff := Filtered(diff, x-> IsCanonicalAddition(set,x,mt)
-                        and CanWeAdd(set, x, cyclics, mt));
-        #if diff is empty then there is no way to extend the set irreducibly
-        if IsEmpty(diff) then AddSet(deadends, set); fi;
-        #it is enough the compile a List, rather than a Set
-        ll := List(diff, x->Set(Concatenation(set,[x])));
-        l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
-        Perform(l, function(y) Store(candidates,y);end);
-      fi;
+    AddSet(log,blistrep);
+    if SizeBlist(H) = n then
+      AddSet(irredgensets, set);
+    else
+      diff := Difference(potgens,ListBlist(Indices(mt),H));
+      # orbit reps by the normalizer, making diff smaller, avoid dups
+      #normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
+      #diff := List(Orbits(normalizer, diff), x->x[1]);
+      # checking whether adding elements from diff would yield igs' or not
+      diff := Filtered(diff, x-> IsCanonicalAddition(set,x,mt)
+                      and CanWeAdd(set, x, cyclics, mt));
+      #if diff is empty then there is no way to extend the set irreducibly
+      if IsEmpty(diff) then AddSet(deadends, set); fi;
+      #it is enough the compile a List, rather than a Set
+      ll := List(diff, x->Set(Concatenation(set,[x])));
+      l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
+      Perform(l, function(y) Store(candidates,y);end);
     fi;
     counter := counter + 1;#####################################################
     if InfoLevel(SubSemiInfoClass)>0
