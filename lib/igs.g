@@ -45,6 +45,14 @@ CanWeAdd := function(gens, newgen, cyclics, mt)
   return true;
 end;
 
+IsCanonicalAddition := function(gens, newgen, mt)
+  local set, p, rep;
+  set := Set(Union(gens,[newgen]));
+  p := SetConjugacyClassConjugator(set, PossibleMinConjugators(set,mt));
+  rep := OnSets(set, p);
+  return newgen = Minimum(rep)^(Inverse(p));
+end;
+
 #this also keeps track of the irreducible generating sets in a logged database
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
@@ -68,7 +76,8 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
         normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
         diff := List(Orbits(normalizer, diff), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
-        diff := Filtered(diff, x-> CanWeAdd(set, x, cyclics, mt));
+        diff := Filtered(diff, x-> IsCanonicalAddition(set,x,mt)
+                        and CanWeAdd(set, x, cyclics, mt));
         #if diff is empty then there is no way to extend the set irreducibly
         if IsEmpty(diff) then AddSet(deadends, set); fi;
         #it is enough the compile a List, rather than a Set
