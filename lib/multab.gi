@@ -194,6 +194,7 @@ end;
 # conjugacy class rep defined for list of integers
 SetConjugacyClassConjugator := function(set,symmetries)
   local  min, new,i, conjugator;
+  conjugator := symmetries[1];
   min := AsSet(set);
   for i in [1..Length(symmetries)] do
     new := OnSets(set,symmetries[i]);
