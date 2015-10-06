@@ -56,11 +56,10 @@ end;
 #this also keeps track of the irreducible generating sets in a logged database
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
-ISParametrized := function(mt, potgens,candidates, iss)
+ISParametrized := function(mt, potgens, candidates, iss)
   local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics, ll;
   counter := 0;
   n := Size(Indices(mt));
-  deadends := [];
   cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
@@ -75,8 +74,6 @@ ISParametrized := function(mt, potgens,candidates, iss)
       # checking whether adding elements from diff would yield igs' or not
       diff := Filtered(diff, x-> IsCanonicalAddition(set,x,mt)
                       and CanWeAdd(set, x, cyclics, mt));
-      #if diff is empty then there is no way to extend the set irreducibly
-      if IsEmpty(diff) then AddSet(deadends, set); fi;
       #it is enough the compile a List, rather than a Set
       ll := List(diff, x->Set(Concatenation(set,[x])));
       l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
