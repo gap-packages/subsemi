@@ -56,7 +56,7 @@ end;
 #this also keeps track of the irreducible generating sets in a logged database
 #(even if they are not the full ones)
 #potgens should be a subset of FullSet(mt)
-IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
+ISParametrized := function(mt, potgens,candidates, iss)
   local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics, ll;
   counter := 0;
   n := Size(Indices(mt));
@@ -66,10 +66,8 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
     blistrep := BlistList(Indices(mt),set);
-    AddSet(log,blistrep);
-    if SizeBlist(H) = n then
-      AddSet(irredgensets, set);
-    else
+    AddSet(iss,blistrep);
+    if SizeBlist(H) < n then
       diff := Difference(potgens,ListBlist(Indices(mt),H));
       # orbit reps by the normalizer, making diff smaller, avoid dups
       #normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
@@ -88,18 +86,17 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
       Info(SubSemiInfoClass,1,FormattedBigNumberString(counter),
-           " igs:", Size(irredgensets)," ~ ",
-           FormattedBigNumberString(Size(irredgensets)),
-           " db:", Size(log), " ~ ", FormattedBigNumberString(Size(log)),
+           " iss:", Size(iss)," ~ ",
+           FormattedBigNumberString(Size(iss)),
            " stack:",String(Size(candidates)),
            " ", Peek(candidates));
     fi;#########################################################################
     if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then
       SUBSEMI_IGSCheckPointData.candidates := candidates;
-      SUBSEMI_IGSCheckPointData.log := log;
+      #SUBSEMI_IGSCheckPointData.log := log;
       SUBSEMI_IGSCheckPointData.mt := mt;
       SUBSEMI_IGSCheckPointData.potgens := potgens;
-      SUBSEMI_IGSCheckPointData.irredgensets := irredgensets;
+      SUBSEMI_IGSCheckPointData.iss := iss;
       SaveWorkspace(Concatenation("IGScheckpoint",
               String(IO_gettimeofday().tv_sec),".ws"));
       Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved after ",
@@ -107,14 +104,9 @@ IGSParametrized := function(mt, potgens,log,candidates, irredgensets)
     fi;
   od;
   Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
-       String(Size(irredgensets)),
+       String(Size(iss)),
        " in ",String(counter)," steps");########################################
-  return rec(igss := List(irredgensets, x->SetByIndicatorFunction(x,mt)),
-             deadends := List(deadends, x->SetByIndicatorFunction(x,mt)),
-             pigss := List(
-                     Filtered(List(AsList(log), x->ListBlist(Indices(mt),x)),
-                             x -> not (x in irredgensets)),
-                     x->SetByIndicatorFunction(x,mt)));
+  return  List(AsList(iss), x->SetByIndicatorFunction(x,mt));
 end;
 
 # mt - multiplication table
