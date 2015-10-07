@@ -101,7 +101,7 @@ ISCanCons := function(mt, potgens, iss, candidates)
   Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
        String(Size(iss)),
        " in ",String(counter)," steps");########################################
-  return  List(iss, x->SetByIndicatorFunction(x,mt));
+  return  iss; #List(iss, x->SetByIndicatorFunction(x,mt));
 end;
 
 # keeping a database for checking against
@@ -153,7 +153,7 @@ ISDatabase := function(mt, potgens,iss,candidates)
   Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
        String(Size(iss)),
        " in ",String(counter)," steps");########################################
-  return  List(AsList(iss), x->SetByIndicatorFunction(x,mt));
+  return  AsList(iss); #List(AsList(iss), x->SetByIndicatorFunction(x,mt));
 end;
 
 # mt - multiplication table
