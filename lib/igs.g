@@ -64,7 +64,7 @@ ISCanCons := function(mt, potgens, iss, candidates)
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
     blistrep := BlistList(Indices(mt),set);
-    AddSet(iss,blistrep);
+    Add(iss,blistrep);
     if SizeBlist(H) < n then
       diff := Difference(potgens,ListBlist(Indices(mt),H));
       # orbit reps by the normalizer, making diff smaller, avoid dups
@@ -101,7 +101,7 @@ ISCanCons := function(mt, potgens, iss, candidates)
   Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
        String(Size(iss)),
        " in ",String(counter)," steps");########################################
-  return  List(AsList(iss), x->SetByIndicatorFunction(x,mt));
+  return  List(iss, x->SetByIndicatorFunction(x,mt));
 end;
 
 # keeping a database for checking against
@@ -159,20 +159,30 @@ end;
 # mt - multiplication table
 # potgens - potential generators, e.g. Indices(mt) for all elements
 ISWithGens := function(mt,potgens,ISfunc)
-  local stack;
+  local stack,db;
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, []);
-  return ISfunc(mt, potgens, LightBlistContainer(),stack);
+  if ISfunc = ISDatabase then
+    db := LightBlistContainer();
+  else
+    db := [];
+  fi;
+  return ISfunc(mt, potgens, db ,stack);
 end;
 
 IS := function(mt,ISfunc) return ISWithGens(mt, Indices(mt),ISfunc); end;
 
 #
 IGSFromSet := function(mt,set,potgens,ISfunc)
-  local stack;
+  local stack,db;
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, set);
-  return ISfunc(mt, potgens, LightBlistContainer(),stack,[]);
+  if ISfunc = ISDatabase then
+    db := LightBlistContainer();
+  else
+    db := [];
+  fi;
+  return ISfunc(mt, potgens, db ,stack);
 end;
 
 # resuming an interrupted calculation by using global variables
