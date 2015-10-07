@@ -29,7 +29,8 @@ local test,infolevel;
           "embedding",
           "conjugacy",
           "T3",
-          "I3"
+          "I3",
+          "is"
           ] do
     Test(Concatenation(
             PackageInfo("subsemi")[1]!.InstallationPath,
