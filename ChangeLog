@@ -1,3 +1,5 @@
+0.43
+	Implementing the canonical construction path method for finding independent sets.
 0.42
 	Making the small degree diagram semigroup classification self-contained (included a partitioned binary relation implementation). Several little improvements for calculating independent sets.
 0.41
