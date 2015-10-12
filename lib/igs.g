@@ -81,8 +81,8 @@ ISCanCons := function(mt, potgens, iss, candidates)
     counter := counter + 1;#####################################################
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter),
-           " iss:", Size(iss)," ~ ",
+      Info(SubSemiInfoClass,1,
+           "iss:", Size(iss)," ~ ",
            FormattedBigNumberString(Size(iss)),
            " stack:",String(Size(candidates)),
            " ", Peek(candidates));
