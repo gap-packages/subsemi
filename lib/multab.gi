@@ -161,7 +161,7 @@ function(mt)
   return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y)));
 end);
 
-#for minimal conjugates, what is the symmetry that takes an element to its min?
+#for minimal conjugates, what are the symmetries taking an element to its min?
 InstallMethod(MinimumConjugators,"for multab",
         [IsMulTab],
 function(mt)
