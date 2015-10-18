@@ -53,7 +53,7 @@ local mt,inds;
       SetSymmetries(mt, [()]);
     fi;
   else
-    #same as above, except 
+    #same as above, except
     SetSymmetries(mt,Set(G,
             g->AsPermutation(TransformationOp(g,SortedElements(mt),
                     function(p,t)
@@ -80,7 +80,7 @@ local mt;
   SetSortedElements(mt,SortedElements(multab));
   SetIndices(mt,Indices(multab));
   SetSymmetries(mt, Symmetries(multab)); # TODO is this correct? symmetries are the same?
-  if HasOriginalName(multab) then 
+  if HasOriginalName(multab) then
     SetOriginalName(mt,OriginalName(multab));
   fi;
   return mt;
@@ -137,7 +137,7 @@ end);
 InstallMethod(SymmetryGroup,"for multab",
         [IsMulTab],
 function(mt)
-  if Size(Symmetries(mt)) = 1 then return Group(()); fi;  
+  if Size(Symmetries(mt)) = 1 then return Group(()); fi;
   return Group(SmallGeneratingSet(Group(Symmetries(mt)))); #TODO this is a bit roundabout
 end);
 
@@ -343,11 +343,11 @@ function (sgp)
   fi;
 end);
 
-# returns the subarray of the multiplication table mt spanned by 
+# returns the subarray of the multiplication table mt spanned by
 # elements in L (positive integers as indices)
 # the order of the elements in L kept
 # 0 indicate any product outside L (since subarrays may not be closed)
-# mt can be just a matrix, or a MulTab object 
+# mt can be just a matrix, or a MulTab object
 InstallGlobalFunction(SubArray,
 function(mt, L)
   local sa,i,j,tab;
@@ -359,12 +359,12 @@ function(mt, L)
   sa := [];
   for i in L do
     Add(sa,List(L,
-            function(j) if tab[i][j] in L then 
-                          return tab[i][j]; 
-                        else 
+            function(j) if tab[i][j] in L then
+                          return tab[i][j];
+                        else
                           return 0;fi;end));
   od;
-  return sa;                  
+  return sa;
 end);
 
 #just for convenience, TODO: include it properly
