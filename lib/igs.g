@@ -28,13 +28,8 @@ end;
 
 #can we add newgen to gens that it still remains independent
 #TODO this is actually very similar to IsIGS, could be written as one function
-CanWeAdd := function(gens, newgen, cyclics, mt)
+CanWeAdd := function(gens, newgen, mt)
   local g,l,i;
-  #first the cheap check: any old gen contained in the cyclic group of newgen?
-  #experiments show that this helps a little, maybe asymptotically vanishing
-  if (ForAny(gens, x-> cyclics[newgen][x])) then
-    return false;
-  fi;
   l := ShallowCopy(gens); #defensive copying
   for i  in [1..Size(gens)] do
     g := l[i]; #remembering the knocked out old generator
@@ -68,8 +63,10 @@ ISCanCons := function(mt, potgens, iss, candidates)
     if SizeBlist(H) < n then
       diff := Difference(potgens,ListBlist(Indices(mt),H));
       # checking whether adding elements from diff would yield igs' or not
-      diff := Filtered(diff, x-> IsCanonicalAddition(set,x,mt)
-                      and CanWeAdd(set, x, cyclics, mt));
+      diff := Filtered(diff,
+                      x -> not ForAny(set, y-> cyclics[x][y])
+                           and IsCanonicalAddition(set,x,mt)
+                           and CanWeAdd(set, x, mt));
       #it is enough the compile a List, rather than a Set
       ll := List(diff, x->Set(Concatenation(set,[x])));
       l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
@@ -120,7 +117,8 @@ ISDatabase := function(mt, potgens,iss,candidates)
         normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
         diff := List(Orbits(normalizer, diff), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
-        diff := Filtered(diff, x-> CanWeAdd(set, x, cyclics, mt));
+        diff := Filtered(diff, x -> not ForAny(set, y-> cyclics[x][y])
+                                    and CanWeAdd(set, x, mt));
         #it is enough the compile a List, rather than a Set
         ll := List(diff, x->Set(Concatenation(set,[x])));
         l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
