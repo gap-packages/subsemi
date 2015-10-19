@@ -56,7 +56,7 @@ end;
 # canonical construction path method
 #potgens should be a subset of FullSet(mt)
 ISCanCons := function(mt, potgens, iss, candidates)
-  local H,set,counter,blistrep,diff,normalizer,n, l, deadends, cyclics, ll;
+  local H,set,counter,blistrep,diff,n, l, cyclics, ll;
   counter := 0;
   n := Size(Indices(mt));
   cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
@@ -67,9 +67,6 @@ ISCanCons := function(mt, potgens, iss, candidates)
     Add(iss,blistrep);
     if SizeBlist(H) < n then
       diff := Difference(potgens,ListBlist(Indices(mt),H));
-      # orbit reps by the normalizer, making diff smaller, avoid dups
-      #normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
-      #diff := List(Orbits(normalizer, diff), x->x[1]);
       # checking whether adding elements from diff would yield igs' or not
       diff := Filtered(diff, x-> IsCanonicalAddition(set,x,mt)
                       and CanWeAdd(set, x, cyclics, mt));

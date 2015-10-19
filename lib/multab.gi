@@ -191,7 +191,7 @@ SetConjugacyClassRep := function(set,symmetries)
   return min;
 end;
 
-# conjugacy class rep defined for list of integers
+# conjugacy class rep defined for set of integers
 SetConjugacyClassConjugator := function(set,symmetries)
   local  min, new,i, conjugator;
   conjugator := symmetries[1];
