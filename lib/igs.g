@@ -51,17 +51,21 @@ end;
 # canonical construction path method
 #potgens should be a subset of FullSet(mt)
 ISCanCons := function(mt, potgens, iss, candidates)
-  local H,set,counter,blistrep,diff,n, l, cyclics, ll;
+  local H,set,counter,blistrep,diff,n, l, cyclics, ll, minconjs, min;
   counter := 0;
   n := Size(Indices(mt));
   cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
+  minconjs := MinimumConjugates(mt);
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
+    if IsEmpty(set) then min := 0; else min := Minimum(set); fi;
     H := SgpInMulTab(set,mt);
     blistrep := BlistList(Indices(mt),set);
     Add(iss,blistrep);
     if SizeBlist(H) < n then
       diff := Difference(potgens,ListBlist(Indices(mt),H));
+      #adding an element smaller than the minrep can't be canonical construction
+      diff := Filtered(diff, x->minconjs[x] > min);
       # checking whether adding elements from diff would yield igs' or not
       diff := Filtered(diff,
                       x -> not ForAny(set, y-> cyclics[x][y])
