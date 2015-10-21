@@ -262,8 +262,7 @@ function(indset,mt)
 end);
 
 
-InstallMethod(GlobalTables,"for multab",
-        [IsMulTab],
+InstallMethod(GlobalTables, "for multab", [IsMulTab],
 function(mt)
   local i,j, boolfunctab,val, L;
   boolfunctab := List(Indices(mt),x -> []);

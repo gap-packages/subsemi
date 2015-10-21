@@ -113,6 +113,13 @@ ClosureByComplement := function(base,extension,mt)
   return closure;
 end;
 
+DirectlyExpressible := function(elt, gens, mt)
+  return elt in gens
+         or ForAny(GlobalTables(mt)[elt],
+                 x -> x[1] in gens
+                 and ForAny(x[2], y -> y in gens));
+end;
+
 InstallGlobalFunction(SgpInMulTab,
 function(arg)
   #arg[1] - gens
