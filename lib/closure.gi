@@ -120,6 +120,15 @@ DirectlyExpressible := function(elt, gens, mt)
                  and ForAny(x[2], y -> y in gens));
 end;
 
+Expressible := function(elt,gens,mt)
+  local tab, t;
+  if DirectlyExpressible(elt, gens,mt) then return true; fi;
+  tab := GlobalTables(mt)[elt];
+  return ForAny(tab,
+                x-> DirectlyExpressible(x[1], gens, mt)
+                and (x[1] = x[2][1]  or ForAny(x[2], y -> DirectlyExpressible(y,gens,mt))));
+end;
+
 InstallGlobalFunction(SgpInMulTab,
 function(arg)
   #arg[1] - gens
