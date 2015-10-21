@@ -65,7 +65,7 @@ ISCanCons := function(mt, potgens, iss, candidates)
     if SizeBlist(H) < n then
       diff := Difference(potgens,ListBlist(Indices(mt),H));
       #adding an element smaller than the minrep can't be canonical construction
-      diff := Filtered(diff, x->minconjs[x] > min);
+      diff := Filtered(diff, x->minconjs[x] >= min);
       # checking whether adding elements from diff would yield igs' or not
       diff := Filtered(diff,
                       x -> not ForAny(set, y-> cyclics[x][y])
