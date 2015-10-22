@@ -25,6 +25,7 @@ IsInClosure := function(base,extension,elt,mt)
   diff := BlistList(Indices(mt),[]);
   while SizeBlist(waiting) > 0 do
     i := Position(waiting,true); # it is not empty, so this is ok, not a queue
+    if (elt = i) then return true; fi;
     for j in Indices(mt) do
       if closure[j] then
         diff[tab[j][i]] := true; #scanning the ith column
@@ -36,7 +37,6 @@ IsInClosure := function(base,extension,elt,mt)
     UniteBlist(waiting, diff);
     SubtractBlist(diff,waiting);#cleaning for reusing diff object
     closure[i] := true; #adding i
-    if (elt = i) then return true; fi;
     waiting[i] := false; #removing i from the waiting
   od;
   return false;

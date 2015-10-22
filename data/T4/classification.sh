@@ -6,7 +6,7 @@
 # INPUT: T4.reps
 # OUTPUT: 
 
-CORES="16" #number of cores
+CORES="4" #number of cores
 
 LOADER="Read(\"T4defs.g\");"      #variables and functions needed 
 XLOADER="Read(\\\"T4defs.g\\\");" #escape character madness
