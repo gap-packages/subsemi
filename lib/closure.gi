@@ -113,31 +113,27 @@ ClosureByComplement := function(base,extension,mt)
   return closure;
 end;
 
-DirectlyExpressible := function(elt, gens, mt)
-  return elt in gens
-         or ForAny(GlobalTables(mt)[elt],
-                 x -> x[1] in gens
-                 and ForAny(x[2], y -> y in gens));
-end;
-
-# gates - true if already calculated
-# flags - the value of calculation
+# processed - true if already calculated
+# result - the value of calculation
 Expressible := function(elt,gens,mt)
-  local flags, gates,f;
+  local result, processed,f;
   f := function(elt)
-    local b;
-    if gates[elt] then return flags[elt];fi;
-    gates[elt] := true;
-    if DirectlyExpressible(elt, gens,mt) then flags[elt] := true; return true; fi;
-    b := ForAny(GlobalTables(mt)[elt],
-                x-> f(x[1])
-                and (x[1] = x[2][1]  or
-                     ForAny(x[2], y -> f(y))));
-    flags[elt] := b;
-    return b;
+    if processed[elt] then
+      return result[elt];
+    fi;
+    if elt in gens then
+      result[elt] := true;
+      processed[elt] := true;  
+    else
+      result[elt] := ForAny(GlobalTables(mt)[elt],
+                            x-> f(x[1]) and ForAny(x[2],f));
+      processed[elt] := true;
+    fi;
+
+    return result[elt];
   end;
-  flags := BlistList(Indices(mt),[]);
-  gates := BlistList(Indices(mt),[]);
+  result := BlistList(Indices(mt),[]);
+  processed := BlistList(Indices(mt),[]);
   return f(elt);
 end;
 
