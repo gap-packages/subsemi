@@ -35,7 +35,7 @@ CanWeAdd := function(gens, newgen, mt)
     g := l[i]; #remembering the knocked out old generator
     l[i] := newgen; #putting in the new generator
     if IsInClosure(EmptySet(mt),l,g,mt) then return false; fi;
-    #if Expressible(g, Set(l),mt,BlistList(Indices(mt),[]), BlistList(Indices(mt),[]) ) then return false; fi;
+    #if Expressible(g, Set(l),mt) then return false; fi;
     l[i] := g; #undo
   od;
   return true;

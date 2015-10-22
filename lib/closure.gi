@@ -122,18 +122,23 @@ end;
 
 # gates - true if already calculated
 # flags - the value of calculation
-Expressible := function(elt,gens,mt, flags, gates)
-  local tab, b;
-  if gates[elt] then return flags[elt];fi;
-  gates[elt] := true;
-  if DirectlyExpressible(elt, gens,mt) then flags[elt] := true; return true; fi;
-  tab := GlobalTables(mt)[elt];
-  b := ForAny(tab,
-              x-> Expressible(x[1], gens, mt,flags,gates)
-              and (x[1] = x[2][1]  or
-                   ForAny(x[2], y -> Expressible(y,gens,mt,flags,gates))));
-  flags[elt] := b;
-  return b;
+Expressible := function(elt,gens,mt)
+  local flags, gates,f;
+  f := function(elt)
+    local b;
+    if gates[elt] then return flags[elt];fi;
+    gates[elt] := true;
+    if DirectlyExpressible(elt, gens,mt) then flags[elt] := true; return true; fi;
+    b := ForAny(GlobalTables(mt)[elt],
+                x-> f(x[1])
+                and (x[1] = x[2][1]  or
+                     ForAny(x[2], y -> f(y))));
+    flags[elt] := b;
+    return b;
+  end;
+  flags := BlistList(Indices(mt),[]);
+  gates := BlistList(Indices(mt),[]);
+  return f(elt);
 end;
 
 InstallGlobalFunction(SgpInMulTab,
