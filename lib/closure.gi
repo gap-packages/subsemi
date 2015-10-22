@@ -17,15 +17,17 @@ MutableBlist := function(set, universe)
 end;
 
 #TODO duplicated code, do proper abstraction!
+#trying to leave the function as early as possible
 IsInClosure := function(base,extension,elt,mt)
   local waiting,diff,closure,i,j,tab;
   tab := Rows(mt);
   waiting := MutableBlist(extension, Indices(mt));
   closure := ShallowCopy(base);
+  if closure[elt] or waiting[elt] then return true; fi;
   diff := BlistList(Indices(mt),[]);
   while SizeBlist(waiting) > 0 do
     i := Position(waiting,true); # it is not empty, so this is ok, not a queue
-    if (elt = i) then return true; fi;
+    if elt = i then return true; fi;
     for j in Indices(mt) do
       if closure[j] then
         diff[tab[j][i]] := true; #scanning the ith column
@@ -34,6 +36,7 @@ IsInClosure := function(base,extension,elt,mt)
     od;
     diff[tab[i][i]] := true; # adding the diagonal
     SubtractBlist(diff,closure); #now it is a real diff
+    if diff[elt] then return true; fi;
     UniteBlist(waiting, diff);
     SubtractBlist(diff,waiting);#cleaning for reusing diff object
     closure[i] := true; #adding i
