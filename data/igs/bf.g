@@ -10,9 +10,13 @@ IsIndependentSet := function(A)
           ForAll(A,x-> not (x in Group(Difference(A,[x])))));
 end;
 
+Rep := function(A, Sn)
+  return Minimum(Set(Sn, g->Set(A, x->x^g)));
+end;
+
 for n in [1..4] do
   Sn := SymmetricGroup(IsPermGroup,n);
   allsubsets := Combinations(AsList(Sn));
   iss := Filtered(allsubsets, IsIndependentSet);
-  Display(Size(iss));
+  Display(Size(Set(iss, x->Rep(x,Sn))));
 od;
