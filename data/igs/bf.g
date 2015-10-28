@@ -14,9 +14,13 @@ Rep := function(A, Sn)
   return Minimum(Set(Sn, g->Set(A, x->x^g)));
 end;
 
-for n in [1..4] do
+CalcIndependentConjugacyClasses := function(n)
+  local Sn, allsubsets, iss, reps;
   Sn := SymmetricGroup(IsPermGroup,n);
   allsubsets := Combinations(AsList(Sn));
   iss := Filtered(allsubsets, IsIndependentSet);
-  Display(Size(Set(iss, x->Rep(x,Sn))));
-od;
+  reps := Set(iss, x->Rep(x,Sn));
+  Print(Size(iss)," ", Size(reps),"\n");
+end;
+
+for i in [1..4] do CalcIndependentConjugacyClasses(i); od;
