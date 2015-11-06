@@ -75,22 +75,3 @@ end);
 GenerateConjugacyClasses := function(seeds, G, conjclassfunc)
   return Set(seeds,x->AsSortedList(conjclassfunc(x,G)));  
 end;
-
-# side effect! elms gets sorted
-ConjugacyClusters := function(elms, G, conjclassfunc)
-  local l,class,cluster, clusters;
-  # we need to sort as cojugate collections are sorted
-  if IsBound(elms[1]) and IsCollection(elms[1]) then
-    Perform(elms,Sort);
-  fi;
-  clusters := [];
-  l := elms;
-  while not IsEmpty(l) do
-    class := conjclassfunc(l[1],G);
-    cluster := Filtered(class, x->x in elms);
-    Add(clusters,cluster);
-    l := Difference(l,cluster);
-  od;
-  return clusters;
-end;
-
