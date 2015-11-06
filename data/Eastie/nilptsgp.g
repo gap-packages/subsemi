@@ -91,3 +91,23 @@ NilpotentSemigroup := function(S)
   return Semigroup(List(res, Transformation));
 end;
 ################################################################################
+
+DeclareCategory("IsNilpotentSgpElement", IsMultiplicativeElementWithOne
+        and IsAssociativeElement and IsAttributeStoringRep
+        and IsMultiplicativeElementWithInverse);
+
+DeclareCategoryCollections("IsNilpotentSgpElement");
+
+BindGlobal("NilpotentSgpElementFamily",
+        NewFamily("NilpotentSgpElementFamily",
+                IsNilpotentSgpElement, CanEasilySortElements, CanEasilySortElements));
+
+BindGlobal("NilpotentSgpElementType", NewType(NilpotentSgpElementFamily, IsNilpotentSgpElement));
+
+NilpotentSgpElement := function(s)
+  return Objectify(NilpotentSgpElementType, rec(s:=s));
+end;
+
+NilPotentSgpZero := function()
+  return Objectify(NilpotentSgpElementType, rec(s:=0));
+end;
