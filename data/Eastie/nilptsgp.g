@@ -108,6 +108,41 @@ NilpotentSgpElement := function(s)
   return Objectify(NilpotentSgpElementType, rec(s:=s));
 end;
 
-NilPotentSgpZero := function()
+NilpotentSgpZero := function()
   return Objectify(NilpotentSgpElementType, rec(s:=0));
 end;
+
+MultiplyNilpotentSgpElements := function(s1, s2)
+  if s1!.s = 0
+     or s2!.s = 0
+     or NrFloatingBlocks(s1!.s,s2!.s) <> 0 then
+    return NilpotentSgpZero();  #TODO not to dup zeroes
+  fi; 
+  return NilpotentSgpElement(s1!.s*s2!.s);
+end;
+
+# registering the above action as a method for *
+InstallMethod(\*, "for nilpotent sgp elements",
+        [IsNilpotentSgpElement,IsNilpotentSgpElement], 
+        MultiplyNilpotentSgpElements);
+
+InstallMethod(\<, "for nilpotent sgp elements", IsIdenticalObj,
+        [IsNilpotentSgpElement, IsNilpotentSgpElement],
+        function(p,q)
+  if p!.s = q!.s then return false; fi;
+  if p!.s = 0 then return true; fi;
+  if q!.s = 0 then return false; fi;
+  return p!.s < q!.s;
+end);
+
+InstallOtherMethod(\=, "for nilpotent sgp elements",
+        [IsNilpotentSgpElement,IsNilpotentSgpElement],
+        function(p,q)
+  return p!.s = q!.s;
+end);
+
+InstallOtherMethod(OneOp, "for a nilpotent sgp element",
+        [IsNilpotentSgpElement],
+        function(p)
+  return OneOp(p!.s); # TODO again, zero
+end);
