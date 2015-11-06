@@ -8,4 +8,3 @@
 ##
 
 DeclareGlobalFunction("TimeInSeconds");
-DeclareGlobalFunction("RandomizeBySystemClock");
