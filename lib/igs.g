@@ -16,6 +16,14 @@ IsIndependentSet := function(A)
           ForAll(A,x-> not (x in Group(Difference(A,[x])))));
 end;
 
+IsDeadEnd := function(gens,G)
+  local diff;
+  if IsEmpty(gens) then return false; fi;
+  diff := Difference(AsList(G), AsList(Group(gens)));
+  return (not IsEmpty(diff))
+         and ForAll(diff, x-> not IsIndependentSet(Union(gens,[x])));
+end;
+
 # Deciding whether gens is an independent generating set, by taking all
 # of its subsets missing a single generator.
 # gens - list, mt - MulTab, S - bitlist
