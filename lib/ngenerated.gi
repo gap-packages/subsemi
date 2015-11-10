@@ -14,6 +14,7 @@ NSubsets := function(mt,n)
   counter := 1;
   db := LightBlistContainer();
   size := Binomial(Size(Indices(mt)),n);
+  Info(SubSemiInfoClass,1,FormattedBigNumberString(size)," subsets of size ",n);
   for ntuple in IteratorOfCombinations(Indices(mt),n) do
     AddSet(db,ConjugacyClassRep(BlistList(Indices(mt),ntuple),mt));
     if InfoLevel(SubSemiInfoClass)>0
@@ -24,7 +25,7 @@ NSubsets := function(mt,n)
     fi;
     counter := counter + 1;
   od;
-  Info(SubSemiInfoClass,1,Size(db), " generator set reps of size ", n);
+  Info(SubSemiInfoClass,1,Size(db), " rep sets ");
   return AsList(db);
 end;
 MakeReadOnlyGlobal("NSubsets");
@@ -39,15 +40,16 @@ MakeReadOnlyGlobal("NGeneratedSubSgps");
 
 #put the first n layers together, and find the layers
 InstallGlobalFunction(SubSgpsByMinimalGenSets,
-function(mt)
-  local layers,i;
-  layers := [AsSortedList(NGeneratedSubSgps(mt,1))];
+function(mt,n)
+  local layers,i, allsgps;
+  layers := [];
+  allsgps := [];
   i := 1;
-  Info(SubSemiInfoClass,1,String(i), " generators ", String(Size(layers[i])), " sgps");
-  while Size(layers[i]) > 0 do
+  repeat
+    Add(layers, Difference(AsSortedList(NGeneratedSubSgps(mt,i)), allsgps));
+    allsgps := Union(allsgps, layers[i]);
+    Info(SubSemiInfoClass,1, String(Size(layers[i])), " sgps\n");
     i := i+1;
-    Add(layers, Difference(AsSortedList(NGeneratedSubSgps(mt,i)), Union(layers)));
-    Info(SubSemiInfoClass,1,String(i), " generators ", String(Size(layers[i])), " sgps");
-  od;
+  until (Size(layers[i-1]) = 0) or (i > n);
   return layers;
 end);
