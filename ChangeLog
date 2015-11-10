@@ -1,3 +1,5 @@
+0.44
+	Adding IsDeadEnd, revamping SubSgpdByMinimalGenSets, code cleaning.
 0.43
 	Implementing the canonical construction path method for finding independent sets.
 0.42
