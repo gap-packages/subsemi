@@ -20,19 +20,14 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
         Bprofs2elts, #lookup table a profile in mtB -> elements of mtB
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
-        solutions, # cumulative collection of solutions
-        found; # flag for exiting from backtrack gracefully (keeping  L)
+        solutions; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
     local k,i,candidates,X,Y;
     # when a solution is found
     if Size(L)=N then
-        if firstsolution then
-            found := true;
-        else
-          Add(solutions, ShallowCopy(L));
-        fi;
-        return;
+      Add(solutions, ShallowCopy(L));
+      return;
     fi;
     k := Size(L)+1; # the index of the next element
     # getting elements of B with profiles matching profile of A, not used yet
@@ -49,7 +44,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
       Y := SubArray(mtB,L);
       if X = Y then
         BackTrack();
-        if found then return;fi;
+        if firstsolution and not IsEmpty(solutions) then return; fi;
       fi;
       Remove(L); Remove(used, Position(used,i)); #UNDO extending
     od;
@@ -72,21 +67,9 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
     N := Size(mtA);
   fi;
   #now the backtrack
-  used := []; found := false; L := []; solutions := [];
+  used := []; L := []; solutions := [];
   BackTrack();
-  if firstsolution then
-    if Size(L)=N then
-      return L;
-    else
-      return fail;
-    fi;
-  else
-    if IsEmpty(solutions) then
-      return fail;
-    else
-      return solutions;
-    fi;
-  fi;
+  return solutions;
 end;
 MakeReadOnlyGlobal("SubTableMatchingSearch");
 
@@ -126,7 +109,7 @@ function(mtA,mtB)
   if map = fail then
     return fail;
   else
-    return PermList(map);
+    return PermList(map[1]);
   fi;
 end);
 
