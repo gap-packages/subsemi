@@ -11,20 +11,29 @@
 # A backtrack algorithm to build a map from multiplication table A (mtA) to
 # multiplication table B (mtB). The map is built in L, i->L[i].
 # mtA, mtB: matrices or MulTab objects
-# Aprofs, Bprofs: for each element we associate a profile object (provided 
+# Aprofs, Bprofs: for each element we associate a profile object (provided
 # by the caller), and this profile information is used for restricting search
-SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
+SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
   local L, # the mapping i->L[i]
         N, # the number of elements of the semigroups
         Aprofs2elts, #lookup table a profile in mtA -> elements of mtA
         Bprofs2elts, #lookup table a profile in mtB -> elements of mtB
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
+        solutions, # cumulative collection of solutions
         found; # flag for exiting from backtrack gracefully (keeping  L)
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
     local k,i,candidates,X,Y;
-    if Size(L)=N then found := true; return; fi;
+    # when a solution is found
+    if Size(L)=N then
+        if firstsolution then
+            found := true;
+        else
+          Add(solutions, ShallowCopy(L));
+        fi;
+        return;
+    fi;
     k := Size(L)+1; # the index of the next element
     # getting elements of B with profiles matching profile of A, not used yet
     candidates := Difference(AsSet(Bprofs2elts[Aprofs[k]]),used);
@@ -63,12 +72,20 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs)
     N := Size(mtA);
   fi;
   #now the backtrack
-  used := []; found := false; L := [];
+  used := []; found := false; L := []; solutions := [];
   BackTrack();
-  if Size(L)=N then
-    return L;
+  if firstsolution then
+    if Size(L)=N then
+      return L;
+    else
+      return fail;
+    fi;
   else
-    return fail;
+    if IsEmpty(solutions) then
+      return fail;
+    else
+      return solutions;
+    fi;
   fi;
 end;
 MakeReadOnlyGlobal("SubTableMatchingSearch");
@@ -87,7 +104,7 @@ function(A,B)
   #for embeddings we only use the index-period information
   Aips := List([1..Size(mtA)], x->AbstractIndexPeriod(mtA,x));
   Bips := List([1..Size(mtB)], x->AbstractIndexPeriod(mtB,x));
-  map := SubTableMatchingSearch(mtA,mtB,Aips,Bips);
+  map := SubTableMatchingSearch(mtA,mtB,Aips,Bips,false);
   if map = fail then
     return fail;
   else
@@ -95,7 +112,7 @@ function(A,B)
   fi;
 end);
 
-# mtA, mtB: MulTab objects 
+# mtA, mtB: MulTab objects
 # returns a permutation of the element indices of mtA if isomorphism
 # can be established, otherwise returns fail
 InstallGlobalFunction(IsomorphismMulTabs,
@@ -117,7 +134,7 @@ function(mtA,mtB)
   Bprofs := List(Indices(mtB), x->ElementProfile(mtB,x));
   #just another quick invariant
   if AsSet(Aprofs) <> AsSet(Bprofs) then return fail;fi;
-  map := SubTableMatchingSearch(mtA,mtB,Aprofs,Bprofs);
+  map := SubTableMatchingSearch(mtA,mtB,Aprofs,Bprofs,true);
   if map = fail then
     return fail;
   else
@@ -127,7 +144,7 @@ end);
 
 InstallGlobalFunction(IsIsomorphicMulTab,
 function(mtS,mtT)
-  if Size(mtS) = Size(mtT) 
+  if Size(mtS) = Size(mtT)
      and IsomorphismMulTabs(mtS, mtT)<> fail then
     return true;
   else
@@ -137,7 +154,7 @@ end);
 
 InstallGlobalFunction(IsIsomorphicSemigroupByMulTabs,
 function(S,T)
-  if Size(S) = Size(T) 
+  if Size(S) = Size(T)
      and IsomorphismMulTabs(MulTab(S), MulTab(T))<> fail then
     return true;
   else
