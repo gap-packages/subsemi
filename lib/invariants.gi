@@ -85,14 +85,14 @@ IdempotentsInMulTab := function(mt)
 end;
 
 InstallGlobalFunction(IdempotentDiagonalFrequencies,
-function(mt) 
+function(mt)
   local idempotents;
   idempotents := IdempotentsInMulTab(mt);
   return Frequencies(Filtered(DiagonalOfMat(Rows(mt)), x->x in idempotents));
 end);
 
 InstallGlobalFunction(IdempotentFrequencies,
-function(mt) 
+function(mt)
   local idempotents;
   idempotents := IdempotentsInMulTab(mt);
   return Frequencies(Filtered(Flat(Rows(mt)), x->x in idempotents));
@@ -105,3 +105,17 @@ NumOfProfileClasses := function(mt)
   bl := ReversedAssociativeList(al);
   return Size(Keys(bl));
 end;
+
+# APPLICATIONS #################################################################
+
+# checking invariants one by one with short-circuit conjunction
+InstallGlobalFunction(PotentiallyIsomorphicMulTabs,
+function(mtA, mtB)
+  return
+    Size(Rows(mtA)) = Size(Rows(mtB))
+    and DiagonalFrequencies(mtA) = DiagonalFrequencies(mtB)
+    and IdempotentDiagonalFrequencies(mtA) = IdempotentDiagonalFrequencies(mtB)
+    and MulTabFrequencies(mtA) = MulTabFrequencies(mtB)
+    and IdempotentFrequencies(mtA) = IdempotentFrequencies(mtB)
+    and IndexPeriodTypeFrequencies(mtA) = IndexPeriodTypeFrequencies(mtB);
+end);

@@ -92,14 +92,7 @@ function(mtA,mtB)
         map; #the resulting map from the search
   #-----------------------------------------------------------------------------
   #checking global invariants one by one
-  if Size(Rows(mtA)) <> Size(Rows(mtB))
-     or DiagonalFrequencies(mtA) <> DiagonalFrequencies(mtB)
-     or IdempotentDiagonalFrequencies(mtA)<>IdempotentDiagonalFrequencies(mtB)
-     or MulTabFrequencies(mtA) <> MulTabFrequencies(mtB)
-     or IdempotentFrequencies(mtA) <> IdempotentFrequencies(mtB)
-     or IndexPeriodTypeFrequencies(mtA) <> IndexPeriodTypeFrequencies(mtB) then
-    return fail;
-  fi;
+  if not PotentiallyIsomorphicMulTabs(mtA,mtB) then return false; fi;
   #for lining-up the elements we need the profiles
   Aprofs := List(Indices(mtA), x->ElementProfile(mtA,x));
   Bprofs := List(Indices(mtB), x->ElementProfile(mtB,x));

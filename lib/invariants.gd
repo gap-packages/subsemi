@@ -27,4 +27,5 @@ DeclareGlobalFunction("IndexPeriodTypeFrequencies");
 DeclareGlobalFunction("ElementProfileTypes");
 DeclareGlobalFunction("MulTabProfile");
 
-
+#APPLYING INVARIANTS
+DeclareGlobalFunction("PotentiallyIsomorphicMulTabs");
