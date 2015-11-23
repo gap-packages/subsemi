@@ -97,19 +97,13 @@ MakeReadOnlyGlobal("SubTableMatchingSearch");
 InstallGlobalFunction(EmbedAbstractSemigroup,
 function(A,B)
   local Aips,Bips, #lookup arrays i->IndexPeriod(i)
-        mtA, mtB, #matrices
-        map; #the resulting map from the search
+        mtA, mtB; #matrices
   if IsMulTab(A) then mtA := Rows(A); else mtA := A; fi;
   if IsMulTab(B) then mtB := Rows(B); else mtB := B; fi;
   #for embeddings we only use the index-period information
   Aips := List([1..Size(mtA)], x->AbstractIndexPeriod(mtA,x));
   Bips := List([1..Size(mtB)], x->AbstractIndexPeriod(mtB,x));
-  map := SubTableMatchingSearch(mtA,mtB,Aips,Bips,false);
-  if map = fail then
-    return fail;
-  else
-    return map;
-  fi;
+  return SubTableMatchingSearch(mtA,mtB,Aips,Bips,false);
 end);
 
 # mtA, mtB: MulTab objects
