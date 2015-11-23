@@ -90,20 +90,14 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
 end;
 MakeReadOnlyGlobal("SubTableMatchingSearch");
 
-# trying the represent semigroup (multiplication table) A as a subtable
-# of B
-# A,B: positive integer matrices representing multiplication tables
-# or MulTab objects
+# trying the represent semigroup (multiplication table) mA as a subtable of mB
+# mA,mB: positive integer matrices representing multiplication tables
 InstallGlobalFunction(EmbedAbstractSemigroup,
-function(A,B)
-  local Aips,Bips, #lookup arrays i->IndexPeriod(i)
-        mtA, mtB; #matrices
-  if IsMulTab(A) then mtA := Rows(A); else mtA := A; fi;
-  if IsMulTab(B) then mtB := Rows(B); else mtB := B; fi;
+function(mA,mB)
+  local f;
   #for embeddings we only use the index-period information
-  Aips := List([1..Size(mtA)], x->AbstractIndexPeriod(mtA,x));
-  Bips := List([1..Size(mtB)], x->AbstractIndexPeriod(mtB,x));
-  return SubTableMatchingSearch(mtA,mtB,Aips,Bips,false);
+  f := m -> List([1..Size(m)], x->AbstractIndexPeriod(m,x));
+  return SubTableMatchingSearch(mA,mB,f(mA),f(mB),false);
 end);
 
 # mtA, mtB: MulTab objects
