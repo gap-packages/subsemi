@@ -26,6 +26,8 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
     # when a solution is found
     if Size(L)=N then
       Add(solutions, ShallowCopy(L));
+      Info(SubSemiInfoClass,1,Size(solutions)," ",
+           solutions[Size(solutions)]);
       return;
     fi;
     k := Size(L)+1; # the index of the next element
@@ -118,7 +120,7 @@ function(mtA,mtB) return EmbeddingsDispatcher(mtA,mtB,true);end);
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
 local l;
-  l := EmbeddingsDispatcher(mtA,mtB,false);
+  l := EmbeddingsDispatcher(mtA,mtB,true);
   if IsEmpty(l) then
     return fail;
   else
