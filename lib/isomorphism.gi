@@ -128,8 +128,7 @@ local l;
   fi;
 end);
 
-
 InstallGlobalFunction(IsIsomorphicMulTab,
 function(mtA,mtB)
-  return not (IsomorphismMulTabs = fail);
+  return not (IsomorphismMulTabs(mtA,mtB) = fail);
 end);
