@@ -7,6 +7,10 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
+DeclareGlobalFunction("TableEmbeddings");
+
+DeclareGlobalFunction("MulTabEmbedding");
+DeclareGlobalFunction("MulTabEmbeddings");
+
 DeclareGlobalFunction("IsomorphismMulTabs");
-DeclareGlobalFunction("EmbedAbstractSemigroup");
 DeclareGlobalFunction("IsIsomorphicMulTab");

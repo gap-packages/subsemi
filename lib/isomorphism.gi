@@ -12,7 +12,7 @@
 # mtA, mtB: matrices or MulTab objects
 # Aprofs, Bprofs: for each element we associate a profile object (provided
 # by the caller), and this profile information is used for restricting search
-SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
+SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   local L, # the mapping i->L[i]
         N, # the number of elements of the semigroups
         Aprofs2elts, #lookup table a profile in mtA -> elements of mtA
@@ -43,7 +43,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
       Y := SubArray(mtB,L);
       if X = Y then
         BackTrack();
-        if firstsolution and not IsEmpty(solutions) then return; fi;
+        if onlyfirst and not IsEmpty(solutions) then return; fi;
       fi;
       Remove(L); Remove(used, Position(used,i)); #UNDO extending
     od;
@@ -51,9 +51,9 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
   #-----------------------------------------------------------------------------
   #checking for enough profile types
   Aprofs2elts := AssociativeList();
-  Perform([1..Size(Aprofs)], function(x) Collect(Aprofs2elts, Aprofs[x], x);end);
+  Perform([1..Size(Aprofs)], function(x) Collect(Aprofs2elts,Aprofs[x],x);end);
   Bprofs2elts := AssociativeList();
-  Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts, Bprofs[x], x);end);
+  Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts,Bprofs[x],x);end);
   if not ForAll(Keys(Aprofs2elts),
              x-> (Bprofs2elts[x] <> fail)
              and Size(Aprofs2elts[x]) <= Size(Bprofs2elts[x])) then
@@ -72,43 +72,62 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, firstsolution)
 end;
 MakeReadOnlyGlobal("SubTableMatchingSearch");
 
-# trying the represent semigroup (multiplication table) mA as a subtable of mB
-# mA,mB: positive integer matrices representing multiplication tables
-InstallGlobalFunction(EmbedAbstractSemigroup,
+#just convenience for testing without multiplication tables
+InstallGlobalFunction(TableEmbeddings,
 function(mA,mB)
-  local f;
-  #for embeddings we only use the index-period information
-  f := m -> List([1..Size(m)], x->AbstractIndexPeriod(m,x));
-  return SubTableMatchingSearch(mA,mB,f(mA),f(mB),false);
+  local f, Aprofs, Bprofs;
+  if Size(mA) > Size(mB) then
+    return [];
+  else # embedding
+    f := m -> List([1..Size(m)], x->AbstractIndexPeriod(m,x));
+    return SubTableMatchingSearch(mA,mB,f(mA),f(mB), false);
+  fi;
 end);
 
-# mtA, mtB: MulTab objects
-# returns a permutation of the element indices of mtA if isomorphism
-# can be established, otherwise returns fail
-InstallGlobalFunction(IsomorphismMulTabs,
-function(mtA,mtB)
-  local Aprofs,Bprofs, #lookup arrays i->ElementProfile(i)
-        map, #the resulting map from the search
-        f;
-  f := mt -> List(Indices(mt),x->ElementProfile(mt,x));
+# trying the represent semigroup (multiplication table) mtA as a subtable of mtB
+# mtA,mtB: multiplication tables
+# onlyfirst: Do we stop after first embedding found?
+# This dispatcher checks whether we have an embedding or isomorphism.
+EmbeddingsDispatcher := function(mtA,mtB,onlyfirst)
+  local f, Aprofs, Bprofs;
+  if Size(mtA) > Size(mtB) then
+    return [];
+  elif Size(mtA) = Size(mtB) then # isomorphism
+    f := mt -> List([1..Size(mt)],x->ElementProfile(mt,x));
+  else # embedding
+    f := mt -> List([1..Size(mt)], x->AbstractIndexPeriod(Rows(mt),x));
+  fi;
   Aprofs := f(mtA);
   Bprofs := f(mtB);
-  #the set of profiles should be the same
-  if AsSet(Aprofs) <> AsSet(Bprofs) then return fail;fi;
-  map := SubTableMatchingSearch(mtA,mtB,Aprofs,Bprofs,true);
-  if map = fail then
+  #for isomorphisms the set of profiles should be the same
+  if Size(mtA) = Size(mtB)
+     and AsSet(Aprofs) <> AsSet(Bprofs) then
+    return [];
+  fi;
+  return SubTableMatchingSearch(mtA,mtB,Aprofs,Bprofs,onlyfirst);
+end;
+MakeReadOnlyGlobal("EmbeddingsDispatcher"); #TODO silly name, change it
+
+InstallGlobalFunction(MulTabEmbeddings,
+function(mtA,mtB) return EmbeddingsDispatcher(mtA,mtB,false);end);
+
+InstallGlobalFunction(MulTabEmbedding,
+function(mtA,mtB) return EmbeddingsDispatcher(mtA,mtB,true);end);
+
+#returns a permutation
+InstallGlobalFunction(IsomorphismMulTabs,
+function(mtA,mtB)
+local l;
+  l := EmbeddingsDispatcher(mtA,mtB,false);
+  if IsEmpty(l) then
     return fail;
   else
-    return PermList(map[1]);
+    return PermList(l[1]);
   fi;
 end);
 
+
 InstallGlobalFunction(IsIsomorphicMulTab,
-function(mtS,mtT)
-  if Size(mtS) = Size(mtT)
-     and IsomorphismMulTabs(mtS, mtT)<> fail then
-    return true;
-  else
-    return false;
-  fi;
+function(mtA,mtB)
+  return not (IsomorphismMulTabs = fail);
 end);
