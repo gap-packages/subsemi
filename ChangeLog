@@ -1,3 +1,5 @@
+0.48
+	Fixes for isomorphism functions. File reanming: isomorphism -> embedding.
 0.47
 	Complete rework of functions to create semigroup embeddings.
 0.46
