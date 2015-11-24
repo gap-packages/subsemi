@@ -7,7 +7,7 @@ ReadPackage("SubSemi","/lib/blist.gi");
 ReadPackage("SubSemi","/lib/multab.gi");
 ReadPackage("SubSemi","/lib/closure.gi");
 ReadPackage("SubSemi","/lib/invariants.gi");
-ReadPackage("SubSemi","/lib/isomorphism.gi");
+ReadPackage("SubSemi","/lib/embedding.gi");
 ReadPackage("SubSemi","/lib/minextension.gi");
 ReadPackage("SubSemi","/lib/ngenerated.gi");
 ReadPackage("SubSemi","/lib/filing.gi");
