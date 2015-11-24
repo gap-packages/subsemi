@@ -2,10 +2,9 @@
 ##
 ## SubSemi
 ##
-## Deciding embedding and isomorphism of multiplication tables,
-## and based on that of semigroups.
+## Deciding embedding and isomorphism of multiplication tables.
 ##
-## Copyright (C) 2013-14  Attila Egri-Nagy
+## Copyright (C) 2013-15  Attila Egri-Nagy
 ##
 
 # A backtrack algorithm to build a map from multiplication table A (mtA) to

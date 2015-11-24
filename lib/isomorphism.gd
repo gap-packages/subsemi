@@ -2,10 +2,9 @@
 ##
 ## SubSemi
 ##
-## Deciding isomorphism of multiplication tables,
-## and based on that of semigroups.
+## Deciding isomorphism and embedding of multiplication tables.
 ##
-## Copyright (C) 2013  Attila Egri-Nagy
+## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
 DeclareGlobalFunction("IsomorphismMulTabs");
