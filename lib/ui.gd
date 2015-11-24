@@ -9,3 +9,6 @@
 
 DeclareGlobalFunction("AllSubsemigroups");
 DeclareGlobalFunction("ConjugacyClassRepSubsemigroups");
+
+DeclareGlobalFunction("IsIsomorphicSemigroupByMulTabs");
+DeclareGlobalFunction("IsomorphismSemigroupsByMulTabs");

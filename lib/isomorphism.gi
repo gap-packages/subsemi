@@ -91,7 +91,7 @@ function(mtA,mtB)
   local Aprofs,Bprofs, #lookup arrays i->ElementProfile(i)
         map, #the resulting map from the search
         f;
-  f := mt -> List(Indices(mt),x->ElementProfile(mtA,x));
+  f := mt -> List(Indices(mt),x->ElementProfile(mt,x));
   Aprofs := f(mtA);
   Bprofs := f(mtB);
   #the set of profiles should be the same
@@ -112,37 +112,4 @@ function(mtS,mtT)
   else
     return false;
   fi;
-end);
-
-InstallGlobalFunction(IsIsomorphicSemigroupByMulTabs,
-function(S,T)
-  if Size(S) = Size(T)
-     and IsomorphismMulTabs(MulTab(S), MulTab(T))<> fail then
-    return true;
-  else
-    return false;
-  fi;
-end);
-
-#returns a mapping for the whole semigroup
-InstallGlobalFunction(IsomorphismSemigroupsByMulTabs,
-function(S,T)
-  local mtS, mtT, perm,source, image, mappingfunc;
-  if Size(S) <> Size(T)
-     or NrIdempotents(S) <> NrIdempotents(T)
-     or NrRClasses(S) <> NrRClasses(T)
-     or NrDClasses(S) <> NrDClasses(T)
-     or NrLClasses(S) <> NrLClasses(T) then
-    return fail;
-  fi;
-  #calculating multiplication tables
-  mtS := MulTab(S);
-  mtT := MulTab(T);
-  perm := IsomorphismMulTabs(mtS, mtT);
-  if perm = fail then return fail; fi; #not isomorphic
-  #if they are isomorphic then we construct the mapping
-  source := SortedElements(mtS);
-  image := List(ListPerm(perm, Size(T)), x->SortedElements(mtT)[x]);
-  mappingfunc := function(s) return image[Position(source,s)];end;
-  return MappingByFunction(S,T,mappingfunc);
 end);
