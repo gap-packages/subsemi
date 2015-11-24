@@ -89,14 +89,12 @@ end);
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
   local Aprofs,Bprofs, #lookup arrays i->ElementProfile(i)
-        map; #the resulting map from the search
-  #-----------------------------------------------------------------------------
-  #checking global invariants one by one
-  if not PotentiallyIsomorphicMulTabs(mtA,mtB) then return false; fi;
-  #for lining-up the elements we need the profiles
-  Aprofs := List(Indices(mtA), x->ElementProfile(mtA,x));
-  Bprofs := List(Indices(mtB), x->ElementProfile(mtB,x));
-  #just another quick invariant
+        map, #the resulting map from the search
+        f;
+  f := mt -> List(Indices(mt),x->ElementProfile(mtA,x));
+  Aprofs := f(mtA);
+  Bprofs := f(mtB);
+  #the set of profiles should be the same
   if AsSet(Aprofs) <> AsSet(Bprofs) then return fail;fi;
   map := SubTableMatchingSearch(mtA,mtB,Aprofs,Bprofs,true);
   if map = fail then
