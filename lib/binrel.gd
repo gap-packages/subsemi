@@ -10,5 +10,9 @@
 ## Extra functions for binary relations. (probably should go to GAP lib)
 ##
 
+if not IsBound(IsBinaryRelationSemigroup) then
+  DeclareProperty("IsBinaryRelationSemigroup", IsSemigroup);
+fi;
+
 DeclareGlobalFunction("ConjugateBinaryRelation");
 DeclareGlobalFunction("UnionOfBinaryRelations");
