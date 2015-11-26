@@ -5,7 +5,7 @@ ClassifySubsemigroupsBySize(PBR1, SymmetricGroup(IsPermGroup,1),"PBR1_");
 ###BINARY RELATION##############################################################
 B2 := Semigroup([
               BinaryRelationOnPoints([[2],[1]]),
-              BinaryRelationOnPoints([[1,1],[]]),
+              BinaryRelationOnPoints([[1],[]]),
               BinaryRelationOnPoints([[1,2],[1]]),
               BinaryRelationOnPoints([[1,2],[]])]);
 ClassifySubsemigroupsBySize(B2, SymmetricGroup(IsPermGroup,2),"B2_");
