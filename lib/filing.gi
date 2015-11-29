@@ -101,34 +101,20 @@ end;
 #separating IndicatorFunctions into files by their tags
 # the memory usage is minimal, but puts strain on the kernel I/O
 FilingIndicatorFunctions := function(infile,taggerfunc)
-  TextProcessor(infile, function(s)
-                          local indfunc,otf;
-                          indfunc := AsBlist(DecodeBitString(s));
-                          otf := OutputTextFile(taggerfunc(indfunc),true);
-                          if not WriteLine(otf,s) then return false; fi;
-                          CloseStream(otf);
-                          return true;
-                        end);
+  TextProcessor(infile,
+          function(s)
+            local indfunc,otf;
+            indfunc := AsBlist(DecodeBitString(s));
+            otf := OutputTextFile(taggerfunc(indfunc),true);
+            if not WriteLine(otf,s) then return false; fi;
+            CloseStream(otf);
+            return true;
+          end);
 end;
 
 FilingIndicatorFunctionsBySize := function(infile,ndigits)
   FilingIndicatorFunctions(infile,
           x->Concatenation("S",PaddedNumString(SizeBlist(x),ndigits)));
-end;
-
-FilingIndicatorFunctionsBySgpTag := function(infile,mt,prefix,ndigits)
-  TextProcessor(infile,
-          function(s)
-             local sgp, tag;
-             sgp := Semigroup(SetByIndicatorFunction(
-                            AsBlist(DecodeBitString(s)),mt));
-             tag := SgpTag(sgp,ndigits);
-             if not WriteGenerators(Concatenation(prefix,tag,".gens"),
-                        SmallSemigroupGeneratingSet(sgp),"a") then
-               return false;
-             fi;
-             return true;
-           end);
 end;
 
 RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
@@ -360,19 +346,23 @@ end;
 ################################################################################
 
 ClassifySubsemigroups := function(S, G , prefix)
-  local mt,subreps,ndigits, repsfile;
+  local mt,subreps,ndigits, repsfile, tagger;
   ndigits := Size(String(Size(S)));
-  #SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S));
   mt := MulTab(S,G);
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
-  repsfile := Concatenation(prefix{[1..Size(prefix)-1]},".reps");
+  repsfile := Concatenation(prefix,".reps");
   SaveIndicatorFunctions(subreps, repsfile);
-  FilingIndicatorFunctionsBySgpTag(repsfile,mt,prefix,ndigits);
-  Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
-  Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
-  Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
-          AntiAndIsomClassToIsomClasses);
+  tagger := function(indfunc)
+    return Concatenation(prefix, "_",
+             SgpTag(Semigroup(SetByIndicatorFunction(indfunc,mt)),ndigits),
+             ".set");
+  end;
+  FilingIndicatorFunctions(repsfile,tagger);
+  #Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
+  #Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
+  #Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
+  #        AntiAndIsomClassToIsomClasses);
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
 end;
