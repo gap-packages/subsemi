@@ -26,7 +26,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
     # when a solution is found
     if Size(L)=N then
       Add(solutions, ShallowCopy(L));
-      Info(SubSemiInfoClass,1,Size(solutions)," ",
+      Info(SubSemiInfoClass,2,Size(solutions)," ",
            solutions[Size(solutions)]);
       return;
     fi;
