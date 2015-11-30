@@ -39,7 +39,6 @@ DeclareOperation("ConvergingSets", [IsMulTab,IsList]);
 DeclareGlobalFunction("NilpotencyDegreeByMulTabs");
 
 DeclareGlobalFunction("ConjugacyClassRep");
-DeclareGlobalFunction("ConjugacyClassRepClever");
 DeclareGlobalFunction("ConjugacyClassOfSet");
 
 DeclareGlobalFunction("RemoveEquivalentGenerators");
