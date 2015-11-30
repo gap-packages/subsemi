@@ -126,8 +126,8 @@ RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
             indfunc := AsBlist(DecodeBitString(s));
             if not  WriteLine(otf,EncodeBitString(AsBitString(
                        RecodeIndicatorFunction(indfunc,
-                               SortedElements(mt),
-                               SortedElements(MT))))) then
+                               Elts(mt),
+                               Elts(MT))))) then
               return false;
             fi;
             return true;
@@ -305,7 +305,7 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indfunc, torso;
   reps := SubSgpsByMinExtensions(mtT);
   SaveIndicatorFunctions(reps, Concatenation(Name(T),".reps"));
   mtI := MulTab(I);
-  preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
+  preimgs := List(Elts(mtT),x->PreImages(rfh,x));
   elts := List(preimgs,
                function(x)
                  if Size(x)> 1 then return fail;else return x[1];fi;end);
@@ -331,7 +331,7 @@ ISubsFromJUpperTorsos := function(I,J,uppertorsosfile,G)
   time := TimeInSeconds();
   result := [];
   mt := MulTab(I,G);
-  gens := IndicatorFunction(AsList(J), SortedElements(mt));
+  gens := IndicatorFunction(AsList(J), Elts(mt));
   torsos := LoadIndicatorFunctions(uppertorsosfile);
   for U in torsos do
     Append(result, AsList(

@@ -4,11 +4,10 @@
 ##
 ## Multiplication table for magmas
 ##
-## Copyright (C) 2013  Attila Egri-Nagy
+## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
-#mulitplication table based on the order of the magma elements in list,
-#indices are assigned to elements
+#mulitplication table based on the order of the magma elements in a list,
 InstallGlobalFunction(ProductTableOfElements,
 function(M) #magma in a list
 local n, mat,i,j;
@@ -40,7 +39,7 @@ local mt,inds;
   else
     SetRows(mt,ProductTableOfElements(sortedelements));
   fi;
-  SetSortedElements(mt,sortedelements);
+  SetElts(mt,sortedelements);
   inds := [1..Size(sortedelements)];
   MakeImmutable(inds);
   SetIndices(mt,inds);
@@ -48,14 +47,14 @@ local mt,inds;
     #conjugations expressed as permutations of the set elements (indices of)
     if Size(G) > 1 then
       SetSymmetries(mt,Set(G,
-              g->AsPermutation(TransformationOp(g,SortedElements(mt),\^))));
+              g->AsPermutation(TransformationOp(g,Elts(mt),\^))));
     else
       SetSymmetries(mt, [()]);
     fi;
   else
     #same as above, except
     SetSymmetries(mt,Set(G,
-            g->AsPermutation(TransformationOp(g,SortedElements(mt),
+            g->AsPermutation(TransformationOp(g,Elts(mt),
                     function(p,t)
                       return Image(hom,PreImagesRepresentative(hom,p)^t);
                     end))));
@@ -77,7 +76,7 @@ local mt;
   else
     SetRows(mt,Rows(multab));
   fi;
-  SetSortedElements(mt,SortedElements(multab));
+  SetElts(mt,Elts(multab));
   SetIndices(mt,Indices(multab));
   SetSymmetries(mt, Symmetries(multab)); # TODO is this correct? symmetries are the same?
   if HasOriginalName(multab) then
@@ -300,7 +299,7 @@ end);
 #just for convenience, TODO: include it properly
 SmallGenSetSgpFromIndicatorFunction := function(indset,mt)
   return SmallGeneratingSet(Semigroup(
-                 SetByIndicatorFunction(indset,SortedElements(mt))
+                 SetByIndicatorFunction(indset,Elts(mt))
                  ));
 end;
 
@@ -308,14 +307,14 @@ end;
 InstallOtherMethod(SetByIndicatorFunction, "for boolean list and multab",
         [IsList, IsMulTab],
 function(indset, mt)
-  return SetByIndicatorFunction(indset, SortedElements(mt));
+  return SetByIndicatorFunction(indset, Elts(mt));
 end);
 
 InstallOtherMethod(IndicatorFunction,
         "for a list of elements and multab",
         [IsList,IsMulTab],
 function(elms, mt)
-  return IndicatorFunction(elms, SortedElements(mt));
+  return IndicatorFunction(elms, Elts(mt));
 end);
 
 InstallOtherMethod(RecodeIndicatorFunction,

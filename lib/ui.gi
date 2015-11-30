@@ -56,8 +56,8 @@ function(S,T)
   perm := IsomorphismMulTabs(mtS, mtT);
   if perm = fail then return fail; fi; #not isomorphic
   #if they are isomorphic then we construct the mapping
-  source := SortedElements(mtS);
-  image := List(ListPerm(perm, Size(T)), x->SortedElements(mtT)[x]);
+  source := Elts(mtS);
+  image := List(ListPerm(perm, Size(T)), x->Elts(mtT)[x]);
   mappingfunc := function(s) return image[Position(source,s)];end;
   return MappingByFunction(S,T,mappingfunc);
 end);

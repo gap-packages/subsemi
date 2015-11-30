@@ -11,7 +11,7 @@
 #of the quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
 function(I)
-  local quotienthom,regrepisom; 
+  local quotienthom,regrepisom;
   quotienthom:=HomomorphismQuotientSemigroup(ReesCongruenceOfSemigroupIdeal(I));
   regrepisom:=IsomorphismTransformationSemigroup(Range(quotienthom));
   return CompositionMapping(regrepisom, quotienthom);
@@ -34,7 +34,7 @@ end);
 # I an ideal in S (S is contained as a parent)
 # G the automorphism group of S
 UpperTorsos := function(I,G)
-local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;  
+local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
   #get the Rees quotient as ts
   rfh := ReesFactorHomomorphism(I);
   T := Range(rfh);
@@ -42,14 +42,14 @@ local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
   mtT := MulTab(T,G,rfh);
   Treps := AsList(SubSgpsByMinExtensions(mtT));
   #mapping back the subs of the quotient to the original
-  preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
+  preimgs := List(Elts(mtT),x->PreImages(rfh,x));
   #from preimageset to elements, getting rid of zero by failing it
   elts := List(preimgs,function(x) if Size(x)> 1 then return fail;
                                    else return x[1];fi;end);
   tmp := List(Treps, x->SetByIndicatorFunction(x,elts));
   Perform(tmp, function(x) if fail in x then
       Remove(x, Position(x,fail));fi;end);
-  mtS := MulTab(Parent(I),G); 
+  mtS := MulTab(Parent(I),G);
   return  List(Unique(tmp),x-> IndicatorFunction(x,mtS));
 end;
 
@@ -60,9 +60,9 @@ end;
 SubSgpsByUpperTorsos := function(I,G,uppertorsos)
   local extended, filter, result, S,mtS;
   S := Parent(I);
-  mtS := MulTab(S,G); 
+  mtS := MulTab(S,G);
   extended := List(uppertorsos, x-> SgpInMulTab(x,mtS));
-  filter := IndicatorFunction(AsList(I),SortedElements(mtS));
+  filter := IndicatorFunction(AsList(I),Elts(mtS));
   result := [];
   Perform(extended, function(x)
     Append(result,AsList(

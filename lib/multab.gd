@@ -24,7 +24,7 @@ DeclareProperty("IsAnti", IsMulTab);
 DeclareAttribute("Rows", IsMulTab);
 DeclareAttribute("Columns", IsMulTab);
 DeclareAttribute("Indices", IsMulTab);
-DeclareAttribute("SortedElements", IsMulTab);
+DeclareAttribute("Elts", IsMulTab);
 DeclareAttribute("EquivalentGenerators", IsMulTab);
 DeclareAttribute("Symmetries", IsMulTab);
 DeclareAttribute("SymmetryGroup", IsMulTab);

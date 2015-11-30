@@ -17,7 +17,7 @@ gap> j := Random([1..Size(classes)]);;
 gap> mtI := MulTab(Semigroup(classes[i]));;
 gap> mtJ:=MulTab(Semigroup(classes[j]));;
 gap> perm := IsomorphismMulTabs(mtI,mtJ);;
-gap> Rows(mtJ)= ProductTableOfElements(Permuted(ShallowCopy(SortedElements(mtI)),perm));
+gap> Rows(mtJ)= ProductTableOfElements(Permuted(ShallowCopy(Elts(mtI)),perm));
 true
 
 #
