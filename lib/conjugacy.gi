@@ -8,10 +8,11 @@
 ##
 
 ### FOR SETS OF INTEGERS #######################################################
-# conjugacy class rep defined for list of integers TODO cleanup
+# conjugacy class rep defined for list of integers
+# TODO the next two functions can be merged
 SetConjugacyClassRep := function(set,symmetries)
   local  min, new, g;
-  min := AsSet(set);
+  min := AsSet(set); #to be on the safe side
   for g in symmetries do
     new := OnSets(set,g);
     if new < min then
@@ -23,7 +24,7 @@ end;
 
 # conjugacy class rep defined for set of integers
 SetConjugacyClassConjugator := function(set,symmetries)
-  local  min, new,i, conjugator;
+  local  min,new,i,conjugator;
   conjugator := symmetries[1];
   min := AsSet(set);
   for i in [1..Length(symmetries)] do
