@@ -148,12 +148,6 @@ function(mt)
 end);
 
 ### CONJUGATION ################################################################
-# the conjugacy class is calculated by applying all symmetries
-InstallGlobalFunction(ConjugacyClassOfSet,
-function(indset,mt)
-  return Set(Symmetries(mt), g->OnFiniteSet(indset,g));
-end);
-
 #for each element what is the smallest element in order that is conjugate to it?
 InstallMethod(MinimumConjugates,"for a multab",
         [IsMulTab],
