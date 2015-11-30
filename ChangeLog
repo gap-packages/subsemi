@@ -1,3 +1,5 @@
+0.49
+	Separating conjugacy code for better readability and maintainability. Simplifying filing.
 0.48
 	Fixes for isomorphism functions. File reanming: isomorphism -> embedding.
 0.47
