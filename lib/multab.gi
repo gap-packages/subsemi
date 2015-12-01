@@ -24,23 +24,23 @@ local n, mat,i,j;
 end);
 
 ### CONSTRUCTORS ###############################################################
-# sortedelements - a sorted list of multiplicative elements
+# elts - a list of multiplicative elements, the order defines indices
 # G - a group of automorphisms of the multiplicative elements
 # name - fail if no need for naming (search algorithm will not dump)
 # hom - a Rees factor homomorphism
 # isanti - flag to make anti multiplication table
 InstallGlobalFunction(CreateMulTab,
-function(sortedelements, G, name, hom, isanti)
+function(elts, G, name, hom, isanti)
 local mt,inds;
   mt := Objectify(MulTabType, rec());
   SetIsAnti(mt,isanti);
   if isanti then
-    SetRows(mt,TransposedMat(ProductTableOfElements(sortedelements)));
+    SetRows(mt,TransposedMat(ProductTableOfElements(elts)));
   else
-    SetRows(mt,ProductTableOfElements(sortedelements));
+    SetRows(mt,ProductTableOfElements(elts));
   fi;
-  SetElts(mt,sortedelements);
-  inds := [1..Size(sortedelements)];
+  SetElts(mt,elts);
+  inds := [1..Size(elts)];
   MakeImmutable(inds);
   SetIndices(mt,inds);
   if hom = fail then
@@ -124,7 +124,7 @@ end);
 
 InstallOtherMethod(MulTab,
         "for a semigroup an automorphism  group, and a homomorphism",
-[IsSemigroup,IsGroup,IsMapping],
+        [IsSemigroup,IsGroup,IsMapping],
 function(S,G,hom)
   if HasName(S) then
     return CreateMulTab(AsSortedList(S), G, Name(S),hom,false);
@@ -133,28 +133,20 @@ function(S,G,hom)
   fi;
 end);
 
-InstallMethod(SymmetryGroup,"for multab",
-        [IsMulTab],
+InstallMethod(SymmetryGroup,"for multab", [IsMulTab],
 function(mt)
   if Size(Symmetries(mt)) = 1 then return Group(()); fi;
-  return Group(SmallGeneratingSet(Group(Symmetries(mt)))); #TODO this is a bit roundabout
+  return Group(SmallGeneratingSet(Group(Symmetries(mt))));
 end);
 
-InstallMethod(Columns,"for multab",
-        [IsMulTab],
-function(mt)
-  return TransposedMat(Rows(mt));
-end);
+InstallMethod(Columns,"for multab", [IsMulTab],
+function(mt) return TransposedMat(Rows(mt)); end);
 
 ### DISPLAY ####################################################################
-InstallOtherMethod(Size, "for a multab",
-[IsMulTab],
-function(mt)
-  return Size(Indices(mt));
-end);
+InstallOtherMethod(Size, "for a multab", [IsMulTab],
+function(mt) return Size(Indices(mt)); end);
 
-InstallMethod(ViewObj, "for a multab",
-[IsMulTab],
+InstallMethod(ViewObj, "for a multab", [IsMulTab],
 function(mt)
   local str;
   if IsAnti(mt) then str := "<anti-"; else str := "<"; fi;
@@ -166,8 +158,7 @@ function(mt)
 end);
 
 #experimental
-InstallMethod(EquivalentGenerators,"for a multab",
-        [IsMulTab],
+InstallMethod(EquivalentGenerators,"for a multab", [IsMulTab],
 function(mt)
 local al,i;
   al := AssociativeList();
