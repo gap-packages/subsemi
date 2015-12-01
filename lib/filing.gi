@@ -135,7 +135,8 @@ RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
             local indfunc;
             indfunc := AsBlist(DecodeBitString(s));
             return WriteLine(otf,EncodeBitString(AsBitString(
-                           RecodeIndicatorFunction(indfunc,Elts(mt),Elts(MT)))))
+                           RecodeIndicatorFunction(indfunc,
+                                   Elts(mt),Elts(MT)))));
           end);
   CloseStream(otf);
 end;
