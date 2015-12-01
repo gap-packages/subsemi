@@ -59,7 +59,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   if not ForAll(Keys(Aprofs2elts),
              x-> (Bprofs2elts[x] <> fail)
              and Size(Aprofs2elts[x]) <= Size(Bprofs2elts[x])) then
-    return fail; #not enough elements of some type to represent A
+    return []; #not enough elements of some type to represent A
   fi;
   # figuring out target size
   if IsMulTab(mtA) then
