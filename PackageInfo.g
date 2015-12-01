@@ -1,5 +1,5 @@
 ##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "0.49">
+##  <!ENTITY VERSION "0.50">
 ##  <!ENTITY COPYRIGHTYEARS "2013-2015">
 ##  <#/GAPDoc>
 
@@ -9,9 +9,9 @@ PackageName := "SubSemi",
 
 Subtitle := "Enumeration of subsemigroups",
 
-Version := "0.49",
+Version := "0.50",
 
-Date := "30/11/2015",
+Date := "01/12/2015",
 
 ArchiveURL := "https://bitbucket.org/dersu/subsemi",
 
@@ -76,9 +76,9 @@ PackageDoc := rec(
 Dependencies := rec(
  GAP := ">= 4.7",
  NeededOtherPackages := [["GAPDoc", ">=1.5"],
-                   ["semigroups", ">=2.6"],
+                   ["semigroups", ">=2.7"],
                    ["sgpdec", ">=0.7"],
-                   ["dust", ">=0.1.20"]
+                   ["dust", ">=0.1.23"]
                    ],
  SuggestedOtherPackages := [],
  ExternalConditions := [ ]
