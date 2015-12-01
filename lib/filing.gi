@@ -1,3 +1,13 @@
+################################################################################
+##
+## SubSemi
+##
+## Functions for putting subsets, subsgps into separate files according to
+## some classification.
+##
+## Copyright (C) 2015  Attila Egri-Nagy
+##
+
 # filing - to separate bitlists into different classes based on the output
 # of some given function
 # the tagging function gives a string, that goes into
@@ -180,7 +190,7 @@ end;
 
 GensFileIsomClasses := function(filename)
   ClassProcessor(filename, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
-          ".iso", true);
+          ".isom", true);
 end;
 
 GensFileAntiAndIsomClasses := function(filename)
@@ -345,7 +355,9 @@ end;
 ### COMPREHENSIVE ##############################################################
 ################################################################################
 
-ClassifySubsemigroups := function(S, G , prefix)
+# S semigroup, G automorphism group, prefix filename begins with this
+InstallGlobalFunction(FileSubsemigroups,
+function(S, G , prefix)
   local mt,subreps,ndigits, repsfile, tagger;
   ndigits := Size(String(Size(S)));
   mt := MulTab(S,G);
@@ -365,7 +377,7 @@ ClassifySubsemigroups := function(S, G , prefix)
   #        AntiAndIsomClassToIsomClasses);
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
-end;
+end);
 
 # TODO just a copy-paste for the moment
 ClassifySubsemigroupsBySize := function(S, G , prefix)
