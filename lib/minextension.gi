@@ -31,12 +31,12 @@ InstallGlobalFunction(SubSgpsGenSetsByMinExtensions,
 
 BindGlobal("SUBSEMI_MinExtensionsCheckPointData", rec());
 ResumeMinExtensions := function()
-  return SubSgpsByMinExtensionsParametrized(SUBSEMI_MinExtensionsCheckPointData.mt,
+  return SubSgpsByMinExtensionsParametrized(
+                 SUBSEMI_MinExtensionsCheckPointData.mt,
                  [], #this does not matter
                  SUBSEMI_MinExtensionsCheckPointData.generators,
                  SUBSEMI_MinExtensionsCheckPointData.waiting,
-                 SUBSEMI_MinExtensionsCheckPointData.result
-                 );
+                 SUBSEMI_MinExtensionsCheckPointData.result);
 end;
 
 # returns all extensions of the given baseset (empty baseset not collected,
@@ -86,7 +86,8 @@ function(mt,baseset,generators, waiting, result)
     SUBSEMI_MinExtensionsCheckPointData.result := result;
     SUBSEMI_MinExtensionsCheckPointData.mt := mt;
     SUBSEMI_MinExtensionsCheckPointData.generators := generators;
-    SaveWorkspace(Concatenation("checkpoint",String(IO_gettimeofday().tv_sec),".ws"));
+    SaveWorkspace(Concatenation("checkpoint",
+            String(IO_gettimeofday().tv_sec),".ws"));
     Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved in ",
             FormattedTimeString(TimeInSeconds()-prev_secs)));
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
@@ -99,10 +100,10 @@ function(mt,baseset,generators, waiting, result)
       seed := ConjugacyClassRep(SgpInMulTab(baseset,mt),mt);
       AddSet(result, seed);
     else
-      seed := baseset; 
+      seed := baseset;
     fi;
-    # fill up the waiting list with lists of 2 or 3 elements: 
-    # 1: baseset, 2: gen the element to be extended with, 3: generating set (opt)
+    # fill up the waiting list with lists of 2 or 3 elements:
+    # 1: baseset 2: gen the element to be extended with, 3: generating set (opt)
     if isBreadthFirst then
       gensets := [];
       for gen in ListBlist(Indices(mt),generators) do
@@ -136,11 +137,11 @@ function(mt,baseset,generators, waiting, result)
       AddSet(result, bl);
       #REMAINDER
       diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
-      normalizer := Stabilizer(SymmetryGroup(mt), bl, OnFiniteSet);       
+      normalizer := Stabilizer(SymmetryGroup(mt), bl, OnFiniteSet);
       if Size(normalizer) > 1 then #do it only if it is nontrivial
         #Print(Size(diff));
         diff := List(Orbits(normalizer, diff, OnPoints ), x->x[1]);
-        #Print("->",Size(diff)," by " , Size(normalizer),"  ");  
+        #Print("->",Size(diff)," by " , Size(normalizer),"  ");
       fi;
       #RECURSION
       if isBreadthFirst then
@@ -149,7 +150,7 @@ function(mt,baseset,generators, waiting, result)
       else
         Perform(diff,function(t)Store(waiting,[bl,t]);end);
       fi;
-    od; 
+    od;
   end;
   #-----------------------------------------------------------------------------
   # START
@@ -157,7 +158,7 @@ function(mt,baseset,generators, waiting, result)
   isBreadthFirst := IsQueue(waiting);
   if IsEmpty(AsList(result)) and IsEmpty(waiting) then init(); fi; # initialize
   prev_subs:=0;prev_counter:=0;counter:=0;
-  prev_secs:=TimeInSeconds();  
+  prev_secs:=TimeInSeconds();
   main();
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
