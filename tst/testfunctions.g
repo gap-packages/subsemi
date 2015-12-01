@@ -30,6 +30,7 @@ local test,infolevel;
           "conjugacy",
           "T3",
           "I3",
+          "classifier",
           "is"
           ] do
     Test(Concatenation(
