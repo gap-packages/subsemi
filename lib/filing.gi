@@ -159,8 +159,13 @@ ClassProcessor := function(filename, classifierfunc, ext, preprocess)
   # frequency profiles -> generator sets
   if preprocess then
     al := AssociativeList();
-    Perform(ReadGenerators(filename),function(x)
-      Collect(al,IdempotentFrequencies(MulTab(Semigroup(x))),x);end);
+    # Perform(LoadIndicatorFunctions(filename),
+    #   function(x)
+    #   Collect(al,
+    #           IdempotentFrequencies(
+    #             MulTab(
+    #               Semigroup(
+    #                 SetByIndicatorFunction(x,mt))));end);
     idpclasses := Filtered(ValueSet(al),x->Size(x)>1);
     if IsEmpty(idpclasses) then return; fi;
   else
@@ -357,6 +362,7 @@ function(S, G , prefix)
   local mt,subreps,ndigits, repsfile, tagger;
   ndigits := Size(String(Size(S)));
   mt := MulTab(S,G);
+  WriteGenerators(Concatenation(prefix,".elts"), Elts(mt));
   Print("Calculating and classifying ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
   repsfile := Concatenation(prefix,".reps");
@@ -374,18 +380,3 @@ function(S, G , prefix)
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
 end);
-
-# TODO just a copy-paste for the moment
-ClassifySubsemigroupsBySize := function(S, G , prefix)
-  local mt,subreps,ndigits, repsfile;
-  ndigits := Size(String(Size(S)));
-  #SemigroupsOptionsRec.hashlen := NextPrimeInt(2*Size(S));
-  mt := MulTab(S,G);
-  Print("Calculating and classifying ",prefix,"\n\c");
-  subreps := AsList(SubSgpsByMinExtensions(mt));
-  repsfile := Concatenation(prefix{[1..Size(prefix)-1]},".reps");
-  SaveIndicatorFunctions(subreps, repsfile);
-  FilingIndicatorFunctionsBySize(repsfile,ndigits);
-  GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
-          Concatenation(prefix,"sizedist.dat"));
-end;
