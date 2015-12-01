@@ -4,7 +4,7 @@
 ##
 ## Enumerating subsemigroups by recursively extending with a generator.
 ##
-## Copyright (C) 2013-2014  Attila Egri-Nagy
+## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
 # mt - MulTab, multiplication table
@@ -14,21 +14,15 @@ InstallGlobalFunction(SubSgpsByMinExtensions,
                                     RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Stack(),
                                     []);end);
-  # TODO:understand why this trick does not work with torsos
-  # removing generators that are in the base already
-  #generators := DifferenceBlist(generators, baseset);
-  # removing equivalent generators
-  #generators := RemoveEquivalentGenerators(generators,mt);
 
-
-
-InstallGlobalFunction(SubSgpsGenSetsByMinExtensions,
+InstallGlobalFunction(SubSgpGenSetsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
                                     RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Queue(),
                                     []);end);
 
+#global datastructure for resuming search
 BindGlobal("SUBSEMI_MinExtensionsCheckPointData", rec());
 ResumeMinExtensions := function()
   return SubSgpsByMinExtensionsParametrized(
@@ -126,22 +120,18 @@ function(mt,baseset,generators, waiting, result)
         log();
       fi;
       if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then checkpoint(); fi;
-      #calculating the new subsgp
+      #CONSTRUCTING new subsgp
       next := Retrieve(waiting);
-      bl := ClosureByIncrements(next[1], [next[2]], mt);
-      #its conjugacy class rep
-      bl := ConjugacyClassRep(bl,mt);
+      bl := ConjugacyClassRep(ClosureByIncrements(next[1],[next[2]],mt),mt);
       if  bl in result then continue; fi; #EXIT if nothing to do
-      #STORE
+      #STORING new subsgp
       if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
       AddSet(result, bl);
-      #REMAINDER
+      #REMAINDER elts for further extensions
       diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
       normalizer := Stabilizer(SymmetryGroup(mt), bl, OnFiniteSet);
       if Size(normalizer) > 1 then #do it only if it is nontrivial
-        #Print(Size(diff));
         diff := List(Orbits(normalizer, diff, OnPoints ), x->x[1]);
-        #Print("->",Size(diff)," by " , Size(normalizer),"  ");
       fi;
       #RECURSION
       if isBreadthFirst then

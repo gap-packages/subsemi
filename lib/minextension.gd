@@ -4,9 +4,9 @@
 ##
 ## Enumerating subsemigroups by recursively extending with a generator.
 ##
-## Copyright (C) 2013-2014  Attila Egri-Nagy
+## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
 DeclareGlobalFunction("SubSgpsByMinExtensions");
-DeclareGlobalFunction("SubSgpsGenSetsByMinExtensions");
+DeclareGlobalFunction("SubSgpGenSetsByMinExtensions");
 DeclareGlobalFunction("SubSgpsByMinExtensionsParametrized");
