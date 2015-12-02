@@ -1,0 +1,6 @@
+Read("sampler.g");
+T5 := FullTransformationSemigroup(5);
+SetName(T5, "T5");
+SampleSubSgps(
+  MulTab(T5,SymmetricGroup(IsPermGroup,5)),
+  10000);

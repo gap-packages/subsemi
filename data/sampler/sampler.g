@@ -35,6 +35,3 @@ SampleSubSgps := function(mt,N)
     fi;
   od;
 end;
-
-mt := MulTab(T3,S3);
-SampleSubSgps(mt, 100000);
