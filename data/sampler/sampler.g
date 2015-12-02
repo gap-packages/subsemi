@@ -22,8 +22,10 @@ SampleSubSgps := function(mt,N)
   local i, subset, seed, outfilename;
   seed := TimeSeed();
   Reset(GlobalMersenneTwister, seed);
-  outfilename := Concatenation(OriginalName(mt),"_",
-                         String(N),"_",
+  outfilename := Concatenation(OriginalName(mt),
+                         "_",
+                         ReplacedString(FormattedBigNumberString(N)," ","_"),
+                         "_",
                          String(seed));
   PrintTo(outfilename,"");
   for i in [1..N] do
