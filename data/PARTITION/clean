@@ -1,4 +1,4 @@
-find . -name '*.iso' -delete
+find . -name '*.isom' -delete
 find . -name '*.set' -delete
 find . -name '*.ais' -delete
 find . -name '*.reps' -delete
