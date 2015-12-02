@@ -151,62 +151,43 @@ end;
 ################################################################################
 
 #generic function
-ClassProcessor := function(filename, classifierfunc, ext, preprocess)
-  local prefix, sgps, idpclasses, digits,i,al,iso, counter,sgpclasses,class;
+ClassProcessor := function(filename, mt, classifierfunc, ext)
+  local prefix, sgps, digits, counter,sgpclasses,class;
   prefix := filename{[1..Maximum(Positions(filename,'.'))-1]};
   counter:=1;
-  #memory saving idea - not storing all semigroups
-  # frequency profiles -> generator sets
-  if preprocess then
-    al := AssociativeList();
-    # Perform(LoadIndicatorFunctions(filename),
-    #   function(x)
-    #   Collect(al,
-    #           IdempotentFrequencies(
-    #             MulTab(
-    #               Semigroup(
-    #                 SetByIndicatorFunction(x,mt))));end);
-    idpclasses := Filtered(ValueSet(al),x->Size(x)>1);
-    if IsEmpty(idpclasses) then return; fi;
-  else
-    idpclasses := [ReadGenerators(filename)];
-  fi;
-  #now going through the prefiltered classes
-  digits := Size(String(Maximum(List(idpclasses,Size))));
-  counter:=1;
-  for class in idpclasses do
-    sgps := List(class, Semigroup);
-    sgpclasses := Filtered(classifierfunc(sgps),x->Size(x)>1);
-    for iso in sgpclasses do
-      if not WriteGenerators(
-                 Concatenation(prefix,"_",
-                         PaddedNumString(counter,digits),ext),
-                 iso,"w") then
-        Error(Concatenation("Failure when processing ",filename));
-      fi;
-      counter := counter + 1;
-    od;
+  sgps := List(LoadIndicatorFunctions(filename),
+               x-> Semigroup(SetByIndicatorFunction(x,mt)));
+  sgpclasses := classifierfunc(sgps);
+  digits := Size(String(Maximum(List(sgpclasses,Size))));
+  for class in sgpclasses do
+    if not SaveIndicatorFunctions(
+               List(class,x->IndicatorFunction(AsList(x),mt)),
+               Concatenation(prefix,"_",
+                       PaddedNumString(counter,digits),ext)) then
+      Error(Concatenation("Failure when processing ",filename));
+    fi;
+    counter := counter + 1;
   od;
 end;
 
-GensFileIsomClasses := function(filename)
-  ClassProcessor(filename, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
-          ".isom", true);
+GensFileIsomClasses := function(filename,mt)
+  ClassProcessor(filename, mt, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
+          ".isom");
 end;
 
-GensFileAntiAndIsomClasses := function(filename)
+GensFileAntiAndIsomClasses := function(filename,mt)
   local f;
   f := sgps -> Classify(sgps, MulTab,
                function(x,y)
                  return IsIsomorphicMulTab(x,y)
                         or IsIsomorphicMulTab(x,CopyMulTab(y,true));end);
-  ClassProcessor(filename, f, ".ais", true);
+  ClassProcessor(filename, mt, f, ".ais");
 end;
 
 # assume .ais files as input
-AntiAndIsomClassToIsomClasses := function(filename)
-  ClassProcessor(filename, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
-          ".iso", false);
+AntiAndIsomClassToIsomClasses := function(filename,mt)
+  ClassProcessor(filename, mt, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
+          ".isom");
 end;
 
 ################################################################################
@@ -373,10 +354,11 @@ function(S, G , prefix)
              ".set");
   end;
   FilingIndicatorFunctions(repsfile,tagger);
-  #Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
-  #Perform(PrefixMatchedListDir(".",prefix),GensFileAntiAndIsomClasses);
-  #Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
-  #        AntiAndIsomClassToIsomClasses);
+  Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
+  Perform(PrefixPostfixMatchedListDir(".",prefix,"set"),
+          function(x)GensFileAntiAndIsomClasses(x,mt);end);
+  Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
+          function(x)AntiAndIsomClassToIsomClasses(x,mt);end);
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
 end);

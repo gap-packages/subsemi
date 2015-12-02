@@ -38,7 +38,7 @@ end);
 ### BITLIST - BITSTRING - COMPRESSED STRING ####################################
 #the idea is to pack 6 bits into a single character by using this lookup string
 #trailing bits are just written out (that is why no 1s and 0s in the key)
-CODEKEY := SortedList( 
+CODEKEY := SortedList(
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789_-+=");
 MakeReadOnlyGlobal("CODEKEY");
 EXPONENTS := [5,4,3,2,1,0];
@@ -139,7 +139,7 @@ function(filename)
   s := ReadLine(itf);
   repeat
     NormalizeWhitespace(s);
-    Add(result,AsBlist(DecodeBitString(s)));    
+    Add(result,AsBlist(DecodeBitString(s)));
     s := ReadLine(itf);
   until s=fail;
   CloseStream(itf);
@@ -155,4 +155,5 @@ function(indsets, filename)
     AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
   od;
   CloseStream(output);
+  return true;
 end);
