@@ -2,14 +2,6 @@
 PBR1 := PartitionedBinaryRelationMonoid(1);
 ClassifySubsemigroupsBySize(PBR1, SymmetricGroup(IsPermGroup,1),"PBR1_");
 
-###BINARY RELATION##############################################################
-B2 := Semigroup([
-              BinaryRelationOnPoints([[2],[1]]),
-              BinaryRelationOnPoints([[1],[]]),
-              BinaryRelationOnPoints([[1,2],[1]]),
-              BinaryRelationOnPoints([[1,2],[]])]);
-ClassifySubsemigroupsBySize(B2, SymmetricGroup(IsPermGroup,2),"B2_");
-
 ###TRANSFORMATION###############################################################
 for degree in [1..3] do
   ClassifySubsemigroups(FullTransformationSemigroup(degree),
