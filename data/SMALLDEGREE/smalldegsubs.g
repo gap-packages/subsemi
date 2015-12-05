@@ -2,21 +2,6 @@
 PBR1 := PartitionedBinaryRelationMonoid(1);
 ClassifySubsemigroupsBySize(PBR1, SymmetricGroup(IsPermGroup,1),"PBR1_");
 
-###TRANSFORMATION###############################################################
-for degree in [1..3] do
-  ClassifySubsemigroups(FullTransformationSemigroup(degree),
-          SymmetricGroup(IsPermGroup, degree),
-          Concatenation("T",String(degree),"_"));
-od;
-
-###PARTIAL TRANSFORMATION#######################################################
-for degree in [1..3] do
-  ClassifySubsemigroups(PartialTransformationSemigroup(degree),
-          SymmetricGroup(IsPermGroup, degree),
-          Concatenation("PT",String(degree),"_"));
-od;
-
-
 ###PARTIAL PERMUTATION##########################################################
 for degree in [1..3] do
   ClassifySubsemigroups(SymmetricInverseMonoid(degree),
@@ -44,11 +29,4 @@ for degree in [1..4] do
   ClassifySubsemigroups(BrauerMonoid(degree),
           SymmetricGroup(IsPermGroup, degree),
           Concatenation("Br",String(degree),"_"));
-od;
-
-###BIPARTITION##################################################################
-for degree in [1..2] do
-  ClassifySubsemigroups(PartitionMonoid(degree),
-          SymmetricGroup(IsPermGroup, degree),
-          Concatenation("P",String(degree),"_"));
 od;
