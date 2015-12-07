@@ -8,3 +8,4 @@
 ##
 
 DeclareGlobalFunction("Is3NilPotent");
+DeclareGlobalFunction("Is3NilPotentInMulTab");
