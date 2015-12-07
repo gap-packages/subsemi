@@ -19,7 +19,8 @@ EnumByMaxSubSgps := function(mt)
     newelts := Union(List(layers[1], x->MaxSubSgpsInMulTab(x,mt)));
     newlayer := Difference(newelts, total);
     Info(SubSemiInfoClass, 1, String(Size(newlayer)),
-         " new maximal subsgps out of ", String(Size(newelts)));
+         " new maximal subsgps out of ", String(Size(newelts)),
+         " TOTAL ", String(Size(total)));
     total := Union(total, newlayer);
     Add(layers, newlayer,1);
     SaveIndicatorFunctions(newlayer, Concatenation(OriginalName(mt),
