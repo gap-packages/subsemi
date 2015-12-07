@@ -1,8 +1,9 @@
 MaxSubSgpsInMulTab := function(sgp,mt)
   local S, maxsgps;
   S := Semigroup(SetByIndicatorFunction(sgp,mt));
+  Print("#\c");
   maxsgps := List(MaximalSubsemigroups(S),
-                  x->SgpInMulTab(IndicatorFunction(AsList(x),mt),mt));
+                  x->SgpInMulTab(IndicatorFunction(GeneratorsOfSemigroup(x),mt),mt));
   return Set(maxsgps, x->ConjugacyClassRep(x,mt));
 end;
 
