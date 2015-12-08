@@ -3,7 +3,7 @@ mtT5 := MulTab(FullTransformationSemigroup(5),
 
 SetOriginalName(mtT5, "T5_S5");
 
-n := 1;
+n := 3;
 
 l := SubSgpsByMinimalGenSets(mtT5,n);
 
