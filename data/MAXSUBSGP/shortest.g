@@ -27,7 +27,8 @@ SgpIsomClassReps := function(sgps)
   return List(classes, Representative);
 end;
 
-GreedySubsemigroupChain := function(S)
+LengthOfShortestSubsemigroupChain := function(S)
   if Size(S) = 1 then return 1; fi;
-  return Minimum(List(MaximalSubsemigroups(S), GreedySubsemigroupChain))+1;
+  return Minimum(List(SgpIsomClassReps(MaximalSubsemigroups(S)),
+                 LengthOfShortestSubsemigroupChain)) + 1;
 end;
