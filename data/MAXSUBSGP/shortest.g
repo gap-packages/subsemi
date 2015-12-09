@@ -32,3 +32,13 @@ LengthOfShortestSubsemigroupChain := function(S)
   return Minimum(List(SgpIsomClassReps(MaximalSubsemigroups(S)),
                  LengthOfShortestSubsemigroupChain)) + 1;
 end;
+
+LengthOfShortestGreedySubSgpChain := function(S)
+  local maxsubs, min, minimalmaxsubs;
+  if Size(S) = 1 then return 1; fi;
+  maxsubs := MaximalSubsemigroups(S);
+  min := Minimum(List(maxsubs, Size));
+  minimalmaxsubs := Filtered(maxsubs, x-> min = Size(x));
+  return Minimum(List(SgpIsomClassReps(minimalmaxsubs),
+                 LengthOfShortestGreedySubSgpChain)) + 1;
+end;
