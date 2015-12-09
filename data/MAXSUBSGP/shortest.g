@@ -20,9 +20,9 @@ GrpChainDescription :=
 SgpIsomClassReps := function(sgps)
   local classes;
   classes := Classify(sgps,
-                     x->x,
+                     MulTab,
                      function(x,y)
-                       return IsomorphismSemigroupsByMulTabs(x,y) <> fail;
+                       return IsomorphismMulTabs(x,y) <> fail;
                      end);
   return List(classes, Representative);
 end;
