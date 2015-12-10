@@ -42,7 +42,7 @@ local mtK43, mtT4, K43reps, K43_T4reps, id;
   K43reps := LoadIndicatorFunctions("K43.reps");
   K43_T4reps := List(K43reps, x->RecodeIndicatorFunction(x,mtK43,mtT4)); 
   SaveIndicatorFunctions(K43_T4reps,"K43_T4.reps");
-  id := Position(SortedElements(mtT4), IdentityTransformation);
+  id := Position(Elts(mtT4), IdentityTransformation);
   Perform(K43_T4reps, function(x) x[id]:=true;end);
   SaveIndicatorFunctions(K43_T4reps,"K43sharp_T4.reps");
 end;
@@ -65,7 +65,7 @@ local mtT4, I, uts, id, result;
   #remove emptyset
   Remove(uts, Position(uts, EmptySet(mtT4)));
   #remove trivial group
-  id := BlistList(Indices(mtT4), [Position(SortedElements(mtT4),IdentityTransformation)]);
+  id := BlistList(Indices(mtT4), [Position(Elts(mtT4),IdentityTransformation)]);
   Remove(uts, Position(uts, id));
   result := SubSgpsByUpperTorsos(I,S4,uts);
   Add(result,id);
