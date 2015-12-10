@@ -33,12 +33,25 @@ LengthOfShortestSubsemigroupChain := function(S)
                  LengthOfShortestSubsemigroupChain)) + 1;
 end;
 
-LengthOfShortestGreedySubSgpChain := function(S)
+### GREEDY BY SIZE #############################################################
+# Length of Shortest Greedy Maximal Sub* Chain - higher order function
+# S - semigroup, group
+# MaxSubs - function that gives the maximal subs of S
+# ClassReps - function that gives class representatives of a collection
+LOSGMSC := function(S, MaxSubs, ClassReps)
   local maxsubs, min, minimalmaxsubs;
   if Size(S) = 1 then return 1; fi;
-  maxsubs := MaximalSubsemigroups(S);
+  maxsubs := MaxSubs(S);
   min := Minimum(List(maxsubs, Size));
   minimalmaxsubs := Filtered(maxsubs, x-> min = Size(x));
-  return Minimum(List(SgpIsomClassReps(minimalmaxsubs),
-                 LengthOfShortestGreedySubSgpChain)) + 1;
+  return Minimum(List(ClassReps(minimalmaxsubs),
+                 x -> LOSGMSC(x,MaxSubs,ClassReps))) + 1;
+end;
+
+LengthOfShortestGreedySubSgpChain := function(S)
+  return LOSGMSC(S, MaximalSubsemigroups, SgpIsomClassReps);
+end;
+
+LengthOfShortestGreedySubGrpChain := function(G)
+  return LOSGMSC(G, MaximalSubgroupClassReps, x->x);
 end;
