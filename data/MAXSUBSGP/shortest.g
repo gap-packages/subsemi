@@ -12,13 +12,19 @@ GrpChainDescription :=
   l -> List(l, x -> [x[1], List(x[2], y -> StructureDescription(y))]);
 
 SgpIsomClassReps := function(sgps)
-  local classes;
-  classes := Classify(sgps,
-                     MulTab,
-                     function(x,y)
-                       return IsomorphismMulTabs(x,y) <> fail;
-                     end);
-  return List(classes, Representative);
+  local sizeclasses, isomclasses, result, f;
+  f := xs -> Classify(xs,
+               MulTab,
+               function(x,y)
+    return IsomorphismMulTabs(x,y) <> fail;
+  end);
+  #first by size
+  sizeclasses := Classify(sgps,Size,\=);
+  #singletons are representatives already
+  result := Concatenation(Filtered(sizeclasses, x->Size(x)=1));
+  isomclasses := Union(List(Filtered(sizeclasses, x->Size(x)>1),
+                         x-> List(f(x), Representative)));
+  return Concatenation(result, isomclasses);
 end;
 
 ### LENGTH OF SHORTEST MAXIMAL CHAIN ###########################################
