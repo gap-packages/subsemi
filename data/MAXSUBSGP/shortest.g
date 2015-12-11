@@ -1,8 +1,8 @@
-AllShortestSubgroupChains := function(G)
+AllShortestSubGrpChains := function(G)
   local shortchains, min, l;
   if Size(G) = 1 then return [[0, [G]]]; fi;
   shortchains := Concatenation(List(MaximalSubgroupClassReps(G),
-                         AllShortestSubgroupChains));
+                         AllShortestSubGrpChains));
   min := Minimum(List(shortchains, x -> x[1]));
   l := Filtered(shortchains, x -> min = x[1]);
   return List(l, x -> [min + 1, Concatenation([G], x[2])]);
@@ -28,12 +28,12 @@ LOSSC := function(S, MaxSubs, ClassReps)
                  x -> LOSSC(x, MaxSubs, ClassReps))) + 1;
 end;
 
-LengthOfShortestSubgroupChain := function(G)
+LengthOfShortestSubGrpChain := function(G)
   return LOSSC(G, MaximalSubgroupClassReps, x->x) - 1;
 end;
 
 
-LengthOfShortestSubsemigroupChain := function(S)
+LengthOfShortestSubSgpChain := function(S)
   return LOSSC(S, MaximalSubsemigroups, SgpIsomClassReps);
 end;
 
