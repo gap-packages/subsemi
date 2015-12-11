@@ -1,9 +1,3 @@
-LengthOfShortestSubgroupChain := function(G)
-  if Size(G) = 1 then return 0; fi;
-  return Minimum(List(MaximalSubgroupClassReps(G),
-                 LengthOfShortestSubgroupChain)) + 1;
-end;
-
 AllShortestSubgroupChains := function(G)
   local shortchains, min, l;
   if Size(G) = 1 then return [[0, [G]]]; fi;
@@ -27,10 +21,20 @@ SgpIsomClassReps := function(sgps)
   return List(classes, Representative);
 end;
 
+### LENGTH OF SHORTEST MAXIMAL CHAIN ###########################################
+LOSSC := function(S, MaxSubs, ClassReps)
+  if Size(S) = 1 then return 1; fi; # the empty set is a semigroup
+  return Minimum(List(ClassReps(MaxSubs(S)),
+                 x -> LOSSC(x, MaxSubs, ClassReps))) + 1;
+end;
+
+LengthOfShortestSubgroupChain := function(G)
+  return LOSSC(G, MaximalSubgroupClassReps, x->x) - 1;
+end;
+
+
 LengthOfShortestSubsemigroupChain := function(S)
-  if Size(S) = 1 then return 1; fi;
-  return Minimum(List(SgpIsomClassReps(MaximalSubsemigroups(S)),
-                 LengthOfShortestSubsemigroupChain)) + 1;
+  return LOSSC(S, MaximalSubsemigroups, SgpIsomClassReps);
 end;
 
 ### GREEDY BY SIZE #############################################################
@@ -53,5 +57,5 @@ LengthOfShortestGreedySubSgpChain := function(S)
 end;
 
 LengthOfShortestGreedySubGrpChain := function(G)
-  return LOSGMSC(G, MaximalSubgroupClassReps, x->x);
+  return LOSGMSC(G, MaximalSubgroupClassReps, x->x) - 1;
 end;
