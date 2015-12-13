@@ -1,3 +1,4 @@
+#embedding all subsemigroups of T3 into T4
 SetInfoLevel(SubSemiInfoClass, 2);
 T3 := FullTransformationSemigroup(3);
 T4 := FullTransformationSemigroup(4);
@@ -9,5 +10,7 @@ mtT4 := MulTab(T4,S4);
 
 T3subs := ConjugacyClassRepSubsemigroups(T3,S3);
 
+# embeddings modulo the automorphisms of S in Sub(T3)
+# and up to conjugacy in T4
 l := Set(T3subs, x->Set(MulTabEmbeddings(MulTab(Semigroup(x)), mtT4),
              y->ConjugacyClassRep(BlistList(Indices(mtT4),y),mtT4)));
