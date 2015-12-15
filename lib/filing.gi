@@ -16,15 +16,17 @@
 ################################################################################
 ### TAGGING ####################################################################
 ################################################################################
-# just to have padded zeros
+# numbers of fixed length padded with zeros in the front
 PaddedNumString := function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
 end;
 
+# doing transitive&reflexive reduction here until digraphs stabilizes
 ReflexiveReduction := function(rel)
   return List([1..Length(rel)], x -> Filtered(rel[x], y -> not x = y));
 end;
 
+# TODO is this correct?
 TransitiveReduction := function(rel)
   return List([1..Length(rel)], x -> Difference(rel[x], Union(rel{rel[x]})));
 end;
@@ -66,16 +68,6 @@ SgpTag := function (sgp,ndigits)
   if IsMonoid(sgp) or IsMonoidAsSemigroup(sgp) then Append(tag,"m");fi;
   if tag[Size(tag)] = '_' then Remove(tag); fi;
   return tag;
-end;
-
-# tagging indicator set - includes converting to semigroup
-BLGreenTag := function(bl,mt,ndigits)
-  return GreenTag(Semigroup(SetByIndicatorFunction(bl,mt)),ndigits);
-end;
-
-# tagging indicator set - includes converting to semigroup
-BLSgpTag := function(bl,mt,ndigits)
-  return SgpTag(Semigroup(SetByIndicatorFunction(bl,mt)),ndigits);
 end;
 
 ################################################################################
