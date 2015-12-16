@@ -1,3 +1,5 @@
+0.52
+	AutGrpOfMulTab added. Removing unused code from filing. GAP 4.8 is now a dependence.
 0.51
 	Scripts: added 3-nilpotent and maximal subsemigroups. Separating scripts into folders (partially).
 0.50
