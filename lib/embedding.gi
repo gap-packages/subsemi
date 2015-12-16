@@ -116,9 +116,10 @@ function(mtA,mtB) return EmbeddingsDispatcher(mtA,mtB,false);end);
 InstallGlobalFunction(MulTabEmbedding,
 function(mtA,mtB) return EmbeddingsDispatcher(mtA,mtB,true);end);
 
-AutGrpOfMulTab := function (mt)
+InstallGlobalFunction(AutGrpOfMulTab,
+function (mt)
   return Group(List(MulTabEmbeddings(mt, mt), PermList));
-end;
+end);
 
 #returns a permutation
 InstallGlobalFunction(IsomorphismMulTabs,

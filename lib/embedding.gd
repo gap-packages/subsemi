@@ -14,3 +14,5 @@ DeclareGlobalFunction("MulTabEmbeddings");
 
 DeclareGlobalFunction("IsomorphismMulTabs");
 DeclareGlobalFunction("IsIsomorphicMulTab");
+
+DeclareGlobalFunction("AutGrpOfMulTab");
