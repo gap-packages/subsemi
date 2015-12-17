@@ -7,7 +7,8 @@ gap> ConjugacyClassOfTransformationCollection:= function(T,G)
 >    AddSet(conjclass,AsSortedList(Set(T,t->t^g)));end);
 >  return conjclass;
 > end;;
-gap> S := RandomTransformationSemigroup(3,4);;
+gap> S := Semigroup([Transformation([1,3,5,1,3]),Transformation([4,5,2,4,5]),
+> Transformation([5,2,4,1,5])]);;
 gap> Rows(MulTab(S))=Columns(AntiMulTab(S));
 true
 gap> S5 := SymmetricGroup(IsPermGroup,5);;
