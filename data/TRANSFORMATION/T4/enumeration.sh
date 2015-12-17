@@ -28,7 +28,7 @@ rm UT*
 split -l 2000 K43modK42.suts UT
 rm UTtasks;
 for i in UT*; do echo "echo \"$XLOADER K43SubsFromUpperTorsos(\\\"$i\\\");\" | gap  -q -m $SMALLMEM" >> UTtasks; done;
-parallel --jobs $CORES --job-log K43modK42.log < UTtasks
+parallel --jobs $CORES --joblog K43modK42.log < UTtasks
 cat K42_K43.reps > K43.reps
 for i in  UT*M; do cat $i >> K43.reps; done;
 
