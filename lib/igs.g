@@ -71,18 +71,18 @@ ISCanCons := function(mt, potgens, iss, candidates)
     H := SgpInMulTab(set,mt);
     blistrep := BlistList(Indices(mt),set);
     Add(iss,blistrep);
-    if SizeBlist(H) < n then
-      diff := Difference(potgens,ListBlist(Indices(mt),H));
+    if Size(H) < n then
+      diff := Difference(potgens,H);
       #adding an element smaller than the minrep can't be canonical construction
       diff := Filtered(diff, x->minconjs[x] >= min);
       # checking whether adding elements from diff would yield igs' or not
       diff := Filtered(diff,
-                      x -> not ForAny(set, y-> cyclics[x][y])
+                      x -> not ForAny(set, y-> y in cyclics[x])
                            and IsCanonicalAddition(set,x,mt)
                            and CanWeAdd(set, x, mt));
       #it is enough the compile a List, rather than a Set
       ll := List(diff, x->Set(Concatenation(set,[x])));
-      l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
+      l := List(ll, x->ConjugacyClassRep(x,mt));
       Perform(l, function(y) Store(candidates,y);end);
     fi;
     counter := counter + 1;#####################################################
