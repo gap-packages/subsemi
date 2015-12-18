@@ -25,7 +25,6 @@ DeclareAttribute("Rows", IsMulTab);
 DeclareAttribute("Columns", IsMulTab);
 DeclareAttribute("Indices", IsMulTab);
 DeclareAttribute("Elts", IsMulTab);
-DeclareAttribute("EquivalentGenerators", IsMulTab);
 DeclareAttribute("Symmetries", IsMulTab);
 DeclareAttribute("SymmetryGroup", IsMulTab);
 DeclareAttribute("OriginalName", IsMulTab);
@@ -36,4 +35,4 @@ DeclareAttribute("EmptySet", IsMulTab);
 DeclareOperation("ConvergingSets", [IsMulTab,IsList]);
 DeclareGlobalFunction("NilpotencyDegreeByMulTabs");
 
-DeclareGlobalFunction("RemoveEquivalentGenerators");
+DeclareGlobalFunction("GeneratorReps");
