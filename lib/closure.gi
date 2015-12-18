@@ -50,7 +50,10 @@ function(base,extension,elt,mt)
   return false;
 end);
 
-CBI := function(base,extension,mt)
+#the closure of base the extension to closure (subsgp)
+# when adding a new point we check for new entries (filtered out by existing positions)
+InstallGlobalFunction(ClosureByIncrements,
+function(base,extension,mt)
   local waiting,diff,closure,i,j,tab, f;
   tab := Rows(mt);
   waiting := DuplicateFreeStack();
@@ -68,33 +71,6 @@ CBI := function(base,extension,mt)
     diff := Difference(diff,closure); #now it is a real diff
     Perform(diff, f);
     AddSet(closure, i); #adding i
-  od;
-  return closure;
-end;
-
-#the closure of base the extension to closure (subsgp)
-# when adding a new point we check for new entries (filtered out by existing positions)
-InstallGlobalFunction(ClosureByIncrements,
-function(base,extension,mt)
-  local waiting,diff,closure,i,j,tab;
-  tab := Rows(mt);
-  waiting := MutableBlist(extension, Indices(mt));
-  closure := ShallowCopy(base);
-  diff := BlistList(Indices(mt),[]);
-  while SizeBlist(waiting) > 0 do
-    i := Position(waiting,true); # it is not empty, so this is ok, not a queue
-    for j in Indices(mt) do
-      if closure[j] then
-        diff[tab[j][i]] := true; #scanning the ith column
-        diff[tab[i][j]] := true; #scanning the ith row
-      fi;
-    od;
-    diff[tab[i][i]] := true; # adding the diagonal
-    SubtractBlist(diff,closure); #now it is a real diff
-    UniteBlist(waiting, diff);
-    SubtractBlist(diff,waiting);#cleaning for reusing diff object
-    closure[i] := true; #adding i
-    waiting[i] := false; #removing i from the waiting
   od;
   return closure;
 end);
@@ -153,7 +129,7 @@ function(arg)
   if IsBound(arg[3]) then
     return arg[3](BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
   else
-    return CBI([],arg[1],arg[2]);
+    return ClosureByIncrements([],arg[1],arg[2]);
   fi;
 end);
 

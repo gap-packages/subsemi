@@ -122,7 +122,7 @@ function(mt,baseset,generators, waiting, result)
       if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then checkpoint(); fi;
       #CONSTRUCTING new subsgp
       next := Retrieve(waiting);
-      sgprep := ConjugacyClassRep(CBI(next[1],[next[2]],mt),mt);
+      sgprep := ConjugacyClassRep(ClosureByIncrements(next[1],[next[2]],mt),mt);
       bl := BlistList(Indices(mt), sgprep);
       if  bl in result then continue; fi; #EXIT if nothing to do
       #STORING new subsgp
