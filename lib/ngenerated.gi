@@ -12,11 +12,11 @@
 NSubsets := function(mt,n)
   local ntuple, db, counter, size;
   counter := 1;
-  db := LightBlistContainer();
+  db := []; # improve this storage
   size := Binomial(Size(Indices(mt)),n);
   Info(SubSemiInfoClass,1,FormattedBigNumberString(size)," subsets of size ",n);
   for ntuple in IteratorOfCombinations(Indices(mt),n) do
-    AddSet(db,ConjugacyClassRep(BlistList(Indices(mt),ntuple),mt));
+    AddSet(db,ConjugacyClassRep(ntuple,mt));
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
       Print("#", FormattedBigNumberString(counter)," ",
@@ -26,7 +26,7 @@ NSubsets := function(mt,n)
     counter := counter + 1;
   od;
   Info(SubSemiInfoClass,1,Size(db), " rep sets ");
-  return AsList(db);
+  return db;
 end;
 MakeReadOnlyGlobal("NSubsets");
 
@@ -34,7 +34,7 @@ MakeReadOnlyGlobal("NSubsets");
 # returns an n-generating set for each, not necessarily minimal
 NGeneratedSubSgps := function(mt,n)
   return Set(NSubsets(mt,n),
-             x->ConjugacyClassRep(SgpInMulTab(x,mt),mt));
+             x->BlistList(Indices(mt),ConjugacyClassRep(SgpInMulTab(x,mt),mt)));
 end;
 MakeReadOnlyGlobal("NGeneratedSubSgps");
 
