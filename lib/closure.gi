@@ -50,6 +50,27 @@ function(base,extension,elt,mt)
   return false;
 end);
 
+CBI := function(base,extension,mt)
+  local waiting,diff,closure,i,j,tab, f;
+  tab := Rows(mt);
+  waiting := DuplicateFreeStack();
+  f := function(x) Store(waiting,x);end;
+  Perform(extension, f);
+  closure := Set(base);
+  diff := [];
+  while not IsEmpty(waiting) do
+    i := Retrieve(waiting);
+    for j in closure do
+      AddSet(diff, tab[j][i]);
+      AddSet(diff, tab[i][j]);
+    od;
+    AddSet(diff, tab[i][i]); # adding the diagonal
+    diff := Difference(diff,closure); #now it is a real diff
+    Perform(diff, f);
+    AddSet(closure, i); #adding i
+  od;
+  return closure;
+end;
 
 #the closure of base the extension to closure (subsgp)
 # when adding a new point we check for new entries (filtered out by existing positions)
