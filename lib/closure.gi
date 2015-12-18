@@ -103,21 +103,22 @@ InstallGlobalFunction(ClosureByComplement,
 function(base,extension,mt)
   local complement,closure,i,globtab,flag;
   globtab := GlobalTables(mt);
-  closure := UnionBlist([base, MutableBlist(extension, Indices(mt))]);
-  complement := DifferenceBlist(FullSet(mt), closure);
+  closure := Union(base, extension);
+  complement := Difference(Indices(mt), closure);
   flag := true; # true means we still have work to do
   while flag do
     flag := false;
-    for i in Indices(mt) do
-      if complement[i] then #is it in the complement
-        if ForAny(globtab[i], function(bt) #do we include i?
-             return closure[bt[1]] and ForAny(bt[2], y->closure[y]);end) then
-          closure[i] := true;
+    for i in complement do
+      if ForAny(globtab[i],
+                function(bt) #do we include i?
+                  return bt[1] in closure
+                         and ForAny(bt[2],
+                                    y->y in closure);end) then
+          AddSet(closure,i);
           flag := true;
         fi;
-      fi;
     od;
-    complement := DifferenceBlist(FullSet(mt), closure);
+    complement := Difference(Indices(mt), closure);
   od;
   return closure;
 end);
