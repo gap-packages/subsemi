@@ -11,3 +11,4 @@ DeclareAttribute("MinimumConjugates", IsMulTab);
 DeclareAttribute("MinimumConjugators", IsMulTab);
 
 DeclareGlobalFunction("ConjugacyClassRep");
+DeclareGlobalFunction("ConjugacyClassRepBlist");

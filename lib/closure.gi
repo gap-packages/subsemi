@@ -153,7 +153,7 @@ function(arg)
   if IsBound(arg[3]) then
     return arg[3](BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
   else
-    return ClosureByIncrements(BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
+    return CBI([],arg[1],arg[2]);
   fi;
 end);
 

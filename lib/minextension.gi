@@ -10,15 +10,15 @@
 # mt - MulTab, multiplication table
 InstallGlobalFunction(SubSgpsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
-                                    EmptySet(mt),
-                                    RemoveEquivalentGenerators(FullSet(mt),mt),
+                                    [],
+                                    Indices(mt),#RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Stack(),
                                     []);end);
 
 InstallGlobalFunction(SubSgpGenSetsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
-                                    EmptySet(mt),
-                                    RemoveEquivalentGenerators(FullSet(mt),mt),
+                                    [],
+                                    Indices(mt),#RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Queue(),
                                     []);end);
 
@@ -49,7 +49,7 @@ function(mt,baseset,generators, waiting, result)
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
         gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main,init,
-        normalizer,seed, peeked;
+        normalizer,seed, peeked, sgprep;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
@@ -90,7 +90,7 @@ function(mt,baseset,generators, waiting, result)
   init := function()
     result := HeavyBlistContainer();
     #if baseset not empty then close it and add it as a sub
-    if SizeBlist(baseset) > 0 then
+    if not IsEmpty(baseset) then
       seed := ConjugacyClassRep(SgpInMulTab(baseset,mt),mt);
       AddSet(result, seed);
     else
@@ -100,11 +100,11 @@ function(mt,baseset,generators, waiting, result)
     # 1: baseset 2: gen the element to be extended with, 3: generating set (opt)
     if isBreadthFirst then
       gensets := [];
-      for gen in ListBlist(Indices(mt),generators) do
+      for gen in generators do
         Store(waiting, [seed, gen,[gen]]);
       od;
     else
-      for gen in ListBlist(Indices(mt),generators) do
+      for gen in generators do
         Store(waiting, [seed, gen]);
       od;
     fi;
@@ -122,23 +122,24 @@ function(mt,baseset,generators, waiting, result)
       if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then checkpoint(); fi;
       #CONSTRUCTING new subsgp
       next := Retrieve(waiting);
-      bl := ConjugacyClassRep(ClosureByIncrements(next[1],[next[2]],mt),mt);
+      sgprep := ConjugacyClassRep(CBI(next[1],[next[2]],mt),mt);
+      bl := BlistList(Indices(mt), sgprep);
       if  bl in result then continue; fi; #EXIT if nothing to do
       #STORING new subsgp
       if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
       AddSet(result, bl);
       #REMAINDER elts for further extensions
-      diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
-      normalizer := Stabilizer(SymmetryGroup(mt), bl, OnFiniteSet);
+      diff := Difference(generators, sgprep);
+      normalizer := Stabilizer(SymmetryGroup(mt), sgprep, OnSets);
       if Size(normalizer) > 1 then #do it only if it is nontrivial
         diff := List(Orbits(normalizer, diff, OnPoints ), x->x[1]);
       fi;
       #RECURSION
       if isBreadthFirst then
         Perform(diff,
-                function(t)Store(waiting,[bl,t,Concatenation(gens,[t])]);end);
+                function(t)Store(waiting,[sgprep,t,Concatenation(gens,[t])]);end);
       else
-        Perform(diff,function(t)Store(waiting,[bl,t]);end);
+        Perform(diff,function(t)Store(waiting,[sgprep,t]);end);
       fi;
     od;
   end;

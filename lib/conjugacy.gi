@@ -64,6 +64,11 @@ MakeReadOnlyGlobal("PossibleMinConjugators");
 
 #the minimal one is the representative
 InstallGlobalFunction(ConjugacyClassRep,
+function(set,mt)
+  return SetConjugacyClassRep(set, PossibleMinConjugators(set,mt));
+end);
+
+InstallGlobalFunction(ConjugacyClassRepBlist,
 function(indset,mt)
   local set, rep;
   set := ListBlist(Indices(mt), indset);
