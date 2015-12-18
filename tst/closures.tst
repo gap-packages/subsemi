@@ -10,12 +10,10 @@ gap> TestGenerateSg := function(mt)
 gap> mt := MulTab(FullTransformationSemigroup(4));;
 gap> ForAll([1..10], i-> TestGenerateSg(mt));
 true
-gap> subs := EnumeratorOfCartesianProduct(List([1..27],x->[false,true]));;
-gap> l := List([1..10000],x->Random(subs));;
-gap> mt := MulTab(FullTransformationSemigroup(3));;
+gap> f := x -> DuplicateFreeList(List([1..Random([1..7])], y->Random(Indices(mt))));;
+gap> l := List([1..100], f);;
 gap> ForAll(l, x-> SgpInMulTab(x,mt) = SgpInMulTab(x,mt,ClosureByIncrementsAndLocalTables));
 true
-gap> l := List([1..10000],x->Random(subs));;
 gap> ForAll(l, x-> SgpInMulTab(x,mt) = SgpInMulTab(x,mt,ClosureByComplement));
 true
 

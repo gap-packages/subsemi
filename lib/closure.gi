@@ -57,7 +57,7 @@ function(base,extension,mt)
   local waiting,diff,closure,i,j,tab, f;
   tab := Rows(mt);
   waiting := DuplicateFreeStack();
-  f := function(x) Store(waiting,x);end;
+  f := function(x) Store(waiting,x);end; #todo generic storefunction in DUST
   Perform(extension, f);
   closure := Set(base);
   diff := [];
@@ -78,21 +78,22 @@ end);
 #alternative method
 InstallGlobalFunction(ClosureByIncrementsAndLocalTables,
 function(base,extension,mt)
-  local waiting,closure,i,v,tab;
+  local waiting,closure,i,v,tab,f;
   tab := LocalTables(mt);
-  waiting := MutableBlist(extension, Indices(mt));
-  closure := ShallowCopy(base);
-  while SizeBlist(waiting) > 0 do
-    i := Position(waiting,true); # it is not empty, so this is ok
-    closure[i] := true; #adding i
+  waiting := DuplicateFreeStack();
+  f := function(x) Store(waiting,x);end; #todo generic storefunction in DUST
+  Perform(extension, f);
+  closure := Set(base);
+  while not IsEmpty(waiting) do
+    i := Retrieve(waiting);
+    AddSet(closure, i); #adding i
     #what shall we include?
     for v in tab[i] do
-      if not closure[v[1]] and ForAny(v[2], x->closure[x]) then
-        waiting[v[1]] := true;
-        closure[v[1]] := true; #boosting: if in waiting then it is in
+      if not v[1] in closure and ForAny(v[2], x-> x in closure) then
+        Store(waiting, v[1]);
+        AddSet(closure, v[1]); #boosting: if in waiting then it is in
       fi;
     od;
-    waiting[i] := false; #removing i from the waiting list
   od;
   return closure;
 end);
@@ -127,7 +128,7 @@ function(arg)
   #arg[2] - mt
   #arg[3] - closure function
   if IsBound(arg[3]) then
-    return arg[3](BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
+    return arg[3]([],arg[1],arg[2]);
   else
     return ClosureByIncrements([],arg[1],arg[2]);
   fi;
