@@ -43,7 +43,7 @@ CanWeAdd := function(gens, newgen, mt)
   for i  in [1..Size(gens)] do
     g := l[i]; #remembering the knocked out old generator
     l[i] := newgen; #putting in the new generator
-    if IsInClosure(EmptySet(mt),l,g,mt) then return false; fi;
+    if IsInClosure([],l,g,mt) then return false; fi;
     l[i] := g; #undo
   od;
   return true;
@@ -124,17 +124,17 @@ ISDatabase := function(mt, potgens,iss,candidates)
     blistrep := BlistList(Indices(mt),set);
     if not blistrep in iss then
       AddSet(iss,blistrep);
-      if SizeBlist(H) < n then
-        diff := Difference(potgens,ListBlist(Indices(mt),H));
+      if Size(H) < n then
+        diff := Difference(potgens,H);
         # orbit reps by the normalizer, making diff smaller, avoid dups
-        normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
-        diff := List(Orbits(normalizer, diff), x->x[1]);
+        #normalizer := Stabilizer(SymmetryGroup(mt), H, OnSets);
+        #diff := List(Orbits(normalizer, diff, OnPoints), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
-        diff := Filtered(diff, x -> not ForAny(set, y-> cyclics[x][y])
+        diff := Filtered(diff, x -> not ForAny(set, y-> y in cyclics[x])
                                     and CanWeAdd(set, x, mt));
         #it is enough the compile a List, rather than a Set
         ll := List(diff, x->Set(Concatenation(set,[x])));
-        l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
+        l := List(ll, x->ConjugacyClassRep(x,mt));
         Perform(l, function(y) Store(candidates,y);end);
       fi;
     fi;
@@ -171,7 +171,7 @@ ISWithGens := function(mt,potgens,ISfunc)
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, []);
   if ISfunc = ISDatabase then
-    db := LightBlistContainer();
+    db := [];#LightBlistContainer();
   else
     db := [];
   fi;

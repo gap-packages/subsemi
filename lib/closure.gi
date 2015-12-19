@@ -24,28 +24,25 @@ MakeReadOnlyGlobal("MutableBlist");
 #trying to leave the function as early as possible
 InstallGlobalFunction(IsInClosure,
 function(base,extension,elt,mt)
-  local waiting,diff,closure,i,j,tab;
+  local waiting,diff,closure,i,j,tab, f;
   tab := Rows(mt);
-  waiting := MutableBlist(extension, Indices(mt));
-  closure := ShallowCopy(base);
-  if closure[elt] or waiting[elt] then return true; fi;
-  diff := BlistList(Indices(mt),[]);
-  while SizeBlist(waiting) > 0 do
-    i := Position(waiting,true); # it is not empty, so this is ok, not a queue
-    if elt = i then return true; fi;
-    for j in Indices(mt) do
-      if closure[j] then
-        diff[tab[j][i]] := true; #scanning the ith column
-        diff[tab[i][j]] := true; #scanning the ith row
-      fi;
+  waiting := DuplicateFreeStack();
+  f := function(x) Store(waiting,x);end; #todo generic storefunction in DUST
+  Perform(extension, f);
+  closure := Set(base);
+  diff := [];
+  while not IsEmpty(waiting) do
+    i := Retrieve(waiting);
+    if i = elt then return true; fi;
+    for j in closure do
+      AddSet(diff, tab[j][i]);
+      AddSet(diff, tab[i][j]);
     od;
-    diff[tab[i][i]] := true; # adding the diagonal
-    SubtractBlist(diff,closure); #now it is a real diff
-    if diff[elt] then return true; fi;
-    UniteBlist(waiting, diff);
-    SubtractBlist(diff,waiting);#cleaning for reusing diff object
-    closure[i] := true; #adding i
-    waiting[i] := false; #removing i from the waiting
+    AddSet(diff, tab[i][i]); # adding the diagonal
+    diff := Difference(diff,closure); #now it is a real diff
+    if elt in diff then return true; fi;
+    Perform(diff, f);
+    AddSet(closure, i); #adding i
   od;
   return false;
 end);
