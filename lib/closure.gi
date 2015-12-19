@@ -9,17 +9,6 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
-#TODO get rid of this by working on lists only
-#returning a mutable bitlist from a bitlist or a list of pos integers
-MutableBlist := function(set, universe)
-  if IsBlist(set) then #to make it type agnostic
-    return ShallowCopy(set);
-  else
-    return BlistList(universe,set);
-  fi;
-end;
-MakeReadOnlyGlobal("MutableBlist");
-
 #TODO duplicated code, do proper abstraction!
 #trying to leave the function as early as possible
 InstallGlobalFunction(IsInClosure,
