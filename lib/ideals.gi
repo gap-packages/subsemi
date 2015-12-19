@@ -50,7 +50,7 @@ local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
   Perform(tmp, function(x) if fail in x then
       Remove(x, Position(x,fail));fi;end);
   mtS := MulTab(Parent(I),G);
-  return  List(Unique(tmp),x-> IndicatorFunction(x,mtS));
+  return  List(Unique(tmp),x-> List(x, y->Position(Elts(mtS),y)) );
 end;
 
 # calculates all sub conjugacy reps of S/I then extends all upper torsos
@@ -62,7 +62,7 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
   S := Parent(I);
   mtS := MulTab(S,G);
   extended := List(uppertorsos, x-> SgpInMulTab(x,mtS));
-  filter := IndicatorFunction(AsList(I),Elts(mtS));
+  filter := List(I, x-> Position(Elts(mtS), x));
   result := [];
   Perform(extended, function(x)
     Append(result,AsList(

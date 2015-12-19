@@ -92,7 +92,7 @@ function(mt,baseset,generators, waiting, result)
     #if baseset not empty then close it and add it as a sub
     if not IsEmpty(baseset) then
       seed := ConjugacyClassRep(SgpInMulTab(baseset,mt),mt);
-      AddSet(result, seed);
+      AddSet(result, BlistList(Indices(mt),seed));
     else
       seed := baseset;
     fi;
