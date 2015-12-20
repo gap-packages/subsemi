@@ -11,6 +11,18 @@
 
 # Blists are lot faster like 4x-7x
 
+InstallGlobalFunction(SgpInMulTab, function(gens, mt)
+  local closure, i;
+  # we allow both lists and blists as input
+  if IsBlist(gens) then gens := ListBlist(Indices(mt), gens); fi;
+  closure := ClosureByIncrements(EmptySet(mt), gens[1], mt);
+  for i in [2..Length(gens)] do
+    closure := ClosureByIncrements(closure, gens[i], mt);
+  od;
+  return closure;
+end);
+
+
 #returning a mutable bitlist from a bitlist or a list of pos integers
 MutableBlist := function(set, universe)
   if IsBlist(set) then #to make it type agnostic
@@ -122,24 +134,6 @@ function(base,extension,mt)
   return closure;
 end);
 
-InstallGlobalFunction(SgpInMulTab,
-function(arg)
-  #arg[1] - gens
-  #arg[2] - mt
-  #arg[3] - closure function
-  local closure, i, f, gens;
-  gens := arg[1]; #ListBlist(Indices(mt), arg[1]);
-  if IsBound(arg[3]) then
-    f := arg[3];
-  else
-    f := ClosureByIncrements;
-  fi;
-  closure := f(EmptySet(arg[2]), gens[1], arg[2]);
-  for i in [2..Length(gens)] do
-    closure := f(closure, gens[i], arg[2]);
-  od;
-  return closure;
-end);
 
 InstallGlobalFunction(IsMaximalSubSgp,
 function(set,mt)
