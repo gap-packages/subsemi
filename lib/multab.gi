@@ -232,6 +232,12 @@ function(mt)
   return BlistList(Indices(mt),[]);
 end);
 
+InstallMethod(MonogenicSgps,"for multab", [IsMulTab],
+function(mt)
+  return List(Indices(mt), x->ClosureByIncrements(EmptySet(mt), x, mt));
+end);
+
+
 # S,S^1,S^2,...,S^n=S^{n+1}
 InstallMethod(ConvergingSets,"for multab and list",
         [IsMulTab,IsList],

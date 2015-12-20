@@ -33,6 +33,8 @@ DeclareAttribute("LocalTables", IsMulTab);
 DeclareAttribute("GlobalTables", IsMulTab);
 DeclareAttribute("FullSet", IsMulTab);
 DeclareAttribute("EmptySet", IsMulTab);
+DeclareAttribute("MonogenicSgps", IsMulTab);
+
 DeclareOperation("ConvergingSets", [IsMulTab,IsList]);
 DeclareGlobalFunction("NilpotencyDegreeByMulTabs");
 
