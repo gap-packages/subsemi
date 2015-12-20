@@ -13,7 +13,7 @@
 
 #returning a mutable bitlist from a bitlist or a list of pos integers
 MutableBlist := function(set, universe)
-  if IsBlist(set) then #to make it type agnostic
+  if IsBlistRep(set) then #to make it type agnostic
     return ShallowCopy(set);
   else
     return BlistList(universe,set);
@@ -62,7 +62,7 @@ function(base,extension,mt)
   closure := ShallowCopy(base);
   diff := BlistList(Indices(mt),[]);
   while SizeBlist(waiting) > 0 do
-    i := Position(waiting,true); # it is not empty, so this is ok, not a queue
+    i := Position(waiting,true); # just get the first
     for j in Indices(mt) do
       if closure[j] then
         diff[tab[j][i]] := true; #scanning the ith column
@@ -71,7 +71,7 @@ function(base,extension,mt)
     od;
     diff[tab[i][i]] := true; # adding the diagonal
     SubtractBlist(diff,closure); #now it is a real diff
-    UniteBlist(waiting, diff);
+    UniteBlist(waiting, diff); # adding the new elements into waiting list
     SubtractBlist(diff,waiting);#cleaning for reusing diff object
     closure[i] := true; #adding i
     waiting[i] := false; #removing i from the waiting
