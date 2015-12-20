@@ -57,8 +57,10 @@ end);
 InstallGlobalFunction(ClosureByIncrements,
 function(base,extension,mt)
   local diff,closure,i,j,tab;
+  if base[extension] then return base; fi;
   tab := Rows(mt);
-  diff := MutableBlist(extension, Indices(mt));
+  diff := BlistList(Indices(mt),[]);
+  diff[extension] := true;
   closure := ShallowCopy(base);
   while SizeBlist(diff) > 0 do
     i := Position(diff,true); # just get the first
@@ -125,11 +127,18 @@ function(arg)
   #arg[1] - gens
   #arg[2] - mt
   #arg[3] - closure function
+  local closure, i, f, gens;
+  gens := arg[1]; #ListBlist(Indices(mt), arg[1]);
   if IsBound(arg[3]) then
-    return arg[3](BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
+    f := arg[3];
   else
-    return ClosureByIncrements(BlistList(Indices(arg[2]),[]),arg[1],arg[2]);
+    f := ClosureByIncrements;
   fi;
+  closure := f(EmptySet(arg[2]), gens[1], arg[2]);
+  for i in [2..Length(gens)] do
+    closure := f(closure, gens[i], arg[2]);
+  od;
+  return closure;
 end);
 
 InstallGlobalFunction(IsMaximalSubSgp,
@@ -139,7 +148,7 @@ function(set,mt)
   SubtractSet(diff, AsSet(ListBlist(Indices(mt), set)));
   if IsEmpty(diff) then return false; fi;
   full := BlistList(Indices(mt),Indices(mt));
-  return ForAll(diff, i-> full = ClosureByIncrements(set,[i],mt));
+  return ForAll(diff, i-> full = ClosureByIncrements(set,i,mt));
 end);
 
 InstallGlobalFunction(IsClosedSubTable,
