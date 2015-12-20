@@ -9,7 +9,8 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
-#TODO get rid of this by working on lists only
+# Blists are lot faster like 4x-7x
+
 #returning a mutable bitlist from a bitlist or a list of pos integers
 MutableBlist := function(set, universe)
   if IsBlist(set) then #to make it type agnostic
