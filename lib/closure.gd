@@ -9,12 +9,13 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
-DeclareGlobalFunction("IsInClosure");
 DeclareGlobalFunction("ClosureByIncrements");
 DeclareGlobalFunction("ClosureByIncrementsAndLocalTables");
 DeclareGlobalFunction("ClosureByComplement");
 
 DeclareGlobalFunction("SgpInMulTab");
+DeclareGlobalFunction("IsInSgp");
+
 DeclareGlobalFunction("IsClosedSubTable");
 DeclareGlobalFunction("IsMaximalSubSgp");
 DeclareGlobalFunction("MissingElements");

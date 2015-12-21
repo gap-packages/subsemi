@@ -34,32 +34,29 @@ MutableBlist := function(set, universe)
 end;
 MakeReadOnlyGlobal("MutableBlist");
 
-#TODO duplicated code, do proper abstraction!
 #trying to leave the function as early as possible
-InstallGlobalFunction(IsInClosure,
-function(base,extension,elt,mt)
-  local waiting,diff,closure,i,j,tab;
+InstallGlobalFunction(IsInSgp,
+function(gens,elt,mt)
+  local diff,closure,i,j,tab;
+  #first the monogenic semigroups
+  if elt in gens or ForAny(gens, x->MonogenicSgps(mt)[x][elt]) then
+    return true;
+  fi;
   tab := Rows(mt);
-  waiting := MutableBlist(extension, Indices(mt));
-  closure := ShallowCopy(base);
-  if closure[elt] or waiting[elt] then return true; fi;
-  diff := BlistList(Indices(mt),[]);
-  while SizeBlist(waiting) > 0 do
-    i := Position(waiting,true); # it is not empty, so this is ok, not a queue
-    if elt = i then return true; fi;
+  closure := BlistList(Indices(mt),[]);
+  diff := BlistList(Indices(mt),gens);
+  while SizeBlist(diff) > 0 do
+    i := Position(diff,true); # just get the first
+    if i = elt then return true; fi;
+    closure[i] := true; #adding i
     for j in Indices(mt) do
       if closure[j] then
         diff[tab[j][i]] := true; #scanning the ith column
         diff[tab[i][j]] := true; #scanning the ith row
       fi;
     od;
-    diff[tab[i][i]] := true; # adding the diagonal
-    SubtractBlist(diff,closure); #now it is a real diff
     if diff[elt] then return true; fi;
-    UniteBlist(waiting, diff);
-    SubtractBlist(diff,waiting);#cleaning for reusing diff object
-    closure[i] := true; #adding i
-    waiting[i] := false; #removing i from the waiting
+    SubtractBlist(diff,closure); #now it is a real diff
   od;
   return false;
 end);
