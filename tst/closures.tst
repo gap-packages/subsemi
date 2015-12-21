@@ -20,10 +20,10 @@ true
 gap> subs := EnumeratorOfCartesianProduct(List([1..27],x->[false,true]));;
 gap> l := List([1..10000],x->Random(subs));;
 gap> mt := MulTab(FullTransformationSemigroup(3));;
-gap> ForAll(l, x-> SgpInMulTab(x,mt) = SgpInMulTab(x,mt,ClosureByIncrementsAndLocalTables));
+gap> ForAll(l, x-> SgpInMulTab(x,mt) = ClosureByIncrementsAndLocalTables(EmptySet(mt), x, mt));
 true
 gap> l := List([1..10000],x->Random(subs));;
-gap> ForAll(l, x-> SgpInMulTab(x,mt) = SgpInMulTab(x,mt,ClosureByComplement));
+gap> ForAll(l, x-> SgpInMulTab(x,mt) = ClosureByComplement(EmptySet(mt), x ,mt));
 true
 
 #

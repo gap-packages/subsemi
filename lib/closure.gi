@@ -135,7 +135,6 @@ function(base,extension,mt)
   return closure;
 end);
 
-
 InstallGlobalFunction(IsMaximalSubSgp,
 function(set,mt)
   local diff, full;
