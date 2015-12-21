@@ -15,7 +15,10 @@ InstallGlobalFunction(SgpInMulTab, function(gens, mt)
   local closure, i;
   if IsEmpty(gens) then return EmptySet(mt);fi;
   # we allow both lists and blists as input
-  if IsBlist(gens) then gens := ListBlist(Indices(mt), gens); fi;
+  if IsBlist(gens) then
+    if SizeBlist(gens) = 0 then return EmptySet(mt); fi;
+    gens := ListBlist(Indices(mt), gens);
+  fi;
   closure := MonogenicSgps(mt)[gens[1]];
   for i in [2..Length(gens)] do
     closure := ClosureByIncrements(closure, gens[i], mt);
