@@ -60,10 +60,9 @@ end;
 # canonical construction path method
 #potgens should be a subset of FullSet(mt)
 ISCanCons := function(mt, potgens, iss, candidates)
-  local H,set,counter,blistrep,diff,n, l, cyclics, ll, minconjs, min;
+  local H,set,counter,blistrep,diff,n, l, ll, minconjs, min;
   counter := 0;
   n := Size(Indices(mt));
-  cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
   minconjs := MinimumConjugates(mt);
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
@@ -77,7 +76,7 @@ ISCanCons := function(mt, potgens, iss, candidates)
       diff := Filtered(diff, x->minconjs[x] >= min);
       # checking whether adding elements from diff would yield igs' or not
       diff := Filtered(diff,
-                      x -> not ForAny(set, y-> cyclics[x][y])
+                      x -> not ForAny(set, y-> MonogenicSgps(mt)[x][y])
                            and IsCanonicalAddition(set,x,mt)
                            and CanWeAdd(set, x, mt));
       #it is enough the compile a List, rather than a Set
@@ -114,10 +113,9 @@ end;
 # keeping a database for checking against
 #potgens should be a subset of FullSet(mt)
 ISDatabase := function(mt, potgens,iss,candidates)
-  local H,set,counter,blistrep,diff,normalizer,n, l, cyclics, ll;
+  local H,set,counter,blistrep,diff,normalizer,n, l, ll;
   counter := 0;
   n := Size(Indices(mt));
-  cyclics := List(Indices(mt), x->SgpInMulTab([x],mt)); #cyclic groups
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
@@ -130,8 +128,7 @@ ISDatabase := function(mt, potgens,iss,candidates)
         normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
         diff := List(Orbits(normalizer, diff), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
-        diff := Filtered(diff, x -> not ForAny(set, y-> cyclics[x][y])
-                                    and CanWeAdd(set, x, mt));
+        diff := Filtered(diff, x -> CanWeAdd(set, x, mt));
         #it is enough the compile a List, rather than a Set
         ll := List(diff, x->Set(Concatenation(set,[x])));
         l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
