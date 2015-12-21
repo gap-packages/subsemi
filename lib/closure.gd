@@ -10,8 +10,8 @@
 ##
 
 DeclareGlobalFunction("ClosureByIncrements");
-DeclareGlobalFunction("ClosureByIncrementsAndLocalTables");
-DeclareGlobalFunction("ClosureByComplement");
+DeclareGlobalFunction("ClosureByLocalTables");
+DeclareGlobalFunction("ClosureByGlobalTables");
 
 DeclareGlobalFunction("SgpInMulTab");
 DeclareGlobalFunction("IsInSgp");
