@@ -1,5 +1,9 @@
+0.55
+	Closure algorithms got simplified.
+0.54
+	CLOSED BRANCH! Major architectural change: closure algorithms work on lists only, and blists are only used for storage. (It turns out that plain lists are lot slower.)
 0.53
-	IsIndependentSet -> IsSgpIndependentSet, to be matehamtically precise. Removing experimental code (Expressible).
+	IsIndependentSet -> IsSgpIndependentSet, to be mathematically precise. Removing experimental code (Expressible).
 0.52
 	AutGrpOfMulTab added. Removing unused code from filing. GAP 4.8 is now a dependence.
 0.51
