@@ -10,21 +10,24 @@
 ##
 
 # Blists are lot faster like 4x-7x
+SgpInMulTabFunc := function(closure_func)
+  return function(gens, mt)
+    local closure, i;
+    if IsEmpty(gens) then return EmptySet(mt);fi;
+    # we allow both lists and blists as input
+    if IsBlist(gens) then
+      if SizeBlist(gens) = 0 then return EmptySet(mt); fi;
+      gens := ListBlist(Indices(mt), gens);
+    fi;
+    closure := MonogenicSgps(mt)[gens[1]];
+    for i in [2..Length(gens)] do
+      closure := closure_func(closure, gens[i], mt);
+    od;
+    return closure;
+  end;
+end;
 
-InstallGlobalFunction(SgpInMulTab, function(gens, mt)
-  local closure, i;
-  if IsEmpty(gens) then return EmptySet(mt);fi;
-  # we allow both lists and blists as input
-  if IsBlist(gens) then
-    if SizeBlist(gens) = 0 then return EmptySet(mt); fi;
-    gens := ListBlist(Indices(mt), gens);
-  fi;
-  closure := MonogenicSgps(mt)[gens[1]];
-  for i in [2..Length(gens)] do
-    closure := ClosureByIncrements(closure, gens[i], mt);
-  od;
-  return closure;
-end);
+InstallGlobalFunction(SgpInMulTab, SgpInMulTabFunc(ClosureByIncrements));
 
 #trying to leave the function as early as possible
 InstallGlobalFunction(IsInSgp,
