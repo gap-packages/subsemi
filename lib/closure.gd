@@ -16,6 +16,7 @@ DeclareGlobalFunction("ClosureByGlobalTables");
 DeclareGlobalFunction("SgpInMulTab");
 DeclareGlobalFunction("IsInSgp");
 
-DeclareGlobalFunction("IsClosedSubTable");
 DeclareGlobalFunction("IsMaximalSubSgp");
+
+DeclareGlobalFunction("IsClosedSubTable");
 DeclareGlobalFunction("MissingElements");
