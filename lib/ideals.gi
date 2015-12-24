@@ -64,9 +64,11 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
   extended := List(uppertorsos, x-> SgpInMulTab(x,mtS));
   filter := IndicatorFunction(AsList(I),Elts(mtS));
   result := [];
-  Perform(extended, function(x)
-    Append(result,AsList(
-            SubSgpsByMinExtensionsParametrized(mtS,x,filter,Stack(),[])));end);
+  Perform(extended,
+          function(x)
+           Append(result,
+                  SubSgpsByMinExtensionsParametrized(mtS,x,filter,Stack(),[],[]));
+         end);
   return result; #TODO duplicates when the ideal has only one element
 end;
 
