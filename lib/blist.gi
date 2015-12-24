@@ -7,6 +7,20 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
+BlistStorage := function(n)
+  local sample;
+  sample := BlistList([1..3], [1,2,3]); #just a sample blist object
+  return List([1..n], x-> HTCreate(sample)); 
+end;
+
+StoreBlist := function(bls, bl)
+  HTAdd(bls[(HASH_FUNC_FOR_BLIST(bl,[]) mod Size(bls))+1], bl, true);
+end;
+
+IsInBlistStorage := function(bls, bl)
+  return true = HTValue(bls[(HASH_FUNC_FOR_BLIST(bl,[]) mod Size(bls))+1], bl);
+end;
+
 ### INDEXING ###################################################################
 # returns the position of the 1st entry or 1 if empty
 InstallGlobalFunction(FirstEntryPosOr1,
