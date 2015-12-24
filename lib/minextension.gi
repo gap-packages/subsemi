@@ -13,14 +13,14 @@ InstallGlobalFunction(SubSgpsByMinExtensions,
                                     EmptySet(mt),
                                     RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Stack(),
-                                    []);end);
+                                    [],[]);end);
 
 InstallGlobalFunction(SubSgpGenSetsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
                                     RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Queue(),
-                                    []);end);
+                                    [],[]);end);
 
 #global datastructure for resuming search
 BindGlobal("SUBSEMI_MinExtensionsCheckPointData", rec());
@@ -30,6 +30,7 @@ ResumeMinExtensions := function()
                  [], #this does not matter
                  SUBSEMI_MinExtensionsCheckPointData.generators,
                  SUBSEMI_MinExtensionsCheckPointData.waiting,
+                 SUBSEMI_MinExtensionsCheckPointData.db,
                  SUBSEMI_MinExtensionsCheckPointData.result);
 end;
 
@@ -41,7 +42,7 @@ end;
 # waiting - the new and yet unchecked extensions in a stack or a queue
 # result - the collected subs so far in a collection admitting AddSet
 InstallGlobalFunction(SubSgpsByMinExtensionsParametrized,
-function(mt,baseset,generators, waiting, result)
+function(mt,baseset,generators, waiting, db, result)
   local gen, # the generator to be added to the base
         counter, # counting the recursive calls
         prev_counter, # the value of counter at previous measurement (log, dump)
@@ -78,6 +79,7 @@ function(mt,baseset,generators, waiting, result)
     prev_secs := TimeInSeconds();
     SUBSEMI_MinExtensionsCheckPointData.waiting := waiting;
     SUBSEMI_MinExtensionsCheckPointData.result := result;
+    SUBSEMI_MinExtensionsCheckPointData.db := db;
     SUBSEMI_MinExtensionsCheckPointData.mt := mt;
     SUBSEMI_MinExtensionsCheckPointData.generators := generators;
     SaveWorkspace(Concatenation("checkpoint",
@@ -88,11 +90,13 @@ function(mt,baseset,generators, waiting, result)
   end;
   #-----------------------------------------------------------------------------
   init := function()
-    result := HeavyBlistContainer();
+    result := [];
+    db := BlistStorage(Size(mt));
     #if baseset not empty then close it and add it as a sub
     if SizeBlist(baseset) > 0 then
       seed := ConjugacyClassRep(SgpInMulTab(baseset,mt),mt);
-      AddSet(result, seed);
+      Add(result, seed);
+      StoreBlist(db, seed);
     else
       seed := baseset;
     fi;
@@ -123,10 +127,11 @@ function(mt,baseset,generators, waiting, result)
       #CONSTRUCTING new subsgp
       next := Retrieve(waiting);
       bl := ConjugacyClassRep(ClosureByIncrements(next[1],next[2],mt),mt);
-      if  bl in result then continue; fi; #EXIT if nothing to do
+      if  IsInBlistStorage(db,bl) then continue; fi; #EXIT if nothing to do
       #STORING new subsgp
       if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
-      AddSet(result, bl);
+      Add(result, bl);
+      StoreBlist(db,bl);
       #REMAINDER elts for further extensions
       diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
       normalizer := Stabilizer(SymmetryGroup(mt), bl, OnFiniteSet);

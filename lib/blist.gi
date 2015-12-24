@@ -14,11 +14,11 @@ BlistStorage := function(n)
 end;
 
 StoreBlist := function(bls, bl)
-  HTAdd(bls[(HASH_FUNC_FOR_BLIST(bl,[]) mod Size(bls))+1], bl, true);
+  HTAdd(bls[(HASH_FUNC_FOR_BLIST(bl,101) mod Size(bls))+1], bl, true);
 end;
 
 IsInBlistStorage := function(bls, bl)
-  return true = HTValue(bls[(HASH_FUNC_FOR_BLIST(bl,[]) mod Size(bls))+1], bl);
+  return true = HTValue(bls[(HASH_FUNC_FOR_BLIST(bl,101) mod Size(bls))+1], bl);
 end;
 
 ### INDEXING ###################################################################
