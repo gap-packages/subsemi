@@ -112,7 +112,7 @@ end;
 
 # keeping a database for checking against
 #potgens should be a subset of FullSet(mt)
-ISDatabase := function(mt, potgens,iss,candidates)
+ISDatabase := function(mt, potgens,db,candidates,result)
   local H,set,counter,blistrep,diff,normalizer,n, l, ll;
   counter := 0;
   n := Size(Indices(mt));
@@ -120,8 +120,9 @@ ISDatabase := function(mt, potgens,iss,candidates)
     set := Retrieve(candidates);
     H := SgpInMulTab(set,mt);
     blistrep := BlistList(Indices(mt),set);
-    if not blistrep in iss then
-      AddSet(iss,blistrep);
+    if not IsInBlistStorage(db,blistrep) then
+      StoreBlist(db,blistrep);
+      Add(result, blistrep);
       if SizeBlist(H) < n then
         diff := Difference(potgens,ListBlist(Indices(mt),H));
         # orbit reps by the normalizer, making diff smaller, avoid dups
@@ -139,8 +140,8 @@ ISDatabase := function(mt, potgens,iss,candidates)
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
       Info(SubSemiInfoClass,1,FormattedBigNumberString(counter),
-           " iss:", Size(iss)," ~ ",
-           FormattedBigNumberString(Size(iss)),
+           " iss:", Size(result)," ~ ",
+           FormattedBigNumberString(Size(result)),
            " stack:",String(Size(candidates)),
            " ", Peek(candidates));
     fi;#########################################################################
@@ -148,7 +149,8 @@ ISDatabase := function(mt, potgens,iss,candidates)
       SUBSEMI_IGSCheckPointData.candidates := candidates;
       SUBSEMI_IGSCheckPointData.mt := mt;
       SUBSEMI_IGSCheckPointData.potgens := potgens;
-      SUBSEMI_IGSCheckPointData.iss := iss;
+      SUBSEMI_IGSCheckPointData.db := db;
+      SUBSEMI_IGSCheckPointData.result := result;
       SaveWorkspace(Concatenation("IGScheckpoint",
               String(IO_gettimeofday().tv_sec),".ws"));
       Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved after ",
@@ -156,9 +158,9 @@ ISDatabase := function(mt, potgens,iss,candidates)
     fi;
   od;
   Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
-       String(Size(iss)),
+       String(Size(result)),
        " in ",String(counter)," steps");########################################
-  return  AsList(iss); #List(AsList(iss), x->SetByIndicatorFunction(x,mt));
+  return result;
 end;
 
 # mt - multiplication table
@@ -168,11 +170,10 @@ ISWithGens := function(mt,potgens,ISfunc)
   stack := DuplicateFreeStack();#since different cands may have the same rep
   Store(stack, []);
   if ISfunc = ISDatabase then
-    db := LightBlistContainer();
+    return ISDatabase(mt, potgens, BlistStorage(Size(mt)), stack, []);
   else
-    db := [];
+    return ISCanCons(mt, potgens, [] ,stack);  
   fi;
-  return ISfunc(mt, potgens, db ,stack);
 end;
 
 IS := function(mt,ISfunc) return ISWithGens(mt, Indices(mt),ISfunc); end;

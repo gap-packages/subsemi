@@ -21,34 +21,6 @@ IsInBlistStorage := function(bls, bl)
   return true = HTValue(bls[(HASH_FUNC_FOR_BLIST(bl,101) mod Size(bls))+1], bl);
 end;
 
-### INDEXING ###################################################################
-# returns the position of the 1st entry or 1 if empty
-InstallGlobalFunction(FirstEntryPosOr1,
-function(blist)
-  if SizeBlist(blist) = 0 then return 1; fi;
-  return Position(blist,true);
-end);
-
-# returns the position of the last entry or 1 if empty
-InstallGlobalFunction(LastEntryPosOr1,
-function(blist)
-local i;
-  if SizeBlist(blist) = 0 then return 1; fi;
-  i := Size(blist);
-  while not blist[i] do i := i - 1; od;
-  return i;
-end);
-
-InstallGlobalFunction(HeavyBlistContainer,
-function()
-  return DynamicIndexedHashSet([x->SizeBlist(x)+1,FirstEntryPosOr1,LastEntryPosOr1]);
-end);
-
-InstallGlobalFunction(LightBlistContainer,
-function()
-  return DynamicIndexedHashSet([x->SizeBlist(x)+1,FirstEntryPosOr1]);
-end);
-
 ### BITLIST - BITSTRING - COMPRESSED STRING ####################################
 #the idea is to pack 6 bits into a single character by using this lookup string
 #trailing bits are just written out (that is why no 1s and 0s in the key)
