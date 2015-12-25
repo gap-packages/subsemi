@@ -165,10 +165,10 @@ end;
 
 # mt - multiplication table
 # potgens - potential generators, e.g. Indices(mt) for all elements
-ISWithGens := function(mt,potgens,ISfunc)
+ISWithGens := function(mt,seed, potgens,ISfunc)
   local stack,db;
   stack := DuplicateFreeStack();#since different cands may have the same rep
-  Store(stack, []);
+  Store(stack, seed);
   if ISfunc = ISDatabase then
     return ISDatabase(mt, potgens, BlistStorage(Size(mt)), stack, []);
   else
@@ -176,20 +176,7 @@ ISWithGens := function(mt,potgens,ISfunc)
   fi;
 end;
 
-IS := function(mt,ISfunc) return ISWithGens(mt, Indices(mt),ISfunc); end;
-
-#
-IGSFromSet := function(mt,set,potgens,ISfunc)
-  local stack,db;
-  stack := DuplicateFreeStack();#since different cands may have the same rep
-  Store(stack, set);
-  if ISfunc = ISDatabase then
-    db := LightBlistContainer();
-  else
-    db := [];
-  fi;
-  return ISfunc(mt, potgens, db ,stack);
-end;
+IS := function(mt,ISfunc) return ISWithGens(mt, [], Indices(mt),ISfunc); end;
 
 # resuming an interrupted calculation by using global variables
 # these variables get updated at each checkpoint
