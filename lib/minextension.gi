@@ -13,14 +13,14 @@ InstallGlobalFunction(SubSgpsByMinExtensions,
                                     EmptySet(mt),
                                     RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Stack(),
-                                    [],[]);end);
+                                    BlistStorage(Size(mt)),[]);end);
 
 InstallGlobalFunction(SubSgpGenSetsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
                                     RemoveEquivalentGenerators(FullSet(mt),mt),
                                     Queue(),
-                                    [],[]);end);
+                                    BlistStorage(Size(mt)),[]);end);
 
 #global datastructure for resuming search
 BindGlobal("SUBSEMI_MinExtensionsCheckPointData", rec());
@@ -91,7 +91,7 @@ function(mt,baseset,generators, waiting, db, result)
   #-----------------------------------------------------------------------------
   init := function()
     result := [];
-    db := BlistStorage(Size(mt));
+        #db := BlistStorage(Size(mt));
     #if baseset not empty then close it and add it as a sub
     if SizeBlist(baseset) > 0 then
       seed := ConjugacyClassRep(SgpInMulTab(baseset,mt),mt);
@@ -151,7 +151,7 @@ function(mt,baseset,generators, waiting, db, result)
   # START
   #which search method are we doing?
   isBreadthFirst := IsQueue(waiting);
-  if IsEmpty(AsList(result)) and IsEmpty(waiting) then init(); fi; # initialize
+  if IsEmpty(result) and IsEmpty(waiting) then init(); fi; # initialize
   prev_subs:=0;prev_counter:=0;counter:=0;
   prev_secs:=TimeInSeconds();
   main();

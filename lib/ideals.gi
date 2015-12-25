@@ -67,7 +67,7 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
   Perform(extended,
           function(x)
            Append(result,
-                  SubSgpsByMinExtensionsParametrized(mtS,x,filter,Stack(),[],[]));
+                  SubSgpsByMinExtensionsParametrized(mtS,x,filter,Stack(),BlistStorage(Size(I)),[]));
          end);
   return result; #TODO duplicates when the ideal has only one element
 end;
