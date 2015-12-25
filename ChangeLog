@@ -1,3 +1,5 @@
+0.57
+	Replacing DUST's indexed blist storage solution with a simple array of hashtables.
 0.56
 	Closure functions again have the same signature. Renamings and rearrangings in closure.g*.
 0.55
