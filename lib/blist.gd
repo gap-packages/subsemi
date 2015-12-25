@@ -7,10 +7,9 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-DeclareGlobalFunction("FirstEntryPosOr1");
-DeclareGlobalFunction("LastEntryPosOr1");
-DeclareGlobalFunction("HeavyBlistContainer");
-DeclareGlobalFunction("LightBlistContainer");
+DeclareGlobalFunction("BlistStorage");
+DeclareGlobalFunction("StoreBlist");
+DeclareGlobalFunction("IsInBlistStorage");
 
 DeclareGlobalFunction("EncodeBitString");
 DeclareGlobalFunction("DecodeBitString");

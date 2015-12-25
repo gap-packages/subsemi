@@ -7,19 +7,22 @@
 ## Copyright (C) 2013  Attila Egri-Nagy
 ##
 
-BlistStorage := function(n)
+InstallGlobalFunction(BlistStorage,
+function(n)
   local sample;
   sample := BlistList([1..3], [1,2,3]); #just a sample blist object
   return List([1..n], x-> HTCreate(sample)); 
-end;
+end);
 
-StoreBlist := function(bls, bl)
+InstallGlobalFunction(StoreBlist,
+function(bls, bl)
   HTAdd(bls[(HASH_FUNC_FOR_BLIST(bl,101) mod Size(bls))+1], bl, true);
-end;
+end);
 
-IsInBlistStorage := function(bls, bl)
+InstallGlobalFunction(IsInBlistStorage,
+function(bls, bl)
   return true = HTValue(bls[(HASH_FUNC_FOR_BLIST(bl,101) mod Size(bls))+1], bl);
-end;
+end);
 
 ### BITLIST - BITSTRING - COMPRESSED STRING ####################################
 #the idea is to pack 6 bits into a single character by using this lookup string
