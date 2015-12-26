@@ -11,7 +11,7 @@ InstallGlobalFunction(BlistStorage,
 function(n)
   local sample;
   sample := BlistList([1..3], [1,2,3]); #just a sample blist object
-  return List([1..n], x-> HTCreate(sample)); 
+  return List([1..Maximum(2,n)], x-> HTCreate(sample));
 end);
 
 InstallGlobalFunction(StoreBlist,
