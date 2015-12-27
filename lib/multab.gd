@@ -39,3 +39,4 @@ DeclareOperation("ConvergingSets", [IsMulTab,IsList]);
 DeclareGlobalFunction("NilpotencyDegreeByMulTabs");
 
 DeclareGlobalFunction("RemoveEquivalentGenerators");
+DeclareGlobalFunction("DistinctGenerators");

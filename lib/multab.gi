@@ -182,6 +182,12 @@ function(indset,mt)
   return set;
 end);
 
+InstallGlobalFunction(DistinctGenerators,
+  function(set, mt)
+  local classes;
+  classes := Classify(ListBlist(Indices(mt),set), x -> SgpInMulTab([x],mt), \=);
+  return BlistList(Indices(mt), List(classes, x -> x[1]));
+end);
 
 InstallMethod(GlobalTables, "for multab", [IsMulTab],
 function(mt)
