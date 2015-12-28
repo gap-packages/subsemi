@@ -19,7 +19,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
         Bprofs2elts, #lookup table a profile in mtB -> elements of mtB
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
-        equivclassmap,
+        ecm,
         solutions; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
@@ -55,13 +55,13 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   #checking for enough profile types
   if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
   #creating a lookup for profile types of B -> classes of B
-  equivclassmap := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
-  Bprofs2elts := HTCreate(equivclassmap[1][1]);
-  Perform([1..Size(equivclassmap[1])], function(x) HTAdd(Bprofs2elts, equivclassmap[1][x], equivclassmap[2][x]);end);
+  ecm := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
+  Bprofs2elts := HTCreate(ecm.data[1]);
+  Perform([1..Size(ecm.data)], function(x) HTAdd(Bprofs2elts, ecm.data[x], ecm.classes[x]);end);
   #now checking whether we have enough stuff for A in B
-  equivclassmap := GeneralEquivClassMap([1..Size(Aprofs)], x -> Aprofs[x], \=);
-  if not ForAll([1..Size(equivclassmap[1])],
-             x -> Size(equivclassmap[2][x]) <= Size(HTValue(Bprofs2elts, equivclassmap[1][x]))) then
+  ecm := GeneralEquivClassMap([1..Size(Aprofs)], x -> Aprofs[x], \=);
+  if not ForAll([1..Size(ecm.data)],
+             x -> Size(ecm.classes[x]) <= Size(HTValue(Bprofs2elts, ecm.data[x]))) then
     return []; #not enough elements of some type to represent A
   fi;
   # figuring out target size

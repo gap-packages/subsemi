@@ -30,14 +30,14 @@ GeneralEquivClassMap := function(elts, f, eq)
       Add(classes[pos],e);
     fi;
   od;
-  return [data,classes];
+  return rec(data:=data, classes:=classes);
 end;
 MakeReadOnlyGlobal("GeneralEquivClassMap");
 
 
 InstallGlobalFunction(Classify,
 function(elts, f, eq)
-  return GeneralEquivClassMap(elts, f, eq)[2];
+  return GeneralEquivClassMap(elts, f, eq).classes;
 end);
 
 #Print(Classify([1..10], IsEvenInt, \=));
