@@ -11,14 +11,14 @@
 InstallGlobalFunction(SubSgpsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
-                                    RemoveEquivalentGenerators(FullSet(mt),mt),
+                                    DistinctGenerators(FullSet(mt),mt),
                                     Stack(),
                                     BlistStorage(Size(mt)),[]);end);
 
 InstallGlobalFunction(SubSgpGenSetsByMinExtensions,
         function(mt) return SubSgpsByMinExtensionsParametrized(mt,
                                     EmptySet(mt),
-                                    RemoveEquivalentGenerators(FullSet(mt),mt),
+                                    DistinctGenerators(FullSet(mt),mt),
                                     Queue(),
                                     BlistStorage(Size(mt)),[]);end);
 
