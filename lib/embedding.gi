@@ -19,6 +19,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
         Bprofs2elts, #lookup table a profile in mtB -> elements of mtB
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
+        equivclassmap,
         solutions; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
@@ -32,7 +33,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
     fi;
     k := Size(L)+1; # the index of the next element
     # getting elements of B with profiles matching profile of A, not used yet
-    candidates := Difference(AsSet(Bprofs2elts[Aprofs[k]]),used);
+    candidates := Difference(AsSet(HTValue(Bprofs2elts, Aprofs[k])),used);
     if IsEmpty(candidates) then return; fi;
     for i in candidates do
       Add(L,i); AddSet(used, i); # EXTEND by i
@@ -52,13 +53,15 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   end;
   #-----------------------------------------------------------------------------
   #checking for enough profile types
-  Aprofs2elts := AssociativeList();
-  Perform([1..Size(Aprofs)], function(x) Collect(Aprofs2elts,Aprofs[x],x);end);
-  Bprofs2elts := AssociativeList();
-  Perform([1..Size(Bprofs)], function(x) Collect(Bprofs2elts,Bprofs[x],x);end);
-  if not ForAll(Keys(Aprofs2elts),
-             x-> (Bprofs2elts[x] <> fail)
-             and Size(Aprofs2elts[x]) <= Size(Bprofs2elts[x])) then
+  if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
+  #creating a lookup for profile types of B -> classes of B
+  equivclassmap := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
+  Bprofs2elts := HTCreate(equivclassmap[1][1]);
+  Perform([1..Size(equivclassmap[1])], function(x) HTAdd(Bprofs2elts, equivclassmap[1][x], equivclassmap[2][x]);end);
+  #now checking whether we have enough stuff for A in B
+  equivclassmap := GeneralEquivClassMap([1..Size(Aprofs)], x -> Aprofs[x], \=);
+  if not ForAll([1..Size(equivclassmap[1])],
+             x -> Size(equivclassmap[2][x]) <= Size(HTValue(Bprofs2elts, equivclassmap[1][x]))) then
     return []; #not enough elements of some type to represent A
   fi;
   # figuring out target size
