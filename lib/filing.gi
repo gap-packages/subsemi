@@ -195,18 +195,15 @@ end;
 # set xrange [-1:140]
 # set grid
 # plot "T4sizedist.dat" with boxes lc rgb"black" title "Sub(T4)"
+# assuming no zero size value
 GNUPlotDataFromSizeVector := function(sizes, filename)
-  local N, al, i;
+  local N, l, i, p;
   N := Maximum(sizes);
-  al := AssociativeList();
-  Perform(Collected(sizes), function(x) Assign(al, x[1], x[2]);end);
+  l := List([1..N], x->0);
+  Perform(Collected(sizes), function(x) l[x[1]] := x[2];end);
   PrintTo(filename,""); # erasing
-  for i in [0..N] do
-    if ContainsKey(al, i) then
-      AppendTo(filename, String(i)," ",String(al[i]),"\n");
-    else
-      AppendTo(filename, String(i)," 0\n");
-    fi;
+  for i in [1..N] do
+    AppendTo(filename, String(i)," ",String(l[i]),"\n");
   od;
 end;
 
