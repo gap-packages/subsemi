@@ -55,9 +55,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   #checking for enough profile types
   if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
   #creating a lookup for profile types of B -> classes of B
-  ecm := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
-  Bprofs2elts := HTCreate(ecm.data[1]);
-  Perform([1..Size(ecm.data)], function(x) HTAdd(Bprofs2elts, ecm.data[x], ecm.classes[x]);end);
+  Bprofs2elts := DataToClassesHT([1..Size(Bprofs)], x -> Bprofs[x], \=);
   #now checking whether we have enough stuff for A in B
   ecm := GeneralEquivClassMap([1..Size(Aprofs)], x -> Aprofs[x], \=);
   if not ForAll([1..Size(ecm.data)],
