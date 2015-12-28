@@ -98,14 +98,6 @@ function(mt)
   return Frequencies(Filtered(Flat(Rows(mt)), x->x in idempotents));
 end);
 
-NumOfProfileClasses := function(mt)
-  local al, bl;
-  al := AssociativeList();
-  Perform(Indices(mt), function(x)Assign(al, x, ElementProfile(mt,x));end);
-  bl := ReversedAssociativeList(al);
-  return Size(Keys(bl));
-end;
-
 # APPLICATIONS #################################################################
 
 # checking invariants one by one with short-circuit conjunction
