@@ -12,9 +12,8 @@
 # elts - the elements to be classified
 # f - function that constructs derived data for deciding equivalence
 # eq - function that decides the equivalence based on data by f
-InstallGlobalFunction(Classify,
-function(elts, f, eq)
-  local e, #an elemenet from elts 
+GeneralEquivClassMap := function(elts, f, eq)
+ local e, #an elemenet from elts
         d, #data constructed from e, f(e)
         data, #precalculated data for each class representative
         classes, #the resulting classes
@@ -31,7 +30,14 @@ function(elts, f, eq)
       Add(classes[pos],e);
     fi;
   od;
-  return classes;
+  return [data,classes];
+end;
+MakeReadOnlyGlobal("GeneralEquivClassMap");
+
+
+InstallGlobalFunction(Classify,
+function(elts, f, eq)
+  return GeneralEquivClassMap(elts, f, eq)[2];
 end);
 
 #Print(Classify([1..10], IsEvenInt, \=));
