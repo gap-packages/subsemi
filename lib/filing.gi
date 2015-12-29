@@ -351,3 +351,16 @@ function(S, G , prefix)
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
 end);
+
+SaveTaggedSgps := function(sgps, mt, outfile)
+  local otf, s, nrdigits;
+  otf := OutputTextFile(outfile, false);
+  nrdigits := Size(String(Size(mt)));
+  for s in sgps do
+    WriteLine(otf,Concatenation(
+            EncodeBitString(AsBitString(s)),
+            " ",
+            SgpTag(Semigroup(SetByIndicatorFunction(s,mt)),2)));
+  od;
+  CloseStream(otf);
+end;
