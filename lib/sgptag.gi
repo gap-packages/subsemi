@@ -16,6 +16,7 @@ PaddedNumString := function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
 end;
 
+# TODO remove the next two functions once it is in digraphs properly
 # doing transitive&reflexive reduction here until digraphs stabilizes
 ReflexiveReduction := function(rel)
   return List([1..Length(rel)], x -> Filtered(rel[x], y -> not x = y));
@@ -50,6 +51,9 @@ GreenTag := function (sgp,ndigits)
 end;
 
 # tagging semigroup by size and Greens
+# sgp - semigroup
+# ndigits - the number of digits to be shown for integer values
+# important for ordering the entries
 InstallGlobalFunction(SgpTag,
 function(sgp,ndigits)
   local tag;
