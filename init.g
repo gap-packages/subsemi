@@ -1,6 +1,8 @@
 ReadPackage("SubSemi","config.g"); #the configuration file
 
 ReadPackage("SubSemi","/lib/classifier.gd");
+ReadPackage("SubSemi","/lib/textfileprocessor.gd");
+
 ReadPackage("SubSemi","/lib/semigroup.gd");
 ReadPackage("SubSemi","/lib/ideals.gd");
 ReadPackage("SubSemi","/lib/util.gd");
