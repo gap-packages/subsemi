@@ -1,3 +1,5 @@
+# enumerating 3-nilpotent subsemigroup of semigroup given by its multiplication
+# table
 Extend3NilpotentSubSgp := function(sgp, mt)
   local extendedsgps;
   extendedsgps := Set(Difference(Indices(mt),ListBlist(Indices(mt),sgp)),
