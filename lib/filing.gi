@@ -5,7 +5,7 @@
 ## Functions for putting subsets, subsgps into separate files according to
 ## some classification.
 ##
-## Copyright (C) 2015  Attila Egri-Nagy
+## Copyright (C) 2015-2016  Attila Egri-Nagy
 ##
 
 # filing - to separate bitlists into different classes based on the output
