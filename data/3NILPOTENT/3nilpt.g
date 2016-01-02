@@ -5,7 +5,7 @@ Extend3NilpotentSubSgp := function(sgp, mt)
   extendedsgps := Set(Difference(Indices(mt),ListBlist(Indices(mt),sgp)),
                       x->ConjugacyClassRep(ClosureByIncrements(sgp,[x],mt),mt));
   return Filtered(extendedsgps,
-                 x->Is3NilPotentInMulTab(ListBlist(Indices(mt),x),mt));
+                 x->Is3NilpotentInMulTab(ListBlist(Indices(mt),x),mt));
 end;
 
 ThreeNilpotentSubSgps := function(mt)

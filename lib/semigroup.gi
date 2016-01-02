@@ -7,7 +7,7 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
-InstallGlobalFunction(Is3NilPotent,
+InstallGlobalFunction(Is3Nilpotent,
 function(S)
   local zero,L;
   L := AsList(S);
@@ -18,7 +18,7 @@ function(S)
   return false;
 end);
 
-InstallGlobalFunction(Is3NilPotentInMulTab,
+InstallGlobalFunction(Is3NilpotentInMulTab,
 function(subsgp, mt)
   local zero, rows, s;
   rows := Rows(mt);
