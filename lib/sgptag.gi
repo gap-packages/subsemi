@@ -66,6 +66,7 @@ function(sgp,ndigits)
   if IsRegularSemigroup(sgp) then Append(tag,"r");fi;
   if IsInverseSemigroup(sgp) then Append(tag,"i");fi;
   if IsMonoid(sgp) or IsMonoidAsSemigroup(sgp) then Append(tag,"m");fi;
+  if Is3Nilpotent(sgp) then Append(tag,"n");fi;
   if tag[Size(tag)] = '_' then Remove(tag); fi;
   return tag;
 end);
