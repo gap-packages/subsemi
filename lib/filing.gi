@@ -284,3 +284,20 @@ SaveTaggedSgps := function(sgps, mt, outfile)
   od;
   CloseStream(otf);
 end;
+
+TagSgpsFromFile := function(infile, outfile, mt)
+  local outf, f, nrdigits;
+  nrdigits := Size(String(Size(mt)));
+  outf := OutputTextFile(outfile, false);
+  f := function(s)
+    WriteLine(outf,Concatenation(
+            s,
+            " ",
+            SgpTag(Semigroup(SetByIndicatorFunction(
+                    AsBlist(DecodeBitString(s)),mt)),
+                   nrdigits)));
+    return true;
+  end;
+  TextFileProcessor(infile, f);
+  CloseStream(outf);
+end;
