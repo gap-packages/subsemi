@@ -280,7 +280,7 @@ SaveTaggedSgps := function(sgps, mt, outfile)
     WriteLine(otf,Concatenation(
             EncodeBitString(AsBitString(s)),
             " ",
-            SgpTag(Semigroup(SetByIndicatorFunction(s,mt)),2)));
+            SgpTag(Semigroup(SetByIndicatorFunction(s,mt)),nrdigits)));
   od;
   CloseStream(otf);
 end;
