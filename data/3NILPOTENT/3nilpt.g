@@ -13,8 +13,7 @@ ThreeNilpotentSubSgps := function(mt)
   total := [];
   l := [EmptySet(mt)];
   repeat
-    l := Difference(Union(List(l, x->Extend3NilpotentSubSgp(x,mt))),
-                 total);
+    l := Difference(Union(List(l, x->Extend3NilpotentSubSgp(x,mt))), total);
     Info(SubSemiInfoClass, 1, String(Size(l))," new 3-nilpotent subsgps");
     total := Union(total, l);
   until IsEmpty(l);
