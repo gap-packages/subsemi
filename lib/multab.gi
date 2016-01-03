@@ -274,13 +274,6 @@ function(mt, L)
   return sa;
 end);
 
-#just for convenience, TODO: include it properly
-SmallGenSetSgpFromIndicatorFunction := function(indset,mt)
-  return SmallGeneratingSet(Semigroup(
-                 SetByIndicatorFunction(indset,Elts(mt))
-                 ));
-end;
-
 #CONVENIENCE
 InstallOtherMethod(SetByIndicatorFunction, "for boolean list and multab",
         [IsList, IsMulTab],
