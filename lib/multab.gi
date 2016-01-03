@@ -250,6 +250,18 @@ function (sgp)
   fi;
 end);
 
+MulInMulTab := function(A, B, mt)
+  local AB,i,j, tab;
+  tab := Rows(mt);
+  AB := [];
+  for i in A do
+    for j in B do
+      AddSet(AB, tab[i][j]);
+    od;
+  od;
+  return AB;
+end;
+
 # returns the subarray of the multiplication table mt spanned by
 # elements in L (positive integers as indices)
 # the order of the elements in L kept
