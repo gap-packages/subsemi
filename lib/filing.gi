@@ -286,7 +286,7 @@ SaveTaggedSgps := function(sgps, mt, outfile)
 end;
 
 GrpTag := function(G)
-  return Concatenation(StructureDescription(G),
+  return Concatenation(StructureDescription(G:short),
                  "_",
                  String(IdSmallGroup(G)[1]),
                  "_",
