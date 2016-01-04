@@ -1,3 +1,5 @@
+0.62
+	AutomorphsimGroup now works for semigroups. GrpTag, SgpsDatabase added for the classification of Sub(T4).
 0.61
 	TagSgpsFromFile added.
 0.60
