@@ -61,3 +61,16 @@ function(S,T)
   mappingfunc := function(s) return image[Position(source,s)];end;
   return MappingByFunction(S,T,mappingfunc);
 end);
+
+### AUTOMORPHISM GROUPS ########################################################
+InstallMethod(AutomorphismGroup, "for a semigroup", [IsSemigroup],
+function(S)
+  local mt, G;
+  mt := MulTab(S);
+  G := Group(List(MulTabEmbeddings(mt,mt), PermList));
+  if Size(G) = 1 then
+    return G;
+  else
+    return Group(SmallGeneratingSet(G));
+  fi;
+end);
