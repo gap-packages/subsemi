@@ -314,3 +314,7 @@ TagSgpsFromFile := function(infile, outfile, mt)
   TextFileProcessor(infile, f);
   CloseStream(outf);
 end;
+
+SgpsDatabase := function(infile, mt)
+  TagSgpsFromFile(infile, Concatenation(infile,".db"),mt);
+end;
