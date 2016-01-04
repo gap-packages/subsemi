@@ -306,7 +306,9 @@ TagSgpsFromFile := function(infile, outfile, mt)
             " ",
             SgpTag(S,nrdigits),
             " ",
-            GrpTag(AutomorphismGroup(S))));
+            GrpTag(AutomorphismGroup(S)),
+            " ",
+            GrpTag(Stabilizer(SymmetryGroup(mt),bl,OnFiniteSet))));
     return true;
   end;
   TextFileProcessor(infile, f);
