@@ -285,17 +285,28 @@ SaveTaggedSgps := function(sgps, mt, outfile)
   CloseStream(otf);
 end;
 
+GrpTag := function(G)
+  return Concatenation(StructureDescription(G),
+                 "_",
+                 String(IdSmallGroup(G)[1]),
+                 "_",
+                 String(IdSmallGroup(G)[2]));
+end;
+
 TagSgpsFromFile := function(infile, outfile, mt)
   local outf, f, nrdigits;
   nrdigits := Size(String(Size(mt)));
   outf := OutputTextFile(outfile, false);
   f := function(s)
+    local S, bl;
+    bl := AsBlist(DecodeBitString(s));
+    S := Semigroup(SetByIndicatorFunction(bl,mt));
     WriteLine(outf,Concatenation(
             s,
             " ",
-            SgpTag(Semigroup(SetByIndicatorFunction(
-                    AsBlist(DecodeBitString(s)),mt)),
-                   nrdigits)));
+            SgpTag(S,nrdigits),
+            " ",
+            GrpTag(AutomorphismGroup(S))));
     return true;
   end;
   TextFileProcessor(infile, f);
