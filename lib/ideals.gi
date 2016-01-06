@@ -61,12 +61,13 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
   local extended, filter, result, S,mtS;
   S := Parent(I);
   mtS := MulTab(S,G);
-  extended := List(uppertorsos, x-> SgpInMulTab(x,mtS));
+  extended := Set(uppertorsos, x-> ConjugacyClassRep(SgpInMulTab(x,mtS),mtS));
   filter := IndicatorFunction(AsList(I),Elts(mtS));
   result := [];
   Perform(extended,
           function(x)
-           Append(result,
+            if SizeBlist(x) > 0 then Add(result, x); fi;
+            Append(result,
                   SubSgpsByMinExtensionsParametrized(mtS,x,filter,Stack(),BlistStorage(Size(I)),[]));
          end);
   return result; #TODO duplicates when the ideal has only one element
