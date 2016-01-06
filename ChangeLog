@@ -1,3 +1,5 @@
+0.63
+	SgpsContaining added. Minimal extensions algorithm does not include the seed subsgp automatically.
 0.62
 	AutomorphsimGroup now works for semigroups. GrpTag, SgpsDatabase added for the classification of Sub(T4).
 0.61
