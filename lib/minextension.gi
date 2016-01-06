@@ -22,6 +22,16 @@ InstallGlobalFunction(SubSgpGenSetsByMinExtensions,
                                     Queue(),
                                     BlistStorage(Size(mt)),[]);end);
 
+SubSgpsContaining := function(set,mt)
+  local rep;
+  rep := ConjugacyClassRep(set,mt);
+  return SubSgpsByMinExtensionsParametrized(mt,
+                 rep,
+                 DistinctGenerators(FullSet(mt),mt),
+                 Stack(),
+                 BlistStorage(Size(mt)),[]);
+end;
+
 #global datastructure for resuming search
 BindGlobal("SUBSEMI_MinExtensionsCheckPointData", rec());
 ResumeMinExtensions := function()
