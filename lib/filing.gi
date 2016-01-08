@@ -228,7 +228,7 @@ end;
 # S semigroup, G automorphism group, prefix filename begins with this
 InstallGlobalFunction(FileSubsemigroups,
 function(S, G , prefix)
-  local mt,subreps,ndigits, repsfile;
+  local mt,subreps,ndigits, repsfile, isomcls;
   mt := MulTab(S,G);
   #generators for the record
   WriteGenerators(Concatenation(prefix,".elts"), Elts(mt));
