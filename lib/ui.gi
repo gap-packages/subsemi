@@ -14,7 +14,7 @@ function(S)
   local mt; # multiplication table
   mt := MulTab(S);
   return List(AsList(SubSgpsByMinExtensions(mt)),
-              x->BlistToSmallGenSet(x,mt));
+              x->SmallSemigroupGeneratingSet(SetByIndicatorFunction(x,mt)));
 end);
 
 # returning all representatives of conjugacy classes of
@@ -24,7 +24,7 @@ function(S, G)
   local mt; # multiplication table
   mt := MulTab(S,G);
   return List(AsList(SubSgpsByMinExtensions(mt)),
-              x->BlistToSmallGenSet(x,mt));
+              x->SmallSemigroupGeneratingSet(SetByIndicatorFunction(x,mt)));
 end);
 
 InstallGlobalFunction(IsIsomorphicSemigroupByMulTabs,

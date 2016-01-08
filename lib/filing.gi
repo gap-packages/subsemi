@@ -32,11 +32,6 @@ RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
   CloseStream(otf);
 end;
 
-#used in ui.gi
-BlistToSmallGenSet := function(indfunc, mt)
-  return SmallSemigroupGeneratingSet(SetByIndicatorFunction(indfunc,mt));
-end;
-
 ################################################################################
 ### ISOMORPHISM ################################################################
 ################################################################################
@@ -49,7 +44,7 @@ ClassProcessor := function(filename, mt, classifierfunc, ext)
   sgps := List(LoadIndicatorFunctions(filename),
                x-> Semigroup(SetByIndicatorFunction(x,mt)));
   sgpclasses := classifierfunc(sgps);
-  #if Size(sgpclasses) = 1 then return; fi;
+  if Size(sgpclasses) = 1 then return; fi;
   digits := Size(String(Maximum(List(sgpclasses,Size))));
   for class in sgpclasses do
     if not SaveIndicatorFunctions(
@@ -240,17 +235,19 @@ InstallGlobalFunction(FileSubsemigroups,
 function(S, G , prefix)
   local mt,subreps,ndigits, repsfile;
   mt := MulTab(S,G);
+  #generators for the record
   WriteGenerators(Concatenation(prefix,".elts"), Elts(mt));
-  Print("Calculating and classifying ",prefix,"\n\c");
+  Print("Calculating subsgps of ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
   repsfile := Concatenation(prefix,".set");
   SaveIndicatorFunctions(subreps, repsfile);
+  Print("Classifying subsgps of ",prefix,"\n\c");
   SgpsDatabase(repsfile, mt);
   SgpsDatabaseToClassFiles(Concatenation(repsfile, ".db"),prefix);
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixPostfixMatchedListDir(".",prefix,"reps"),
           function(x)GensFileAntiAndIsomClasses(x,mt);end);
-  Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
+  Perform(PrefixPostfixMatchedListDir(".",prefix,"reps"),
           function(x)AntiAndIsomClassToIsomClasses(x,mt);end);
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
