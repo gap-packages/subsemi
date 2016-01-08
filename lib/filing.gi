@@ -268,3 +268,15 @@ end;
 SgpsDatabase := function(infile, mt)
   TagSgpsFromFile(infile, Concatenation(infile,".db"),mt);
 end;
+
+SgpsDatabaseToClassFiles := function(infile)
+  TextFileProcessor(infile,
+    function(s)
+    local otf, l;
+    l := SplitString(s," ");
+    otf := OutputTextFile(l[2],true);
+    if not WriteLine(otf,l[1]) then return false; fi;
+    CloseStream(otf);
+    return true;
+  end);
+end;
