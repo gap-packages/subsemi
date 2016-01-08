@@ -4,4 +4,5 @@ find . -name '*.ais' -delete
 find . -name '*.reps' -delete
 find . -name '*.dat' -delete
 find . -name '*.elts' -delete
+find . -name '*.db' -delete
 find . -name 'S*' -delete

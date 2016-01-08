@@ -18,27 +18,6 @@
 ### FILING INDICATOR FUNCTIONS #################################################
 ################################################################################
 
-#still generic
-#tagger function : indicator set -> string (should work in all cases)
-#separating IndicatorFunctions into files by their tags
-# the memory usage is minimal, but puts strain on the kernel I/O
-FilingIndicatorFunctions := function(infile,taggerfunc)
-  TextFileProcessor(infile,
-          function(s)
-            local indfunc,otf;
-            indfunc := AsBlist(DecodeBitString(s));
-            otf := OutputTextFile(taggerfunc(indfunc),true);
-            if not WriteLine(otf,s) then return false; fi;
-            CloseStream(otf);
-            return true;
-          end);
-end;
-
-FilingIndicatorFunctionsBySize := function(infile,ndigits)
-  FilingIndicatorFunctions(infile,
-          x->Concatenation("S",PaddedNumString(SizeBlist(x),ndigits)));
-end;
-
 RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
   local otf;
   otf := OutputTextFile(outfile,false);
@@ -70,6 +49,7 @@ ClassProcessor := function(filename, mt, classifierfunc, ext)
   sgps := List(LoadIndicatorFunctions(filename),
                x-> Semigroup(SetByIndicatorFunction(x,mt)));
   sgpclasses := classifierfunc(sgps);
+  #if Size(sgpclasses) = 1 then return; fi;
   digits := Size(String(Maximum(List(sgpclasses,Size))));
   for class in sgpclasses do
     if not SaveIndicatorFunctions(
@@ -196,32 +176,6 @@ end;
 ### COMPREHENSIVE ##############################################################
 ################################################################################
 
-# S semigroup, G automorphism group, prefix filename begins with this
-InstallGlobalFunction(FileSubsemigroups,
-function(S, G , prefix)
-  local mt,subreps,ndigits, repsfile, tagger;
-  ndigits := Size(String(Size(S)));
-  mt := MulTab(S,G);
-  WriteGenerators(Concatenation(prefix,".elts"), Elts(mt));
-  Print("Calculating and classifying ",prefix,"\n\c");
-  subreps := AsList(SubSgpsByMinExtensions(mt));
-  repsfile := Concatenation(prefix,".reps");
-  SaveIndicatorFunctions(subreps, repsfile);
-  tagger := function(indfunc)
-    return Concatenation(prefix, "_",
-             SgpTag(Semigroup(SetByIndicatorFunction(indfunc,mt)),ndigits),
-             ".set");
-  end;
-  FilingIndicatorFunctions(repsfile,tagger);
-  Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
-  Perform(PrefixPostfixMatchedListDir(".",prefix,"set"),
-          function(x)GensFileAntiAndIsomClasses(x,mt);end);
-  Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
-          function(x)AntiAndIsomClassToIsomClasses(x,mt);end);
-  GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
-          Concatenation(prefix,"sizedist.dat"));
-end);
-
 SaveTaggedSgps := function(sgps, mt, outfile)
   local otf, s, nrdigits;
   otf := OutputTextFile(outfile, false);
@@ -269,14 +223,35 @@ SgpsDatabase := function(infile, mt)
   TagSgpsFromFile(infile, Concatenation(infile,".db"),mt);
 end;
 
-SgpsDatabaseToClassFiles := function(infile)
+SgpsDatabaseToClassFiles := function(infile, prefix)
   TextFileProcessor(infile,
     function(s)
     local otf, l;
     l := SplitString(s," ");
-    otf := OutputTextFile(l[2],true);
+    otf := OutputTextFile(Concatenation(prefix,"_",l[2],".reps"),true);
     if not WriteLine(otf,l[1]) then return false; fi;
     CloseStream(otf);
     return true;
   end);
 end;
+
+# S semigroup, G automorphism group, prefix filename begins with this
+InstallGlobalFunction(FileSubsemigroups,
+function(S, G , prefix)
+  local mt,subreps,ndigits, repsfile;
+  mt := MulTab(S,G);
+  WriteGenerators(Concatenation(prefix,".elts"), Elts(mt));
+  Print("Calculating and classifying ",prefix,"\n\c");
+  subreps := AsList(SubSgpsByMinExtensions(mt));
+  repsfile := Concatenation(prefix,".set");
+  SaveIndicatorFunctions(subreps, repsfile);
+  SgpsDatabase(repsfile, mt);
+  SgpsDatabaseToClassFiles(Concatenation(repsfile, ".db"),prefix);
+  Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
+  Perform(PrefixPostfixMatchedListDir(".",prefix,"reps"),
+          function(x)GensFileAntiAndIsomClasses(x,mt);end);
+  Perform(PrefixPostfixMatchedListDir(".",prefix,"ais"),
+          function(x)AntiAndIsomClassToIsomClasses(x,mt);end);
+  GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
+          Concatenation(prefix,"sizedist.dat"));
+end);
