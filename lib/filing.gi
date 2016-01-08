@@ -33,51 +33,6 @@ RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
 end;
 
 ################################################################################
-### ISOMORPHISM ################################################################
-################################################################################
-
-#generic function
-ClassProcessor := function(filename, mt, classifierfunc, ext)
-  local prefix, sgps, digits, counter,sgpclasses,class;
-  prefix := filename{[1..Maximum(Positions(filename,'.'))-1]};
-  counter:=1;
-  sgps := List(LoadIndicatorFunctions(filename),
-               x-> Semigroup(SetByIndicatorFunction(x,mt)));
-  sgpclasses := classifierfunc(sgps);
-  if Size(sgpclasses) = 1 then return; fi;
-  digits := Size(String(Maximum(List(sgpclasses,Size))));
-  for class in sgpclasses do
-    if not SaveIndicatorFunctions(
-               List(class,x->IndicatorFunction(AsList(x),mt)),
-               Concatenation(prefix,"_",
-                       PaddedNumString(counter,digits),ext)) then
-      Error(Concatenation("Failure when processing ",filename));
-    fi;
-    counter := counter + 1;
-  od;
-end;
-
-GensFileIsomClasses := function(filename,mt)
-  ClassProcessor(filename, mt, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
-          ".isom");
-end;
-
-GensFileAntiAndIsomClasses := function(filename,mt)
-  local f;
-  f := sgps -> Classify(sgps, MulTab,
-               function(x,y)
-                 return IsIsomorphicMulTab(x,y)
-                        or IsIsomorphicMulTab(x,CopyMulTab(y,true));end);
-  ClassProcessor(filename, mt, f, ".ais");
-end;
-
-# assume .ais files as input
-AntiAndIsomClassToIsomClasses := function(filename,mt)
-  ClassProcessor(filename, mt, sgps->Classify(sgps, MulTab, IsIsomorphicMulTab),
-          ".isom");
-end;
-
-################################################################################
 ### GNUPLOT ####################################################################
 ################################################################################
 
@@ -230,6 +185,27 @@ SgpsDatabaseToClassFiles := function(infile, prefix)
   end);
 end;
 
+IsomClasses := function(filename, mt)
+  local prefix, sgps, digits, counter,sgpclasses,class, cf;
+  prefix := filename{[1..Maximum(Positions(filename,'.'))-1]};
+  counter:=1;
+  sgps := List(LoadIndicatorFunctions(filename),
+               x-> Semigroup(SetByIndicatorFunction(x,mt)));
+  cf := x->Classify(x, MulTab, IsIsomorphicMulTab);
+  sgpclasses := cf(sgps);
+  if Size(sgpclasses) = 1 then return; fi;
+  digits := Size(String(Maximum(List(sgpclasses,Size))));
+  for class in sgpclasses do
+    if not SaveIndicatorFunctions(
+               List(class,x->IndicatorFunction(AsList(x),mt)),
+               Concatenation(prefix,".",
+                       PaddedNumString(counter,digits),".isom")) then
+      Error(Concatenation("Failure when processing ",filename));
+    fi;
+    counter := counter + 1;
+  od;
+end;
+
 # S semigroup, G automorphism group, prefix filename begins with this
 InstallGlobalFunction(FileSubsemigroups,
 function(S, G , prefix)
@@ -246,9 +222,7 @@ function(S, G , prefix)
   SgpsDatabaseToClassFiles(Concatenation(repsfile, ".db"),prefix);
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixPostfixMatchedListDir(".",prefix,"reps"),
-          function(x)GensFileAntiAndIsomClasses(x,mt);end);
-  Perform(PrefixPostfixMatchedListDir(".",prefix,"reps"),
-          function(x)AntiAndIsomClassToIsomClasses(x,mt);end);
+          function(x) IsomClasses(x,mt);end);
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
 end);
