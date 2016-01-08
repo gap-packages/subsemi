@@ -207,8 +207,23 @@ IsomClasses := function(filename, mt)
 end;
 
 DetectAntiIsomClasses := function(prefix, mt)
-  
-od;
+  local indices, classes, eqf, f, c;
+  indices := List(PrefixPostfixMatchedListDir(".", prefix, ".isom"),
+                  x -> SplitString(x,".")[2]);
+  f := x -> MulTab(
+               Semigroup(
+                       SetByIndicatorFunction(
+                               LoadIndicatorFunctions(
+                                       Concatenation(prefix,".",
+                                               x,".isom"))[1],mt)));
+  eqf := function(mt1, mt2)
+          return IsIsomorphicMulTab(mt1, CopyMulTab(mt2, true));
+        end;
+  classes := Filtered(Classify(indices, f, eqf), x-> Size(x)>1);
+  for c in classes do
+    PrintTo(Concatenation(prefix, ".", JoinStringsWithSeparator(c,"+")),"");
+  od;
+end;
 
 # S semigroup, G automorphism group, prefix filename begins with this
 InstallGlobalFunction(FileSubsemigroups,
@@ -227,6 +242,9 @@ function(S, G , prefix)
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixPostfixMatchedListDir(".",prefix,"reps"),
           function(x) IsomClasses(x,mt);end);
+  isomcls := Set(PrefixPostfixMatchedListDir(".", prefix, ".isom"),
+                 x->SplitString(x,".")[1]);
+  Perform(isomcls, function(x) DetectAntiIsomClasses(x,mt);end);
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
           Concatenation(prefix,"sizedist.dat"));
 end);
