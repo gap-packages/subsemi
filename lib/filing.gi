@@ -206,6 +206,10 @@ IsomClasses := function(filename, mt)
   od;
 end;
 
+DetectAntiIsomClasses := function(prefix, mt)
+  
+od;
+
 # S semigroup, G automorphism group, prefix filename begins with this
 InstallGlobalFunction(FileSubsemigroups,
 function(S, G , prefix)
