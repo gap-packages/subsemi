@@ -77,8 +77,7 @@ Dependencies := rec(
  GAP := ">= 4.8",
  NeededOtherPackages := [["GAPDoc", ">=1.5"],
                    ["semigroups", ">=2.7"],
-                   ["sgpdec", ">=0.7"],
-                   ["dust", ">=0.1.23"]
+                   ["sgpdec", ">=0.7"]
                    ],
  SuggestedOtherPackages := [],
  ExternalConditions := [ ]

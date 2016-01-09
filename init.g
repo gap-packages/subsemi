@@ -1,5 +1,13 @@
 ReadPackage("SubSemi","config.g"); #the configuration file
 
+#from dust
+ReadPackage("SubSemi","/lib/storage/storage.gd");
+ReadPackage("SubSemi","/lib/storage/stack.gd");
+ReadPackage("SubSemi","/lib/storage/dupfreestack.gd");
+ReadPackage("SubSemi","/lib/storage/queue.gd");
+ReadPackage("SubSemi","/lib/storage/randomset.gd");
+
+
 ReadPackage("SubSemi","/lib/classifier.gd");
 ReadPackage("SubSemi","/lib/textfileprocessor.gd");
 
