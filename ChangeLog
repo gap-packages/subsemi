@@ -1,3 +1,5 @@
+0.65
+	Removed dependency: the Dust package. The storage code (stacks. queues, etc.) is included here now.
 0.64
 	FileSubsemigroups rewritten, especially the isomorphism and anti-isomorphim checks.
 0.63
