@@ -1,3 +1,5 @@
+0.64
+	FileSubsemigroups rewritten, especially the isomorphism and anti-isomorphim checks.
 0.63
 	SgpsContaining added. Minimal extensions algorithm does not include the seed subsgp automatically.
 0.62
