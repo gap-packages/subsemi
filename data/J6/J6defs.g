@@ -32,8 +32,8 @@ local mt, reps, MT, REPS;
   reps := AsList(SubSgpsByMinExtensions(mt));
   MT := MulTab(J6,G);
   REPS := List(reps, x -> RecodeIndicatorFunction(x,
-                SortedElements(mt),
-                SortedElements(MT)));
+                Elts(mt),
+                Elts(MT)));
   SaveIndicatorFunctions(REPS, "I3C_J6.reps");
 end;
 
@@ -47,7 +47,7 @@ end;
 K43sharp := function()
   local mtJ6, id, I1Creps;
   mtJ6 := MulTab(J6);
-  id := Position(SortedElements(mtJ6), One(J6));
+  id := Position(Elts(mtJ6), One(J6));
   I1Creps := LoadIndicatorFunctions("I1C_J6.reps");
   Perform(I1Creps, function(x) x[id]:=true;end);
   SaveIndicatorFunctions(I1Creps,"I1Csharp_J6.reps");
