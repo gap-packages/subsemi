@@ -34,6 +34,13 @@ NrEdgesInHasseDiagramOfDClasses := function(sgp)
 end;
 
 # semigroup -> string containing green info
+# L - number of L-classes
+# R - number of R-classes
+# D - number of D-classes
+# RD - number of regular D-classes
+# M - number of maximal D-classes
+# E - number of edges in the Hasse-diagram of the partial order of D-classes
+# G - size of group of units
 GreenTag := function (sgp,ndigits)
   local s;
   if GroupOfUnits(sgp) <> fail then
@@ -54,6 +61,14 @@ end;
 # sgp - semigroup
 # ndigits - the number of digits to be shown for integer values
 # important for ordering the entries
+# S - size of the semigroup
+# I - number of idempotents
+# b - band
+# c - commutative semigroup
+# r - regular semigroup
+# i - inverse semigroup
+# m - monoid
+# n - 3-nilpotent semigroup
 InstallGlobalFunction(SgpTag,
 function(sgp,ndigits)
   local tag;
