@@ -78,7 +78,7 @@ end;
 # output: .reps file containing Sub(I/J), also as upper torsos
 # G - the symmetries
 ImodJSubs := function(I, J, Iname, Jname, G)
-local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indfunc, torso;
+local rfh, T, mtT, reps,mtI, preimgs, elts, otf, f;
   rfh := ReesFactorHomomorphism(J);
   T := Range(rfh);
   SetName(T,Concatenation(Iname,"mod",Jname));
@@ -90,10 +90,9 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indfunc, torso;
   elts := List(preimgs,
                function(x)
                  if Size(x)> 1 then return fail;else return x[1];fi;end);
-  itf := InputTextFile(Concatenation(Name(T),".reps"));
   otf := OutputTextFile(Concatenation(Name(T),".uppertorsos"),false);
-  s := ReadLine(itf);
-  repeat
+  f := function(s)
+    local indfunc, torso;
     NormalizeWhitespace(s);
     indfunc := AsBlist(DecodeBitString(s));
     torso := SetByIndicatorFunction(indfunc,elts);
@@ -102,8 +101,9 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, itf, otf, s, indfunc, torso;
       WriteLine(otf,EncodeBitString(AsBitString(
               IndicatorFunction(torso,mtI))));
     fi;
-    s := ReadLine(itf);
-  until s=fail;
+    return true;
+  end;
+  TextProcessor(Concatenation(Name(T),".reps"), f);
 end;
 
 ISubsFromJUpperTorsos := function(I, J, uppertorsosfile, G)
