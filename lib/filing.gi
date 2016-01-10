@@ -103,7 +103,7 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, otf, f;
     fi;
     return true;
   end;
-  TextProcessor(Concatenation(Name(T),".reps"), f);
+  TextFileProcessor(Concatenation(Name(T),".reps"), f);
 end;
 
 ISubsFromJUpperTorsos := function(I, J, uppertorsosfile, G)
