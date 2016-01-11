@@ -31,31 +31,6 @@ RecodeIndicatorFunctionFile := function(infile, outfile, mt, MT)
   CloseStream(otf);
 end;
 
-################################################################################
-### GNUPLOT ####################################################################
-################################################################################
-
-#the frequency distribution vector
-# gnuplot code:
-# set terminal tikz size 14cm,7cm
-# set style fill transparent solid 0.5 border
-# set output "T4size6peaks.tikz"
-# set xlab "size of semigroup"
-# set xrange [-1:140]
-# set grid
-# plot "T4sizedist.dat" with boxes lc rgb"black" title "Sub(T4)"
-# assuming no zero size value
-GNUPlotDataFromSizeVector := function(sizes, filename)
-  local N, l, i, p;
-  N := Maximum(sizes);
-  l := List([1..N], x->0);
-  Perform(Collected(sizes), function(x) l[x[1]] := x[2];end);
-  PrintTo(filename,""); # erasing
-  for i in [1..N] do
-    AppendTo(filename, String(i)," ",String(l[i]),"\n");
-  od;
-end;
-
 ### getting some file lists - bit clumsy methods TODO check io package for this
 # implementing ls <dir>/<prefix>*
 PrefixMatchedListDir := function(dir, prefix)
@@ -242,6 +217,4 @@ function(S, G , prefix)
   isomcls := Set(PrefixPostfixMatchedListDir(".", prefix, ISOM@),
                  x->SplitString(x,".")[1]);
   Perform(isomcls, function(x) DetectAntiIsomClasses(x,mt);end);
-  GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
-          Concatenation(prefix,"sizedist.dat"));
 end);

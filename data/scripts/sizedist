@@ -1,0 +1,14 @@
+#!/bin/sh
+
+cat $1 | awk '{print $2}' | awk -F _ '{print substr($1,2)}' |sort -n | uniq -c | awk '{print $2" "$1}'
+
+#the frequency distribution vector
+# gnuplot code:
+# set terminal tikz size 14cm,7cm
+# set style fill transparent solid 0.5 border
+# set output "T4size6peaks.tikz"
+# set xlab "size of semigroup"
+# set xrange [-1:140]
+# set grid
+# plot "T4sizedist.dat" with boxes lc rgb"black" title "Sub(T4)"
+# assuming no zero size value
