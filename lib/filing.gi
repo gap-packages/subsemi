@@ -167,7 +167,7 @@ TagSgpsFromFile := function(infile, outfile, mt)
 end;
 
 SgpsDatabase := function(infile, mt)
-  TagSgpsFromFile(infile, Concatenation(infile,".db"),mt);
+  TagSgpsFromFile(infile, Concatenation(infile,DB@),mt);
 end;
 
 SgpsDatabaseToClassFiles := function(infile, prefix)
@@ -235,7 +235,7 @@ function(S, G , prefix)
   SaveIndicatorFunctions(subreps, repsfile);
   Print("Classifying subsgps of ",prefix,"\n\c");
   SgpsDatabase(repsfile, mt);
-  SgpsDatabaseToClassFiles(Concatenation(repsfile, ".db"),prefix);
+  SgpsDatabaseToClassFiles(Concatenation(repsfile, DB@),prefix);
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixPostfixMatchedListDir(".",prefix,"reps"),
           function(x) IsomClasses(x,mt);end);
