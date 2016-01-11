@@ -13,4 +13,8 @@
 # short structure descriptions of automorphism groups and normalizers
 BindGlobal("DB@", ".db");
 
+# elements of a semigroup written out in order as it is used in MulTab
+# for further reference in interpreting SGPS@ files
+BindGlobal("ELTS@", ".elts");
+
 DeclareGlobalFunction("FileSubsemigroups");

@@ -228,7 +228,7 @@ function(S, G , prefix)
   local mt,subreps,ndigits, repsfile, isomcls;
   mt := MulTab(S,G);
   #generators for the record
-  WriteGenerators(Concatenation(prefix,".elts"), Elts(mt));
+  WriteGenerators(Concatenation(prefix,ELTS@), Elts(mt));
   Print("Calculating subsgps of ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
   repsfile := Concatenation(prefix,".set");
