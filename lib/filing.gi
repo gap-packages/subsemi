@@ -13,7 +13,6 @@
 # the tagging function gives a string, that goes into
 # the filename, thus we get separate files for the classes
 
-
 ################################################################################
 ### FILING INDICATOR FUNCTIONS #################################################
 ################################################################################
@@ -140,12 +139,12 @@ SaveTaggedSgps := function(sgps, mt, outfile)
   CloseStream(otf);
 end;
 
+# short string tag for groups
 GrpTag := function(G)
-  return Concatenation(StructureDescription(G:short),
-                 "_",
-                 String(IdSmallGroup(G)[1]),
-                 "_",
-                 String(IdSmallGroup(G)[2]));
+  return JoinStringsWithSeparator([StructureDescription(G:short),
+                                   String(IdSmallGroup(G)[1]),
+                                   String(IdSmallGroup(G)[2])],
+                                  "_");
 end;
 
 TagSgpsFromFile := function(infile, outfile, mt)
@@ -156,14 +155,11 @@ TagSgpsFromFile := function(infile, outfile, mt)
     local S, bl;
     bl := AsBlist(DecodeBitString(s));
     S := Semigroup(SetByIndicatorFunction(bl,mt));
-    WriteLine(outf,Concatenation(
-            s,
-            " ",
-            SgpTag(S,nrdigits),
-            " ",
-            GrpTag(AutomorphismGroup(S)),
-            " ",
-            GrpTag(Stabilizer(SymmetryGroup(mt),bl,OnFiniteSet))));
+    WriteLine(outf,
+            JoinStringsWithSeparator(
+            [s, SgpTag(S,nrdigits), GrpTag(AutomorphismGroup(S)),
+             GrpTag(Stabilizer(SymmetryGroup(mt),bl,OnFiniteSet))],
+                    " "));
     return true;
   end;
   TextFileProcessor(infile, f);
