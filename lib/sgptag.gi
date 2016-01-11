@@ -44,9 +44,9 @@ end;
 GreenTag := function (sgp,ndigits)
   local s;
   if GroupOfUnits(sgp) <> fail then
-    s := Concatenation("_G", PaddedNumString(Size(GroupOfUnits(sgp)),ndigits));
+    s := PaddedNumString(Size(GroupOfUnits(sgp)),ndigits);
   else
-    s := "";
+    s := PaddedNumString(0,ndigits);
   fi;
   return Concatenation("L",PaddedNumString(NrLClasses(sgp),ndigits),
                  "_R",PaddedNumString(NrRClasses(sgp),ndigits),
@@ -54,7 +54,8 @@ GreenTag := function (sgp,ndigits)
                  "_RD",PaddedNumString(NrRegularDClasses(sgp),ndigits),
                  "_M",PaddedNumString(Size(MaximalDClasses(sgp)),ndigits),
                  "_E",PaddedNumString(NrEdgesInHasseDiagramOfDClasses(sgp),
-                         ndigits),s);
+                         ndigits),
+                 "_G",s);
 end;
 
 # tagging semigroup by size and Greens
@@ -72,10 +73,12 @@ end;
 InstallGlobalFunction(SgpTag,
 function(sgp,ndigits)
   local tag;
-  tag := Concatenation("S",PaddedNumString(Size(sgp),ndigits),
-                 "_",GreenTag(sgp,ndigits),
-                 "_I",PaddedNumString(NrIdempotents(sgp),ndigits),
+  tag := JoinStringsWithSeparator(
+                 [Concatenation("S",PaddedNumString(Size(sgp),ndigits)),
+                  Concatenation("I",PaddedNumString(NrIdempotents(sgp),ndigits)),
+                  GreenTag(sgp,ndigits),],
                  "_");
+  Append(tag,"_");
   if IsBand(sgp) then Append(tag,"b");fi;
   if IsCommutativeSemigroup(sgp) then Append(tag,"c");fi;
   if IsRegularSemigroup(sgp) then Append(tag,"r");fi;
