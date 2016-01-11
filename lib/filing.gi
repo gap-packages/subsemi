@@ -200,7 +200,7 @@ end;
 # S semigroup, G automorphism group, prefix filename begins with this
 InstallGlobalFunction(FileSubsemigroups,
 function(S, G , prefix)
-  local mt,subreps,ndigits, repsfile, isomcls;
+  local mt,subreps,ndigits, repsfile, isomcls, files;
   mt := MulTab(S,G);
   #generators for the record
   WriteGenerators(Concatenation(prefix,ELTS@), Elts(mt));
@@ -212,9 +212,9 @@ function(S, G , prefix)
   SgpsDatabase(repsfile, mt);
   SgpsDatabaseToClassFiles(Concatenation(repsfile, DB@),prefix);
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
-  Perform(PrefixPostfixMatchedListDir(".",prefix,SUBS@),
-          function(x) IsomClasses(x,mt);end);
-  isomcls := Set(PrefixPostfixMatchedListDir(".", prefix, ISOM@),
-                 x->SplitString(x,".")[1]);
+  files := PrefixPostfixMatchedListDir(".", Concatenation(prefix,"_S"),SUBS@);
+  Perform(files, function(x) IsomClasses(x,mt);end);
+  files := PrefixPostfixMatchedListDir(".", Concatenation(prefix,"_S"),ISOM@);
+  isomcls := Set(files, x->SplitString(x,".")[1]);
   Perform(isomcls, function(x) DetectAntiIsomClasses(x,mt);end);
 end);
