@@ -83,7 +83,7 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, otf, f;
   SetName(T,Concatenation(Iname,"mod",Jname));
   mtT := MulTab(T,G,rfh);
   reps := SubSgpsByMinExtensions(mtT);
-  SaveIndicatorFunctions(reps, Concatenation(Name(T),".reps"));
+  SaveIndicatorFunctions(reps, Concatenation(Name(T),SUBS@));
   mtI := MulTab(I);
   preimgs := List(Elts(mtT),x->PreImages(rfh,x));
   elts := List(preimgs,
@@ -102,7 +102,7 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, otf, f;
     fi;
     return true;
   end;
-  TextFileProcessor(Concatenation(Name(T),".reps"), f);
+  TextFileProcessor(Concatenation(Name(T),SUBS@), f);
 end;
 
 ISubsFromJUpperTorsos := function(I, J, uppertorsosfile, G)
@@ -175,7 +175,7 @@ SgpsDatabaseToClassFiles := function(infile, prefix)
     function(s)
     local otf, l;
     l := SplitString(s," ");
-    otf := OutputTextFile(Concatenation(prefix,"_",l[2],".reps"),true);
+    otf := OutputTextFile(Concatenation(prefix,"_",l[2],SUBS@),true);
     if not WriteLine(otf,l[1]) then return false; fi;
     CloseStream(otf);
     return true;
@@ -237,7 +237,7 @@ function(S, G , prefix)
   SgpsDatabase(repsfile, mt);
   SgpsDatabaseToClassFiles(Concatenation(repsfile, DB@),prefix);
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
-  Perform(PrefixPostfixMatchedListDir(".",prefix,"reps"),
+  Perform(PrefixPostfixMatchedListDir(".",prefix,SUBS@),
           function(x) IsomClasses(x,mt);end);
   isomcls := Set(PrefixPostfixMatchedListDir(".", prefix, ".isom"),
                  x->SplitString(x,".")[1]);

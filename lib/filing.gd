@@ -17,4 +17,7 @@ BindGlobal("DB@", ".db");
 # for further reference in interpreting SGPS@ files
 BindGlobal("ELTS@", ".elts");
 
+# subsets (subgroups, subsemigroups), 6bit encoded
+BindGlobal("SUBS@", ".subs");
+
 DeclareGlobalFunction("FileSubsemigroups");
