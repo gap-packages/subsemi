@@ -6,3 +6,4 @@ find . -name '*.dat' -delete
 find . -name '*.elts' -delete
 find . -name '*.db' -delete
 find . -name 'S*' -delete
+find . -name '*\+*' -delete
