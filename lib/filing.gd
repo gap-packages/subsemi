@@ -20,4 +20,7 @@ BindGlobal("ELTS@", ".elts");
 # subsets (subgroups, subsemigroups), 6bit encoded
 BindGlobal("SUBS@", ".subs");
 
+# isomorphism class of subsemigroups
+BindGlobal("ISOM@", ".isom");
+
 DeclareGlobalFunction("FileSubsemigroups");

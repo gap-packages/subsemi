@@ -1,7 +1,6 @@
 find . -name '*.isom' -delete
-find . -name '*.set' -delete
 find . -name '*.ais' -delete
-find . -name '*.reps' -delete
+find . -name '*.subs' -delete
 find . -name '*.dat' -delete
 find . -name '*.elts' -delete
 find . -name '*.db' -delete

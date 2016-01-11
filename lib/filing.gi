@@ -196,7 +196,7 @@ IsomClasses := function(filename, mt)
     if not SaveIndicatorFunctions(
                List(class,x->IndicatorFunction(AsList(x),mt)),
                Concatenation(prefix,".",
-                       PaddedNumString(counter,digits),".isom")) then
+                       PaddedNumString(counter,digits),ISOM@)) then
       Error(Concatenation("Failure when processing ",filename));
     fi;
     counter := counter + 1;
@@ -205,14 +205,14 @@ end;
 
 DetectAntiIsomClasses := function(prefix, mt)
   local indices, classes, eqf, f, c;
-  indices := List(PrefixPostfixMatchedListDir(".", prefix, ".isom"),
+  indices := List(PrefixPostfixMatchedListDir(".", prefix, ISOM@),
                   x -> SplitString(x,".")[2]);
   f := x -> MulTab(
                Semigroup(
                        SetByIndicatorFunction(
                                LoadIndicatorFunctions(
                                        Concatenation(prefix,".",
-                                               x,".isom"))[1],mt)));
+                                               x,ISOM@))[1],mt)));
   eqf := function(mt1, mt2)
           return IsIsomorphicMulTab(mt1, CopyMulTab(mt2, true));
         end;
@@ -231,7 +231,7 @@ function(S, G , prefix)
   WriteGenerators(Concatenation(prefix,ELTS@), Elts(mt));
   Print("Calculating subsgps of ",prefix,"\n\c");
   subreps := AsList(SubSgpsByMinExtensions(mt));
-  repsfile := Concatenation(prefix,".set");
+  repsfile := Concatenation(prefix,SUBS@);
   SaveIndicatorFunctions(subreps, repsfile);
   Print("Classifying subsgps of ",prefix,"\n\c");
   SgpsDatabase(repsfile, mt);
@@ -239,7 +239,7 @@ function(S, G , prefix)
   Print("Detecting nontrivial isomorphism classes  ",prefix, "\n\c");
   Perform(PrefixPostfixMatchedListDir(".",prefix,SUBS@),
           function(x) IsomClasses(x,mt);end);
-  isomcls := Set(PrefixPostfixMatchedListDir(".", prefix, ".isom"),
+  isomcls := Set(PrefixPostfixMatchedListDir(".", prefix, ISOM@),
                  x->SplitString(x,".")[1]);
   Perform(isomcls, function(x) DetectAntiIsomClasses(x,mt);end);
   GNUPlotDataFromSizeVector(List(subreps, SizeBlist),
