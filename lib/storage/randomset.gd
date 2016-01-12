@@ -10,8 +10,7 @@
 DeclareCategory("IsRandomSet", IsStorage);
 DeclareRepresentation( "IsRandomSetRep",
                        IsComponentObjectRep,
-                       [ "l"      #list containing the elements
-                         ] );
+                       ["l"]); #sorted list containing the elements
 
 RandomSetType  := NewType(
     NewFamily("RandomSetFamily",IsRandomSet),
