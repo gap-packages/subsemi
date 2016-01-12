@@ -1,8 +1,8 @@
 #############################################################################
 ##
-## randomset.gi           Dust package
+## randomset.gi           Subsemi package
 ##
-## Copyright (C)  Attila Egri-Nagy 2011-2014
+## Copyright (C)  Attila Egri-Nagy 2011-2016
 ##
 ## Simple storage with randomized Retrieve.
 ##
@@ -11,12 +11,14 @@ InstallGlobalFunction(RandomSet,
 function() return Objectify(RandomSetType, rec(l:=[]));end);
 
 ##Storage methods ##############################################################
-InstallMethod(Store,"store for a random set",[IsRandomSet and IsRandomSetRep,IsObject],
+InstallMethod(Store,"store for a random set",
+        [IsRandomSet and IsRandomSetRep,IsObject],
 function(rndset, element)
   AddSet(rndset!.l,element);
 end);
 
-InstallMethod(Retrieve,"retrieve for a random set", [IsRandomSet and IsRandomSetRep],
+InstallMethod(Retrieve,"retrieve for a random set",
+        [IsRandomSet and IsRandomSetRep],
 function(rndset)
 local result, element;
   element := Random(rndset!.l);
@@ -36,7 +38,6 @@ function(rndset) return IsEmpty(rndset!.l); end);
 
 InstallMethod( Size,"for a random set", [IsRandomSet and IsRandomSetRep],
 function( rndset ) return Size(rndset!.l);end);
-
 
 InstallMethod( ViewObj,"for a random set",[IsRandomSet and IsRandomSetRep],
 function( rndset ) Print("RandomSet: ", rndset!.l); end);

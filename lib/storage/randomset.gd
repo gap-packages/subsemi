@@ -1,8 +1,8 @@
 #############################################################################
 ##
-## randomset.gd           Dust package
+## randomset.gd           Subsemi package
 ##
-## Copyright (C)  Attila Egri-Nagy 2011-2014
+## Copyright (C)  Attila Egri-Nagy 2011-2016
 ##
 ## Simple storage with randomized Retrieve.
 ##
@@ -17,17 +17,4 @@ RandomSetType  := NewType(
     NewFamily("RandomSetFamily",IsRandomSet),
     IsRandomSet and IsRandomSetRep and IsMutable);
 
-#############################################################################
-## <#GAPDoc Label="RandomSet">
-##  <ManSection><Heading>Creating an empty randomized set</Heading>
-##   <Func Name="RandomSet" Arg=""/>
-##    <Description>
-##    Creates an empty stack.
-##    <Example>
-##     gap&gt; stack := RandomSet()
-##     RandomSet: [  ]&lt;-
-##    </Example>
-##   </Description>
-##  </ManSection>
-## <#/GAPDoc>
 DeclareGlobalFunction("RandomSet");
