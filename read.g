@@ -26,6 +26,7 @@ ReadPackage("SubSemi","/lib/binrel.gi");
 ReadPackage("SubSemi","/lib/partbinrel.gi");
 ReadPackage("SubSemi","/lib/ui.gi");
 ReadPackage("SubSemi","/lib/igs.g");
+ReadPackage("SubSemi","/lib/maxsubsgp.gi");
 
 ReadPackage("SubSemi","/tst/testfunctions.g");
 ReadPackage("SubSemi","/tst/againstbf.g");

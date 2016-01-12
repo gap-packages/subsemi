@@ -1,15 +1,3 @@
-# delegates the calculation to MaximalSubsemigroups
-#converts back and forth
-MaxSubSgpsInMulTab := function(sgp,mt)
-  local S, maxsgps;
-  Print("#\c");
-  S := Semigroup(SetByIndicatorFunction(sgp,mt));
-  maxsgps := Set(MaximalSubsemigroups(S),
-                  x->SgpInMulTab(
-                          IndicatorFunction(GeneratorsOfSemigroup(x),mt),mt));
-  return Set(maxsgps, x->ConjugacyClassRep(x,mt));
-end;
-
 EnumByMaxSubSgps := function(mt)
   local layers, newlayer, total, newelts,i;
   layers := [[FullSet(mt)]];
