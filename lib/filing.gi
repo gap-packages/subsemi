@@ -228,12 +228,16 @@ FileSubsemigroupsInDecreasingOrder := function(mt)
     next := NextOrderClassSubSgps(st,mt);
     if not IsEmpty(next) then
       size := SizeBlist(Representative(next));
-      nextsize := SizeBlist(Peek(st));
       SaveIndicatorFunctions(next,
-              JoinStringsWithSeparator(["T4",
-                      PaddedNumString(size,3),
+              JoinStringsWithSeparator([OriginalName(mt),
+                      PaddedNumString(size,Size(String(Size(mt)))),
                       SUBS@SubSemi],
                       "_"));
+      if IsEmpty(st) then
+        nextsize := 0;
+      else
+        nextsize := SizeBlist(Peek(st));
+      fi;
       Info(SubSemiInfoClass, 1, Size(next), " of size ", size, ", ",
            Size(Filtered(AsList(st),x->nextsize=SizeBlist(x))), " next, ",
            Size(st), " in total");
