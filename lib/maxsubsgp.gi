@@ -11,8 +11,14 @@ function(sgp,mt)
   return Set(maxsgps, x->ConjugacyClassRep(x,mt));
 end);
 
-# side-effecting in st
-SubSgpsNextStep := function(st, mt)
+### ENUMERATING BY DECREASING ORDER ############################################
+
+# this function does one step for SubSgpsInDecreasingOrder: getting the next
+# class of semigroups with maximal size assuming that the sorted content of
+# the given storage is consistent
+# WARNING!!! side-effecting in st
+InstallGlobalFunction(NextOrderClassSubSgps,
+function(st, mt)
   local sgp, sub, result, n;
   if IsEmpty(st) then return []; fi;
   n := SizeBlist(Peek(st));
@@ -25,18 +31,20 @@ SubSgpsNextStep := function(st, mt)
     od;
   until IsEmpty(st) or (n > SizeBlist(Peek(st)));
   return result;
-end;
+end);
 
-
-SubSgpsByDecresingOrder := function(mt)
+# using MaximalSubsemigroups enumerating all subsgps in order
+# of decreasing size
+InstallGlobalFunction(SubSgpsInDecreasingOrder,
+function(mt)
   local f, st, next, result;
   f := function(A,B) return SizeBlist(A) < SizeBlist(B); end;
   st := SortedSet(f);
   Store(st, FullSet(mt));
   result := [];
   repeat
-    next := SubSgpsNextStep(st,mt);
+    next := NextOrderClassSubSgps(st,mt);
     Append(result,next);
   until IsEmpty(next);
   return result;
-end;
+end);
