@@ -1,19 +1,3 @@
-#by order
-SubSgpsByDecresingOrder := function(mt)
-  local f, st, sgp, sub, result;
-  f := function(A,B) return SizeBlist(A) < SizeBlist(B); end;
-  st := SortedSet(f);
-  Store(st, FullSet(mt));
-  result := [];
-  repeat
-    sgp := Retrieve(st);
-    Add(result, sgp);
-    for sub in MaximalSubsemigroups@SubSemi(sgp,mt) do
-      Store(st, sub);
-    od;
-  until IsEmpty(st);
-  return result;
-end;
 
 #by chain length
 EnumByMaxSubSgps := function(mt)
