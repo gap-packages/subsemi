@@ -44,6 +44,10 @@ end);
 InstallMethod(IsEmpty, "for sorted set", [IsSortedSet and IsSortedSetRep],
 function(st) return IsEmpty(st!.l); end);
 
+#WARNING!!! mutable reference is given out
+InstallMethod(AsList, "for sorted set", [IsSortedSet and IsSortedSetRep],
+        function(st) return st!.l; end);
+
 InstallMethod( Size,"for a sorted set", [IsSortedSet and IsSortedSetRep],
 function( st ) return Size(st!.l);end);
 
