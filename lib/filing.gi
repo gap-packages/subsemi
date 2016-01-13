@@ -218,3 +218,25 @@ function(S, G , prefix)
   isomcls := Set(files, x->SplitString(x,".")[1]);
   Perform(isomcls, function(x) DetectAntiIsomClasses(x,mt);end);
 end);
+
+################################################################################
+FileSubsemigroupsInDecreasingOrder := function(mt)
+  local st, next, nextsize, size;
+  st := SortedSet(function(A,B) return SizeBlist(A) < SizeBlist(B); end);
+  Store(st,FullSet(mt));
+  repeat
+    next := NextOrderClassSubSgps(st,mt);
+    if not IsEmpty(next) then
+      size := SizeBlist(Representative(next));
+      nextsize := SizeBlist(Peek(st));
+      SaveIndicatorFunctions(next,
+              JoinStringsWithSeparator(["T4",
+                      PaddedNumString(size,3),
+                      SUBS@SubSemi],
+                      "_"));
+      Info(SubSemiInfoClass, 1, Size(next), " of size ", size, ", ",
+           Size(Filtered(AsList(st),x->nextsize=SizeBlist(x))), " next, ",
+           Size(st), " in total");
+    fi;
+  until IsEmpty(next);
+end;
