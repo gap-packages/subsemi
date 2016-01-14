@@ -91,7 +91,6 @@ function(mt,seed,generators, waiting, db, result)
   end;
   #-----------------------------------------------------------------------------
   init := function()
-    result := [];
     for gen in ListBlist(Indices(mt), generators) do
       Store(waiting, ConjugacyClassRep(
               ClosureByIncrements(seed,gen,mt),mt));
