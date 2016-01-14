@@ -59,7 +59,7 @@ function(mt,seed,generators, waiting, db, result)
         log, # function logging some info to standart output
         secs, prev_secs, # current time in secs and the previous check
         prev_subs, # number of subsemigroups at previous measurement
-        gensets, bl, diff,gens,next,isBreadthFirst,checkpoint, main,init,
+        gensets, bl, diff,gens,next,checkpoint, main,init,
         normalizer, peeked;
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
@@ -72,7 +72,7 @@ function(mt,seed,generators, waiting, db, result)
     if Size(waiting) > 0 then
       peeked := Peek(waiting);
       if peeked <> fail then
-        Print(TrueValuePositionsBlistString(peeked[1]),"+",peeked[2]," ");
+        Print(TrueValuePositionsBlistString(peeked));
       fi;
     fi;
     if (secs-prev_secs) > 0 then # printing speed only if it measurable
@@ -101,16 +101,10 @@ function(mt,seed,generators, waiting, db, result)
   #-----------------------------------------------------------------------------
   init := function()
     result := [];
-    if isBreadthFirst then
-      gensets := [];
-      for gen in ListBlist(Indices(mt),generators) do
-        Store(waiting, [seed, gen,[gen]]);
-      od;
-    else
-      for gen in ListBlist(Indices(mt),generators) do
-        Store(waiting, [seed, gen]);
-      od;
-    fi;
+    for gen in ListBlist(Indices(mt), generators) do
+      Store(waiting, ConjugacyClassRep(
+              ClosureByIncrements(seed,gen,mt),mt));
+    od;
   end;
   #-----------------------------------------------------------------------------
   # THE MAIN LOOP - the graph search
@@ -124,11 +118,10 @@ function(mt,seed,generators, waiting, db, result)
       fi;
       if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then checkpoint(); fi;
       #CONSTRUCTING new subsgp
-      next := Retrieve(waiting);
-      bl := ConjugacyClassRep(ClosureByIncrements(next[1],next[2],mt),mt);
+      bl := Retrieve(waiting);
+      #bl := ConjugacyClassRep(ClosureByIncrements(next[1],next[2],mt),mt);
       if  IsInBlistStorage(db,bl) then continue; fi; #EXIT if nothing to do
       #STORING new subsgp
-      if isBreadthFirst then gens := next[3]; Add(gensets,gens);fi;
       Add(result, bl);
       StoreBlist(db,bl);
       #REMAINDER elts for further extensions
@@ -138,37 +131,28 @@ function(mt,seed,generators, waiting, db, result)
         diff := List(Orbits(normalizer, diff, OnPoints ), x->x[1]);
       fi;
       #RECURSION
-      if isBreadthFirst then
-        Perform(diff,
-                function(t)Store(waiting,[bl,t,Concatenation(gens,[t])]);end);
-      else
-        Perform(diff,function(t)Store(waiting,[bl,t]);end);
-      fi;
+      Perform(diff,
+              function(t) Store(waiting,
+                      ConjugacyClassRep(
+                              ClosureByIncrements(bl,t,mt),mt));end);
     od;
   end;
   #-----------------------------------------------------------------------------
   # START
-  #which search method are we doing?
-  isBreadthFirst := IsQueue(waiting);
   if IsEmpty(result) and IsEmpty(waiting) then init(); fi; # initialize
   prev_subs:=0;prev_counter:=0;counter:=0;
   prev_secs:=TimeInSeconds();
   main();
   if InfoLevel(SubSemiInfoClass)>0 and Size(result)>1 then log();fi;
   Info(SubSemiInfoClass,1,Concatenation("Total checks: ",String(counter)));
-  if isBreadthFirst then
-    return rec(subsgps:=result, gensets:=gensets);
-  else
-    return result;
-  fi;
+  return result;
 end);
 
 # a wasteful implementation
 SubSgpsIncreasingOrder := function(mt)
   local f;
   f := function(A,B)
-    return SizeBlist(ClosureByIncrements(A[1],A[2],mt))
-           > SizeBlist(ClosureByIncrements(B[1],B[2],mt));
+    return SizeBlist(A) > SizeBlist(B);
   end;
   return SubSgpsByMinExtensionsParametrized(mt,
                  EmptySet(mt),
