@@ -65,9 +65,7 @@ function(mt,seed,generators, waiting, db, result)
   log := function() #put some information on the screen
     secs := TimeInSeconds();
     Print("#", FormattedBigNumberString(counter)," #",Size(result)," ",
-          FormattedMemoryString(MemoryUsage(result))," ",
-          FormattedPercentageString(Size(result)-prev_subs,
-                  counter-prev_counter)," ");
+          FormattedMemoryString(MemoryUsage(result))," ");
     Print(Size(waiting), " ");
     if Size(waiting) > 0 then
       peeked := Peek(waiting);
