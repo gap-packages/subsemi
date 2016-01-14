@@ -101,17 +101,6 @@ function(mt,seed,generators, waiting, db, result)
   #-----------------------------------------------------------------------------
   init := function()
     result := [];
-        #db := BlistStorage(Size(mt));
-    #if baseset not empty then close it and add it as a sub
-    # if SizeBlist(baseset) > 0 then
-    #   seed := ConjugacyClassRep(SgpInMulTab(baseset,mt),mt);
-    #   Add(result, seed);
-    #   StoreBlist(db, seed);
-    # else
-    #   seed := baseset;
-    # fi;
-    # fill up the waiting list with lists of 2 or 3 elements:
-    # 1: baseset 2: gen the element to be extended with, 3: generating set (opt)
     if isBreadthFirst then
       gensets := [];
       for gen in ListBlist(Indices(mt),generators) do
