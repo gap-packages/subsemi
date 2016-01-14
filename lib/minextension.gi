@@ -15,13 +15,6 @@ InstallGlobalFunction(SubSgpsByMinExtensions,
                                     Stack(),
                                     BlistStorage(Size(mt)),[]);end);
 
-InstallGlobalFunction(SubSgpGenSetsByMinExtensions,
-        function(mt) return SubSgpsByMinExtensionsParametrized(mt,
-                                    EmptySet(mt),
-                                    DistinctGenerators(FullSet(mt),mt),
-                                    Queue(),
-                                    BlistStorage(Size(mt)),[]);end);
-
 SubSgpsContaining := function(set,mt)
   local rep;
   rep := ConjugacyClassRep(set,mt);

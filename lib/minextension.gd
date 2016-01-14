@@ -8,5 +8,4 @@
 ##
 
 DeclareGlobalFunction("SubSgpsByMinExtensions");
-DeclareGlobalFunction("SubSgpGenSetsByMinExtensions");
 DeclareGlobalFunction("SubSgpsByMinExtensionsParametrized");
