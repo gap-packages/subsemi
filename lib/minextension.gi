@@ -173,3 +173,17 @@ function(mt,seed,generators, waiting, db, result)
     return result;
   fi;
 end);
+
+# a wasteful implementation
+SubSgpsIncreasingOrder := function(mt)
+  local f;
+  f := function(A,B)
+    return SizeBlist(ClosureByIncrements(A[1],A[2],mt))
+           > SizeBlist(ClosureByIncrements(B[1],B[2],mt));
+  end;
+  return SubSgpsByMinExtensionsParametrized(mt,
+                 EmptySet(mt),
+                 DistinctGenerators(FullSet(mt),mt),
+                 SortedSet(f),
+                 BlistStorage(Size(mt)),[]);
+end;
