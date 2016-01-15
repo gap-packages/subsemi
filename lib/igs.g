@@ -7,7 +7,7 @@
 ## Copyright (C) 2015  Attila Egri-Nagy
 ##
 
-#global chackpoint data structure is bound here
+#global checkpoint data structure is bound here
 BindGlobal("SUBSEMI_IGSCheckPointData", rec());
 
 # this takes the identity singleton as independent, unlike the group case
