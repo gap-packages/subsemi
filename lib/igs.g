@@ -2,38 +2,13 @@
 ##
 ## SubSemi
 ##
-## Finding independent generating sets.
+## Independent sets in groups and semigroups.
 ##
-## Copyright (C) 2015  Attila Egri-Nagy
+## Copyright (C) 2015-2016  Attila Egri-Nagy
 ##
 
 #global checkpoint data structure is bound here
 BindGlobal("SUBSEMI_IGSCheckPointData", rec());
-
-# this takes the identity singleton as independent, unlike the group case
-IsSgpIndependentSet := function(A)
-  return IsDuplicateFreeList(A) and
-         (Size(A)<2 or
-          ForAll(A,x-> not (x in Group(Difference(A,[x])))));
-end;
-
-IsDeadEnd := function(gens,G)
-  local diff;
-  if IsEmpty(gens) then return false; fi;
-  diff := Difference(AsList(G), AsList(Group(gens)));
-  return (not IsEmpty(diff))
-         and ForAll(diff, x-> not IsSgpIndependentSet(Union(gens,[x])));
-end;
-
-# Deciding whether gens is an independent generating set, by taking all
-# of its subsets missing a single generator.
-# gens - list, mt - MulTab, S - bitlist
-# condition: S = SgpInMulTab(gens,mt); - not checked
-IsSgpIGS := function(gens,mt,S)
-  if Size(gens) < 2 then return true; fi;
-  return not ForAny(gens,x->
-                 SizeBlist(S)=SizeBlist(SgpInMulTab(Difference(gens,[x]),mt)));
-end;
 
 #can we add newgen to gens that it still remains independent
 #TODO this is actually very similar to IsSgpIGS, could be written as one function
@@ -172,7 +147,7 @@ ISWithGens := function(mt,seed, potgens,ISfunc)
   if ISfunc = ISDatabase then
     return ISDatabase(mt, potgens, BlistStorage(Size(mt)), stack, []);
   else
-    return ISCanCons(mt, potgens, [] ,stack);  
+    return ISCanCons(mt, potgens, [] ,stack);
   fi;
 end;
 
@@ -185,4 +160,32 @@ ResumeIGS := function(ISfunc)
                 SUBSEMI_IGSCheckPointData.potgens,
                 SUBSEMI_IGSCheckPointData.iss,
                 SUBSEMI_IGSCheckPointData.candidates);
+end;
+
+
+### predicates, independent from the actual search algorithm ###################
+# using group multiplication
+# this takes the identity singleton as independent, unlike the group case
+IsSgpIndependentSet := function(A)
+  return IsDuplicateFreeList(A) and
+         (Size(A)<2 or
+          ForAll(A, x-> not (x in Group(Difference(A,[x])))));
+end;
+
+# Deciding whether gens is an independent generating set, by taking all
+# of its subsets missing a single generator.
+# gens - list, mt - MulTab, S - bitlist
+# condition: S = SgpInMulTab(gens,mt); - not checked
+IsSgpIGS := function(gens,mt,S)
+  if Size(gens) < 2 then return true; fi;
+  return not ForAny(gens,x->
+                 SizeBlist(S)=SizeBlist(SgpInMulTab(Difference(gens,[x]),mt)));
+end;
+
+IsDeadEnd := function(gens,G)
+  local diff;
+  if IsEmpty(gens) then return false; fi;
+  diff := Difference(AsList(G), AsList(Group(gens)));
+  return (not IsEmpty(diff))
+         and ForAll(diff, x-> not IsSgpIndependentSet(Union(gens,[x])));
 end;
