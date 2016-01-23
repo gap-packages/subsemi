@@ -155,7 +155,7 @@ ISDatabase := function(mt, potgens,db,candidates,result)
       if SizeBlist(H) < n then
         diff := Difference(potgens,ListBlist(Indices(mt),H));
         # orbit reps by the normalizer, making diff smaller, avoid dups
-        normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
+        normalizer := Stabilizer(SymmetryGroup(mt), set, OnSets);
         diff := List(Orbits(normalizer, diff), x->x[1]);
         # checking whether adding elements from diff would yield igs' or not
         diff := Filtered(diff, x -> CanWeAdd(set, x, mt));
