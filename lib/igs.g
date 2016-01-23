@@ -32,6 +32,60 @@ IsCanonicalAddition := function(gens, newgen, mt)
   return newgen = Maximum(rep)^(Inverse(p));
 end;
 
+ISxxx := function(mt, potgens,db,candidates,result, isNew, store, isCand)
+  local H,set,counter,blistrep,diff,normalizer,n, l, ll;
+  counter := 0;
+  n := Size(Indices(mt));
+  while not IsEmpty(candidates) do
+    set := Retrieve(candidates);
+    H := SgpInMulTab(set,mt);
+    blistrep := BlistList(Indices(mt),set);
+    if isNew(blistrep) then
+      #StoreBlist(db,blistrep);
+      #Add(result, blistrep);
+      store(blistrep);
+      if SizeBlist(H) < n then
+        diff := Difference(potgens,ListBlist(Indices(mt),H));
+        isCand(diff, blistrep, set);
+        # orbit reps by the normalizer, making diff smaller, avoid dups
+        #normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
+        #diff := List(Orbits(normalizer, diff), x->x[1]);
+        # checking whether adding elements from diff would yield igs' or not
+        #diff := Filtered(diff, x -> CanWeAdd(set, x, mt));
+        #it is enough the compile a List, rather than a Set
+        ll := List(diff, x->Set(Concatenation(set,[x])));
+        l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
+        Perform(l, function(y) Store(candidates,y);end);
+      fi;
+    fi;
+    counter := counter + 1;#####################################################
+    if InfoLevel(SubSemiInfoClass)>0
+       and (counter mod SubSemiOptions.LOGFREQ)=0 then
+      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter),
+           " iss:", Size(result)," ~ ",
+           FormattedBigNumberString(Size(result)),
+           " stack:",String(Size(candidates)),
+           " ", Peek(candidates));
+    fi;#########################################################################
+    if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then
+      SUBSEMI_IGSCheckPointData.candidates := candidates;
+      SUBSEMI_IGSCheckPointData.mt := mt;
+      SUBSEMI_IGSCheckPointData.potgens := potgens;
+      SUBSEMI_IGSCheckPointData.db := db;
+      SUBSEMI_IGSCheckPointData.result := result;
+      SaveWorkspace(Concatenation("IGScheckpoint",
+              String(IO_gettimeofday().tv_sec),".ws"));
+      Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved after ",
+              FormattedBigNumberString(counter), " steps"));
+    fi;
+  od;
+  Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
+       String(Size(result)),
+       " in ",String(counter)," steps");########################################
+  return result;
+end;
+
+
 # canonical construction path method
 #potgens should be a subset of FullSet(mt)
 ISCanCons := function(mt, potgens, iss, candidates)
