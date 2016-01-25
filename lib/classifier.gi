@@ -30,6 +30,7 @@ GeneralEquivClassMap := function(elts, f, eq)
       Add(classes[pos],e);
     fi;
   od;
+  #TODO consider parallel sorting the data elements
   return rec(data:=data, classes:=classes);
 end;
 MakeReadOnlyGlobal("GeneralEquivClassMap");

@@ -60,10 +60,11 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   fi;
   #checking for enough profile types
   if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
-  #classifying A by profiles
+  #classifying by profiles
   Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
   Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
   matchedBprofs := EmptyPlist(N);
+  #bit of searching in order to avoid using hashtables
   for elt in [1..N] do
     matchedBprofs[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
     if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
@@ -71,6 +72,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
       return [];
     fi;
   od;
+  Info(SubSemiInfoClass,2," Embeddings seem possible.");
   #calling backtrack
   used := []; L := []; solutions := [];
   BackTrack();
