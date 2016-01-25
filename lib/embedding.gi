@@ -15,7 +15,6 @@
 SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   local L, # the mapping i->L[i]
         N, # the number of elements of the semigroups
-        Aprofs2elts, #lookup table a profile in mtA -> elements of mtA
         Bprofs2elts, #lookup table a profile in mtB -> elements of mtB
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
