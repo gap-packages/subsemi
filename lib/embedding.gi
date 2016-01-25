@@ -19,7 +19,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
         matchedBprofs, #lookup: element of A -> class of B with the same profile
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
-        Acls, # classifying A by its profiles
+        Acls, Bcls, # classifying A by its profiles
         solutions,elt; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
@@ -62,10 +62,14 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
   #classifying A by profiles
   Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
+  Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
   matchedBprofs := EmptyPlist(N);
   for elt in [1..N] do
-    matchedBprofs[elt] := Filtered([1..N], x->Aprofs[elt] = Bprofs[x]);
-    if Size(Acls.classes[elt]) > Size(matchedBprofs[elt]) then Error(); fi;
+    matchedBprofs[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
+    if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
+       > Size(matchedBprofs[elt]) then
+      return [];
+    fi;
   od;
   #if not ForAll([1..Size(ecm.data)],
   #           x -> Size(ecm.classes[x]) <= Size(HTValue(Bprofs2elts, ecm.data[x]))) then
