@@ -71,10 +71,6 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
       return [];
     fi;
   od;
-  #if not ForAll([1..Size(ecm.data)],
-  #           x -> Size(ecm.classes[x]) <= Size(HTValue(Bprofs2elts, ecm.data[x]))) then
-  #  return []; #not enough elements of some type to represent A
-  #fi;
   #calling backtrack
   used := []; L := []; solutions := [];
   BackTrack();
