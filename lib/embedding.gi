@@ -12,14 +12,15 @@
 # mtA, mtB: matrices or MulTab objects
 # Aprofs, Bprofs: for each element we associate a profile object (provided
 # by the caller), and this profile information is used for restricting search
+# integer -> inhomogeneous lists
 SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   local L, # the mapping i->L[i]
         N, # the number of elements of the semigroups
-        Bprofs2elts, #lookup table a profile in mtB -> elements of mtB
+        matchedBprofs, #lookup: element of A -> class of B with the same profile
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
-        ecm,
-        solutions; # cumulative collection of solutions
+        Acls, # classifying A by its profiles
+        solutions,elt; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
     local k,i,candidates,X,Y;
@@ -32,7 +33,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
     fi;
     k := Size(L)+1; # the index of the next element
     # getting elements of B with profiles matching profile of A, not used yet
-    candidates := Difference(AsSet(HTValue(Bprofs2elts, Aprofs[k])),used);
+    candidates := Difference(matchedBprofs[k],used);
     if IsEmpty(candidates) then return; fi;
     for i in candidates do
       Add(L,i); AddSet(used, i); # EXTEND by i
@@ -51,23 +52,26 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
     od;
   end;
   #-----------------------------------------------------------------------------
-  #checking for enough profile types
-  if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
-  #creating a lookup for profile types of B -> classes of B
-  Bprofs2elts := DataToClassesHT([1..Size(Bprofs)], x -> Bprofs[x], \=);
-  #now checking whether we have enough stuff for A in B
-  ecm := GeneralEquivClassMap([1..Size(Aprofs)], x -> Aprofs[x], \=);
-  if not ForAll([1..Size(ecm.data)],
-             x -> Size(ecm.classes[x]) <= Size(HTValue(Bprofs2elts, ecm.data[x]))) then
-    return []; #not enough elements of some type to represent A
-  fi;
   # figuring out target size
   if IsMulTab(mtA) then
     N := Size(Rows(mtA));
   else
     N := Size(mtA);
   fi;
-  #now the backtrack
+  #checking for enough profile types
+  if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
+  #classifying A by profiles
+  Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
+  matchedBprofs := EmptyPlist(N);
+  for elt in [1..N] do
+    matchedBprofs[elt] := Filtered([1..N], x->Aprofs[elt] = Bprofs[x]);
+    if Size(Acls.classes[elt]) > Size(matchedBprofs[elt]) then Error(); fi;
+  od;
+  #if not ForAll([1..Size(ecm.data)],
+  #           x -> Size(ecm.classes[x]) <= Size(HTValue(Bprofs2elts, ecm.data[x]))) then
+  #  return []; #not enough elements of some type to represent A
+  #fi;
+  #calling backtrack
   used := []; L := []; solutions := [];
   BackTrack();
   return solutions;
