@@ -30,18 +30,10 @@ GeneralEquivClassMap := function(elts, f, eq)
       Add(classes[pos],e);
     fi;
   od;
+  #TODO consider parallel sorting the data elements
   return rec(data:=data, classes:=classes);
 end;
 MakeReadOnlyGlobal("GeneralEquivClassMap");
-
-DataToClassesHT := function(elts, f, eq)
-  local eqcm,ht;
-  eqcm := GeneralEquivClassMap(elts, f, eq);
-  ht := HTCreate(eqcm.data[1]);
-  Perform([1..Size(eqcm.data)],
-          function(x) HTAdd(ht, eqcm.data[x], eqcm.classes[x]);end);
-  return ht;
-end;
 
 InstallGlobalFunction(Classify,
 function(elts, f, eq)
