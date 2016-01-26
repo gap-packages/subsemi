@@ -89,10 +89,12 @@ end;
 #potgens should be a subset of FullSet(mt)
 ISCanCons := function(mt, potgens, db, candidates)
   local minconjs, isNew, store, filter;
+  minconjs := MinimumConjugates(mt);
   isNew := ReturnTrue;
   store := function(blist) Add(db, blist);end;
   filter := function(diff, blistrep, set, mt)
     local l,min;
+    if IsEmpty(set) then min := 0; else min := Minimum(set); fi;
     #adding an element smaller than the minrep can't be canonical construction
     l := Filtered(diff, x->minconjs[x] >= min);
     # checking whether adding elements from diff would yield igs' or not
