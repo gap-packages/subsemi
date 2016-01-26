@@ -32,8 +32,8 @@ IsCanonicalAddition := function(gens, newgen, mt)
   return newgen = Maximum(rep)^(Inverse(p));
 end;
 
-ISxxx := function(mt, potgens,db,candidates,result, isNew, store, isCand)
-  local H,set,counter,blistrep,diff,normalizer,n, l, ll;
+ISxxx := function(mt, potgens,db,candidates,result, isNew, store, filter)
+  local H,set,counter,blistrep,normalizer,n, l, ll;
   counter := 0;
   n := Size(Indices(mt));
   while not IsEmpty(candidates) do
@@ -45,16 +45,15 @@ ISxxx := function(mt, potgens,db,candidates,result, isNew, store, isCand)
       #Add(result, blistrep);
       store(blistrep);
       if SizeBlist(H) < n then
-        diff := Difference(potgens,ListBlist(Indices(mt),H));
-        isCand(diff, blistrep, set);
-        # orbit reps by the normalizer, making diff smaller, avoid dups
-        #normalizer := Stabilizer(SymmetryGroup(mt), blistrep, OnFiniteSet);
-        #diff := List(Orbits(normalizer, diff), x->x[1]);
-        # checking whether adding elements from diff would yield igs' or not
-        #diff := Filtered(diff, x -> CanWeAdd(set, x, mt));
-        #it is enough the compile a List, rather than a Set
-        ll := List(diff, x->Set(Concatenation(set,[x])));
-        l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
+        #filter the complement of semigroup H for candidate elements
+        l := filter(Difference(potgens,ListBlist(Indices(mt),H)),
+                    blistrep,
+                    set,
+                    mt);
+        #build the new sets by appending candidates to set
+        l := List(l, x->Set(Concatenation(set,[x])));
+        #taking conjugacy class representatives
+        l := List(l, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
         Perform(l, function(y) Store(candidates,y);end);
       fi;
     fi;
@@ -88,55 +87,21 @@ end;
 
 # canonical construction path method
 #potgens should be a subset of FullSet(mt)
-ISCanCons := function(mt, potgens, iss, candidates)
-  local H,set,counter,blistrep,diff,n, l, ll, minconjs, min;
-  counter := 0;
-  n := Size(Indices(mt));
-  minconjs := MinimumConjugates(mt);
-  while not IsEmpty(candidates) do
-    set := Retrieve(candidates);
-    if IsEmpty(set) then min := 0; else min := Minimum(set); fi;
-    H := SgpInMulTab(set,mt);
-    blistrep := BlistList(Indices(mt),set);
-    Add(iss,blistrep);
-    if SizeBlist(H) < n then
-      diff := Difference(potgens,ListBlist(Indices(mt),H));
-      #adding an element smaller than the minrep can't be canonical construction
-      diff := Filtered(diff, x->minconjs[x] >= min);
-      # checking whether adding elements from diff would yield igs' or not
-      diff := Filtered(diff,
-                      x -> not ForAny(set, y-> MonogenicSgps(mt)[x][y])
-                           and IsCanonicalAddition(set,x,mt)
-                           and CanWeAdd(set, x, mt));
-      #it is enough the compile a List, rather than a Set
-      ll := List(diff, x->Set(Concatenation(set,[x])));
-      l := List(ll, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
-      Perform(l, function(y) Store(candidates,y);end);
-    fi;
-    counter := counter + 1;#####################################################
-    if InfoLevel(SubSemiInfoClass)>0
-       and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      Info(SubSemiInfoClass,1,
-           "iss:", Size(iss)," ~ ",
-           FormattedBigNumberString(Size(iss)),
-           " stack:",String(Size(candidates)),
-           " ", Peek(candidates));
-    fi;#########################################################################
-    if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then
-      SUBSEMI_IGSCheckPointData.candidates := candidates;
-      SUBSEMI_IGSCheckPointData.mt := mt;
-      SUBSEMI_IGSCheckPointData.potgens := potgens;
-      SUBSEMI_IGSCheckPointData.iss := iss;
-      SaveWorkspace(Concatenation("IGScheckpoint",
-              String(IO_gettimeofday().tv_sec),".ws"));
-      Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved after ",
-              FormattedBigNumberString(counter), " steps"));
-    fi;
-  od;
-  Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
-       String(Size(iss)),
-       " in ",String(counter)," steps");########################################
-  return  iss; #List(iss, x->SetByIndicatorFunction(x,mt));
+ISCanCons := function(mt, potgens, db, candidates)
+  local minconjs, isNew, store, filter;
+  isNew := ReturnTrue;
+  store := function(blist) Add(db, blist);end;
+  filter := function(diff, blistrep, set, mt)
+    local l,min;
+    #adding an element smaller than the minrep can't be canonical construction
+    l := Filtered(diff, x->minconjs[x] >= min);
+    # checking whether adding elements from diff would yield igs' or not
+    return Filtered(l,
+                   x -> not ForAny(set, y-> MonogenicSgps(mt)[x][y])
+                   and IsCanonicalAddition(set,x,mt)
+                   and CanWeAdd(set, x, mt));
+  end;
+  return ISxxx(mt, potgens, db, candidates, db, isNew, store, filter);
 end;
 
 # keeping a database for checking against
