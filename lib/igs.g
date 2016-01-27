@@ -48,8 +48,7 @@ ISxxx := function(mt, potgens,db,candidates,result, isNew, store, filter)
         #filter the complement of semigroup H for candidate elements
         l := filter(Difference(potgens,ListBlist(Indices(mt),H)),
                     blistrep,
-                    set,
-                    mt);
+                    set);
         #build the new sets by appending candidates to set
         l := List(l, x->Set(Concatenation(set,[x])));
         #taking conjugacy class representatives
@@ -92,7 +91,7 @@ ISCanCons := function(mt, potgens, db, candidates)
   minconjs := MinimumConjugates(mt);
   isNew := ReturnTrue;
   store := function(blist) Add(db, blist);end;
-  filter := function(diff, blistrep, set, mt)
+  filter := function(diff, blistrep, set)
     local l,min;
     if IsEmpty(set) then min := 0; else min := Minimum(set); fi;
     #adding an element smaller than the minrep can't be canonical construction
@@ -112,7 +111,7 @@ ISDatabase := function(mt, potgens,db,candidates,result)
   local isNew, store, filter;
   isNew := x -> not IsInBlistStorage(db,x);
   store := function(x) StoreBlist(db,x);Add(result,x); end;
-  filter := function(diff, blistrep, set, mt)
+  filter := function(diff, blistrep, set)
     local normalizer, l;
     # orbit reps by the normalizer, making diff smaller, avoid dups
     normalizer := Stabilizer(SymmetryGroup(mt), set, OnSets);
