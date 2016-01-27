@@ -163,7 +163,10 @@ ISWithGens := function(mt,seed, potgens,ISfunc)
   fi;
 end;
 
-IS := function(mt,ISfunc) return ISWithGens(mt, [], Indices(mt),ISfunc); end;
+InstallGlobalFunction(IndependentSets,
+function(mt,ISfunc)
+  return ISWithGens(mt, [], Indices(mt),ISfunc);
+end);
 
 # resuming an interrupted calculation by using global variables
 # these variables get updated at each checkpoint
