@@ -1,3 +1,5 @@
+0.71
+	Getting rid of duplicated code in the independent set search algorithms by proper abstraction.
 0.70
 	Using a simple array instead of hashing in SubTableMatchingSearch. It gives speedup and it is compatible with Orb 4.7.5.
 0.69
