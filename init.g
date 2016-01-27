@@ -29,3 +29,4 @@ ReadPackage("SubSemi","/lib/binrel.gd");
 ReadPackage("SubSemi","/lib/partbinrel.gd");
 ReadPackage("SubSemi","/lib/filing.gd");
 ReadPackage("SubSemi","/lib/maxsubsgp.gd");
+ReadPackage("SubSemi","/lib/independentset.gd");
