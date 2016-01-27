@@ -32,30 +32,42 @@ IsCanonicalAddition := function(gens, newgen, mt)
   return newgen = Maximum(rep)^(Inverse(p));
 end;
 
-IS_SEARCH := function(mt, potgens,db,candidates,result, isNew, store, filter)
+# graph search algorithm for independent sets
+# mt - multiplication table
+# potgens - potential generators, i.e. elements to be in independent sets
+# db - database for keeping track visited elements
+# candidates - the `waiting list' of the search, can be a Stack, Queue etc.
+# result - IsDatabase needs a separate list for the end result
+### functions for changing the behaviour of the search
+# isnew - decided whether the blist representation of the set is now or not
+# store - store the blist in database/ result
+# filter - filtering the complement of the generated subsemigroup for generators
+IS_SEARCH := function(mt, potgens,db,candidates,result, isnew, store, filter)
   local set, # a subset of the elements of multiplication table (list)
         blist, # set represented as a boolean list
         S, # semigroup generated set (subsemigroup in the multiplication table)
-        counter,blistrep,normalizer,n, l;
+        l, # list used for temporary storage
+        counter; #counting the number of search steps for logging, checkpointing
   counter := 0;
-  n := Size(Indices(mt));
+  ### MAIN SEARCH LOOP #########################################################
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
     blist := BlistList(Indices(mt),set);
-    if isNew(blist) then
+    if isnew(blist) then
       store(blist);
       S := SgpInMulTab(set,mt);
-      if SizeBlist(S) < n then
+      if SizeBlist(S) < Size(mt) then
         #filter the complement of semigroup S for candidate elements
         l := filter(Difference(potgens,ListBlist(Indices(mt),S)), set);
         #build the new sets by appending candidates to set
         l := List(l, x->Set(Concatenation(set,[x])));
         #taking conjugacy class representatives
         l := List(l, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
-        Perform(l, function(y) Store(candidates,y);end);
+        Perform(l, function(x) Store(candidates,x);end);
       fi;
     fi;
-    counter := counter + 1;#####################################################
+    ### LOGGING ################################################################
+    counter := counter + 1;
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
       Info(SubSemiInfoClass,1,FormattedBigNumberString(counter),
@@ -63,7 +75,8 @@ IS_SEARCH := function(mt, potgens,db,candidates,result, isNew, store, filter)
            FormattedBigNumberString(Size(result)),
            " stack:",String(Size(candidates)),
            " ", Peek(candidates));
-    fi;#########################################################################
+    fi;
+    ### CHECKPOINTING ##########################################################
     if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then
       SUBSEMI_IGSCheckPointData.candidates := candidates;
       SUBSEMI_IGSCheckPointData.mt := mt;
@@ -76,19 +89,19 @@ IS_SEARCH := function(mt, potgens,db,candidates,result, isNew, store, filter)
               FormattedBigNumberString(counter), " steps"));
     fi;
   od;
-  Info(SubSemiInfoClass,1,"TOTAL: ",###########################################
+  ### FINAL LOG MESSAGE ########################################################
+  Info(SubSemiInfoClass,1,"TOTAL: ",
        String(Size(result)),
-       " in ",String(counter)," steps");########################################
+       " in ",String(counter)," steps");
   return result;
 end;
-
 
 # canonical construction path method
 #potgens should be a subset of FullSet(mt)
 ISCanCons := function(mt, potgens, db, candidates)
-  local minconjs, isNew, store, filter;
+  local minconjs, isnew, store, filter;
   minconjs := MinimumConjugates(mt);
-  isNew := ReturnTrue;
+  isnew := ReturnTrue;
   store := function(blist) Add(db, blist);end;
   filter := function(diff, set)
     local l,min;
@@ -101,14 +114,14 @@ ISCanCons := function(mt, potgens, db, candidates)
                    and IsCanonicalAddition(set,x,mt)
                    and CanWeAdd(set, x, mt));
   end;
-  return IS_SEARCH(mt, potgens, db, candidates, db, isNew, store, filter);
+  return IS_SEARCH(mt, potgens, db, candidates, db, isnew, store, filter);
 end;
 
 # keeping a database for checking against
 #potgens should be a subset of FullSet(mt)
 ISDatabase := function(mt, potgens,db,candidates,result)
-  local isNew, store, filter;
-  isNew := x -> not IsInBlistStorage(db,x);
+  local isnew, store, filter;
+  isnew := x -> not IsInBlistStorage(db,x);
   store := function(x) StoreBlist(db,x);Add(result,x); end;
   filter := function(diff, set)
     local normalizer, l;
@@ -118,7 +131,7 @@ ISDatabase := function(mt, potgens,db,candidates,result)
     # checking whether adding elements from diff would yield igs' or not
     return Filtered(l, x -> CanWeAdd(set, x, mt));
   end;
-  return IS_SEARCH(mt, potgens, db, candidates, result, isNew, store, filter);
+  return IS_SEARCH(mt, potgens, db, candidates, result, isnew, store, filter);
 end;
 
 # mt - multiplication table
