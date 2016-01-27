@@ -8,31 +8,13 @@
 ##
 
 #global checkpoint data structure is bound here
-BindGlobal("SUBSEMI_IGSCheckPointData", rec());
+BindGlobal("SUBSEMI_IS_CheckPointData", rec());
 
-#can we add newgen to gens that it still remains independent
-#TODO this is actually very similar to IsSgpIGS, could be written as one function
-CanWeAdd := function(gens, newgen, mt)
-  local g,l,i;
-  l := ShallowCopy(gens); #defensive copying
-  for i  in [1..Size(gens)] do
-    g := l[i]; #remembering the knocked out old generator
-    l[i] := newgen; #putting in the new generator
-    if IsInSgp(l,g,mt) then return false; fi;
-    l[i] := g; #undo
-  od;
-  return true;
-end;
+################################################################################
+### GRAPH SEARCH FOR INDEPENDENT SETS ##########################################
+################################################################################
 
-IsCanonicalAddition := function(gens, newgen, mt)
-  local set, p, rep;
-  set := Set(Union(gens,[newgen]));
-  p := SetConjugacyClassConjugator(set, PossibleMinConjugators(set,mt));
-  rep := OnSets(set, p);
-  return newgen = Maximum(rep)^(Inverse(p));
-end;
-
-# graph search algorithm for independent sets
+# graph search algorithm for independent sets, high level algorithm
 # mt - multiplication table
 # potgens - potential generators, i.e. elements to be in independent sets
 # db - database for keeping track visited elements
@@ -78,11 +60,11 @@ IS_SEARCH := function(mt, potgens,db,candidates,result, isnew, store, filter)
     fi;
     ### CHECKPOINTING ##########################################################
     if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then
-      SUBSEMI_IGSCheckPointData.candidates := candidates;
-      SUBSEMI_IGSCheckPointData.mt := mt;
-      SUBSEMI_IGSCheckPointData.potgens := potgens;
-      SUBSEMI_IGSCheckPointData.db := db;
-      SUBSEMI_IGSCheckPointData.result := result;
+      SUBSEMI_IS_CheckPointData.candidates := candidates;
+      SUBSEMI_IS_CheckPointData.mt := mt;
+      SUBSEMI_IS_CheckPointData.potgens := potgens;
+      SUBSEMI_IS_CheckPointData.db := db;
+      SUBSEMI_IS_CheckPointData.result := result;
       SaveWorkspace(Concatenation("IGScheckpoint",
               String(IO_gettimeofday().tv_sec),".ws"));
       Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved after ",
@@ -95,6 +77,53 @@ IS_SEARCH := function(mt, potgens,db,candidates,result, isnew, store, filter)
        " in ",String(counter)," steps");
   return result;
 end;
+
+################################################################################
+### SEARCH WITH A DATABASE #####################################################
+################################################################################
+
+#can we add newgen to gens that it still remains independent
+CanWeAdd := function(gens, newgen, mt)
+  local g,l,i;
+  l := ShallowCopy(gens); #defensive copying
+  for i  in [1..Size(gens)] do
+    g := l[i]; #remembering the knocked out old generator
+    l[i] := newgen; #putting in the new generator
+    if IsInSgp(l,g,mt) then return false; fi;
+    l[i] := g; #undo
+  od;
+  return true;
+end;
+MakeReadOnlyGlobal("CanWeAdd");
+
+# keeping a database for checking against
+ISDatabase := function(mt, potgens,db,candidates,result)
+  local isnew, store, filter;
+  isnew := x -> not IsInBlistStorage(db,x);
+  store := function(x) StoreBlist(db,x);Add(result,x); end;
+  filter := function(diff, set)
+    local normalizer, l;
+    # orbit reps by the normalizer, making diff smaller, avoid dups
+    normalizer := Stabilizer(SymmetryGroup(mt), set, OnSets);
+    l := List(Orbits(normalizer, diff), x->x[1]);
+    # checking whether adding elements from diff would yield igs' or not
+    return Filtered(l, x -> CanWeAdd(set, x, mt));
+  end;
+  return IS_SEARCH(mt, potgens, db, candidates, result, isnew, store, filter);
+end;
+
+################################################################################
+### CANONICAL CONSTRUCTION PATH METHOD #########################################
+################################################################################
+
+IsCanonicalAddition := function(gens, newgen, mt)
+  local set, p, rep;
+  set := Set(Union(gens,[newgen]));
+  p := SetConjugacyClassConjugator(set, PossibleMinConjugators(set,mt));
+  rep := OnSets(set, p);
+  return newgen = Maximum(rep)^(Inverse(p));
+end;
+MakeReadOnlyGlobal("IsCanonicalAddition");
 
 # canonical construction path method
 #potgens should be a subset of FullSet(mt)
@@ -117,22 +146,9 @@ ISCanCons := function(mt, potgens, db, candidates)
   return IS_SEARCH(mt, potgens, db, candidates, db, isnew, store, filter);
 end;
 
-# keeping a database for checking against
-#potgens should be a subset of FullSet(mt)
-ISDatabase := function(mt, potgens,db,candidates,result)
-  local isnew, store, filter;
-  isnew := x -> not IsInBlistStorage(db,x);
-  store := function(x) StoreBlist(db,x);Add(result,x); end;
-  filter := function(diff, set)
-    local normalizer, l;
-    # orbit reps by the normalizer, making diff smaller, avoid dups
-    normalizer := Stabilizer(SymmetryGroup(mt), set, OnSets);
-    l := List(Orbits(normalizer, diff), x->x[1]);
-    # checking whether adding elements from diff would yield igs' or not
-    return Filtered(l, x -> CanWeAdd(set, x, mt));
-  end;
-  return IS_SEARCH(mt, potgens, db, candidates, result, isnew, store, filter);
-end;
+################################################################################
+### DISPATCH FUNCTIONS  ########################################################
+################################################################################
 
 # mt - multiplication table
 # potgens - potential generators, e.g. Indices(mt) for all elements
@@ -151,11 +167,11 @@ IS := function(mt,ISfunc) return ISWithGens(mt, [], Indices(mt),ISfunc); end;
 
 # resuming an interrupted calculation by using global variables
 # these variables get updated at each checkpoint
-ResumeIGS := function(ISfunc)
-  return ISfunc(SUBSEMI_IGSCheckPointData.mt,
-                SUBSEMI_IGSCheckPointData.potgens,
-                SUBSEMI_IGSCheckPointData.iss,
-                SUBSEMI_IGSCheckPointData.candidates);
+Resume_IS_SEARCH := function(ISfunc)
+  return ISfunc(SUBSEMI_IS_CheckPointData.mt,
+                SUBSEMI_IS_CheckPointData.potgens,
+                SUBSEMI_IS_CheckPointData.iss,
+                SUBSEMI_IS_CheckPointData.candidates);
 end;
 
 ################################################################################
