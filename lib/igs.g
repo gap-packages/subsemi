@@ -32,22 +32,25 @@ IsCanonicalAddition := function(gens, newgen, mt)
   return newgen = Maximum(rep)^(Inverse(p));
 end;
 
-ISxxx := function(mt, potgens,db,candidates,result, isNew, store, filter)
-  local H,set,counter,blistrep,normalizer,n, l, ll;
+IS_SEARCH := function(mt, potgens,db,candidates,result, isNew, store, filter)
+  local set, # a subset of the elements of multiplication table (list)
+        blist, # set represented as a boolean list
+        S, # semigroup generated set (subsemigroup in the multiplication table)
+        counter,blistrep,normalizer,n, l, ll;
   counter := 0;
   n := Size(Indices(mt));
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
-    H := SgpInMulTab(set,mt);
-    blistrep := BlistList(Indices(mt),set);
-    if isNew(blistrep) then
-      #StoreBlist(db,blistrep);
-      #Add(result, blistrep);
-      store(blistrep);
-      if SizeBlist(H) < n then
-        #filter the complement of semigroup H for candidate elements
-        l := filter(Difference(potgens,ListBlist(Indices(mt),H)),
-                    blistrep,
+    S := SgpInMulTab(set,mt);
+    blist := BlistList(Indices(mt),set);
+    if isNew(blist) then
+      #StoreBlist(db,blist);
+      #Add(result, blist);
+      store(blist);
+      if SizeBlist(S) < n then
+        #filter the complement of semigroup S for candidate elements
+        l := filter(Difference(potgens,ListBlist(Indices(mt),S)),
+                    blist,
                     set);
         #build the new sets by appending candidates to set
         l := List(l, x->Set(Concatenation(set,[x])));
@@ -91,7 +94,7 @@ ISCanCons := function(mt, potgens, db, candidates)
   minconjs := MinimumConjugates(mt);
   isNew := ReturnTrue;
   store := function(blist) Add(db, blist);end;
-  filter := function(diff, blistrep, set)
+  filter := function(diff, blist, set)
     local l,min;
     if IsEmpty(set) then min := 0; else min := Minimum(set); fi;
     #adding an element smaller than the minrep can't be canonical construction
@@ -102,7 +105,7 @@ ISCanCons := function(mt, potgens, db, candidates)
                    and IsCanonicalAddition(set,x,mt)
                    and CanWeAdd(set, x, mt));
   end;
-  return ISxxx(mt, potgens, db, candidates, db, isNew, store, filter);
+  return IS_SEARCH(mt, potgens, db, candidates, db, isNew, store, filter);
 end;
 
 # keeping a database for checking against
@@ -111,7 +114,7 @@ ISDatabase := function(mt, potgens,db,candidates,result)
   local isNew, store, filter;
   isNew := x -> not IsInBlistStorage(db,x);
   store := function(x) StoreBlist(db,x);Add(result,x); end;
-  filter := function(diff, blistrep, set)
+  filter := function(diff, blist, set)
     local normalizer, l;
     # orbit reps by the normalizer, making diff smaller, avoid dups
     normalizer := Stabilizer(SymmetryGroup(mt), set, OnSets);
@@ -119,7 +122,7 @@ ISDatabase := function(mt, potgens,db,candidates,result)
     # checking whether adding elements from diff would yield igs' or not
     return Filtered(l, x -> CanWeAdd(set, x, mt));
   end;
-  return ISxxx(mt, potgens, db, candidates, result, isNew, store, filter);
+  return IS_SEARCH(mt, potgens, db, candidates, result, isNew, store, filter);
 end;
 
 # mt - multiplication table
@@ -146,8 +149,10 @@ ResumeIGS := function(ISfunc)
                 SUBSEMI_IGSCheckPointData.candidates);
 end;
 
-
+################################################################################
 ### predicates, independent from the actual search algorithm ###################
+################################################################################
+
 # using group multiplication
 # this takes the identity singleton as independent, unlike the group case
 IsSgpIndependentSet := function(A)
