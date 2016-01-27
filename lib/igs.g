@@ -36,7 +36,7 @@ IS_SEARCH := function(mt, potgens,db,candidates,result, isNew, store, filter)
   local set, # a subset of the elements of multiplication table (list)
         blist, # set represented as a boolean list
         S, # semigroup generated set (subsemigroup in the multiplication table)
-        counter,blistrep,normalizer,n, l, ll;
+        counter,blistrep,normalizer,n, l;
   counter := 0;
   n := Size(Indices(mt));
   while not IsEmpty(candidates) do
@@ -44,14 +44,10 @@ IS_SEARCH := function(mt, potgens,db,candidates,result, isNew, store, filter)
     S := SgpInMulTab(set,mt);
     blist := BlistList(Indices(mt),set);
     if isNew(blist) then
-      #StoreBlist(db,blist);
-      #Add(result, blist);
       store(blist);
       if SizeBlist(S) < n then
         #filter the complement of semigroup S for candidate elements
-        l := filter(Difference(potgens,ListBlist(Indices(mt),S)),
-                    blist,
-                    set);
+        l := filter(Difference(potgens,ListBlist(Indices(mt),S)), set);
         #build the new sets by appending candidates to set
         l := List(l, x->Set(Concatenation(set,[x])));
         #taking conjugacy class representatives
@@ -94,7 +90,7 @@ ISCanCons := function(mt, potgens, db, candidates)
   minconjs := MinimumConjugates(mt);
   isNew := ReturnTrue;
   store := function(blist) Add(db, blist);end;
-  filter := function(diff, blist, set)
+  filter := function(diff, set)
     local l,min;
     if IsEmpty(set) then min := 0; else min := Minimum(set); fi;
     #adding an element smaller than the minrep can't be canonical construction
@@ -114,7 +110,7 @@ ISDatabase := function(mt, potgens,db,candidates,result)
   local isNew, store, filter;
   isNew := x -> not IsInBlistStorage(db,x);
   store := function(x) StoreBlist(db,x);Add(result,x); end;
-  filter := function(diff, blist, set)
+  filter := function(diff, set)
     local normalizer, l;
     # orbit reps by the normalizer, making diff smaller, avoid dups
     normalizer := Stabilizer(SymmetryGroup(mt), set, OnSets);
