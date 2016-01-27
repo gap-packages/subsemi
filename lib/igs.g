@@ -41,10 +41,10 @@ IS_SEARCH := function(mt, potgens,db,candidates,result, isNew, store, filter)
   n := Size(Indices(mt));
   while not IsEmpty(candidates) do
     set := Retrieve(candidates);
-    S := SgpInMulTab(set,mt);
     blist := BlistList(Indices(mt),set);
     if isNew(blist) then
       store(blist);
+      S := SgpInMulTab(set,mt);
       if SizeBlist(S) < n then
         #filter the complement of semigroup S for candidate elements
         l := filter(Difference(potgens,ListBlist(Indices(mt),S)), set);
