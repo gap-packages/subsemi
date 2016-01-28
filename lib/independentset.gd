@@ -7,4 +7,6 @@
 ## Copyright (C) 2016  Attila Egri-Nagy
 ##
 
-DeclareGlobalFunction("IndependentSets");
+
+DeclareGlobalFunction("IS");
+DeclareGlobalFunction("IS_SEARCH");

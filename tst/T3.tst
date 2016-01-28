@@ -18,7 +18,7 @@ gap> T3conjclasses = AsSet(SubSgpsByIdeals(K32,S3));
 true
 gap> T3conjclasses = AsSet(SubSgpsByIdeals(K33,S3));
 true
-gap> T3ccsbyIS := IndependentSets(mt,ISCanCons);;
+gap> T3ccsbyIS := IS(mt,ISCanCons);;
 gap> Remove(T3ccsbyIS, Position(T3ccsbyIS, EmptySet(mt)));;
 gap> Set(T3ccsbyIS, x-> ConjugacyClassRep(SgpInMulTab(x,mt),mt)) = T3conjclasses;
 true

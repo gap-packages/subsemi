@@ -24,7 +24,8 @@ BindGlobal("SUBSEMI_IS_CheckPointData", rec());
 # isnew - decided whether the blist representation of the set is now or not
 # store - store the blist in database/ result
 # filter - filtering the complement of the generated subsemigroup for generators
-IS_SEARCH := function(mt, potgens,db,candidates,result, isnew, store, filter)
+InstallGlobalFunction(IS_SEARCH,
+function(mt, potgens,db,candidates,result, isnew, store, filter)
   local set, # a subset of the elements of multiplication table (list)
         blist, # set represented as a boolean list
         S, # semigroup generated set (subsemigroup in the multiplication table)
@@ -76,7 +77,7 @@ IS_SEARCH := function(mt, potgens,db,candidates,result, isnew, store, filter)
        String(Size(result)),
        " in ",String(counter)," steps");
   return result;
-end;
+end);
 
 ################################################################################
 ### SEARCH WITH A DATABASE #####################################################
@@ -163,7 +164,7 @@ ISWithGens := function(mt,seed, potgens,ISfunc)
   fi;
 end;
 
-InstallGlobalFunction(IndependentSets,
+InstallGlobalFunction(IS,
 function(mt,ISfunc)
   return ISWithGens(mt, [], Indices(mt),ISfunc);
 end);
