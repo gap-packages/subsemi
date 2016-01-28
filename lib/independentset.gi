@@ -66,7 +66,7 @@ function(mt, potgens,db,candidates,result, isnew, store, filter)
       SUBSEMI_IS_CheckPointData.potgens := potgens;
       SUBSEMI_IS_CheckPointData.db := db;
       SUBSEMI_IS_CheckPointData.result := result;
-      SaveWorkspace(Concatenation("IGScheckpoint",
+      SaveWorkspace(Concatenation("IScheckpoint",
               String(IO_gettimeofday().tv_sec),".ws"));
       Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved after ",
               FormattedBigNumberString(counter), " steps"));
@@ -98,7 +98,8 @@ end;
 MakeReadOnlyGlobal("CanWeAdd");
 
 # keeping a database for checking against
-ISDatabase := function(mt, potgens,db,candidates,result)
+InstallGlobalFunction(ISDatabase,
+function(mt, potgens,db,candidates,result)
   local isnew, store, filter;
   isnew := x -> not IsInBlistStorage(db,x);
   store := function(x) StoreBlist(db,x);Add(result,x); end;
@@ -111,7 +112,7 @@ ISDatabase := function(mt, potgens,db,candidates,result)
     return Filtered(l, x -> CanWeAdd(set, x, mt));
   end;
   return IS_SEARCH(mt, potgens, db, candidates, result, isnew, store, filter);
-end;
+end);
 
 ################################################################################
 ### CANONICAL CONSTRUCTION PATH METHOD #########################################
@@ -128,7 +129,8 @@ MakeReadOnlyGlobal("IsCanonicalAddition");
 
 # canonical construction path method
 #potgens should be a subset of FullSet(mt)
-ISCanCons := function(mt, potgens, db, candidates)
+InstallGlobalFunction(ISCanCons,
+function(mt, potgens, db, candidates)
   local minconjs, isnew, store, filter;
   minconjs := MinimumConjugates(mt);
   isnew := ReturnTrue;
@@ -145,7 +147,7 @@ ISCanCons := function(mt, potgens, db, candidates)
                    and CanWeAdd(set, x, mt));
   end;
   return IS_SEARCH(mt, potgens, db, candidates, db, isnew, store, filter);
-end;
+end);
 
 ################################################################################
 ### DISPATCH FUNCTIONS  ########################################################
@@ -171,12 +173,13 @@ end);
 
 # resuming an interrupted calculation by using global variables
 # these variables get updated at each checkpoint
-Resume_IS_SEARCH := function(ISfunc)
+InstallGlobalFunction(Resume_IS_SEARCH,
+function(ISfunc)
   return ISfunc(SUBSEMI_IS_CheckPointData.mt,
                 SUBSEMI_IS_CheckPointData.potgens,
                 SUBSEMI_IS_CheckPointData.iss,
                 SUBSEMI_IS_CheckPointData.candidates);
-end;
+end);
 
 ################################################################################
 ### predicates, independent from the actual search algorithm ###################

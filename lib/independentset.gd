@@ -8,5 +8,8 @@
 ##
 
 
-DeclareGlobalFunction("IS");
 DeclareGlobalFunction("IS_SEARCH");
+DeclareGlobalFunction("Resume_IS_SEARCH");
+DeclareGlobalFunction("ISDatabase");
+DeclareGlobalFunction("ISCanCons");
+DeclareGlobalFunction("IS");
