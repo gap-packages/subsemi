@@ -74,3 +74,10 @@ function(S)
     return Group(SmallGeneratingSet(G));
   fi;
 end);
+
+### INDEPENDENT SETS ###########################################################
+InstallGlobalFunction(IndependentSets,
+function(S)
+  local mt;
+  
+end);
