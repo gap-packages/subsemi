@@ -79,5 +79,6 @@ end);
 InstallGlobalFunction(IndependentSets,
 function(S)
   local mt;
-  
+  mt := MulTab(S);
+  return List(IS(mt, ISCanCons), x -> SetByIndicatorFunction(x,mt));
 end);

@@ -13,4 +13,4 @@ DeclareGlobalFunction("ConjugacyClassRepSubsemigroups");
 DeclareGlobalFunction("IsIsomorphicSemigroupByMulTabs");
 DeclareGlobalFunction("IsomorphismSemigroupsByMulTabs");
 
-DeclareMethod("IndependentSets");
+DeclareGlobalFunction("IndependentSets");
