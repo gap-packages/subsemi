@@ -58,7 +58,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   else
     N := Size(mtA);
   fi;
-  #checking for enough profile types
+  #checking for the right set of target profile types
   if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
   #classifying by profiles
   Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
@@ -66,7 +66,9 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   matchedBprofs := EmptyPlist(N);
   #bit of searching in order to avoid using hashtables
   for elt in [1..N] do
+    #for each element in mtA we find the elements of mtB with same profile
     matchedBprofs[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
+    #there should be enough elements in each class
     if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
        > Size(matchedBprofs[elt]) then
       return [];
