@@ -276,7 +276,7 @@ function(mt, L)
     tab := mt;
   fi;
   sa := [];
-  bl := BlistList(Indices(mt), L);
+  bl := BlistList([1..Size(tab)], L);
   for i in L do
     Add(sa,List(L,
             function(j) if bl[tab[i][j]] then
