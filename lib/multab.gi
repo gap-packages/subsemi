@@ -269,16 +269,17 @@ end;
 # mt can be just a matrix, or a MulTab object
 InstallGlobalFunction(SubArray,
 function(mt, L)
-  local sa,i,j,tab;
+  local sa,i,j,tab, bl;
   if IsMulTab(mt) then
     tab := Rows(mt);
   else
     tab := mt;
   fi;
   sa := [];
+  bl := BlistList(Indices(mt), L);
   for i in L do
     Add(sa,List(L,
-            function(j) if tab[i][j] in L then
+            function(j) if bl[tab[i][j]] then
                           return tab[i][j];
                         else
                           return 0;fi;end));
