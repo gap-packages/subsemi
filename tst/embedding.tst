@@ -11,6 +11,9 @@ gap> TL3 := JonesMonoid(3);;mt := MulTab(TL3);;
 gap> ForAll(AllSubsemigroups(TL3),
 >        x-> not IsEmpty(MulTabEmbedding(MulTab(Semigroup(x)), mt)));
 true
+gap>  f :=  G -> IsomorphismGroups(AutomorphismGroup(G), AutGrpOfMulTab(MulTab(G)))<>fail;;
+gap>  ForAll([1..15], n -> ForAll(AllSmallGroups(n), G -> f(G)));
+true
 
 #
 gap> STOP_TEST( "SubSemi package: embedding.tst", 10000);
