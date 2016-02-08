@@ -192,10 +192,11 @@ end);
 # using group multiplication
 # this takes the identity singleton as independent, unlike the group case
 IsSgpIndependentSet := function(A)
-  return IsDuplicateFreeList(A) and
-         (Size(A)<2 or
-          ForAll(A, x-> not (x in Group(Difference(A,[x])))));
+  return IsDuplicateFreeList(A)
+         and (Size(A)<2
+              or ForAll(A, x-> not (x in Group(Difference(A,[x])))));
 end;
+#TODO Using Magma would make it more general, but slower
 
 # Deciding whether gens is an independent generating set, by taking all
 # of its subsets missing a single generator.
