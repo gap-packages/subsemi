@@ -118,12 +118,16 @@ end);
 ### CANONICAL CONSTRUCTION PATH METHOD #########################################
 ################################################################################
 
-IsCanonicalAddition := function(gens, newgen, mt)
+# we add a new element to a set, then get the permutation that conjugates the
+# set to its class representative (lexicographic minimal element of the class)
+# the addition is canonical if it corresponds to adding a new maximal element
+# in the representative
+IsCanonicalAddition := function(gens, newelt, mt)
   local set, p, rep;
-  set := Set(Union(gens,[newgen]));
+  set := Set(Union(gens,[newelt]));
   p := SetConjugacyClassConjugator(set, PossibleMinConjugators(set,mt));
   rep := OnSets(set, p);
-  return newgen = Maximum(rep)^(Inverse(p));
+  return newelt = Maximum(rep)^(Inverse(p));
 end;
 MakeReadOnlyGlobal("IsCanonicalAddition");
 
