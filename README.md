@@ -18,7 +18,7 @@ The enumeration was extended to other diagram semigroups, see the data/SMALLDEGR
 
 ## Installation
 
-Just cloning the repository under GAP/pkg/ and copying (and possibly editing) config_EXAMPLE.g to config.g.
+Just copying, or more conveniently cloning, the repository under GAP/pkg/.
 
 Copyright (C) 2014 James East, Attila Egri-Nagy, James D. Mitchell
 
