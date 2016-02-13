@@ -205,7 +205,7 @@ end);
 InstallGlobalFunction(IsMaximalIndependentSet,
 function(A,M,constructor)
   local diff;
-  if IsEmpty(A) then return false; fi;
+  if IsEmpty(A) then return IsEmpty(M); fi;
   diff := Difference(AsSet(M), AsSet(constructor(A)));
   return ForAll(diff, x-> not IsIndependentSet(Union(A,[x]),constructor));
 end);
