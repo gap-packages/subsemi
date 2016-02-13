@@ -193,23 +193,13 @@ end);
 # set (as semigroup)
 # the constructor is a function that creates the algebraic structure,
 # e.g. Group, Semigroup, Magma - the more general the slower
+# constructor for MulTabs: x->ListBlist(Indices(mt), SgpInMulTab(x,mt))
 InstallGlobalFunction(IsIndependentSet,
 function(A, constructor)
   return IsDuplicateFreeList(A)
          and (Size(A)<2
               or ForAll(A, x-> not (x in constructor(Difference(A,[x])))));
 end);
-
-
-# Deciding whether gens is an independent generating set, by taking all
-# of its subsets missing a single generator.
-# gens - list, mt - MulTab, S - bitlist
-# condition: S = SgpInMulTab(gens,mt); - not checked
-IsSgpIGS := function(gens,mt,S)
-  if Size(gens) < 2 then return true; fi;
-  return not ForAny(gens,x->
-                 SizeBlist(S)=SizeBlist(SgpInMulTab(Difference(gens,[x]),mt)));
-end;
 
 IsDeadEnd := function(gens,G)
   local diff;
