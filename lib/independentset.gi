@@ -189,14 +189,17 @@ end);
 ### predicates, independent from the actual search algorithm ###################
 ################################################################################
 
-# using group multiplication
-# this takes the identity singleton as independent, unlike the group case
-IsSgpIndependentSet := function(A)
+# decides whether the given set A of multiplicative elements is an independent
+# set (as semigroup)
+# the constructor is a function that creates the algebraic structure,
+# e.g. Group, Semigroup, Magma - the more general the slower
+InstallGlobalFunction(IsIndependentSet,
+function(A, constructor)
   return IsDuplicateFreeList(A)
          and (Size(A)<2
-              or ForAll(A, x-> not (x in Group(Difference(A,[x])))));
-end;
-#TODO Using Magma would make it more general, but slower
+              or ForAll(A, x-> not (x in constructor(Difference(A,[x])))));
+end);
+
 
 # Deciding whether gens is an independent generating set, by taking all
 # of its subsets missing a single generator.
@@ -213,5 +216,5 @@ IsDeadEnd := function(gens,G)
   if IsEmpty(gens) then return false; fi;
   diff := Difference(AsList(G), AsList(Group(gens)));
   return (not IsEmpty(diff))
-         and ForAll(diff, x-> not IsSgpIndependentSet(Union(gens,[x])));
+         and ForAll(diff, x-> not IsIndependentSet(Union(gens,[x])));
 end;
