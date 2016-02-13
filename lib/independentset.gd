@@ -15,3 +15,5 @@ DeclareGlobalFunction("ISCanCons");
 DeclareGlobalFunction("IS");
 
 DeclareGlobalFunction("IsIndependentSet");
+DeclareGlobalFunction("IsMaximalIndependentSet");
+DeclareGlobalFunction("IsDeadEnd");

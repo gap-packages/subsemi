@@ -201,10 +201,19 @@ function(A, constructor)
               or ForAll(A, x-> not (x in constructor(Difference(A,[x])))));
 end);
 
-IsDeadEnd := function(gens,G)
+# true if A is a maximal independent set in M
+InstallGlobalFunction(IsMaximalIndependentSet,
+function(A,M,constructor)
   local diff;
-  if IsEmpty(gens) then return false; fi;
-  diff := Difference(AsList(G), AsList(Group(gens)));
-  return (not IsEmpty(diff))
-         and ForAll(diff, x-> not IsIndependentSet(Union(gens,[x])));
-end;
+  if IsEmpty(A) then return false; fi;
+  diff := Difference(AsSet(M), AsSet(constructor(A)));
+  return ForAll(diff, x-> not IsIndependentSet(Union(A,[x]),constructor));
+end);
+
+# true if it is maximal, but A does not generate M
+InstallGlobalFunction(IsDeadEnd,
+function(A,M,constructor)
+  if IsEmpty(A) then return false; fi;
+  return (Size(constructor(A)) < Size(M))
+         and IsMaximalIndependentSet(A,M,constructor);
+end);
