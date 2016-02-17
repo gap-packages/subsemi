@@ -13,10 +13,6 @@ Version := "0.72",
 
 Date := "13/02/2016",
 
-ArchiveURL := "https://bitbucket.org/dersu/subsemi",
-
-ArchiveFormats := ".tar.gz",
-
 Persons := [
   rec(
     LastName      := "Egri-Nagy",
@@ -52,15 +48,17 @@ Persons := [
 
 Status := "dev",
 
-README_URL := "https://bitbucket.org/dersu/subsemi",
-
-PackageInfoURL := "https://bitbucket.org/dersu/subsemi",
+PackageWWWHome := "http://gap-packages.github.io/subsemi/",
+README_URL     := Concatenation(~.PackageWWWHome, "README.md"),
+PackageInfoURL := Concatenation(~.PackageWWWHome, "PackageInfo.g"),
+ArchiveURL     := Concatenation("https://github.com/gap-packages/subsemi/",
+                   "releases/download/v", ~.Version,
+                   "/subsemi-", ~.Version),
+                   ArchiveFormats := ".tar.gz .tar.bz2",
 
 AbstractHTML := "<span class=\"pkgname\">SubSemi</span> is  a <span class=\
                    \"pkgname\">GAP</span> \
                    for enumerating subsemigroups.",
-
-PackageWWWHome := "https://bitbucket.org/dersu/subsemi",
 
 PackageDoc := rec(
   BookName  := "SubSemi",
@@ -71,7 +69,6 @@ PackageDoc := rec(
   LongTitle := "Subsemigroup Enumeration",
   Autoload  := true
 ),
-
 
 Dependencies := rec(
  GAP := ">= 4.8",
