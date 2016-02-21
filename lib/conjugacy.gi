@@ -55,6 +55,21 @@ MinimumOfOrbit := function(point, operators, actionfunc)
 end;
 MakeReadOnlyGlobal("MinimumOfOrbit");
 
+MinimumOfOrbitOperator := function(point, operators, actionfunc)
+  local  min,new,i,conjugator;
+  conjugator := operators[1];
+  min := point;
+  for i in [1..Length(operators)] do
+    new := actionfunc(point,operators[i]);
+    if new < min then
+      min := new;
+      conjugator := operators[i];
+    fi;
+  od;
+  return conjugator;
+end;
+MakeReadOnlyGlobal("MinimumOfOrbitOperator");
+
 ### FOR SETS OF INTEGERS #######################################################
 # conjugacy class rep defined for list of integers
 # TODO the next two functions can be merged
@@ -64,17 +79,7 @@ end;
 
 # conjugacy class rep defined for set of integers
 SetConjugacyClassConjugator := function(set,symmetries)
-  local  min,new,i,conjugator;
-  conjugator := symmetries[1];
-  min := AsSet(set);
-  for i in [1..Length(symmetries)] do
-    new := OnSets(set,symmetries[i]);
-    if new < min then
-      min := new;
-      conjugator := symmetries[i];
-    fi;
-  od;
-  return conjugator;
+  return MinimumOfOrbitOperator(AsSet(set), symmetries, OnSets);
 end;
 
 ### FOR BLISTS #################################################################
