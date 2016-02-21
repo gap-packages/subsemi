@@ -41,7 +41,7 @@ end;
 #for each element what is the smallest element in order that is conjugate to it?
 InstallMethod(MinimumConjugates,"for a multab", [IsMulTab],
 function(mt)
-  return List(Indices(mt), x -> Minimum(List(Symmetries(mt), y -> x^y)));
+  return List(Indices(mt), x -> Minimum(Set(Symmetries(mt), y -> x^y)));
 end);
 
 #for minimal conjugates, what are the symmetries taking an element to its min?
