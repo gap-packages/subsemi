@@ -45,7 +45,7 @@ function(mt, potgens,db,candidates,result, isnew, store, filter)
         #build the new sets by appending candidates to set
         l := List(l, x->Set(Concatenation(set,[x])));
         #taking conjugacy class representatives
-        l := List(l, x->SetConjugacyClassRep(x,PossibleMinConjugators(x,mt)));
+        l := List(l, x->SetConjugacyClassRep(x,PossibleRepConjugators(x,mt)));
         Perform(l, function(x) Store(candidates,x);end);
       fi;
     fi;
@@ -125,7 +125,7 @@ end);
 IsCanonicalAddition := function(gens, newelt, mt)
   local set, p, rep;
   set := Set(Union(gens,[newelt]));
-  p := SetConjugacyClassConjugator(set, PossibleMinConjugators(set,mt));
+  p := SetConjugacyClassConjugator(set, PossibleRepConjugators(set,mt));
   rep := OnSets(set, p);
   return newelt = Maximum(rep)^(Inverse(p));
 end;
