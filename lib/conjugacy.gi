@@ -20,26 +20,24 @@
 # for element x what is the smallest element conjugate to it?
 # multab index -> multab index
 InstallMethod(MinimumConjugates,"for a multab", [IsMulTab],
-        function(mt)
+function(mt)
   return List(Indices(mt), x -> Minimum(Set(Symmetries(mt), y -> x^y)));
 end);
 
 # what are the symmetries taking an element x to its minimal conjugate?
 # multab index -> set of symmetries
 InstallMethod(MinimumConjugators,"for multab", [IsMulTab],
-        function(mt)
-  local minimums;
-  minimums := MinimumConjugates(mt);
-  return List(Indices(mt), x -> Filtered(Symmetries(mt), y -> x^y=minimums[x]));
+function(mt)
+  return List(Indices(mt),
+              x -> Filtered(Symmetries(mt), y -> x^y=MinimumConjugates(mt)[x]));
 end);
 
 # permutations that may give the minimal representative
 PossibleMinConjugators:= function(set, mt)
-  local min, mins, conjgrs;
-  mins := MinimumConjugates(mt);
-  conjgrs := MinimumConjugators(mt);
-  min := Minimum(Set(set, x->mins[x]));
-  return Union(Set(Filtered(set, x-> mins[x]=min), y->conjgrs[y]));
+  local min;
+  min := Minimum(Set(set, x->MinimumConjugates(mt)[x]));
+  return Union(Set(Filtered(set, x-> MinimumConjugates(mt)[x]=min),
+                   y->MinimumConjugators(mt)[y]));
 end;
 MakeReadOnlyGlobal("PossibleMinConjugators");
 
