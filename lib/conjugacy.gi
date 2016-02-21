@@ -59,7 +59,7 @@ MakeReadOnlyGlobal("MinimumOfOrbit");
 # conjugacy class rep defined for list of integers
 # TODO the next two functions can be merged
 SetConjugacyClassRep := function(set,symmetries)
-  return MinimumOfOrbit(set, symmetries, OnSets);
+  return MinimumOfOrbit(AsSet(set), symmetries, OnSets);
 end;
 
 # conjugacy class rep defined for set of integers
