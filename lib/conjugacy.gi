@@ -4,8 +4,44 @@
 ##
 ## Conjugation for multab elements.
 ##
-## Copyright (C) 2013-2015  Attila Egri-Nagy
+## Copyright (C) 2013-2016 Attila Egri-Nagy
 ##
+
+### MINIMAL CONJUGATORS ########################################################
+# using the ordering of the elements in the multiplication tables, the conjugacy
+# class representative of a set of elements is defined by the minimal element of
+# the class by the induced lexicographic order
+#
+# when looking for the representative, we do not need to conjugate by all
+# symmetries, only the ones that produce minimal elements
+#
+# here we compute attributes of multabs to help to construct the representative
+
+# for element x what is the smallest element conjugate to it?
+# multab index -> multab index
+InstallMethod(MinimumConjugates,"for a multab", [IsMulTab],
+        function(mt)
+  return List(Indices(mt), x -> Minimum(Set(Symmetries(mt), y -> x^y)));
+end);
+
+# what are the symmetries taking an element x to its minimal conjugate?
+# multab index -> set of symmetries
+InstallMethod(MinimumConjugators,"for multab", [IsMulTab],
+        function(mt)
+  local minimums;
+  minimums := MinimumConjugates(mt);
+  return List(Indices(mt), x -> Filtered(Symmetries(mt), y -> x^y=minimums[x]));
+end);
+
+# permutations that may give the minimal representative
+PossibleMinConjugators:= function(set, mt)
+  local min, mins, conjgrs;
+  mins := MinimumConjugates(mt);
+  conjgrs := MinimumConjugators(mt);
+  min := Minimum(Set(set, x->mins[x]));
+  return Union(Set(Filtered(set, x-> mins[x]=min), y->conjgrs[y]));
+end;
+MakeReadOnlyGlobal("PossibleMinConjugators");
 
 ### FOR SETS OF INTEGERS #######################################################
 # conjugacy class rep defined for list of integers
@@ -38,29 +74,6 @@ SetConjugacyClassConjugator := function(set,symmetries)
 end;
 
 ### FOR BLISTS #################################################################
-#for each element what is the smallest element in order that is conjugate to it?
-InstallMethod(MinimumConjugates,"for a multab", [IsMulTab],
-function(mt)
-  return List(Indices(mt), x -> Minimum(Set(Symmetries(mt), y -> x^y)));
-end);
-
-#for minimal conjugates, what are the symmetries taking an element to its min?
-InstallMethod(MinimumConjugators,"for multab", [IsMulTab],
-function(mt)
-  local minimums;
-  minimums := MinimumConjugates(mt);
-  return List(Indices(mt), x -> Filtered(Symmetries(mt), y -> x^y=minimums[x]));
-end);
-
-# permutations that may give the minimal representative
-PossibleMinConjugators:= function(set, mt)
-  local min, mins, conjgrs;
-  mins := MinimumConjugates(mt);
-  conjgrs := MinimumConjugators(mt);
-  min := Minimum(Set(set, x->mins[x]));
-  return Union(Set(Filtered(set, x-> mins[x]=min), y->conjgrs[y]));
-end;
-MakeReadOnlyGlobal("PossibleMinConjugators");
 
 #the minimal one is the representative
 InstallGlobalFunction(ConjugacyClassRep,
