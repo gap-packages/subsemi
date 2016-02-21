@@ -73,23 +73,24 @@ MakeReadOnlyGlobal("MinimumOfOrbitOperator");
 ### FOR SETS OF INTEGERS #######################################################
 # conjugacy class rep defined for list of integers
 # TODO the next two functions can be merged
-SetConjugacyClassRep := function(set,symmetries)
-  return MinimumOfOrbit(AsSet(set), symmetries, OnSets);
+SetConjugacyClassRep := function(set,mt)
+  return MinimumOfOrbit(AsSet(set), PossibleRepConjugators(set,mt), OnSets);
 end;
 
 # conjugacy class rep defined for set of integers
-SetConjugacyClassConjugator := function(set,symmetries)
-  return MinimumOfOrbitOperator(AsSet(set), symmetries, OnSets);
+SetConjugacyClassConjugator := function(set,mt)
+  return MinimumOfOrbitOperator(AsSet(set),
+                                PossibleRepConjugators(set,mt),
+                                OnSets);
 end;
 
 ### FOR BLISTS #################################################################
-
-#the minimal one is the representative
+# we convert it to set, and back to blist
 InstallGlobalFunction(ConjugacyClassRep,
 function(indset,mt)
   local set, rep;
   if SizeBlist(indset) = 0 then return indset; fi;
   set := ListBlist(Indices(mt), indset);
-  rep := SetConjugacyClassRep(set, PossibleRepConjugators(set,mt));
+  rep := MinimumOfOrbit(set, PossibleRepConjugators(set,mt), OnSets);
   return BlistList(Indices(mt), rep);
 end);
