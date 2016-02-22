@@ -17,7 +17,7 @@ InstallGlobalFunction(SubSgpsByMinExtensions,
 
 SubSgpsContaining := function(set,mt)
   local rep;
-  rep := ConjugacyClassRep(set,mt);
+  rep := BlistConjClassRep(set,mt);
   return SubSgpsByMinExtensionsParametrized(mt,
                  rep,
                  DistinctGenerators(FullSet(mt),mt),
@@ -92,7 +92,7 @@ function(mt,seed,generators, waiting, db, result)
   #-----------------------------------------------------------------------------
   init := function()
     for gen in ListBlist(Indices(mt), generators) do
-      Store(waiting, ConjugacyClassRep(
+      Store(waiting, BlistConjClassRep(
               ClosureByIncrements(seed,gen,mt),mt));
     od;
   end;
@@ -109,7 +109,7 @@ function(mt,seed,generators, waiting, db, result)
       if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then checkpoint(); fi;
       #CONSTRUCTING new subsgp
       bl := Retrieve(waiting);
-      #bl := ConjugacyClassRep(ClosureByIncrements(next[1],next[2],mt),mt);
+      #bl := BlistConjClassRep(ClosureByIncrements(next[1],next[2],mt),mt);
       if  IsInBlistStorage(db,bl) then continue; fi; #EXIT if nothing to do
       #STORING new subsgp
       Add(result, bl);
@@ -123,7 +123,7 @@ function(mt,seed,generators, waiting, db, result)
       #RECURSION
       Perform(diff,
               function(t) Store(waiting,
-                      ConjugacyClassRep(
+                      BlistConjClassRep(
                               ClosureByIncrements(bl,t,mt),mt));end);
     od;
   end;

@@ -8,7 +8,7 @@ function(sgp,mt)
   maxsgps := Set(MaximalSubsemigroups(S),
                  x->SgpInMulTab(
                          IndicatorFunction(GeneratorsOfSemigroup(x),mt),mt));
-  return Set(maxsgps, x->ConjugacyClassRep(x,mt));
+  return Set(maxsgps, x->BlistConjClassRep(x,mt));
 end);
 
 ### ENUMERATING BY DECREASING ORDER ############################################

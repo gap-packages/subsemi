@@ -61,7 +61,7 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
   local extended, filter, result, S,mtS;
   S := Parent(I);
   mtS := MulTab(S,G);
-  extended := Set(uppertorsos, x-> ConjugacyClassRep(SgpInMulTab(x,mtS),mtS));
+  extended := Set(uppertorsos, x-> BlistConjClassRep(SgpInMulTab(x,mtS),mtS));
   filter := IndicatorFunction(AsList(I),Elts(mtS));
   result := [];
   Perform(extended,

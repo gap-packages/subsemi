@@ -6,7 +6,7 @@ gap> mt := MulTab(T3);;
 gap> T3allsubs := AsSet(SubSgpsByMinExtensions(mt));;
 gap> mt := MulTab(T3,S3);;
 gap> T3conjclasses := AsSet(SubSgpsByMinExtensions(mt));;
-gap> T3conjclasses2 := Set(T3allsubs,x->ConjugacyClassRep(x,mt));;
+gap> T3conjclasses2 := Set(T3allsubs,x->BlistConjClassRep(x,mt));;
 gap> T3conjclasses2 =  T3conjclasses;
 true
 gap> K33 := SemigroupIdealByGenerators(T3, [Transformation([1,2,3])]);;
@@ -20,7 +20,7 @@ gap> T3conjclasses = AsSet(SubSgpsByIdeals(K33,S3));
 true
 gap> T3ccsbyIS := IS(mt,ISCanCons);;
 gap> Remove(T3ccsbyIS, Position(T3ccsbyIS, EmptySet(mt)));;
-gap> Set(T3ccsbyIS, x-> ConjugacyClassRep(SgpInMulTab(x,mt),mt)) = T3conjclasses;
+gap> Set(T3ccsbyIS, x-> BlistConjClassRep(SgpInMulTab(x,mt),mt)) = T3conjclasses;
 true
 
 #

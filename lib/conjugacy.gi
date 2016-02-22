@@ -42,7 +42,8 @@ end;
 MakeReadOnlyGlobal("PossibleRepConjugators");
 
 ###
-MinimumOfOrbit := function(point, operators, actionfunc)
+InstallGlobalFunction(MinimumOfOrbit,
+function(point, operators, actionfunc)
   local  min, new, op;
   min := point;
   for op in operators do
@@ -52,10 +53,10 @@ MinimumOfOrbit := function(point, operators, actionfunc)
     fi;
   od;
   return min;
-end;
-MakeReadOnlyGlobal("MinimumOfOrbit");
+end);
 
-MinimumOfOrbitOperator := function(point, operators, actionfunc)
+InstallGlobalFunction(MinimumOfOrbitOp,
+function(point, operators, actionfunc)
   local  min,new,i,conjugator;
   conjugator := operators[1];
   min := point;
@@ -67,30 +68,41 @@ MinimumOfOrbitOperator := function(point, operators, actionfunc)
     fi;
   od;
   return conjugator;
-end;
-MakeReadOnlyGlobal("MinimumOfOrbitOperator");
+end);
 
 ### FOR SETS OF INTEGERS #######################################################
 # conjugacy class rep defined for list of integers
 # TODO the next two functions can be merged
-SetConjugacyClassRep := function(set,mt)
+InstallGlobalFunction(PosIntSetConjClassRep,
+function(set,mt)
   return MinimumOfOrbit(AsSet(set), PossibleRepConjugators(set,mt), OnSets);
-end;
+end);
 
 # conjugacy class rep defined for set of integers
-SetConjugacyClassConjugator := function(set,mt)
-  return MinimumOfOrbitOperator(AsSet(set),
-                                PossibleRepConjugators(set,mt),
-                                OnSets);
-end;
+InstallGlobalFunction(PosIntSetConjClassRepOp,
+function(set,mt)
+  return MinimumOfOrbitOp(AsSet(set),
+                          PossibleRepConjugators(set,mt),
+                          OnSets);
+end);
+
+InstallGlobalFunction(PosIntSetConjClass,
+function(set, mt)
+  return Set(Symmetries(mt), g -> OnSets(set,g));
+end);
 
 ### FOR BLISTS #################################################################
 # we convert it to set, and back to blist
-InstallGlobalFunction(ConjugacyClassRep,
+InstallGlobalFunction(BlistConjClassRep,
 function(indset,mt)
   local set, rep;
   if SizeBlist(indset) = 0 then return indset; fi;
   set := ListBlist(Indices(mt), indset);
   rep := MinimumOfOrbit(set, PossibleRepConjugators(set,mt), OnSets);
   return BlistList(Indices(mt), rep);
+end);
+
+InstallGlobalFunction(BlistConjClass,
+function(blist, mt)
+  return Set(Symmetries(mt), g -> OnFiniteSet(blist,g));
 end);
