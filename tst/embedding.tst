@@ -1,6 +1,6 @@
 gap> START_TEST("SubSemi package: embedding.tst");
 gap> LoadPackage("SubSemi", false);;
-gap> TableEmbeddings([[1,2],[2,2]],[[1,2,3],[2,2,3],[3,3,3]]);
+gap> EmbeddingsDispatcher([[1,2],[2,2]],[[1,2,3],[2,2,3],[3,3,3]],false);
 [ [ 1, 2 ], [ 1, 3 ], [ 2, 3 ] ]
 gap> T3 := FullTransformationSemigroup(3);;
 gap> S3 := SymmetricGroup(IsPermGroup,3);;mt := MulTab(T3);;

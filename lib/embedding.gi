@@ -4,7 +4,7 @@
 ##
 ## Deciding embedding and isomorphism of multiplication tables.
 ##
-## Copyright (C) 2013-15  Attila Egri-Nagy
+## Copyright (C) 2013-16  Attila Egri-Nagy
 ##
 
 # A backtrack algorithm to build a map from multiplication table A (mtA) to
@@ -81,18 +81,6 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   return solutions;
 end;
 MakeReadOnlyGlobal("SubTableMatchingSearch");
-
-#just convenience for testing without multiplication tables
-InstallGlobalFunction(TableEmbeddings,
-function(mA,mB)
-  local f, Aprofs, Bprofs;
-  if Size(mA) > Size(mB) then
-    return [];
-  else # embedding
-    f := m -> List([1..Size(m)], x->AbstractIndexPeriod(m,x));
-    return SubTableMatchingSearch(mA,mB,f(mA),f(mB), false);
-  fi;
-end);
 
 # trying the represent semigroup (multiplication table) mtA as a subtable of mtB
 # mtA,mtB: multiplication tables
