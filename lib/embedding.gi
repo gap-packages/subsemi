@@ -23,7 +23,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
         solutions,elt,f; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
-    local k,i,candidates,q,r, dom, cod;
+    local k,i,candidates,q,r, dom, cod, rdom;
     # when a solution is found
     if Size(L)=N then
       Add(solutions, ShallowCopy(L));
@@ -49,7 +49,8 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
           return not cod[q];
         fi;
       end;
-      if ForAll(Reversed([1..Size(L)]), x -> ForAll(dom, y -> f(x,y))) then
+      rdom := Reversed(dom);
+      if ForAll(rdom, x -> ForAll(dom, y -> f(x,y))) then
         BackTrack();
         if onlyfirst and not IsEmpty(solutions) then return; fi;
       fi;
