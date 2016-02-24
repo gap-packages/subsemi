@@ -23,7 +23,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
         solutions,elt,f; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
-    local k,i,candidates,X,Y;
+    local k,i,candidates,q,r, dom, cod;
     # when a solution is found
     if Size(L)=N then
       Add(solutions, ShallowCopy(L));
@@ -37,22 +37,16 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
     if IsEmpty(candidates) then return; fi;
     for i in candidates do
       Add(L,i); AddSet(used, i); # EXTEND by i
-      #subarray of A, taking the upper left corner
-      #X := SubArray(A, [1..Size(L)]);
-      #using the mapping we already have, we map part of A to B
-      #X := List(X, x->List(x,
-      #             function(y)if(y=0) then return 0; else return L[y];fi;
-      #             end)); # 0 indicates missing elements
-      #Y := SubArray(B,L);
-      #if X = Y then
+      dom := [1..Size(L)];
+      cod := BlistList([1..Size(B)], L);
       f := function(x,y)
         local r,q;
         r := A[x][y];
         q := B[L[x]][L[y]];
-        if r in [1..Size(L)] then
+        if r in dom then
           return L[r] = q;
         else
-          return not (q in L);
+          return not cod[q];
         fi;
       end;
       if ForAll(EnumeratorOfTuples([1..Size(L)],2), t -> f(t[1],t[2])) then
