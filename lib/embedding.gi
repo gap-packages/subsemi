@@ -53,11 +53,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   end;
   #-----------------------------------------------------------------------------
   # figuring out target size
-  if IsMulTab(mtA) then
-    N := Size(Rows(mtA));
-  else
-    N := Size(mtA);
-  fi;
+  N := Size(mtA);
   #checking for the right set of target profile types
   if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
   #classifying by profiles
@@ -86,31 +82,31 @@ MakeReadOnlyGlobal("SubTableMatchingSearch");
 # mtA,mtB: multiplication tables
 # onlyfirst: Do we stop after first embedding found?
 # This dispatcher checks whether we have an embedding or isomorphism.
-EmbeddingsDispatcher := function(mtA,mtB,onlyfirst)
+EmbeddingsDispatcher := function(A,B,onlyfirst)
   local f, Aprofs, Bprofs;
-  if Size(mtA) > Size(mtB) then
+  if Size(A) > Size(B) then
     return [];
-  elif Size(mtA) = Size(mtB) then # isomorphism
-    f := mt -> List([1..Size(mt)],x->ElementProfile(mt,x));
+  elif Size(A) = Size(B) then # isomorphism
+    f := M -> List([1..Size(M)],x->ElementProfile(M,x));
   else # embedding
-    f := mt -> List([1..Size(mt)], x->AbstractIndexPeriod(Rows(mt),x));
+    f := M -> List([1..Size(M)], x->AbstractIndexPeriod(M,x));
   fi;
-  Aprofs := f(mtA);
-  Bprofs := f(mtB);
+  Aprofs := f(A);
+  Bprofs := f(B);
   #for isomorphisms the set of profiles should be the same
-  if Size(mtA) = Size(mtB)
+  if Size(A) = Size(B)
      and AsSet(Aprofs) <> AsSet(Bprofs) then
     return [];
   fi;
-  return SubTableMatchingSearch(mtA,mtB,Aprofs,Bprofs,onlyfirst);
+  return SubTableMatchingSearch(A,B,Aprofs,Bprofs,onlyfirst);
 end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher"); #TODO silly name, change it
 
 InstallGlobalFunction(MulTabEmbeddings,
-function(mtA,mtB) return EmbeddingsDispatcher(mtA,mtB,false);end);
+function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),false);end);
 
 InstallGlobalFunction(MulTabEmbedding,
-function(mtA,mtB) return EmbeddingsDispatcher(mtA,mtB,true);end);
+function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),true);end);
 
 InstallGlobalFunction(AutGrpOfMulTab,
 function (mt)
@@ -121,7 +117,7 @@ end);
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
 local l;
-  l := EmbeddingsDispatcher(mtA,mtB,true);
+  l := EmbeddingsDispatcher(Rows(mtA),Rows(mtB),true);
   if IsEmpty(l) then
     return fail;
   else
