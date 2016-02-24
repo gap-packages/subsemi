@@ -17,7 +17,6 @@ DeclareOperation("AntiMulTab",[IsSemigroup]);
 DeclareGlobalFunction("CreateMulTab");
 DeclareGlobalFunction("CopyMulTab");
 DeclareGlobalFunction("ProductTableOfElements");
-DeclareGlobalFunction("SubArray");
 
 DeclareProperty("IsAnti", IsMulTab);
 

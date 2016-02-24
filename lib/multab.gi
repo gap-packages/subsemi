@@ -262,31 +262,6 @@ MulInMulTab := function(A, B, mt)
   return AB;
 end;
 
-# returns the subarray of the multiplication table mt spanned by
-# elements in L (positive integers as indices)
-# the order of the elements in L kept
-# 0 indicate any product outside L (since subarrays may not be closed)
-# mt can be just a matrix, or a MulTab object
-InstallGlobalFunction(SubArray,
-function(mt, L)
-  local sa,i,j,tab, bl;
-  if IsMulTab(mt) then
-    tab := Rows(mt);
-  else
-    tab := mt;
-  fi;
-  sa := [];
-  bl := BlistList([1..Size(tab)], L);
-  for i in L do
-    Add(sa,List(L,
-            function(j) if bl[tab[i][j]] then
-                          return tab[i][j];
-                        else
-                          return 0;fi;end));
-  od;
-  return sa;
-end);
-
 #CONVENIENCE
 InstallOtherMethod(SetByIndicatorFunction, "for boolean list and multab",
         [IsList, IsMulTab],
