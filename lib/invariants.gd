@@ -1,13 +1,14 @@
 ################################################################################
 ##
-## SubSemi
+## SubSemi - GAP package for enumearting subsemigroups
 ##
 ## Several derived properties for multiplication tables and their elements.
-## Used for quickly deciding non-isomorphism.
+## Used as invariants in embeddings and isomorphisms.
 ##
-## Copyright (C) 2013-2015  Attila Egri-Nagy
+## Copyright (C) 2013-2016  Attila Egri-Nagy
 ##
 
+#GENERIC FUNCTIONS
 DeclareGlobalFunction("Frequencies");
 
 #ELEMENT-LEVEL INVARIANTS

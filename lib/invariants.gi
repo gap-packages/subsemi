@@ -1,57 +1,68 @@
 ################################################################################
 ##
-## SubSemi
+## SubSemi - GAP package for enumearting subsemigroups
 ##
 ## Several derived properties for multiplication tables and their elements.
-## Used for quickly deciding non-isomorphism.
+## Used as invariants in embeddings and isomorphisms.
 ##
 ## Copyright (C) 2013-2016  Attila Egri-Nagy
 ##
 
+### GENERIC FUNCTIONS ##########################################################
 # in a list we count the number of occurences of distinct elements,
 # then we count how many times each frequency value appeared
 # in other words, keeping only the frequency values of a frequency distribution
+# in a sorted list
 InstallGlobalFunction(Frequencies,
 function(list)
   return Collected(List(Collected(list),p->p[2]));
 end);
 
 #ELEMENT-LEVEL INVARIANTS#######################################################
+# M - square matrix of position integers representing a multiplication table
+# k - an element of the multiplication table
 
+# the number of occurences of element k
 InstallGlobalFunction(Frequency,
-function(mt,k) return Size(Positions(Flat(Rows(mt)),k));end);
+function(M,k) return Size(Positions(Flat(M),k));end);
 
+# the number of occurences of k in the diagonal of the matrix
 InstallGlobalFunction(DiagonalFrequency,
-function(mt,k) return Size(Positions(DiagonalOfMat(Rows(mt)),k));end);
+function(M,k) return Size(Positions(DiagonalOfMat(M),k));end);
 
+# frequency distribution of elements in the row of k
 InstallGlobalFunction(RowFrequencies,
-function(mt,k) return Frequencies(Rows(mt)[k]);end);
+function(M,k) return Frequencies(M[k]);end);
 
+# frequency distribution of elements in the column of k
 InstallGlobalFunction(ColumnFrequencies,
-function(mt,k) return Frequencies(Columns(mt)[k]);end);
+function(M,k) return Frequencies(List([1..Size(M)], x -> M[x][k]));end);
 
+# index period of an element calculated in a multiplication table,
+# the semigroup analogue of the order of an element
 InstallGlobalFunction(AbstractIndexPeriod,
-function(rows,k)
+function(M,k)
 local orbit, set,i,p,m;
   orbit := [k];
   set := [];
   m:=k;
   repeat
     AddSet(set,m);
-    m := rows[m][k];
+    m := M[m][k];
     Add(orbit,m);
   until m in set;
   i := Position(orbit,m);
   return [i,Size(orbit)-i];
 end);
 
+# comprehensive profile of a multiplication table element
 InstallGlobalFunction(ElementProfile,
-function(mt,k)
-  return [Frequency(mt,k),
-          DiagonalFrequency(mt,k),
-          AbstractIndexPeriod(Rows(mt),k),
-          ColumnFrequencies(mt,k),
-          RowFrequencies(mt,k)];
+function(M,k)
+  return [Frequency(M,k),
+          DiagonalFrequency(M,k),
+          AbstractIndexPeriod(M,k),
+          ColumnFrequencies(M,k),
+          RowFrequencies(M,k)];
 end);
 
 #TABLE-LEVEL INVARIANTS#########################################################
