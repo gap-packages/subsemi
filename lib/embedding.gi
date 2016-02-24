@@ -13,14 +13,14 @@
 # Aprofs, Bprofs: for each element we associate a profile object (provided
 # by the caller), and this profile information is used for restricting search
 # integer -> inhomogeneous lists
-SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
+SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
   local L, # the mapping i->L[i]
         N, # the number of elements of the semigroups
         matchedBprofs, #lookup: element of A -> class of B with the same profile
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
         Acls, Bcls, # classifying A by its profiles
-        solutions,elt; # cumulative collection of solutions
+        solutions,elt,f; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
     local k,i,candidates,X,Y;
@@ -37,14 +37,25 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
     if IsEmpty(candidates) then return; fi;
     for i in candidates do
       Add(L,i); AddSet(used, i); # EXTEND by i
-      #subarray of mtA, taking the upper left corner
-      X := SubArray(mtA, [1..Size(L)]);
-      #using the mapping we already have, we map part of mtA to mtB
-      X := List(X, x->List(x,
-                   function(y)if(y=0) then return 0; else return L[y];fi;
-                   end)); # 0 indicates missing elements
-      Y := SubArray(mtB,L);
-      if X = Y then
+      #subarray of A, taking the upper left corner
+      #X := SubArray(A, [1..Size(L)]);
+      #using the mapping we already have, we map part of A to B
+      #X := List(X, x->List(x,
+      #             function(y)if(y=0) then return 0; else return L[y];fi;
+      #             end)); # 0 indicates missing elements
+      #Y := SubArray(B,L);
+      #if X = Y then
+      f := function(x,y)
+        local r,q;
+        r := A[x][y];
+        q := B[L[x]][L[y]];
+        if r in [1..Size(L)] then
+          return L[r] = q;
+        else
+          return not (q in L);
+        fi;
+      end;
+      if ForAll(EnumeratorOfTuples([1..Size(L)],2), t -> f(t[1],t[2])) then
         BackTrack();
         if onlyfirst and not IsEmpty(solutions) then return; fi;
       fi;
@@ -53,7 +64,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   end;
   #-----------------------------------------------------------------------------
   # figuring out target size
-  N := Size(mtA);
+  N := Size(A);
   #checking for the right set of target profile types
   if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
   #classifying by profiles
@@ -62,7 +73,7 @@ SubTableMatchingSearch := function(mtA, mtB, Aprofs, Bprofs, onlyfirst)
   matchedBprofs := EmptyPlist(N);
   #bit of searching in order to avoid using hashtables
   for elt in [1..N] do
-    #for each element in mtA we find the elements of mtB with same profile
+    #for each element in A we find the elements of B with same profile
     matchedBprofs[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
     #there should be enough elements in each class
     if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
