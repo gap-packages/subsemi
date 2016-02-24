@@ -20,10 +20,10 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up L
         Acls, Bcls, # classifying A by its profiles
-        solutions,elt,f; # cumulative collection of solutions
+        solutions,elt,f,cod; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
-    local k,i,candidates,q,r, dom, cod, rdom;
+    local k,i,candidates,q,r, dom, rdom;
     # when a solution is found
     if Size(L)=N then
       Add(solutions, ShallowCopy(L));
@@ -36,9 +36,8 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
     candidates := Difference(matchedBprofs[k],used);
     if IsEmpty(candidates) then return; fi;
     for i in candidates do
-      Add(L,i); AddSet(used, i); # EXTEND by i
+      Add(L,i); AddSet(used, i); cod[i]:=true; # EXTEND by i
       dom := [1..Size(L)];
-      cod := BlistList([1..Size(B)], L);
       f := function(x,y)
         local r,q;
         r := A[x][y];
@@ -54,7 +53,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
         BackTrack();
         if onlyfirst and not IsEmpty(solutions) then return; fi;
       fi;
-      Remove(L); Remove(used, Position(used,i)); #UNDO extending
+      Remove(L); Remove(used, Position(used,i)); cod[i]:=false;  #UNDO extending
     od;
   end;
   #-----------------------------------------------------------------------------
@@ -78,7 +77,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
   od;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
   #calling backtrack
-  used := []; L := []; solutions := [];
+  used := []; L := []; solutions := [];cod := BlistList([1..Size(B)], []);
   BackTrack();
   return solutions;
 end;
