@@ -1,7 +1,7 @@
 gap> START_TEST("SubSemi package: invariants.tst");
 gap> LoadPackage("SubSemi", false);;
 gap> mt := MulTab(FullTransformationSemigroup(4));;
-gap> MulTabProfile(mt);
+gap> MulTabProfile(Rows(mt));
 [ [ [ 24, 24 ], [ 120, 144 ], [ 408, 36 ], [ 504, 48 ], [ 2200, 4 ] ], 
   [ [ 1, 56 ], [ 2, 3 ], [ 4, 36 ], [ 10, 5 ] ], 
   [ [ [ 1, 1 ], 41 ], [ [ 1, 2 ], 69 ], [ [ 1, 3 ], 32 ], [ [ 1, 4 ], 6 ], 

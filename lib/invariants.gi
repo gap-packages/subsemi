@@ -67,44 +67,46 @@ end);
 
 #TABLE-LEVEL INVARIANTS#########################################################
 
+# frequency distribution of elements in the diagonal (without the elements)
 InstallGlobalFunction(DiagonalFrequencies,
-function(mt) return Frequencies(DiagonalOfMat(Rows(mt)));end);
+function(M) return Frequencies(DiagonalOfMat(M));end);
 
+# frequency distribution of index-period types
 InstallGlobalFunction(IndexPeriodTypeFrequencies,
-function(mt)
-  return Collected(List(Indices(mt),x->AbstractIndexPeriod(Rows(mt),x)));
+function(M)
+  return Collected(List([1..Size(M)],x->AbstractIndexPeriod(M,x)));
 end);
 
+#the set of all element profiles
 InstallGlobalFunction(ElementProfileTypes,
-function(mt) return Set(Indices(mt), x -> ElementProfile(mt,x));
-end);
+function(M) return Set([1..Size(M)], x -> ElementProfile(M,x)); end);
 
 InstallGlobalFunction(MulTabProfile,
-function(mt)
-  return [MulTabFrequencies(mt),
-          DiagonalFrequencies(mt),
-          IndexPeriodTypeFrequencies(mt),
-          ElementProfileTypes(mt)];
+function(M)
+  return [MulTabFrequencies(M),
+          DiagonalFrequencies(M),
+          IndexPeriodTypeFrequencies(M),
+          ElementProfileTypes(M)];
 end);
 
 #calculate the frequencies of entries in a matrix of positive integers
 InstallGlobalFunction(MulTabFrequencies,
-function(mt) return Frequencies(Flat(Rows(mt)));end);
+function(M) return Frequencies(Flat(M));end);
 
-IdempotentsInMulTab := function(mt)
-  return Filtered(Indices(mt), x-> Rows(mt)[x][x]=x);
+IdempotentsInMulTab := function(M)
+  return Filtered([1..Size(M)], x-> M[x][x]=x);
 end;
 
 InstallGlobalFunction(IdempotentDiagonalFrequencies,
-function(mt)
+function(M)
   local idempotents;
-  idempotents := IdempotentsInMulTab(mt);
-  return Frequencies(Filtered(DiagonalOfMat(Rows(mt)), x->x in idempotents));
+  idempotents := IdempotentsInMulTab(M);
+  return Frequencies(Filtered(DiagonalOfMat(M), x -> x in idempotents));
 end);
 
 InstallGlobalFunction(IdempotentFrequencies,
-function(mt)
+function(M)
   local idempotents;
-  idempotents := IdempotentsInMulTab(mt);
-  return Frequencies(Filtered(Flat(Rows(mt)), x->x in idempotents));
+  idempotents := IdempotentsInMulTab(M);
+  return Frequencies(Filtered(Flat(M), x -> x in idempotents));
 end);
