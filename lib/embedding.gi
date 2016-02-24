@@ -23,7 +23,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
         solutions,elt,f,cod; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: L, used
-    local k,i,candidates,q,r, dom, rdom;
+    local k,i,candidates, dom, rdom;
     # when a solution is found
     if Size(L)=N then
       Add(solutions, ShallowCopy(L));
