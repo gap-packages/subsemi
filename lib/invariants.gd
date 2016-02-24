@@ -5,7 +5,7 @@
 ## Several derived properties for multiplication tables and their elements.
 ## Used for quickly deciding non-isomorphism.
 ##
-## Copyright (C) 2013-2014  Attila Egri-Nagy
+## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
 DeclareGlobalFunction("Frequencies");
@@ -26,6 +26,3 @@ DeclareGlobalFunction("IdempotentDiagonalFrequencies");
 DeclareGlobalFunction("IndexPeriodTypeFrequencies");
 DeclareGlobalFunction("ElementProfileTypes");
 DeclareGlobalFunction("MulTabProfile");
-
-#APPLYING INVARIANTS
-DeclareGlobalFunction("PotentiallyIsomorphicMulTabs");

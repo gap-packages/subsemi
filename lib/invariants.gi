@@ -5,7 +5,7 @@
 ## Several derived properties for multiplication tables and their elements.
 ## Used for quickly deciding non-isomorphism.
 ##
-## Copyright (C) 2013-14  Attila Egri-Nagy
+## Copyright (C) 2013-2016  Attila Egri-Nagy
 ##
 
 # in a list we count the number of occurences of distinct elements,
@@ -96,18 +96,4 @@ function(mt)
   local idempotents;
   idempotents := IdempotentsInMulTab(mt);
   return Frequencies(Filtered(Flat(Rows(mt)), x->x in idempotents));
-end);
-
-# APPLICATIONS #################################################################
-
-# checking invariants one by one with short-circuit conjunction
-InstallGlobalFunction(PotentiallyIsomorphicMulTabs,
-function(mtA, mtB)
-  return
-    Size(Rows(mtA)) = Size(Rows(mtB))
-    and DiagonalFrequencies(mtA) = DiagonalFrequencies(mtB)
-    and IdempotentDiagonalFrequencies(mtA) = IdempotentDiagonalFrequencies(mtB)
-    and MulTabFrequencies(mtA) = MulTabFrequencies(mtB)
-    and IdempotentFrequencies(mtA) = IdempotentFrequencies(mtB)
-    and IndexPeriodTypeFrequencies(mtA) = IndexPeriodTypeFrequencies(mtB);
 end);
