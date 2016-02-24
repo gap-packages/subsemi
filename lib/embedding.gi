@@ -49,7 +49,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
           return not cod[q];
         fi;
       end;
-      if ForAll(EnumeratorOfTuples([1..Size(L)],2), t -> f(t[1],t[2])) then
+      if ForAll(Reversed([1..Size(L)]), x -> ForAll(dom, y -> f(x,y))) then
         BackTrack();
         if onlyfirst and not IsEmpty(solutions) then return; fi;
       fi;
