@@ -1,3 +1,5 @@
+0.74
+	Revising multiplication table invariants. These functions now take simple matrices instead of MulTab onjects.
 0.73
 	Revising the conjugacy class representative code.
 0.72
