@@ -18,12 +18,13 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
         N, # the number of elements of A
         matching, #lookup: element of A -> class of B with the same profile
         BackTrack, # the embedded recursive backtrack function
-        used, # keeping track of what elements we used when building up hom
+        cod, # keeping track of what elements we used when building up hom
         Acls, Bcls, # classifying A by its profiles
-        solutions,elt,cod; # cumulative collection of solutions
+        solutions, # cumulative collection of solutions
+        elt; # an element of A
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: hom, used
-    local i, candidates, dom, rdom, f;
+    local newelt, dom, rdom, f;
     # when a solution is found
     if Size(hom)=N then
       Add(solutions, ShallowCopy(hom));
@@ -31,28 +32,27 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
            solutions[Size(solutions)]);
       return;
     fi;
-    # getting elements of B with profiles matching profile of A, not used yet
-    candidates := Difference(matching[Size(hom)+1],used);
-    if IsEmpty(candidates) then return; fi;
-    for i in candidates do
-      Add(hom,i); AddSet(used, i); cod[i]:=true; # EXTEND by i
-      dom := [1..Size(hom)];
-      f := function(x,y)
-        local r,q;
-        r := A[x][y];
-        q := B[hom[x]][hom[y]];
-        if r in dom then
-          return hom[r] = q;
-        else
-          return not cod[q];
+    for newelt in matching[Size(hom)+1] do
+      if not cod[newelt] then #is it really new?
+        Add(hom,newelt); cod[newelt]:=true; # EXTEND by newelt
+        dom := [1..Size(hom)];
+        f := function(x,y)
+          local r,q;
+          r := A[x][y];
+          q := B[hom[x]][hom[y]];
+          if r in dom then
+            return hom[r] = q;
+          else
+            return not cod[q];
+          fi;
+        end;
+        rdom := Reversed(dom); # to check the newly adjoined element first
+        if ForAll(rdom, x -> ForAll(dom, y -> f(x,y))) then
+          BackTrack();
+          if onlyfirst and not IsEmpty(solutions) then return; fi;
         fi;
-      end;
-      rdom := Reversed(dom); # to check the newly adjoined element first
-      if ForAll(rdom, x -> ForAll(dom, y -> f(x,y))) then
-        BackTrack();
-        if onlyfirst and not IsEmpty(solutions) then return; fi;
+        Remove(hom); cod[newelt]:=false;#UNDO extending
       fi;
-      Remove(hom); Remove(used, Position(used,i)); cod[i]:=false;#UNDO extending
     od;
   end;
   #-----------------------------------------------------------------------------
@@ -76,7 +76,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
   od;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
   #calling backtrack
-  used := []; hom := []; solutions := []; cod := BlistList([1..Size(B)], []);
+  hom := []; solutions := []; cod := BlistList([1..Size(B)], []);
   BackTrack();
   return solutions;
 end;
