@@ -15,15 +15,15 @@
 # integer -> inhomogeneous lists
 SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
   local hom, # the homomorphism from A to B in a list: i->hom[i]
-        N, # the number of elements of the semigroups
-        matchedBprofs, #lookup: element of A -> class of B with the same profile
+        N, # the number of elements of A
+        matching, #lookup: element of A -> class of B with the same profile
         BackTrack, # the embedded recursive backtrack function
         used, # keeping track of what elements we used when building up hom
         Acls, Bcls, # classifying A by its profiles
-        solutions,elt,f,cod; # cumulative collection of solutions
+        solutions,elt,cod; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: hom, used
-    local i,candidates, dom, rdom;
+    local i, candidates, dom, rdom, f;
     # when a solution is found
     if Size(hom)=N then
       Add(solutions, ShallowCopy(hom));
@@ -32,7 +32,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
       return;
     fi;
     # getting elements of B with profiles matching profile of A, not used yet
-    candidates := Difference(matchedBprofs[Size(hom)+1],used);
+    candidates := Difference(matching[Size(hom)+1],used);
     if IsEmpty(candidates) then return; fi;
     for i in candidates do
       Add(hom,i); AddSet(used, i); cod[i]:=true; # EXTEND by i
@@ -63,20 +63,20 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
   #classifying by profiles
   Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
   Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
-  matchedBprofs := EmptyPlist(N);
+  matching := EmptyPlist(N);
   #bit of searching in order to avoid using hashtables
   for elt in [1..N] do
     #for each element in A we find the elements of B with same profile
-    matchedBprofs[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
+    matching[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
     #there should be enough elements in each class
     if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
-       > Size(matchedBprofs[elt]) then
+       > Size(matching[elt]) then
       return [];
     fi;
   od;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
   #calling backtrack
-  used := []; hom := []; solutions := [];cod := BlistList([1..Size(B)], []);
+  used := []; hom := []; solutions := []; cod := BlistList([1..Size(B)], []);
   BackTrack();
   return solutions;
 end;
