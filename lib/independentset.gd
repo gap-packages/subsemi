@@ -14,6 +14,6 @@ DeclareGlobalFunction("ISDatabase");
 DeclareGlobalFunction("ISCanCons");
 DeclareGlobalFunction("IS");
 
-DeclareGlobalFunction("IsIndependentSet");
-DeclareGlobalFunction("IsMaximalIndependentSet");
+DeclareGlobalFunction("IsIndependent");
+DeclareGlobalFunction("IsMaximalIndependent");
 DeclareGlobalFunction("IsDeadEnd");

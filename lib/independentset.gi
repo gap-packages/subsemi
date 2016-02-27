@@ -194,7 +194,7 @@ end);
 # the constructor is a function that creates the algebraic structure,
 # e.g. Group, Semigroup, Magma - the more general the slower
 # constructor for MulTabs: x->ListBlist(Indices(mt), SgpInMulTab(x,mt))
-InstallGlobalFunction(IsIndependentSet,
+InstallGlobalFunction(IsIndependent,
 function(A, constructor)
   return IsDuplicateFreeList(A)
          and (Size(A)<2
@@ -202,12 +202,12 @@ function(A, constructor)
 end);
 
 # true if A is a maximal independent set in M
-InstallGlobalFunction(IsMaximalIndependentSet,
+InstallGlobalFunction(IsMaximalIndependent,
 function(A,M,constructor)
   local diff;
   if IsEmpty(A) then return IsEmpty(M); fi;
   diff := Difference(AsSet(M), AsSet(constructor(A)));
-  return ForAll(diff, x-> not IsIndependentSet(Union(A,[x]),constructor));
+  return ForAll(diff, x-> not IsIndependent(Union(A,[x]),constructor));
 end);
 
 # true if it is maximal, but A does not generate M
@@ -215,5 +215,5 @@ InstallGlobalFunction(IsDeadEnd,
 function(A,M,constructor)
   if IsEmpty(A) then return false; fi;
   return (Size(constructor(A)) < Size(M))
-         and IsMaximalIndependentSet(A,M,constructor);
+         and IsMaximalIndependent(A,M,constructor);
 end);
