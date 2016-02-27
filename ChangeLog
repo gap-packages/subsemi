@@ -1,3 +1,5 @@
+0.76
+	Update release following GAP 4.8.2.
 0.75
 	Constructing embeddings by backtrack does less checks by checking the new element first. This makes the calculation several times faster.
 0.74
