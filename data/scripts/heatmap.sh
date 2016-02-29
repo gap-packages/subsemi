@@ -1,11 +1,9 @@
 #!/bin/sh
 
-# hardcoded size vs. D-classes, TODO make it general
+# input: 2 1-column files encoding X and Y pairs
+# output: matrix containing the frequency of the (X,Y) pair in the X,Y position
 
-cat $1 | awk '{print $2}' \
-       | awk -F '_' '{print $4" "$1}' \
-       | tr -d '[[:alpha:]]' \
-       | awk \
+paste $1 $2 | awk \
            'BEGIN {
                     maxx=0;
                     maxy=0
