@@ -109,8 +109,17 @@ MakeReadOnlyGlobal("EmbeddingsDispatcher"); #TODO silly name, change it
 InstallGlobalFunction(MulTabEmbeddings,
 function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),false);end);
 
+#returns an empty list or mappings of an embedding in a list
 InstallGlobalFunction(MulTabEmbedding,
-function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),true);end);
+function(mtA,mtB)
+  local result;
+  result := EmbeddingsDispatcher(Rows(mtA),Rows(mtB),true);
+  if IsEmpty(result) then
+    return result;
+  else
+    return result[1]; #since we have only one embedding
+  fi;
+end);
 
 InstallGlobalFunction(AutGrpOfMulTab,
 function (mt)
