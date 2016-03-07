@@ -19,10 +19,10 @@ for gens in results do
   Print("Size of the generated sub in B4: ",
         SizeBlist(SgpInMulTab(gens,mt4)),"\n");
   Display("EMBEDDING OF B3");
-  mtsub := MulTab(Semigroup(ElementsByIndicatorSet(gens,mt4)));;
+  mtsub := MulTab(Semigroup(SetByIndicatorFunction(gens,mt4)));;
   emb := MulTabEmbedding(mt3, mtsub);;
   for i in [1..Size(emb)] do
-    Print(Elts(mt3)[i]," -> ", elts(mtsub)[emb[i]],"\n");
+    Print(Elts(mt3)[i]," -> ", Elts(mtsub)[emb[i]],"\n");
   od;
   Print("\n");
 od;
