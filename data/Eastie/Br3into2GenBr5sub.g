@@ -1,4 +1,4 @@
-# just checking - it is known that there are no solutions here
+# there are 21 solutions
 mt3 := MulTab(BrauerMonoid(3));;
 mt5 := MulTab(BrauerMonoid(5),SymmetricGroup(IsPermGroup, 5));;
 
