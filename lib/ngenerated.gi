@@ -30,7 +30,7 @@ NSubsets := function(mt,n)
     fi;
     counter := counter + 1;
   od;
-  Info(SubSemiInfoClass,1,Size(db), " rep sets ");
+  Info(SubSemiInfoClass,1,Size(result), " conjugacy classes of sets ");
   return result;
 end;
 MakeReadOnlyGlobal("NSubsets");
