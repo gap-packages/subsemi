@@ -73,7 +73,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
        > Size(matching[elt]) then
       return [];
     fi;
-  od;
+  od; #TODO separate this class matching, so we can check the search space size
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
   #calling backtrack
   hom := []; solutions := []; cod := BlistList([1..Size(B)], []);
