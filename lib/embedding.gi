@@ -7,6 +7,29 @@
 ## Copyright (C) 2013-16  Attila Egri-Nagy
 ##
 
+PartionedSearchSpace := function(Aprofs, Bprofs)
+  local         Acls, Bcls, # classifying A by its profiles
+                matching,N,         elt; # an element of A
+  N := Size(Aprofs);
+  #checking for the right set of target profile types
+  if not IsSubset(Set(Bprofs), Set(Aprofs)) then return fail; fi;
+  #classifying by profiles
+  Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
+  Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
+  matching := EmptyPlist(N);
+  #bit of searching in order to avoid using hashtables
+  for elt in [1..N] do
+    #for each element in A we find the elements of B with same profile
+    matching[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
+    #there should be enough elements in each class
+    if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
+       > Size(matching[elt]) then
+      return fail;
+    fi;
+  od; #TODO separate this class matching, so we can check the search space size
+  return matching;
+end;
+
 # A backtrack algorithm to build a map from multiplication table A (mtA) to
 # multiplication table B (mtB). The map is built in L, i->L[i].
 # mtA, mtB: matrices or MulTab objects
@@ -19,9 +42,7 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
         matching, #lookup: element of A -> class of B with the same profile
         BackTrack, # the embedded recursive backtrack function
         cod, # keeping track of what elements we used when building up hom
-        Acls, Bcls, # classifying A by its profiles
-        solutions, # cumulative collection of solutions
-        elt; # an element of A
+        solutions; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   BackTrack := function() # parameters: hom, used
     local newelt, dom, rdom, f;
@@ -58,22 +79,8 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
   #-----------------------------------------------------------------------------
   # figuring out target size
   N := Size(A);
-  #checking for the right set of target profile types
-  if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
-  #classifying by profiles
-  Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
-  Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
-  matching := EmptyPlist(N);
-  #bit of searching in order to avoid using hashtables
-  for elt in [1..N] do
-    #for each element in A we find the elements of B with same profile
-    matching[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
-    #there should be enough elements in each class
-    if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
-       > Size(matching[elt]) then
-      return [];
-    fi;
-  od; #TODO separate this class matching, so we can check the search space size
+  matching := PartionedSearchSpace(Aprofs, Bprofs);
+  if matching = fail then return []; fi;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
   #calling backtrack
   hom := []; solutions := []; cod := BlistList([1..Size(B)], []);
