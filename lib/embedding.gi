@@ -45,11 +45,13 @@ SearchSpaceSize := function(Acls, Bcls)
   return Product(List(pairs, p->Factorial(p[2])/Factorial(p[2]-p[1])));
 end;
 
-# A backtrack algorithm to build a map from multiplication table A (mtA) to
-# multiplication table B (mtB). The map is built in L, i->L[i].
+# A backtrack algorithm to build an injective map from multiplication table A to
+# multiplication table B. The map is built in hom, such that i->hom[i].
 # A, B: matrices encoding multiplication tables
-# targetcls:  lookup: element of A -> class of B with the same profile
-MultiplicationTableMorphismSearch := function(A, B, targetcls, onlyfirst)
+# targetcls: lookup array
+# i, element of A -> class of elements of B that are possible images if i
+# onlyfirst: shall we stop after the first solution is found?
+MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
   local hom, # the homomorphism from A to B in a list: i->hom[i]
         N, # the number of elements of A, the source size
         PartitionedBackTrack, # the embedded recursive backtrack function
@@ -63,7 +65,7 @@ MultiplicationTableMorphismSearch := function(A, B, targetcls, onlyfirst)
       Info(SubSemiInfoClass,2,Size(solutions)," ",solutions[Size(solutions)]);
       return;
     fi;
-    for newelt in targetcls[Size(hom)+1] do
+    for newelt in candidates[Size(hom)+1] do
       if not cod[newelt] then #is it really new?
         Add(hom,newelt); cod[newelt]:=true; # EXTEND by newelt
         dom := [1..Size(hom)];
@@ -92,7 +94,7 @@ MultiplicationTableMorphismSearch := function(A, B, targetcls, onlyfirst)
   PartitionedBackTrack();
   return solutions;
 end;
-MakeReadOnlyGlobal("MultiplicationTableMorphismSearch");
+MakeReadOnlyGlobal("MultiplicationTableEmbeddingSearch");
 
 # trying the represent semigroup (multiplication table) mtA as a subtable of mtB
 # mtA,mtB: multiplication tables
@@ -117,7 +119,7 @@ EmbeddingsDispatcher := function(A,B,onlyfirst)
   targetcls := PartionedSearchSpace(Aprofs, Bprofs);
   if targetcls = fail then return []; fi;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
-  return MultiplicationTableMorphismSearch(A,B,targetcls.targetcls,onlyfirst);
+  return MultiplicationTableEmbeddingSearch(A,B,targetcls.targetcls,onlyfirst);
 end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher"); #TODO silly name, change it
 
