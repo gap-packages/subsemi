@@ -49,7 +49,7 @@ end;
 # multiplication table B (mtB). The map is built in L, i->L[i].
 # A, B: matrices encoding multiplication tables
 # targetcls:  lookup: element of A -> class of B with the same profile
-SubTableMatchingSearch := function(A, B, targetcls, onlyfirst)
+MultiplicationTableMorphismSearch := function(A, B, targetcls, onlyfirst)
   local hom, # the homomorphism from A to B in a list: i->hom[i]
         N, # the number of elements of A, the source size
         PartitionedBackTrack, # the embedded recursive backtrack function
@@ -92,7 +92,7 @@ SubTableMatchingSearch := function(A, B, targetcls, onlyfirst)
   PartitionedBackTrack();
   return solutions;
 end;
-MakeReadOnlyGlobal("SubTableMatchingSearch");
+MakeReadOnlyGlobal("MultiplicationTableMorphismSearch");
 
 # trying the represent semigroup (multiplication table) mtA as a subtable of mtB
 # mtA,mtB: multiplication tables
@@ -117,7 +117,7 @@ EmbeddingsDispatcher := function(A,B,onlyfirst)
   targetcls := PartionedSearchSpace(Aprofs, Bprofs);
   if targetcls = fail then return []; fi;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
-  return SubTableMatchingSearch(A,B,targetcls.targetcls,onlyfirst);
+  return MultiplicationTableMorphismSearch(A,B,targetcls.targetcls,onlyfirst);
 end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher"); #TODO silly name, change it
 
