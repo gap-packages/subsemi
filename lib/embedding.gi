@@ -7,43 +7,9 @@
 ## Copyright (C) 2013-16  Attila Egri-Nagy
 ##
 
-# Aprofs, Bprofs: for each element we associate a profile object (provided
-# by the caller), and this profile information is used for restricting search
-# integer -> inhomogeneous lists
-PartionedSearchSpace := function(Aprofs, Bprofs)
-  local Acls, Bcls, # classifying elements of A and B by their profiles
-        targetcls,
-        N,
-        elt; # an element of A
-  N := Size(Aprofs);
-  #checking for the right set of target profile types
-  if not IsSubset(Set(Bprofs), Set(Aprofs)) then return fail; fi;
-  #classifying by the supplied profiles
-  Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
-  Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
-  targetcls := EmptyPlist(N);
-  #bit of searching in order to avoid using hashtables
-  for elt in [1..N] do
-    #for each element in A we find the elements of B with same profile
-    targetcls[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
-    #there should be enough elements in each class
-    if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
-       > Size(targetcls[elt]) then
-      return fail;
-    fi;
-  od; #TODO separate this class matching, so we can check the search space size
-  return rec(targetcls:=targetcls,
-             Acls:=Acls,
-             Bcls:=Bcls);
-end;
-
-SearchSpaceSize := function(Acls, Bcls)
-  local pairs;
-  pairs := List([1..Size(Acls.classes)],
-                x-> [Size(Acls.classes[x]),
-                     Size(Bcls.classes[Position(Bcls.data,Acls.data[x])])]);
-  return Product(List(pairs, p->Factorial(p[2])/Factorial(p[2]-p[1])));
-end;
+### PARTITIONED BACKTRACK SEARCH ###############################################
+# this is the main search algorithm for constructing embeddings,
+# the rest of the file contains interface functions preparing input
 
 # A backtrack algorithm to build an injective map from multiplication table A to
 # multiplication table B. The map is built in hom, such that i->hom[i].
@@ -95,6 +61,46 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
   return solutions;
 end;
 MakeReadOnlyGlobal("MultiplicationTableEmbeddingSearch");
+
+
+# Aprofs, Bprofs: for each element we associate a profile object (provided
+# by the caller), and this profile information is used for restricting search
+# integer -> inhomogeneous lists
+PartionedSearchSpace := function(Aprofs, Bprofs)
+  local Acls, Bcls, # classifying elements of A and B by their profiles
+        targetcls,
+        N,
+        elt; # an element of A
+  N := Size(Aprofs);
+  #checking for the right set of target profile types
+  if not IsSubset(Set(Bprofs), Set(Aprofs)) then return fail; fi;
+  #classifying by the supplied profiles
+  Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
+  Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
+  targetcls := EmptyPlist(N);
+  #bit of searching in order to avoid using hashtables
+  for elt in [1..N] do
+    #for each element in A we find the elements of B with same profile
+    targetcls[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
+    #there should be enough elements in each class
+    if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
+       > Size(targetcls[elt]) then
+      return fail;
+    fi;
+  od; #TODO separate this class matching, so we can check the search space size
+  return rec(targetcls:=targetcls,
+             Acls:=Acls,
+             Bcls:=Bcls);
+end;
+
+SearchSpaceSize := function(Acls, Bcls)
+  local pairs;
+  pairs := List([1..Size(Acls.classes)],
+                x-> [Size(Acls.classes[x]),
+                     Size(Bcls.classes[Position(Bcls.data,Acls.data[x])])]);
+  return Product(List(pairs, p->Factorial(p[2])/Factorial(p[2]-p[1])));
+end;
+
 
 # trying the represent semigroup (multiplication table) mtA as a subtable of mtB
 # mtA,mtB: multiplication tables
