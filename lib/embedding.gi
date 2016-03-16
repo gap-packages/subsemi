@@ -7,6 +7,9 @@
 ## Copyright (C) 2013-16  Attila Egri-Nagy
 ##
 
+# Aprofs, Bprofs: for each element we associate a profile object (provided
+# by the caller), and this profile information is used for restricting search
+# integer -> inhomogeneous lists
 PartionedSearchSpace := function(Aprofs, Bprofs)
   local Acls, Bcls, # classifying elements of A and B by their profiles
         targetcls,
@@ -44,25 +47,20 @@ end;
 
 # A backtrack algorithm to build a map from multiplication table A (mtA) to
 # multiplication table B (mtB). The map is built in L, i->L[i].
-# mtA, mtB: matrices or MulTab objects
-# Aprofs, Bprofs: for each element we associate a profile object (provided
-# by the caller), and this profile information is used for restricting search
-# integer -> inhomogeneous lists
-SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
+# A, B: matrices encoding multiplication tables
+# targetcls:  lookup: element of A -> class of B with the same profile
+SubTableMatchingSearch := function(A, B, targetcls, onlyfirst)
   local hom, # the homomorphism from A to B in a list: i->hom[i]
-        N, # the number of elements of A
-        targetcls, #lookup: element of A -> class of B with the same profile
-        BackTrack, # the embedded recursive backtrack function
+        N, # the number of elements of A, the source size
+        PartitionedBackTrack, # the embedded recursive backtrack function
         cod, # keeping track of what elements we used when building up hom
         solutions; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
-  BackTrack := function() # parameters: hom, used
+  PartitionedBackTrack := function() # parameters: hom, used
     local newelt, dom, rdom, f;
-    # when a solution is found
-    if Size(hom)=N then
+    if Size(hom)=N then  # when a solution is found
       Add(solutions, ShallowCopy(hom));
-      Info(SubSemiInfoClass,2,Size(solutions)," ",
-           solutions[Size(solutions)]);
+      Info(SubSemiInfoClass,2,Size(solutions)," ",solutions[Size(solutions)]);
       return;
     fi;
     for newelt in targetcls[Size(hom)+1] do
@@ -81,22 +79,17 @@ SubTableMatchingSearch := function(A, B, Aprofs, Bprofs, onlyfirst)
         end;
         rdom := Reversed(dom); # to check the newly adjoined element first
         if ForAll(rdom, x -> ForAll(dom, y -> f(x,y))) then
-          BackTrack();
+          PartitionedBackTrack();
           if onlyfirst and not IsEmpty(solutions) then return; fi;
         fi;
-        Remove(hom); cod[newelt]:=false;#UNDO extending
+        Remove(hom); cod[newelt]:=false;# UNDO extending
       fi;
     od;
   end;
   #-----------------------------------------------------------------------------
-  # figuring out target size
   N := Size(A);
-  targetcls := PartionedSearchSpace(Aprofs, Bprofs).targetcls;
-  if targetcls = fail then return []; fi;
-  Info(SubSemiInfoClass,2," Embeddings seem possible.");
-  #calling backtrack
   hom := []; solutions := []; cod := BlistList([1..Size(B)], []);
-  BackTrack();
+  PartitionedBackTrack();
   return solutions;
 end;
 MakeReadOnlyGlobal("SubTableMatchingSearch");
@@ -106,7 +99,7 @@ MakeReadOnlyGlobal("SubTableMatchingSearch");
 # onlyfirst: Do we stop after first embedding found?
 # This dispatcher checks whether we have an embedding or isomorphism.
 EmbeddingsDispatcher := function(A,B,onlyfirst)
-  local f, Aprofs, Bprofs;
+  local f, Aprofs, Bprofs, targetcls;
   if Size(A) > Size(B) then
     return [];
   elif Size(A) = Size(B) then # isomorphism
@@ -121,7 +114,10 @@ EmbeddingsDispatcher := function(A,B,onlyfirst)
      and AsSet(Aprofs) <> AsSet(Bprofs) then
     return [];
   fi;
-  return SubTableMatchingSearch(A,B,Aprofs,Bprofs,onlyfirst);
+  targetcls := PartionedSearchSpace(Aprofs, Bprofs);
+  if targetcls = fail then return []; fi;
+  Info(SubSemiInfoClass,2," Embeddings seem possible.");
+  return SubTableMatchingSearch(A,B,targetcls.targetcls,onlyfirst);
 end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher"); #TODO silly name, change it
 
