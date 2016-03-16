@@ -116,7 +116,7 @@ EmbeddingsDispatcher := function(A,B,onlyfirst)
   fi;
   Aprofs := f(A);
   Bprofs := f(B);
-  #for isomorphisms the set of profiles should be the same
+  #for isomorphisms the set of profiles should be the same #TODO this is checked twice
   if Size(A) = Size(B)
      and AsSet(Aprofs) <> AsSet(Bprofs) then
     return [];
@@ -140,12 +140,10 @@ function(mtA,mtB)
   fi;
 end);
 
-InstallGlobalFunction(AutGrpOfMulTab,
-function (mt)
-  return Group(List(MulTabEmbeddings(mt, mt), PermList));
-end);
 
-#returns a permutation
+### ISOMORPHISM ################################################################
+# returns a permutation that maps elements of mtA to mtB
+# to prove isomorphism
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
 local l;
@@ -157,7 +155,17 @@ local l;
   fi;
 end);
 
+# returns true if multiplication table mtA is isomorphic to mtB
 InstallGlobalFunction(IsIsomorphicMulTab,
 function(mtA,mtB)
   return not (IsomorphismMulTabs(mtA,mtB) = fail);
+end);
+
+### AUTOMORPHISM ###############################################################
+
+# finding the automorphsim group of a multiplication table by collecting all
+# isomorphisms to itself
+InstallGlobalFunction(AutGrpOfMulTab,
+        function (mt)
+  return Group(List(MulTabEmbeddings(mt, mt), PermList));
 end);
