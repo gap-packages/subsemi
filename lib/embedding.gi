@@ -62,18 +62,15 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
 end;
 MakeReadOnlyGlobal("MultiplicationTableEmbeddingSearch");
 
-
 # Aprofs, Bprofs: for each element we associate a profile object (provided
 # by the caller), and this profile information is used for restricting search
 # integer -> inhomogeneous lists
-PartionedSearchSpace := function(Aprofs, Bprofs)
+CandidateLookup := function(Aprofs, Bprofs)
   local Acls, Bcls, # classifying elements of A and B by their profiles
         targetcls,
         N,
         elt; # an element of A
   N := Size(Aprofs);
-  #checking for the right set of target profile types
-  if not IsSubset(Set(Bprofs), Set(Aprofs)) then return fail; fi;
   #classifying by the supplied profiles
   Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
   Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
@@ -87,10 +84,8 @@ PartionedSearchSpace := function(Aprofs, Bprofs)
        > Size(targetcls[elt]) then
       return fail;
     fi;
-  od; #TODO separate this class matching, so we can check the search space size
-  return rec(targetcls:=targetcls,
-             Acls:=Acls,
-             Bcls:=Bcls);
+  od;
+  return targetcls;
 end;
 
 SearchSpaceSize := function(Acls, Bcls)
@@ -102,12 +97,12 @@ SearchSpaceSize := function(Acls, Bcls)
 end;
 
 
-# trying the represent semigroup (multiplication table) mtA as a subtable of mtB
-# mtA,mtB: multiplication tables
+# A,B: matrices representing multiplication tables
 # onlyfirst: Do we stop after first embedding found?
 # This dispatcher checks whether we have an embedding or isomorphism.
 EmbeddingsDispatcher := function(A,B,onlyfirst)
-  local f, Aprofs, Bprofs, targetcls;
+  local f, Aprofs, Bprofs,
+  Aprofsset,Bprofsset;
   if Size(A) > Size(B) then
     return [];
   elif Size(A) = Size(B) then # isomorphism
@@ -117,15 +112,18 @@ EmbeddingsDispatcher := function(A,B,onlyfirst)
   fi;
   Aprofs := f(A);
   Bprofs := f(B);
-  #for isomorphisms the set of profiles should be the same #TODO this is checked twice
-  if Size(A) = Size(B)
-     and AsSet(Aprofs) <> AsSet(Bprofs) then
-    return [];
+  #checking for the right set of target profile types
+  Aprofsset := Set(Aprofs);
+  Bprofsset := Set(Bprofs);
+  if Size(Aprofs) = Size(Bprofs) then
+    if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
+  else
+    if not IsSubset(Bprofsset, Aprofsset) then return []; fi;
   fi;
-  targetcls := PartionedSearchSpace(Aprofs, Bprofs);
-  if targetcls = fail then return []; fi;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
-  return MultiplicationTableEmbeddingSearch(A,B,targetcls.targetcls,onlyfirst);
+  return MultiplicationTableEmbeddingSearch(A,B,
+                                            CandidateLookup(Aprofs, Bprofs),
+                                            onlyfirst);
 end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher"); #TODO silly name, change it
 
