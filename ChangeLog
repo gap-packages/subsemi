@@ -1,3 +1,5 @@
+0.77
+	Reorganize the code for semigroup embeddings. Shell-scripts for handling semigroup databases.
 0.76
 	Update release following GAP 4.8.2.
 0.75
