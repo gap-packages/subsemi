@@ -62,40 +62,51 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
 end;
 MakeReadOnlyGlobal("MultiplicationTableEmbeddingSearch");
 
-# Aprofs, Bprofs: for each element we associate a profile object (provided
-# by the caller), and this profile information is used for restricting search
-# integer -> inhomogeneous lists
+# Aprofs, Bprofs: profiles of each element  in A and B, index -> profile
+# returns: a lookup indexed by A mapping to classes of elements of B that
+# are potential images in an embedding
 CandidateLookup := function(Aprofs, Bprofs)
   local Acls, Bcls, # classifying elements of A and B by their profiles
-        targetcls,
-        N,
+        lookup, # the resulting lookup array
+        N, # size of A and of the final lookup
         elt; # an element of A
   N := Size(Aprofs);
   #classifying by the supplied profiles
   Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
   Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
-  targetcls := EmptyPlist(N);
+  lookup := EmptyPlist(N);
   #bit of searching in order to avoid using hashtables
   for elt in [1..N] do
     #for each element in A we find the elements of B with same profile
-    targetcls[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
+    lookup[elt] := Bcls.classes[Position(Bcls.data, Aprofs[elt])];
     #there should be enough elements in each class
     if Size(Acls.classes[Position(Acls.data, Aprofs[elt])])
-       > Size(targetcls[elt]) then
+       > Size(lookup[elt]) then
       return fail;
     fi;
   od;
-  return targetcls;
+  return lookup;
 end;
 
-SearchSpaceSize := function(Acls, Bcls)
-  local pairs;
+SearchSpaceSize := function(Aprofs, Bprofs)
+  local pairs, Acls, Bcls, f;
+  #classifying by the supplied profiles (indices by content)
+  f := M -> GeneralEquivClassMap([1..Size(M)], x -> M[x], \=);
+  Acls := f(Aprofs);
+  Bcls := f(Bprofs);
   pairs := List([1..Size(Acls.classes)],
                 x-> [Size(Acls.classes[x]),
                      Size(Bcls.classes[Position(Bcls.data,Acls.data[x])])]);
   return Product(List(pairs, p->Factorial(p[2])/Factorial(p[2]-p[1])));
 end;
 
+# calculating profiles of multiplication table elements for embeddings
+InstallGlobalFunction(EmbeddingProfiles,
+        M -> List([1..Size(M)], x->AbstractIndexPeriod(M,x)));
+
+# ...for isomorphisms
+InstallGlobalFunction(IsomorphismProfiles,
+        M -> List([1..Size(M)],x->ElementProfile(M,x)));
 
 # A,B: matrices representing multiplication tables
 # onlyfirst: Do we stop after first embedding found?
@@ -106,9 +117,9 @@ EmbeddingsDispatcher := function(A,B,onlyfirst)
   if Size(A) > Size(B) then
     return [];
   elif Size(A) = Size(B) then # isomorphism
-    f := M -> List([1..Size(M)],x->ElementProfile(M,x));
+    f := IsomorphismProfiles;
   else # embedding
-    f := M -> List([1..Size(M)], x->AbstractIndexPeriod(M,x));
+    f := EmbeddingProfiles;
   fi;
   Aprofs := f(A);
   Bprofs := f(B);
