@@ -62,6 +62,16 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
 end;
 MakeReadOnlyGlobal("MultiplicationTableEmbeddingSearch");
 
+### PARTITIONING THE SEARCH SPACE ##############################################
+
+# calculating profiles of multiplication table elements for embeddings
+InstallGlobalFunction(EmbeddingProfiles,
+        M -> List([1..Size(M)], x->AbstractIndexPeriod(M,x)));
+
+# ...for isomorphisms
+InstallGlobalFunction(IsomorphismProfiles,
+        M -> List([1..Size(M)],x->ElementProfile(M,x)));
+
 # Aprofs, Bprofs: profiles of each element  in A and B, index -> profile
 # returns: a lookup indexed by A mapping to classes of elements of B that
 # are potential images in an embedding
@@ -100,13 +110,7 @@ SearchSpaceSize := function(Aprofs, Bprofs)
   return Product(List(pairs, p->Factorial(p[2])/Factorial(p[2]-p[1])));
 end;
 
-# calculating profiles of multiplication table elements for embeddings
-InstallGlobalFunction(EmbeddingProfiles,
-        M -> List([1..Size(M)], x->AbstractIndexPeriod(M,x)));
-
-# ...for isomorphisms
-InstallGlobalFunction(IsomorphismProfiles,
-        M -> List([1..Size(M)],x->ElementProfile(M,x)));
+### EMBEDDINGS #################################################################
 
 # A,B: matrices representing multiplication tables
 # onlyfirst: Do we stop after first embedding found?
@@ -136,7 +140,7 @@ EmbeddingsDispatcher := function(A,B,onlyfirst)
                                             CandidateLookup(Aprofs, Bprofs),
                                             onlyfirst);
 end;
-MakeReadOnlyGlobal("EmbeddingsDispatcher"); #TODO silly name, change it
+MakeReadOnlyGlobal("EmbeddingsDispatcher");
 
 InstallGlobalFunction(MulTabEmbeddings,
 function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),false);end);
@@ -152,7 +156,6 @@ function(mtA,mtB)
     return result[1]; #since we have only one embedding
   fi;
 end);
-
 
 ### ISOMORPHISM ################################################################
 # returns a permutation that maps elements of mtA to mtB
