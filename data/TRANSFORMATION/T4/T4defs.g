@@ -53,9 +53,9 @@ K43SubsOneShot := function()
   mtT4 := MulTab(T4,S4);
   mtK43 := MulTab(K43,S4);
   SaveIndicatorFunctions(SubSgpsByMinExtensions(mtK43),
-                         Concatenation("K43",SUBS@));
-  RecodeIndicatorFunctionFile(Concatenation("K43",SUBS@),
-                              Concatenation("K43_T4",SUBS@),
+                         Concatenation("K43",SUBS@SubSemi));
+  RecodeIndicatorFunctionFile(Concatenation("K43",SUBS@SubSemi),
+                              Concatenation("K43_T4",SUBS@SubSemi),
                               mtK43,
                               mtT4);
 end;
