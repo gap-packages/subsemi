@@ -40,7 +40,7 @@ local mtK43, mtT4, K43reps, K43_T4reps, id;
   mtK43 := MulTab(K43);
   mtT4 := MulTab(T4);
   K43reps := LoadIndicatorFunctions("K43.reps");
-  K43_T4reps := List(K43reps, x->RecodeIndicatorFunction(x,mtK43,mtT4)); 
+  K43_T4reps := List(K43reps, x->RecodeIndicatorFunction(x,mtK43,mtT4));
   SaveIndicatorFunctions(K43_T4reps,"K43_T4.reps");
   id := Position(Elts(mtT4), IdentityTransformation);
   Perform(K43_T4reps, function(x) x[id]:=true;end);
@@ -49,12 +49,15 @@ end;
 
 #it would be nice to calculate this as a control recalc
 K43SubsOneShot := function()
-  local mtT4, mtK43, reps, output, r;
+  local mtT4, mtK43;
   mtT4 := MulTab(T4,S4);
   mtK43 := MulTab(K43,S4);
-  reps := AsList(SubSgpsByMinExtensions(mtK43));
-  SaveIndicatorFunctions(reps,"K43.reps");
-  RecodeIndicatorFunctionFile("K43.reps","K43_T4.reps", mtK43, mtT4);
+  SaveIndicatorFunctions(SubSgpsByMinExtensions(mtK43),
+                         Concatenation("K43",SUBS@));
+  RecodeIndicatorFunctionFile(Concatenation("K43",SUBS@),
+                              Concatenation("K43_T4",SUBS@),
+                              mtK43,
+                              mtT4);
 end;
 
 P_T4 := function()
@@ -80,8 +83,8 @@ P_T4_Sorter := function()
   sgps := List(reps, x-> Semigroup(SetByIndicatorFunction(x,mtT4)));
   Display("# Converting to semigroups DONE");
   al := AssociativeList();
-  Perform(sgps, function(sgp) 
-    Collect(al, 
+  Perform(sgps, function(sgp)
+    Collect(al,
             StructureDescription(Group(
                     List( Filtered(AsList(sgp),
                             y -> PermList(ImageListOfTransformation(y,4)) <>fail),
