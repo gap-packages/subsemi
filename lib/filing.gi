@@ -67,7 +67,6 @@ local rfh, T, mtT, reps,mtI, preimgs, elts, otf, f;
   otf := OutputTextFile(Concatenation(Name(T),".uppertorsos"),false);
   f := function(s)
     local indfunc, torso;
-    NormalizeWhitespace(s);
     indfunc := AsBlist(DecodeBitString(s));
     torso := SetByIndicatorFunction(indfunc,elts);
     if fail in torso then Remove(torso,Position(torso,fail));fi;
