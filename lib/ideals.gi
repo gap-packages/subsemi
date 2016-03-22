@@ -7,24 +7,10 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
-#actually building the Rees factor semigroup as the right regular representation
-#of the quotient by ideal I
+# homomorphism onto the Rees quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
 function(I)
   return HomomorphismQuotientSemigroup(ReesCongruenceOfSemigroupIdeal(I));
-end);
-
-InstallGlobalFunction(RFHNonZeroPreImages,
-function (l,rfh)
-  local result,t,preimgs;
-  result := [];
-  for t in l do
-    preimgs := PreImages(rfh,t);
-    if Size(preimgs) = 1 then
-      Add(result, preimgs[1]);
-    fi;
-  od;
-  return result;
 end);
 
 # upper torso conjugacy reps, expressed as elements of S
@@ -70,13 +56,13 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
   return result; #TODO duplicates when the ideal has only one element
 end;
 
-InstallOtherMethod(SubSgpsByIdeals,"for an ideal and an automorphism group",
+InstallOtherMethod(SubSgpsByIdeals,"for a semigroup  ideal and its automorphism group",
         [IsSemigroupIdeal,IsPermGroup],
 function(I,G)
   return SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G));
 end);
 
-InstallOtherMethod(SubSgpsByIdeals,"for an ideal and an automorphism group",
+InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal",
         [IsSemigroupIdeal],
         function(I)
   return SubSgpsByUpperTorsos(I,Group(()),UpperTorsos(I,Group(())));
