@@ -11,10 +11,7 @@
 #of the quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
 function(I)
-  local quotienthom,regrepisom;
-  quotienthom:=HomomorphismQuotientSemigroup(ReesCongruenceOfSemigroupIdeal(I));
-  regrepisom:=IsomorphismTransformationSemigroup(Range(quotienthom));
-  return CompositionMapping(regrepisom, quotienthom);
+  return HomomorphismQuotientSemigroup(ReesCongruenceOfSemigroupIdeal(I));
 end);
 
 InstallGlobalFunction(RFHNonZeroPreImages,
