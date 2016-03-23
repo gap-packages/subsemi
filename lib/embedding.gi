@@ -133,7 +133,10 @@ EmbeddingsDispatcher := function(A,B,onlyfirst)
   if Size(Aprofs) = Size(Bprofs) then
     if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
   else
-    if not IsSubset(Bprofsset, Aprofsset) then return []; fi;
+    if not (IsSubset(Bprofsset, Aprofsset)
+            and ForAll(Aprofs,
+                    x-> Size(Positions(Aprofs,x))<=Size(Positions(Bprofs,x))))
+       then return []; fi;
   fi;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
   return MultiplicationTableEmbeddingSearch(A,B,
