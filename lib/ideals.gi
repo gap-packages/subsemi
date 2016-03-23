@@ -7,15 +7,29 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
+InstallOtherMethod(SubSgpsByIdeals,
+        "for a semigroup  ideal and its conjugacy stabilizer group",
+        [IsSemigroupIdeal,IsPermGroup],
+        function(I,G)
+  return SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G));
+end);
+
+InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal",
+        [IsSemigroupIdeal],
+        function(I)
+  return SubSgpsByUpperTorsos(I,Group(()),UpperTorsos(I,Group(())));
+end);
+
+
 # homomorphism onto the Rees quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
 function(I)
   return HomomorphismQuotientSemigroup(ReesCongruenceOfSemigroupIdeal(I));
 end);
 
-# upper torso conjugacy reps, expressed as elements of S
+# non-empty upper torso conjugacy reps, expressed as elements of S
 # I an ideal in S (S is contained as a parent)
-# G the automorphism group of S
+# G the conjugacy stabilizer group of S
 UpperTorsos := function(I,G)
 local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
   #get the Rees quotient as ts
@@ -55,15 +69,3 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
          end);
   return result; #TODO duplicates when the ideal has only one element
 end;
-
-InstallOtherMethod(SubSgpsByIdeals,"for a semigroup  ideal and its automorphism group",
-        [IsSemigroupIdeal,IsPermGroup],
-function(I,G)
-  return SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G));
-end);
-
-InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal",
-        [IsSemigroupIdeal],
-        function(I)
-  return SubSgpsByUpperTorsos(I,Group(()),UpperTorsos(I,Group(())));
-end);
