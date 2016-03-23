@@ -20,7 +20,6 @@ InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal",
   return SubSgpsByUpperTorsos(I,Group(()),UpperTorsos(I,Group(())));
 end);
 
-
 # homomorphism onto the Rees quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
 function(I)
@@ -30,7 +29,8 @@ end);
 # non-empty upper torso conjugacy reps, expressed as elements of S
 # I an ideal in S (S is contained as a parent)
 # G the conjugacy stabilizer group of S
-UpperTorsos := function(I,G)
+InstallGlobalFunction(UpperTorsos,
+function(I,G)
 local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
   #get the Rees quotient as ts
   rfh := ReesFactorHomomorphism(I);
@@ -48,13 +48,14 @@ local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
       Remove(x, Position(x,fail));fi;end);
   mtS := MulTab(Parent(I),G);
   return  List(Unique(tmp),x-> IndicatorFunction(x,mtS));
-end;
+end);
 
 # calculates all sub conjugacy reps of S/I then extends all upper torsos
 # I semigroup ideal
 # G automorphism group
 # calcideal flag if true, then the empty uppertorso is used
-SubSgpsByUpperTorsos := function(I,G,uppertorsos)
+InstallGlobalFunction(SubSgpsByUpperTorsos,
+function(I,G,uppertorsos)
   local extended, filter, result, S,mtS;
   S := Parent(I);
   mtS := MulTab(S,G);
@@ -65,7 +66,8 @@ SubSgpsByUpperTorsos := function(I,G,uppertorsos)
           function(x)
             if SizeBlist(x) > 0 then Add(result, x); fi;
             Append(result,
-                  SubSgpsByMinExtensionsParametrized(mtS,x,filter,Stack(),BlistStorage(Size(I)),[]));
+                   SubSgpsByMinExtensionsParametrized(mtS,
+                           x,filter,Stack(),BlistStorage(Size(I)),[]));
          end);
   return result; #TODO duplicates when the ideal has only one element
-end;
+end);
