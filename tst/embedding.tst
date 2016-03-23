@@ -14,6 +14,8 @@ true
 gap>  f :=  G -> IsomorphismGroups(AutomorphismGroup(G), AutGrpOfMulTab(MulTab(G)))<>fail;;
 gap>  ForAll([1..15], n -> ForAll(AllSmallGroups(n), G -> f(G)));
 true
+gap>  MulTabEmbeddings(MulTab(OrderEndomorphisms(2)), MulTab(SymmetricGroup(IsPermGroup,3), SymmetricGroup(IsPermGroup,3)));
+[  ]
 
 #
 gap> STOP_TEST( "SubSemi package: embedding.tst", 10000);
