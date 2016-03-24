@@ -15,7 +15,8 @@ InstallGlobalFunction(SubSgpsByMinExtensions,
                                     Stack(),
                                     BlistStorage(Size(mt)),[]);end);
 
-SubSgpsContaining := function(set,mt)
+InstallGlobalFunction(SubSgpsContaining,
+function(set,mt)
   local rep;
   rep := BlistConjClassRep(set,mt);
   return SubSgpsByMinExtensionsParametrized(mt,
@@ -23,7 +24,7 @@ SubSgpsContaining := function(set,mt)
                  DistinctGenerators(FullSet(mt),mt),
                  Stack(),
                  BlistStorage(Size(mt)),[]);
-end;
+end);
 
 InstallGlobalFunction(SubsOfSubInAmbientSgp,
 function(sgp,mt)

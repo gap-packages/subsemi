@@ -7,6 +7,10 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
-DeclareGlobalFunction("SubSgpsByMinExtensions");
+# all arguments, the function with code behind it
 DeclareGlobalFunction("SubSgpsByMinExtensionsParametrized");
+
+# interface functions to the fully parametrized one
+DeclareGlobalFunction("SubSgpsByMinExtensions");
 DeclareGlobalFunction("SubsOfSubInAmbientSgp");
+DeclareGlobalFunction("SubSgpsContaining");
