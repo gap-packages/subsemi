@@ -31,23 +31,23 @@ end);
 # G the conjugacy stabilizer group of S
 InstallGlobalFunction(UpperTorsos,
 function(I,G)
-local rfh,T,mtT,Treps,preimgs,elts,tmp,mtS;
-  #get the Rees quotient as ts
-  rfh := ReesFactorHomomorphism(I);
-  T := Range(rfh);
-  #calculate its subsgp classes
-  mtT := MulTab(T,G,rfh);
-  Treps := AsList(SubSgpsByMinExtensions(mtT));
+local rfh,mtSmodI,SmodIsubs,preimgs,elts,sgps,mtS;
+  if Size(I) = 1 then # no need to do any division
+    return SubSgpsByMinExtensions(MulTab(Parent(I),G));
+  fi;
+  rfh := ReesFactorHomomorphism(I); #SmodI := Range(rfh);
+  #calculate subs of the quotient
+  mtSmodI := MulTab(Range(rfh),G,rfh);
+  SmodIsubs := SubSgpsByMinExtensions(mtSmodI);
   #mapping back the subs of the quotient to the original
-  preimgs := List(Elts(mtT),x->PreImages(rfh,x));
-  #from preimageset to elements, getting rid of zero by failing it
-  elts := List(preimgs,function(x) if Size(x)> 1 then return fail;
-                                   else return x[1];fi;end);
-  tmp := List(Treps, x->SetByIndicatorFunction(x,elts));
-  Perform(tmp, function(x) if fail in x then
-      Remove(x, Position(x,fail));fi;end);
+  preimgs := List(Elts(mtSmodI),x->PreImages(rfh,x));
+  #zero has more preimgs - put the empty list there instead
+  elts := List(preimgs, function(x) if Size(x)> 1 then return [];
+                                   else return x;fi;end);
+  # we simply concatenate, so the empty set disappears
+  sgps := Set(SmodIsubs, x->Concatenation(SetByIndicatorFunction(x,elts)));
   mtS := MulTab(Parent(I),G);
-  return  List(Unique(tmp),x-> IndicatorFunction(x,mtS));
+  return List(sgps,x-> IndicatorFunction(x,mtS));
 end);
 
 # calculates all sub conjugacy reps of S/I then extends all upper torsos
