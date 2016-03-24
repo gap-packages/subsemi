@@ -75,6 +75,11 @@ local mtT4, I, uts, id, result;
   SaveIndicatorFunctions(result,"P_T4.reps");
 end;
 
+P_T4_2 := function()
+  SaveIndicatorFunctions(SubSgpsByUpperTorsos(K43,S4,UpperTorsos(K43,S4)),
+          Concatenation("P_T4",SUBS@SubSemi));
+end;
+
 P_T4_Sorter := function()
   local sgps, reps, al, mtT4;
   reps := LoadIndicatorFunctions("P_T4.reps");
