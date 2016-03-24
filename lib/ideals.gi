@@ -8,6 +8,8 @@
 ## Copyright (C) 2013-2016  Attila Egri-Nagy
 ##
 
+# calculating subs of S\I, convert them to uppertorsos, then extend them into
+# subgroups, plus the subs of the ideal itself
 InstallOtherMethod(SubSgpsByIdeals,
         "for a semigroup  ideal and its conjugacy stabilizer group",
         [IsSemigroupIdeal,IsPermGroup],
@@ -19,11 +21,8 @@ function(I,G)
                                        mt));
 end);
 
-InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal",
-        [IsSemigroupIdeal],
-        function(I)
-  return SubSgpsByUpperTorsos(I,Group(()),UpperTorsos(I,Group(())));
-end);
+InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal", [IsSemigroupIdeal],
+function(I) return SubSgpsByIdeals(I,Group());end);
 
 # homomorphism onto the Rees quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
@@ -32,8 +31,8 @@ function(I)
 end);
 
 # non-empty upper torso conjugacy reps, expressed as elements of S
-# I an ideal in S (S is contained as a parent)
-# G the conjugacy stabilizer group of S
+# I - an ideal in S (S is contained as a parent)
+# G - normalizer group of S
 InstallGlobalFunction(UpperTorsos,
 function(I,G)
 local rfh,mtSmodI,SmodIsubs,preimgs,elts,sgps,mtS;
@@ -59,7 +58,6 @@ end);
 # calculates all sub conjugacy reps of S/I then extends all upper torsos
 # I semigroup ideal
 # G automorphism group
-# calcideal flag if true, then the empty uppertorso is used
 InstallGlobalFunction(SubSgpsByUpperTorsos,
 function(I,G,uppertorsos)
   local extended, gens, result,mt;
