@@ -25,6 +25,15 @@ SubSgpsContaining := function(set,mt)
                  BlistStorage(Size(mt)),[]);
 end;
 
+InstallGlobalFunction(SubsOfSubInAmbientSgp,
+function(sgp,mt)
+  return SubSgpsByMinExtensionsParametrized(mt,
+                 EmptySet(mt),
+                 DistinctGenerators(sgp,mt),
+                 Stack(),
+                 BlistStorage(SizeBlist(sgp)),[]);
+end);
+
 #global datastructure for resuming search
 BindGlobal("SUBSEMI_MinExtensionsCheckPointData", rec());
 ResumeMinExtensions := function()

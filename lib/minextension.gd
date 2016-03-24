@@ -9,3 +9,4 @@
 
 DeclareGlobalFunction("SubSgpsByMinExtensions");
 DeclareGlobalFunction("SubSgpsByMinExtensionsParametrized");
+DeclareGlobalFunction("SubsOfSubInAmbientSgp");

@@ -3,15 +3,20 @@
 ## SubSemi
 ##
 ## Distributing subsemigroup enumeration along the ideal structure
+## using the minimal extension method.
 ##
-## Copyright (C) 2013-2015  Attila Egri-Nagy
+## Copyright (C) 2013-2016  Attila Egri-Nagy
 ##
 
 InstallOtherMethod(SubSgpsByIdeals,
         "for a semigroup  ideal and its conjugacy stabilizer group",
         [IsSemigroupIdeal,IsPermGroup],
-        function(I,G)
-  return SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G));
+function(I,G)
+  local mt;
+  mt := MulTab(Parent(I),G);
+  return Concatenation(SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G)),
+                 SubsOfSubInAmbientSgp(IndicatorFunction(AsList(I),Elts(mt)),
+                                       mt));
 end);
 
 InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal",
@@ -47,7 +52,8 @@ local rfh,mtSmodI,SmodIsubs,preimgs,elts,sgps,mtS;
   # we simply concatenate, so the empty set disappears
   sgps := Set(SmodIsubs, x->Concatenation(SetByIndicatorFunction(x,elts)));
   mtS := MulTab(Parent(I),G);
-  return List(sgps,x-> IndicatorFunction(x,mtS));
+  return List(Filtered(sgps, y->not IsEmpty(y)),
+              x-> IndicatorFunction(x,mtS));
 end);
 
 # calculates all sub conjugacy reps of S/I then extends all upper torsos
