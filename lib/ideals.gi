@@ -56,17 +56,16 @@ end);
 # calcideal flag if true, then the empty uppertorso is used
 InstallGlobalFunction(SubSgpsByUpperTorsos,
 function(I,G,uppertorsos)
-  local extended, filter, result, S,mtS;
-  S := Parent(I);
-  mtS := MulTab(S,G);
-  extended := Set(uppertorsos, x-> BlistConjClassRep(SgpInMulTab(x,mtS),mtS));
-  filter := IndicatorFunction(AsList(I),Elts(mtS));
+  local extended, filter, result,mt;
+  mt := MulTab(Parent(I),G);
+  extended := Set(uppertorsos, x-> BlistConjClassRep(SgpInMulTab(x,mt),mt));
+  filter := IndicatorFunction(AsList(I),Elts(mt));
   result := [];
   Perform(extended,
           function(x)
             if SizeBlist(x) > 0 then Add(result, x); fi;
             Append(result,
-                   SubSgpsByMinExtensionsParametrized(mtS,
+                   SubSgpsByMinExtensionsParametrized(mt,
                            x,filter,Stack(),BlistStorage(Size(I)),[]));
          end);
   return result; #TODO duplicates when the ideal has only one element
