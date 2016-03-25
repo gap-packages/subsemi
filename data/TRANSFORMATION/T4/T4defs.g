@@ -4,14 +4,13 @@ SEMIGROUPS_DefaultOptionsRec.hashlen:=rec(L:=257,M:=257, S:=257);
 
 # VARIABLES for T4 and its subs
 S4 := SymmetricGroup(IsPermGroup,4);
-S4_T4 := Semigroup([Transformation([2,1,3,4]),Transformation([2,3,4,1])]);
 T4 := FullTransformationSemigroup(4);
-K43 := SingularTransformationSemigroup(4);
-#GeneratorsOfSemigroup(K43);
+K43 := SemigroupIdeal(T4, [Transformation([1,2,3,3])]);
 SetName(K43,"K43");
 K42 := SemigroupIdeal(K43,[Transformation([1,2,2,2])]);
-#GeneratorsOfSemigroup(K42);
 SetName(K42,"K42");
+K41 := SemigroupIdeal(K42,[Transformation([2,2,2,2])]);
+SetName(K41,"K41");
 
 # FUNCTIONS for the calculations
 # calculating all subsemigroups of the K_{4,2} ideal within K_{4,3} and T4
@@ -26,9 +25,11 @@ K42SubReps := function()
   RecodeIndicatorFunctionFile("K42.reps","K42_T4.reps", mtK42, mtT4);
 end;
 
+K42modK41subs := function() ImodJSubs(K42, K41, Name(K42),Name(K41),S4); end;
+
 #takes couple of days, requires at least 4GB RAM
 #there are a few more reps than uppertorsos
-K43modK42subs := function() ImodJSubs(K43, K42, Name(K43),Name(K42),S4); end;
+  K43modK42subs := function() ImodJSubs(K43, K42, Name(K43),Name(K42),S4); end;
 
 K43SubsFromUpperTorsos := function(filename)
   ISubsFromJUpperTorsos(K43,K42,filename,S4);
@@ -63,10 +64,7 @@ end;
 P_T4 := function()
 local mtT4, I, uts, id, result;
   mtT4 := MulTab(T4,S4);
-  I := SemigroupIdeal(T4, [Transformation([1,2,3,3])]); #K43
-  uts := UpperTorsos(I,S4);
-  #remove emptyset
-  Remove(uts, Position(uts, EmptySet(mtT4)));
+  uts := UpperTorsos(K43,S4);
   #remove trivial group
   id := BlistList(Indices(mtT4), [Position(Elts(mtT4),IdentityTransformation)]);
   Remove(uts, Position(uts, id));
@@ -76,8 +74,11 @@ local mtT4, I, uts, id, result;
 end;
 
 P_T4_2 := function()
-  SaveIndicatorFunctions(SubSgpsByUpperTorsos(K43,S4,UpperTorsos(K43,S4)),
-          Concatenation("P_T4",SUBS@SubSemi));
+  local subs;
+  subs := SubSgpsByUpperTorsos(K43,
+                               S4,
+                               Filtered(UpperTorsos(K43,S4), x -> Size(x)>1));
+  SaveIndicatorFunctions(subs, Concatenation("P_T4",SUBS@SubSemi));
 end;
 
 P_T4_Sorter := function()
