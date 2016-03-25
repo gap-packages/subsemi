@@ -17,14 +17,20 @@ mtK42 := MulTab(K42,S4);
 
 # FUNCTIONS for the calculations
 # calculating all subsemigroups of the K_{4,2} ideal within K_{4,3} and T4
-K42SubReps := function()
+K42Subs := function()
   local subs;
   subs := SubSgpsByMinExtensions(mtK42);
   SaveIndicatorFunctions(List(subs, x-> RecodeIndicatorFunction(x,mtK42,mtT4)),
           Concatenation("K42",SUBS@SubSemi));
 end;
 
-K42modK41subs := function() ImodJSubs(K42, K41, Name(K42),Name(K41),S4); end;
+K42Subs2 := function()
+  local subs;
+  subs := SubSgpsByIdeals(K41,S4);
+  SaveIndicatorFunctions(List(subs, x-> RecodeIndicatorFunction(x,mtK42,mtT4)),
+          Concatenation("K42i",SUBS@SubSemi));
+end;
+
 
 #takes couple of days, requires at least 4GB RAM
 #there are a few more reps than uppertorsos
