@@ -62,7 +62,7 @@ InstallGlobalFunction(SubSgpsByUpperTorsos,
 function(I,G,uppertorsos)
   local extended, gens, result,mt;
   mt := MulTab(Parent(I),G);
-  extended := List(uppertorsos, x-> BlistConjClassRep(SgpInMulTab(x,mt),mt));
+  extended := Set(uppertorsos, x-> BlistConjClassRep(SgpInMulTab(x,mt),mt));
   gens := IndicatorFunction(AsList(I),Elts(mt));
   result := [];
   Perform(extended,
