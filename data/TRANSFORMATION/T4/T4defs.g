@@ -11,18 +11,17 @@ K42 := SemigroupIdeal(K43,[Transformation([1,2,2,2])]);
 SetName(K42,"K42");
 K41 := SemigroupIdeal(K42,[Transformation([2,2,2,2])]);
 SetName(K41,"K41");
+mtT4 := MulTab(T4,S4);
+mtK43 := MulTab(K43,S4);
+mtK42 := MulTab(K42,S4);
 
 # FUNCTIONS for the calculations
 # calculating all subsemigroups of the K_{4,2} ideal within K_{4,3} and T4
 K42SubReps := function()
-  local output, mtT4, mtK43, mtK42, reps, r;
-  mtT4 := MulTab(T4,S4);
-  mtK43 := MulTab(K43,S4);
-  mtK42 := MulTab(K42,S4);
-  reps := AsList(SubSgpsByMinExtensions(mtK42));
-  SaveIndicatorFunctions(reps, "K42.reps");
-  RecodeIndicatorFunctionFile("K42.reps","K42_K43.reps", mtK42, mtK43);
-  RecodeIndicatorFunctionFile("K42.reps","K42_T4.reps", mtK42, mtT4);
+  local subs;
+  subs := SubSgpsByMinExtensions(mtK42);
+  SaveIndicatorFunctions(List(subs, x-> RecodeIndicatorFunction(x,mtK42,mtT4)),
+          Concatenation("K42",SUBS@SubSemi));
 end;
 
 K42modK41subs := function() ImodJSubs(K42, K41, Name(K42),Name(K41),S4); end;
@@ -79,21 +78,4 @@ P_T4_2 := function()
                                S4,
                                Filtered(UpperTorsos(K43,S4), x -> Size(x)>1));
   SaveIndicatorFunctions(subs, Concatenation("P_T4",SUBS@SubSemi));
-end;
-
-P_T4_Sorter := function()
-  local sgps, reps, al, mtT4;
-  reps := LoadIndicatorFunctions("P_T4.reps");
-  Display("# Loading P_T4.reps DONE");
-  mtT4 := MulTab(T4,S4);
-  sgps := List(reps, x-> Semigroup(SetByIndicatorFunction(x,mtT4)));
-  Display("# Converting to semigroups DONE");
-  al := AssociativeList();
-  Perform(sgps, function(sgp)
-    Collect(al,
-            StructureDescription(Group(
-                    List( Filtered(AsList(sgp),
-                            y -> PermList(ImageListOfTransformation(y,4)) <>fail),
-                          z->PermList(ImageListOfTransformation(z,4)) ) ) ) ,sgp); end );
-  return al;
 end;
