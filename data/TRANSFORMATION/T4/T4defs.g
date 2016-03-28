@@ -31,10 +31,14 @@ K42Subs := function()
           Concatenation("K42",SUBS@SubSemi));
 end;
 
-
 #takes couple of days, requires at least 4GB RAM
 #there are a few more reps than uppertorsos
-K43modK42subs := function() ImodJSubs(K43, K42, Name(K43),Name(K42),S4); end;
+K43modK42subs := function()
+  local uts;
+  uts := UpperTorsos(K42,S4);
+  SaveIndicatorFunctions(List(uts, x-> RecodeIndicatorFunction(x,mtK42,mtK43)),
+          Concatenation("K43modK42",SUBS@SubSemi));
+end;
 
 K43SubsFromUpperTorsos := function(filename)
   ISubsFromJUpperTorsos(K43,K42,filename,S4);
