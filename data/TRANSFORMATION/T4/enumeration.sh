@@ -14,7 +14,9 @@ LOADER="Read(\"T4defs.g\");"      #variables and functions needed
 XLOADER="Read(\\\"T4defs.g\\\");" #escape character madness
 
 #subs with nontrivial subgroup + trivial group
-echo $LOADER"P_T4();" | gap -q -m $MAXMEM
+if [ ! -f P_T4.subs ]; then
+    echo $LOADER"P_T4();" | gap -q -m $MAXMEM
+fi
 
 #subs of K42
 echo $LOADER"K42SubReps();" | gap -q -m $MAXMEM

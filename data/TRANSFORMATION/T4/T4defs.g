@@ -17,18 +17,18 @@ mtK42 := MulTab(K42,S4);
 
 # FUNCTIONS for the calculations
 # calculating all subsemigroups of the K_{4,2} ideal within K_{4,3} and T4
-K42Subs := function()
+K42SubsOneShot := function()
   local subs;
   subs := SubSgpsByMinExtensions(mtK42);
   SaveIndicatorFunctions(List(subs, x-> RecodeIndicatorFunction(x,mtK42,mtT4)),
-          Concatenation("K42",SUBS@SubSemi));
+          Concatenation("K42oneshot",SUBS@SubSemi));
 end;
 
-K42Subs2 := function()
+K42Subs := function()
   local subs;
   subs := SubSgpsByIdeals(K41,S4);
   SaveIndicatorFunctions(List(subs, x-> RecodeIndicatorFunction(x,mtK42,mtT4)),
-          Concatenation("K42i",SUBS@SubSemi));
+          Concatenation("K42",SUBS@SubSemi));
 end;
 
 
