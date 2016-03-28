@@ -71,7 +71,7 @@ P_T4 := function()
   #we need to filter out the identity as well, simple size check is enough
   subs := SubSgpsByUpperTorsos(K43,
                                S4,
-                               Filtered(UpperTorsos(K43,S4), x -> Size(x)>1));
+                               Filtered(UpperTorsos(K43,S4),x->SizeBlist(x)>1));
   Add(subs,
       BlistList(Indices(mtT4), [Position(Elts(mtT4),IdentityTransformation)]));
   SaveIndicatorFunctions(subs, Concatenation("P_T4",SUBS@SubSemi));
