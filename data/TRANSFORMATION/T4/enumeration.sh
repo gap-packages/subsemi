@@ -42,6 +42,7 @@ echo "K43modK42 done"
 
 ################################################################################
 # 4. subs of K43 (lower torso extensions) ######################################
+
 if [ ! -f K43.subs ]; then
     find . -name 'UT*' -delete
     split -l $CHUNKSIZE K43modK42.subs UT
@@ -49,18 +50,23 @@ if [ ! -f K43.subs ]; then
         echo "echo \"$XLOADER K43SubsFromUpperTorsos(\\\"$i\\\");\" \
               | gap  -q -m $SMALLMEM" >> UTtasks;
     done;
+    parallel --jobs $CORES --joblog K43modK42.log < UTtasks
+    cat K42.subs > K43.subs
+    for i in  UT*.subs; do
+        cat $i >> K43.subs;
+    done;
 fi;
-# parallel --jobs $CORES --joblog K43modK42.log < UTtasks
-# cat K42_K43.reps > K43.reps
-# for i in  UT*M; do cat $i >> K43.reps; done;
 
 ################################################################################
 # 5. K43 sharp (adding identity to Sub(K43)) ###################################
 
-# echo $LOADER"K43sharp();" | gap -q -m $MAXMEM
+if [ ! -f K43sharp.subs ]; then
+    echo $LOADER"K43sharp();" | gap -q -m $MAXMEM
+fi;
 
 ################################################################################
-# 5. K43 sharp (adding identity to Sub(K43)) ###################################
+# 6. merging total #############################################################
 
-
-# cat K42.subs P_T4.subs > T4.subs
+if [ ! -f T4.subs ]; then
+    cat K43.subs K43sharp.subs P_T4.subs > T4.subs
+fi;
