@@ -41,7 +41,10 @@ K43modK42subs := function()
 end;
 
 K43SubsFromUpperTorsos := function(filename)
-  ISubsFromJUpperTorsos(K43,K42,filename,S4);
+  local subs;
+  subs := SubSgpsByUpperTorsos(K42,S4, LoadIndicatorFunctions(filename));
+  SaveIndicatorFunctions(List(subs, x-> RecodeIndicatorFunction(x,mtK43,mtT4)),
+          Concatenation(filename,SUBS@SubSemi));
 end;
 
 # does the T4 conversion as well
