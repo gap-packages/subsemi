@@ -43,7 +43,7 @@ echo "K43modK42 done"
 ################################################################################
 # 4. subs of K43 (lower torso extensions) ######################################
 if [ ! -f K43.subs ]; then
-    rm UT*
+    find . -name 'UT*' -delete
     split -l $CHUNKSIZE K43modK42.subs UT
     for i in UT*; do
         echo "echo \"$XLOADER K43SubsFromUpperTorsos(\\\"$i\\\");\" \

@@ -34,10 +34,8 @@ end;
 #takes couple of days, requires at least 4GB RAM
 #there are a few more reps than uppertorsos
 K43modK42subs := function()
-  local uts;
-  uts := UpperTorsos(K42,S4);
-  SaveIndicatorFunctions(List(uts, x-> RecodeIndicatorFunction(x,mtK42,mtK43)),
-          Concatenation("K43modK42",SUBS@SubSemi));
+  SaveIndicatorFunctions(UpperTorsos(K42,S4),
+          Concatenation("K43modK42",SUBS@SubSemi) );
 end;
 
 K43SubsFromUpperTorsos := function(filename)
@@ -47,24 +45,17 @@ K43SubsFromUpperTorsos := function(filename)
           Concatenation(filename,SUBS@SubSemi));
 end;
 
-# does the T4 conversion as well
+# adding the identity
 K43sharp := function()
-local mtK43, mtT4, K43reps, K43_T4reps, id;
-  mtK43 := MulTab(K43);
-  mtT4 := MulTab(T4);
-  K43reps := LoadIndicatorFunctions("K43.reps");
-  K43_T4reps := List(K43reps, x->RecodeIndicatorFunction(x,mtK43,mtT4));
-  SaveIndicatorFunctions(K43_T4reps,"K43_T4.reps");
+local K43subs, id;
+  K43subs := LoadIndicatorFunctions(Concatenation("K43", SUBS@SubSemi));
   id := Position(Elts(mtT4), IdentityTransformation);
-  Perform(K43_T4reps, function(x) x[id]:=true;end);
-  SaveIndicatorFunctions(K43_T4reps,"K43sharp_T4.reps");
+  Perform(K43subs, function(x) x[id]:=true;end);
+  SaveIndicatorFunctions(K43subs,Concatenation("K43sharp",SUBS@SubSemi));
 end;
 
 #it would be nice to calculate this as a control recalc
 K43SubsOneShot := function()
-  local mtT4, mtK43;
-  mtT4 := MulTab(T4,S4);
-  mtK43 := MulTab(K43,S4);
   SaveIndicatorFunctions(SubSgpsByMinExtensions(mtK43),
                          Concatenation("K43",SUBS@SubSemi));
   RecodeIndicatorFunctionFile(Concatenation("K43",SUBS@SubSemi),
