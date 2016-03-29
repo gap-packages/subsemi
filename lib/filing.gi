@@ -48,54 +48,6 @@ PrefixPostfixMatchedListDir := function(dir, prefix, postfix)
                  PostfixMatchedListDir(dir,postfix));
 end;
 
-# I semigroup or ideal, J an ideal of I
-# output: .reps file containing Sub(I/J), also as upper torsos
-# G - the symmetries
-ImodJSubs := function(I, J, Iname, Jname, G)
-local rfh, T, mtT, reps,mtI, preimgs, elts, otf, f;
-  rfh := ReesFactorHomomorphism(J);
-  T := Range(rfh);
-  SetName(T,Concatenation(Iname,"mod",Jname));
-  mtT := MulTab(T,G,rfh);
-  reps := SubSgpsByMinExtensions(mtT);
-  SaveIndicatorFunctions(reps, Concatenation(Name(T),SUBS@));
-  mtI := MulTab(I);
-  preimgs := List(Elts(mtT),x->PreImages(rfh,x));
-  elts := List(preimgs,
-               function(x)
-                 if Size(x)> 1 then return fail;else return x[1];fi;end);
-  otf := OutputTextFile(Concatenation(Name(T),".uppertorsos"),false);
-  f := function(s)
-    local indfunc, torso;
-    indfunc := AsBlist(DecodeBitString(s));
-    torso := SetByIndicatorFunction(indfunc,elts);
-    if fail in torso then Remove(torso,Position(torso,fail));fi;
-    if not IsEmpty(torso) then
-      WriteLine(otf,EncodeBitString(AsBitString(
-              IndicatorFunction(torso,mtI))));
-    fi;
-    return true;
-  end;
-  TextFileProcessor(Concatenation(Name(T),SUBS@), f);
-end;
-
-ISubsFromJUpperTorsos := function(I, J, uppertorsosfile, G)
-  local U, result, mt, gens, time, torsos;
-  SetInfoLevel(SubSemiInfoClass,0);#because this is used in parallel
-  time := TimeInSeconds();
-  result := [];
-  mt := MulTab(I,G);
-  gens := IndicatorFunction(AsList(J), Elts(mt));
-  torsos := LoadIndicatorFunctions(uppertorsosfile);
-  for U in torsos do
-    Append(result, AsList(
-            SubSgpsByMinExtensionsParametrized(mt, U, gens, Stack(),
-                    BlistStorage(Size(mt)),[])));
-  od;
-  SaveIndicatorFunctions(result,Concatenation(uppertorsosfile,"M"));;
-  PrintTo(Concatenation(uppertorsosfile,"F"),String(TimeInSeconds()-time));
-end;
-
 ################################################################################
 ### COMPREHENSIVE ##############################################################
 ################################################################################
