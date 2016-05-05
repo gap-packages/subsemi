@@ -20,8 +20,8 @@ if [ ! -f T4.db ]; then
     split -l $CHUNKSIZE T4.subs SUBS
     #creating a script for each chunk
     for i in `ls -1 SUBS*`; do
-        echo "echo \"$XLOADER SgpsDatabase(\\\""$i"\\\", MulTab(T4,S4));\" \
-              | gap -m $MEM" >> SUBStasks;
+	echo "echo \"$XLOADER SgpsDatabase(\\\""$i"\\\", MulTab(T4,S4));\" \
+	      | gap -m $MEM" >> SUBStasks;
     done;
     #processing the chunks with parallel
     parallel --jobs $CORES --joblog T4classifying.log < SUBStasks
