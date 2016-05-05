@@ -24,11 +24,24 @@ local mt, subs, MT, SUBS;
   SaveIndicatorFunctions(SUBS, Concatenation("I3C",SUBS@SubSemi));
 end;
 
-
-K1CmodI2Csubs := function()
-  SaveIndicatorFunctions(UpperTorsos(K42,S4),
-          Concatenation("K43modK42",SUBS@SubSemi) );
+#2
+I2CmodI3Csubs := function()
+  SaveIndicatorFunctions(UpperTorsos(I3C,G),
+          Concatenation("I2CmodI3C",SUBS@SubSemi) );
 end;
 
+#3
+# J - ideal of I<S
+# mtI - multab of I<S
+# mt - multab of ambient semigroup
+SubsFromUpperTorsosFunc := function(J,G,mtI,mt)
+  return
+    function(filename)
+        subs := SubSgpsByUpperTorsos(I,G,LoadIndicatorFunctions(filename));
+        SaveIndicatorFunctions(List(subs,
+                                    x-> RecodeIndicatorFunction(x,mtI,mt)),
+                               Concatenation(filename,SUBS@SubSemi));
+  end;
+end;
 
-
+I2SubsFromUpperTorsos:=SubsFromUpperTorsosFunc(I3C,G,MulTab(I3C,G),MulTab(J6));

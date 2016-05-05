@@ -15,10 +15,18 @@ export LOADER="Read(\"J6defs.g\");"      #variables and functions needed
 export XLOADER="Read(\\\"J6defs.g\\\");" #escape character madness
 
 ################################################################################
-# 1. subs of the smallest ideal ################## #############################
+# 1. subs of the smallest ideal ################################################
 if [ ! -f I3C.subs ]; then
     echo $LOADER"I3CSubs();" | gap -q -m $MAXMEM
 fi
-echo "I3C done"
+echo "I3C done" #immediate, 593 subs
+
+################################################################################
+# 2. I2C mod I3C upper torsos ##################################################
+if [ ! -f I2CmodI3C.subs ]; then
+    echo $LOADER"I2CmodI3Csubs();" | gap -q -m $MAXMEM
+fi
+echo "I2C mod I3C done" # subs
+
 
 
