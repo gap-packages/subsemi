@@ -9,37 +9,26 @@ G := Group(Filtered(S6, g -> AsSet(J6) = Set(J6, x->x^g)));
 DClassesJ6 := DClasses(J6);
 
 I1C:=SemigroupIdealByGenerators(J6, [Representative(DClassesJ6[2])]);
-GeneratorsOfSemigroup(I1C); #TODO why do we need to call this?
 I2C:=SemigroupIdealByGenerators(I1C, [Representative(DClassesJ6[3])]);
-GeneratorsOfSemigroup(I2C);
 I3C:=SemigroupIdealByGenerators(I2C, [Representative(DClassesJ6[4])]);
-GeneratorsOfSemigroup(I3C);
 
-I1CmodI2Csubs := function() ImodJSubs(I1C,I2C,"I1C","I2C",G);end;
-I2CmodI3Csubs := function() ImodJSubs(I2C,I3C,"I2C","I3C",G);end;
-
-I1CSubsFromUpperTorsos := function(filename)
-  ISubsFromJUpperTorsos(I1C,I2C,filename,G);
-end;
-
-I2CSubsFromUpperTorsos := function(filename)
-  ISubsFromJUpperTorsos(I2C,I3C,filename,G);
-end;
-
+#1
 I3CSubs := function()
-local mt, reps, MT, REPS;
+local mt, subs, MT, SUBS;
   mt := MulTab(I3C,G);
-  reps := AsList(SubSgpsByMinExtensions(mt));
+  subs := SubSgpsByMinExtensions(mt);
   MT := MulTab(J6,G);
-  REPS := List(reps, x -> RecodeIndicatorFunction(x,
+  SUBS := List(subs, x -> RecodeIndicatorFunction(x,
                 Elts(mt),
                 Elts(MT)));
-  SaveIndicatorFunctions(REPS, "I3C_J6.reps");
+  SaveIndicatorFunctions(SUBS, Concatenation("I3C",SUBS@SubSemi));
 end;
 
-RecodeToJ6 := function()
-  local mtJ6;
-  mtJ6 := MulTab(J6);
-  RecodeIndicatorFunctionFile("I1CminusI2C.reps","I1CminusI2C_J6.reps", MulTab(I1C), mtJ6);
-  RecodeIndicatorFunctionFile("I2CminusI3C.reps","I2CminusI3C_J6.reps", MulTab(I2C), mtJ6);
+
+K1CmodI2Csubs := function()
+  SaveIndicatorFunctions(UpperTorsos(K42,S4),
+          Concatenation("K43modK42",SUBS@SubSemi) );
 end;
+
+
+
