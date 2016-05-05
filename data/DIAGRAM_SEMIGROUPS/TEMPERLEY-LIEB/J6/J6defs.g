@@ -37,10 +37,12 @@ end;
 SubsFromUpperTorsosFunc := function(J,G,mtI,mt)
   return
     function(filename)
-        subs := SubSgpsByUpperTorsos(I,G,LoadIndicatorFunctions(filename));
-        SaveIndicatorFunctions(List(subs,
-                                    x-> RecodeIndicatorFunction(x,mtI,mt)),
-                               Concatenation(filename,SUBS@SubSemi));
+        SaveIndicatorFunctions(
+          List(SubSgpsByUpperTorsos(J,
+                                    G,
+                                    LoadIndicatorFunctions(filename)),
+               x-> RecodeIndicatorFunction(x,mtI,mt)),
+          Concatenation(filename,SUBS@SubSemi));
   end;
 end;
 
