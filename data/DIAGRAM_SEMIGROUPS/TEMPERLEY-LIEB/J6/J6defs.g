@@ -46,4 +46,4 @@ SubsFromUpperTorsosFunc := function(J,G,mtI,mt)
   end;
 end;
 
-I2SubsFromUpperTorsos:=SubsFromUpperTorsosFunc(I3C,G,MulTab(I3C,G),MulTab(J6));
+I2CSubsFromUpperTorsos:=SubsFromUpperTorsosFunc(I3C,G,MulTab(I3C,G),MulTab(J6));

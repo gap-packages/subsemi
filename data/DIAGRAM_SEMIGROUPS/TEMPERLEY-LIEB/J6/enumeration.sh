@@ -28,5 +28,22 @@ if [ ! -f I2CmodI3C.subs ]; then
 fi
 echo "I2C mod I3C done" # subs
 
+################################################################################
+# 3. subs of I2C (lower torso extensions) ######################################
+if [ ! -f I2C.subs ]; then
+    find . -name 'UT*' -delete
+    split -l $CHUNKSIZE I2CmodI3C.subs UT
+    for i in UT*; do
+        echo "echo \"$XLOADER I2CSubsFromUpperTorsos(\\\"$i\\\");\" \
+              | gap  -q -m $SMALLMEM" >> UTtasks;
+    done;
+    parallel --jobs $CORES --joblog I2C.log < UTtasks
+    cat I3C.subs > I2C.subs
+    for i in  UT*.subs; do
+        cat $i >> I2C.subs;
+    done;
+fi;
+
+
 
 
