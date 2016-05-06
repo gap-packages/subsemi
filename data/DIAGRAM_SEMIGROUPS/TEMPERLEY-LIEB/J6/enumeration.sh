@@ -6,10 +6,10 @@
 # INPUT: none
 # OUTPUT: J6.subs - a file containing all subs in 6-packed encoding
 
-MAXMEM="7g"  #for single process
-CORES="4" #number of cores
-SMALLMEM="1800m" #for parallel processing
-
+MAXMEM="30g"  #for single process
+CORES="5" #number of cores
+SMALLMEM="6g" #for parallel processing
+CHUNKSIZE="100000"
 
 export LOADER="Read(\"J6defs.g\");"      #variables and functions needed 
 export XLOADER="Read(\\\"J6defs.g\\\");" #escape character madness

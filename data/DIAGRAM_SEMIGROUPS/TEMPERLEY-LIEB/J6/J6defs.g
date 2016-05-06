@@ -1,5 +1,9 @@
 # for calculating the subs of J6
 
+SubSemiOptions.LOGFREQ:=1000000;
+SubSemiOptions.CHECKPOINTFREQ:=200000000;
+
+
 J6 := JonesMonoid(6);
 S6 := SymmetricGroup(IsPermGroup,6);
 G := Group(Filtered(S6, g -> AsSet(J6) = Set(J6, x->x^g)));
@@ -46,4 +50,4 @@ SubsFromUpperTorsosFunc := function(J,G,mtI,mt)
   end;
 end;
 
-I2CSubsFromUpperTorsos:=SubsFromUpperTorsosFunc(I3C,G,MulTab(I3C,G),MulTab(J6));
+I2CSubsFromUpperTorsos:=SubsFromUpperTorsosFunc(I3C,G,MulTab(I2C,G),MulTab(J6));
