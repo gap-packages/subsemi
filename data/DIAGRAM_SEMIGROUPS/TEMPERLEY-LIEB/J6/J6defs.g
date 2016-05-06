@@ -51,3 +51,12 @@ SubsFromUpperTorsosFunc := function(J,G,mtI,mt)
 end;
 
 I2CSubsFromUpperTorsos:=SubsFromUpperTorsosFunc(I3C,G,MulTab(I2C,G),MulTab(J6));
+
+#4
+I1CmodI2Csubs := function()
+  SaveIndicatorFunctions(UpperTorsos(I2C,G),
+          Concatenation("I1CmodI2C",SUBS@SubSemi) );
+end;
+
+#5
+I1CSubsFromUpperTorsos:=SubsFromUpperTorsosFunc(I2C,G,MulTab(I1C,G),MulTab(J6));
