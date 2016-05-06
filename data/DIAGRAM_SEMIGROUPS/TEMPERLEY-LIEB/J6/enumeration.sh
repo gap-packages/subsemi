@@ -26,7 +26,7 @@ echo "I3C done" #immediate, 593 subs
 if [ ! -f I2CmodI3C.subs ]; then
     echo $LOADER"I2CmodI3Csubs();" | gap -q -m $MAXMEM
 fi
-echo "I2C mod I3C done" # subs
+echo "I2C mod I3C done" # 6281514 subs, couple of hours
 
 ################################################################################
 # 3. subs of I2C (lower torso extensions) ######################################
@@ -43,6 +43,7 @@ if [ ! -f I2C.subs ]; then
         cat $i >> I2C.subs;
     done;
 fi;
+echo "I2C done"; # 51419197, 4hours
 
 
 
