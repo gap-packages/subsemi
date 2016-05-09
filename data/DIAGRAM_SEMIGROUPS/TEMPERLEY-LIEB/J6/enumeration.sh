@@ -9,7 +9,6 @@
 MAXMEM="30g"  #for single process
 CORES="5" #number of cores
 SMALLMEM="6g" #for parallel processing
-CHUNKSIZE="100000"
 
 export LOADER="Read(\"J6defs.g\");"      #variables and functions needed
 export XLOADER="Read(\\\"J6defs.g\\\");" #escape character madness
@@ -30,6 +29,7 @@ echo "I2C mod I3C done" # 6281514 subs, couple of hours
 
 ################################################################################
 # 3. subs of I2C (lower torso extensions) ######################################
+CHUNKSIZE="100000"
 if [ ! -f I2C.subs ]; then
     find . -name 'UT*' -delete
     split -l $CHUNKSIZE I2CmodI3C.subs UT
@@ -54,6 +54,7 @@ echo "I1C mod I2C done" #
 
 ################################################################################
 # 5. subs of I1C (lower torso extensions) ######################################
+CHUNKSIZE="100"
 if [ ! -f I1C.subs ]; then
     find . -name 'UT*' -delete
     split -l $CHUNKSIZE I1CmodI2C.subs UT
