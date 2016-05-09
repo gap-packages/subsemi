@@ -8,8 +8,8 @@
 ## Copyright (C) 2013-2016  Attila Egri-Nagy
 ##
 
-# calculating subs of S\I, convert them to uppertorsos, then extend them into
-# subgroups, plus the subs of the ideal itself
+# calculating subs of S/I, convert them to uppertorsos, then extend them into
+# subsemigroups, plus the subsemigroups of the ideal itself
 InstallOtherMethod(SubSgpsByIdeals,
         "for a semigroup  ideal and its conjugacy stabilizer group",
         [IsSemigroupIdeal,IsPermGroup],
