@@ -4,26 +4,32 @@
 ##
 ## Enumerating subsemigroups by recursively extending with a generator.
 ##
-## Copyright (C) 2013-2015  Attila Egri-Nagy
+## Copyright (C) 2013-2016  Attila Egri-Nagy
 ##
 
-# mt - MulTab, multiplication table
+# depth-first search of nonempty subsemigroups
 InstallGlobalFunction(SubSgpsByMinExtensions,
-        function(mt) return SubSgpsByMinExtensionsParametrized(mt,
-                                    EmptySet(mt),
-                                    DistinctGenerators(FullSet(mt),mt),
-                                    Stack(),
-                                    BlistStorage(Size(mt)),[]);end);
+function(mt) return SubSgpsByMinExtensionsParametrized(
+                            mt,
+                            EmptySet(mt),
+                            DistinctGenerators(FullSet(mt),mt),
+                            Stack(),
+                            BlistStorage(Size(mt)),
+                            []);
+end);
 
+# depth-first search of subsemigroups containing the given subset
+# in case of nontrivial symmetries conjugacy representative subsgps may not
+# contain the given set
 InstallGlobalFunction(SubSgpsContaining,
 function(set,mt)
-  local rep;
-  rep := BlistConjClassRep(set,mt);
-  return SubSgpsByMinExtensionsParametrized(mt,
-                 rep,
+  return SubSgpsByMinExtensionsParametrized(
+                 mt,
+                 BlistConjClassRep(set,mt),
                  DistinctGenerators(FullSet(mt),mt),
                  Stack(),
-                 BlistStorage(Size(mt)),[]);
+                 BlistStorage(Size(mt)),
+                 []);
 end);
 
 InstallGlobalFunction(SubsOfSubInAmbientSgp,
