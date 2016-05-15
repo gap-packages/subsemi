@@ -34,11 +34,13 @@ end);
 
 InstallGlobalFunction(SubsOfSubInAmbientSgp,
 function(sgp,mt)
-  return SubSgpsByMinExtensionsParametrized(mt,
+  return SubSgpsByMinExtensionsParametrized(
+                 mt,
                  EmptySet(mt),
                  DistinctGenerators(sgp,mt),
                  Stack(),
-                 BlistStorage(SizeBlist(sgp)),[]);
+                 BlistStorage(SizeBlist(sgp)),
+                 []);
 end);
 
 #global datastructure for resuming search
@@ -56,9 +58,9 @@ end;
 # returns all extensions of the given baseset (empty baseset not collected,
 # but the closure of the baseset is added to the final result)
 # mt - MulTab, multiplication table
-# baseset - the elements already in
+# baseset - the seeding set of elements
 # generators - the set of possible extending elements from
-# waiting - the new and yet unchecked extensions in a stack or a queue
+# waiting - the new and yet unchecked extensions in a some data structure
 # result - the collected subs so far in a collection admitting AddSet
 InstallGlobalFunction(SubSgpsByMinExtensionsParametrized,
 function(mt,seed,generators, waiting, db, result)
@@ -115,7 +117,7 @@ function(mt,seed,generators, waiting, db, result)
   #-----------------------------------------------------------------------------
   # THE MAIN LOOP - the graph search
   main := function()
-    while not IsEmpty(waiting)do
+    while not IsEmpty(waiting) do
       #HOUSEKEEPING: logging, dumping, checkpointing
       counter := counter + 1;
       if InfoLevel(SubSemiInfoClass)>0
@@ -123,9 +125,8 @@ function(mt,seed,generators, waiting, db, result)
         log();
       fi;
       if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then checkpoint(); fi;
-      #CONSTRUCTING new subsgp
+      #PROCESSING next waiting element
       bl := Retrieve(waiting);
-      #bl := BlistConjClassRep(ClosureByIncrements(next[1],next[2],mt),mt);
       if  IsInBlistStorage(db,bl) then continue; fi; #EXIT if nothing to do
       #STORING new subsgp
       Add(result, bl);
