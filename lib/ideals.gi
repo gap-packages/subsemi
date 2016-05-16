@@ -72,5 +72,5 @@ function(I,G,uppertorsos)
                    SubSgpsByMinExtensionsParametrized(mt,
                            x,gens,Stack(),BlistStorage(Size(I)),[]));
          end);
-  return result;
+  return Set(result); #why do we get duplicates?
 end);
