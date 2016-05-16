@@ -28,6 +28,7 @@ local test,infolevel;
           "isomorphism",
           "embedding",
           "conjugacy",
+          "minextensions",
           "T3",
           "I3",
           "classifier",
