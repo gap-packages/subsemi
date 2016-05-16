@@ -32,8 +32,13 @@ function(set,mt)
                  []);
 end);
 
+# depth-first search of nonempty subsemigroups of a given subsemigroup
+# in a bigger semigroup (defined by the multiplication table)
+# purpose: to minimize the need for recoding the results
 InstallGlobalFunction(SubsOfSubInAmbientSgp,
 function(sgp,mt)
+  #sanity check to that sgp is really a subsgp
+  if (SizeBlist(sgp) <> SizeBlist(SgpInMulTab(sgp,mt))) then return fail; fi;
   return SubSgpsByMinExtensionsParametrized(
                  mt,
                  EmptySet(mt),
