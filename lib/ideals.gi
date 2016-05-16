@@ -67,7 +67,7 @@ function(I,G,uppertorsos)
   result := [];
   Perform(extended,
           function(x)
-            if SizeBlist(x) > 0 then Add(result, x); fi;
+            Add(result, x);
             Append(result,
                    SubSgpsByMinExtensionsParametrized(mt,
                            x,gens,Stack(),BlistStorage(Size(I)),[]));
