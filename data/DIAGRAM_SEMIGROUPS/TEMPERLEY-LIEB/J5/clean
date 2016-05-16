@@ -1,0 +1,9 @@
+find . -name '*.isom' -delete
+find . -name '*.set' -delete
+find . -name '*.suts' -delete
+find . -name '*.uppertorsos' -delete
+find . -name '*.reps' -delete
+find . -name '*.log' -delete
+find . -name '*.elts' -delete
+find . -name '*.db' -delete
+find . -name 'U*' -delete
