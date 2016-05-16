@@ -49,7 +49,7 @@ local rfh,mtSmodI,SmodIsubs,preimgs,elts,sgps,mtS;
   elts := List(preimgs, function(x) if Size(x)> 1 then return [];
                                    else return x;fi;end);
   # we simply concatenate, so the empty set disappears
-  sgps := Set(SmodIsubs, x->Concatenation(SetByIndicatorFunction(x,elts)));
+  sgps := Set(SmodIsubs, x->Set(Concatenation(SetByIndicatorFunction(x,elts))));
   mtS := MulTab(Parent(I),G);
   return List(Filtered(sgps, y->not IsEmpty(y)),
               x-> IndicatorFunction(x,mtS));
