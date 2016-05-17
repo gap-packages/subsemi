@@ -72,7 +72,7 @@ function(I,G,uppertorsos)
             Append(result,
                    SubSgpsByMinExtensionsParametrized(mt,
                                                       x,
-                                                      DifferenceBlist(Ielts,x),
+                                                      Ielts,
                                                       Stack(),
                                                       BlistStorage(Size(I)),
                                                       []));
