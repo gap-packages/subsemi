@@ -1,3 +1,5 @@
+0.79
+	Fixing regression in the ideal part: no more duplicates of upper torso semigroups.. Rearranging the enumeration scripts.
 0.78
 	Revising the code for enumerating subsemigroups along an ideal. Mainly driven by the need for simplifying downstream enumeration scripts.
 0.77
