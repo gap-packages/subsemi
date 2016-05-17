@@ -16,9 +16,10 @@ InstallOtherMethod(SubSgpsByIdeals,
 function(I,G)
   local mt;
   mt := MulTab(Parent(I),G);
-  return Concatenation(SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G)),
-                 SubsOfSubInAmbientSgp(IndicatorFunction(AsList(I),Elts(mt)),
-                                       mt));
+  return Concatenation(
+           SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G)),
+           SubsOfSubInAmbientSgp(IndicatorFunction(AsList(I),Elts(mt)),
+                                 mt));
 end);
 
 InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal", [IsSemigroupIdeal],
