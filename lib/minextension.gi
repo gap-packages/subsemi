@@ -114,7 +114,7 @@ function(mt,seed,generators, waiting, db, result)
   end;
   #-----------------------------------------------------------------------------
   init := function()
-    for gen in ListBlist(Indices(mt), generators) do
+    for gen in ListBlist(Indices(mt), DifferenceBlist(generators,seed)) do
       Store(waiting, BlistConjClassRep(
               ClosureByIncrements(seed,gen,mt),mt));
     od;
