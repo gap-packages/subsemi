@@ -60,17 +60,21 @@ end);
 # G automorphism group
 InstallGlobalFunction(SubSgpsByUpperTorsos,
 function(I,G,uppertorsos)
-  local extended, gens, result,mt;
+  local extended, Ielts, result,mt;
   mt := MulTab(Parent(I),G);
   extended := Set(uppertorsos, x-> BlistConjClassRep(SgpInMulTab(x,mt),mt));
-  gens := IndicatorFunction(AsList(I),Elts(mt));
+  Ielts := IndicatorFunction(AsList(I),Elts(mt));
   result := [];
   Perform(extended,
           function(x)
             Add(result, x);
             Append(result,
                    SubSgpsByMinExtensionsParametrized(mt,
-                           x,gens,Stack(),BlistStorage(Size(I)),[]));
+                                                      x,
+                                                      DifferenceBlist(Ielts,x),
+                                                      Stack(),
+                                                      BlistStorage(Size(I)),
+                                                      []));
          end);
-  return Set(result); #why do we get duplicates?
+  return result;
 end);
