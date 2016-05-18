@@ -29,23 +29,22 @@ function(I) return SubSgpsByIdeal(I,Group(()));end);
 InstallOtherMethod(SubSgpsByIdealChain,
                    "for a semigroup  ideal chain and the conjugacy stabilizer \
                     group of the semigroup",
-                   [IsSemigroupIdeal,IsPermGroup],
+                   [IsList,IsPermGroup],
 function(ideals,G)
-  local mt, result, i;
-    mt := MulTab(Parent(ideals[Size(ideals)]),G); #the largest ideal's parent
-    result := [SubsOfSubInAmbientSgp(IndicatorFunction(AsList(ideals[1]),
-                                                       Elts(mt)),
-                                     mt)];
-    for i in [2..Size(ideals)] do
-    od;
-    return result;
-    
-  # return Concatenation(
-  #          SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G)),
-  #          SubsOfSubInAmbientSgp(IndicatorFunction(AsList(I),Elts(mt)),
-  #                                mt));
+local mt, result, i, l;
+  mt := MulTab(Parent(ideals[Size(ideals)]),G); #the largest ideal's parent
+  result := SubsOfSubInAmbientSgp(IndicatorFunction(AsList(ideals[1]),
+                                                    Elts(mt)),
+                                  mt);
+  for i in [1..Size(ideals)] do
+    l := SubSgpsByUpperTorsos(ideals[i],G,UpperTorsos(ideals[i],G));
+    if Size(Parent(ideals[i])) < Size(mt) then
+      l := List(l, x->RecodeIndicatorFunction(x,MulTab(Parent(ideals[i])),mt));
+    fi;
+    result := Concatenation(result,l);
+  od;
+  return result;
 end);
-
 
 # homomorphism onto the Rees quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
