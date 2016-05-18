@@ -10,7 +10,7 @@
 
 # calculating subs of S/I, convert them to uppertorsos, then extend them into
 # subsemigroups, plus the subsemigroups of the ideal itself
-InstallOtherMethod(SubSgpsByIdeals,
+InstallOtherMethod(SubSgpsByIdeal,
         "for a semigroup  ideal and its conjugacy stabilizer group",
         [IsSemigroupIdeal,IsPermGroup],
 function(I,G)
@@ -22,8 +22,8 @@ function(I,G)
                                  mt));
 end);
 
-InstallOtherMethod(SubSgpsByIdeals,"for a semigroup ideal", [IsSemigroupIdeal],
-function(I) return SubSgpsByIdeals(I,Group());end);
+InstallOtherMethod(SubSgpsByIdeal,"for a semigroup ideal", [IsSemigroupIdeal],
+function(I) return SubSgpsByIdeal(I,Group(()));end);
 
 # homomorphism onto the Rees quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,

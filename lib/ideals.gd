@@ -7,7 +7,7 @@
 ## Copyright (C) 2013-2015  Attila Egri-Nagy
 ##
 
-DeclareOperation("SubSgpsByIdeals",[IsSemigroupIdeal]);
+DeclareOperation("SubSgpsByIdeal",[IsSemigroupIdeal]);
 
 DeclareGlobalFunction("ReesFactorHomomorphism");
 DeclareGlobalFunction("UpperTorsos");
