@@ -18,6 +18,11 @@ gap> T3conjclasses = AsSet(SubSgpsByIdeal(K32,S3));
 true
 gap> T3conjclasses = AsSet(SubSgpsByIdeal(K33,S3));
 true
+gap> K33 := SemigroupIdealByGenerators(T3, [Transformation([1,2,3])]);;
+gap> K32 := SemigroupIdealByGenerators(K33, [Transformation([1,1,2])]);; 
+gap> K31 := SemigroupIdealByGenerators(K32, [Transformation([1,1,1])]);;
+gap> T3conjclasses = AsSet(SubSgpsByIdealChain([K31,K32,K33], S3));
+true
 gap> T3ccsbyIS := IS(mt,ISCanCons);;
 gap> Remove(T3ccsbyIS, Position(T3ccsbyIS, EmptySet(mt)));;
 gap> Set(T3ccsbyIS, x-> BlistConjClassRep(SgpInMulTab(x,mt),mt)) = T3conjclasses;
