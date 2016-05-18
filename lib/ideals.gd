@@ -8,6 +8,7 @@
 ##
 
 DeclareOperation("SubSgpsByIdeal",[IsSemigroupIdeal]);
+DeclareOperation("SubSgpsByIdealChain",[IsList]);
 
 DeclareGlobalFunction("ReesFactorHomomorphism");
 DeclareGlobalFunction("UpperTorsos");

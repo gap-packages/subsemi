@@ -25,6 +25,28 @@ end);
 InstallOtherMethod(SubSgpsByIdeal,"for a semigroup ideal", [IsSemigroupIdeal],
 function(I) return SubSgpsByIdeal(I,Group(()));end);
 
+#ideals - an increasing chain of semigroup ideals
+InstallOtherMethod(SubSgpsByIdealChain,
+                   "for a semigroup  ideal chain and the conjugacy stabilizer \
+                    group of the semigroup",
+                   [IsSemigroupIdeal,IsPermGroup],
+function(ideals,G)
+  local mt, result, i;
+    mt := MulTab(Parent(ideals[Size(ideals)]),G); #the largest ideal's parent
+    result := [SubsOfSubInAmbientSgp(IndicatorFunction(AsList(ideals[1]),
+                                                       Elts(mt)),
+                                     mt)];
+    for i in [2..Size(ideals)] do
+    od;
+    return result;
+    
+  # return Concatenation(
+  #          SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G)),
+  #          SubsOfSubInAmbientSgp(IndicatorFunction(AsList(I),Elts(mt)),
+  #                                mt));
+end);
+
+
 # homomorphism onto the Rees quotient by ideal I
 InstallGlobalFunction(ReesFactorHomomorphism,
 function(I)
