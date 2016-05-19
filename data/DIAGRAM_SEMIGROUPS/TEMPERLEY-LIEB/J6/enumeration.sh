@@ -20,7 +20,7 @@ lower_torso() {
     find . -name 'UT*' -delete
     split -l $5 $1 UT
     for i in UT*; do
-	echo "echo \"$XLOADER I2CSubsFromUpperTorsos(\\\"$i\\\");\" \
+	echo "echo \"$XLOADER $2(\\\"$i\\\");\" \
 	      | gap  -q -m $SMALLMEM" >> UTtasks;
     done;
     parallel --jobs $CORES --joblog $4.log < UTtasks
