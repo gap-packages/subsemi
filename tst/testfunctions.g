@@ -29,11 +29,12 @@ local test,infolevel;
           "embedding",
           "conjugacy",
           "minextensions",
+          "classifier",
+          "is",
           "T3",
           "I3",
-          "classifier",
-          "is"
-          ] do
+          "J4"
+      ] do
     Test(Concatenation(
             PackageInfo("subsemi")[1]!.InstallationPath,
             "/tst/",test,
