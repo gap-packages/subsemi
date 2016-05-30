@@ -6,7 +6,7 @@ ReadPackage("SubSemi","/lib/storage/stack.gi");
 ReadPackage("SubSemi","/lib/storage/dupfreestack.gi");
 ReadPackage("SubSemi","/lib/storage/queue.gi");
 ReadPackage("SubSemi","/lib/storage/randomset.gi");
-ReadPackage("SubSemi","/lib/storage/sortedset.gi");
+ReadPackage("SubSemi","/lib/storage/priorityqueue.gi");
 
 
 ReadPackage("SubSemi","/lib/sgptag.gi");
