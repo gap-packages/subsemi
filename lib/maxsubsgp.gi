@@ -39,7 +39,7 @@ InstallGlobalFunction(SubSgpsInDecreasingOrder,
 function(mt)
   local f, st, next, result;
   f := function(A,B) return SizeBlist(A) < SizeBlist(B); end;
-  st := SortedSet(f);
+  st := PriorityQueue(f, x->false);
   Store(st, FullSet(mt));
   result := [];
   repeat

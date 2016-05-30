@@ -169,6 +169,6 @@ SubSgpsIncreasingOrder := function(mt)
   return SubSgpsByMinExtensionsParametrized(mt,
                  EmptySet(mt),
                  DistinctGenerators(FullSet(mt),mt),
-                 SortedSet(f),
+                 PriorityQueue(f, x->false),
                  BlistStorage(Size(mt)),[]);
 end;

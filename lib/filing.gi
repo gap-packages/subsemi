@@ -173,7 +173,8 @@ end);
 ################################################################################
 FileSubsemigroupsInDecreasingOrder := function(mt)
   local st, next, nextsize, size;
-  st := SortedSet(function(A,B) return SizeBlist(A) < SizeBlist(B); end);
+  st := PriorityQueue(function(A,B) return SizeBlist(A) < SizeBlist(B); end,
+                     x->false);
   Store(st,FullSet(mt));
   repeat
     next := NextOrderClassSubSgps(st,mt);
