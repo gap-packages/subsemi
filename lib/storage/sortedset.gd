@@ -1,21 +1,22 @@
 #############################################################################
 ##
-## sortedset.gd           Subsemi package
+## priorityqueue.gd           Subsemi package
 ##
 ## Copyright (C)  Attila Egri-Nagy 2011-2016
 ##
-## Storage where elements can be retrieved sorted by a function.
+## Priority queue defined by a sorting and a threshold function.
 ##
 
-DeclareCategory("IsSortedSet", IsStorage);
-DeclareRepresentation( "IsSortedSetRep",
+DeclareCategory("IsPriorityQueue", IsStorage);
+DeclareRepresentation( "IsPriorityQueueRep",
                        IsComponentObjectRep,
         ["l", #list sorted by f
          "s", #set for lookup (sorted by the default comparison)
-         "f"]); #comparison function
+         "f", #comparison function
+         "g"]); #threshold function
 
-SortedSetType  := NewType(
-    NewFamily("SortedSetFamily",IsSortedSet),
-    IsSortedSet and IsSortedSetRep and IsMutable);
+PriorityQueueType  := NewType(
+    NewFamily("PriorityQueueFamily",IsPriorityQueue),
+    IsPriorityQueue and IsPriorityQueueRep and IsMutable);
 
-DeclareGlobalFunction("SortedSet");
+DeclareGlobalFunction("PriorityQueue");
