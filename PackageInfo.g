@@ -55,7 +55,11 @@ ArchiveURL     := Concatenation("https://github.com/gap-packages/subsemi/",
                    "releases/download/v", ~.Version,
                    "/subsemi-", ~.Version),
                    ArchiveFormats := ".tar.gz .tar.bz2",
-
+SourceRepository := rec( 
+  Type := "git", 
+  URL := "https://github.com/gap-packages/subsemi"
+),
+IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
 AbstractHTML := "<span class=\"pkgname\">SubSemi</span> is  a <span class=\
                    \"pkgname\">GAP</span> \
                    for enumerating subsemigroups.",
