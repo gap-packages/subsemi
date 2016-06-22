@@ -17,3 +17,13 @@ srch := function(S,T)
   return Filtered(EnumeratorOfCartesianProduct(List([1..Size(S)],x->Tsubs)),
                  x->isrm(x,S,T));
 end;    
+
+
+srch := function(S,T)
+  local tmp,Tsubs;
+  tmp := EnumeratorOfCartesianProduct(List([1..Size(T)], x->[true,false]));
+  Tsubs := List(tmp, x-> Filtered([1..Size(T)], y->x[y]));
+  Tsubs := Filtered(Tsubs, x->Size(x)>0);
+  return Filtered(EnumeratorOfCartesianProduct(List([1..Size(S)],x->Tsubs)),
+                 x->isrm(x,S,T));
+end;    
