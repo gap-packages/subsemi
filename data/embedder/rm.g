@@ -1,30 +1,40 @@
-# product of sets in multab S
+# brute-forcing morphic relations
+
+# cross-multiplication of sets A and B using multiplication table S
 SetProd := function(A,B,M)
-  return Set(EnumeratorOfCartesianProduct([A,B]), p -> M[p[1]][p[2]]);
+  return Set(EnumeratorOfCartesianProduct([A,B]), p -> M[ p[1] ][ p[2] ]);
 end;
 
-isrm := function(rm, S, T)
-  return ForAll(Tuples([1..Size(S)],2),
-                p -> IsSubset(rm[S[p[1]][p[2]]],
-                        SetProd(rm[p[1]],rm[p[2]],T)));
+# rm - relmorph defined as a list of image sets
+IsRelMorph := function(rm, S, T)
+  return ForAll(Tuples([1..Size(S)],2), # for all pairs in S
+                p -> IsSubset(rm[S[ p[1] ][ p[2] ]], # the image of the product
+                        SetProd(rm[ p[1] ],rm[ p[2] ],T))); #product of images
 end;
 
-srch := function(S,T)
-  local tmp,Tsubs;
-  tmp := EnumeratorOfCartesianProduct(List([1..Size(T)], x->[true,false]));
-  Tsubs := List(tmp, x-> Filtered([1..Size(T)], y->x[y]));
-  Tsubs := Filtered(Tsubs, x->Size(x)>0);
-  return Filtered(EnumeratorOfCartesianProduct(List([1..Size(S)],x->Tsubs)),
-                 x->isrm(x,S,T));
-end;    
+# all possible relational morphisms
+AllRelMorphs := function(S,T)
+  local bitstrings, Tsubs, rms;
+  # bitstrings describing all subsets of T (the enumerator is lazy)
+  bitstrings := EnumeratorOfCartesianProduct(List([1..Size(T)],
+                                                  x->[true,false]));
+  Tsubs := Filtered(List(bitstrings,
+                         x-> Filtered([1..Size(T)], y->x[y])),
+                    x->Size(x)>0);
+  rms := EnumeratorOfCartesianProduct(List([1..Size(S)],x->Tsubs));
+  Info(SubSemiInfoClass,1, Size(Tsubs), " nonempty subsets in target");
+  Info(SubSemiInfoClass,1, Size(rms), " possible relmorphs");
+  return Filtered(rms, x->IsRelMorph(x,S,T));
+end;
 
-
-srch2 := function(S,T)
+# all divisions
+AllDivs := function(S,T)
   local partitions, L;
   #partitions of T with size not smaller than size of S
   partitions := Filtered(PartitionsSet([1..Size(T)]), x->Size(x)>=Size(S));
   L := Concatenation(List(partitions,
             part -> Concatenation(List(List(Combinations(part, Size(S))),
                                        z->PermutationsList(z)))));
-  return Filtered(L, x->isrm(x,S,T));
-end;    
+  Info(SubSemiInfoClass,1, Size(L), " possible relmorphs");
+  return Filtered(L, x->IsRelMorph(x,S,T));
+end;
