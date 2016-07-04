@@ -24,7 +24,7 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
         cod, # keeping track of what elements we used when building up hom
         solutions; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
-  PartitionedBackTrack := function() # parameters: hom, used
+  PartitionedBackTrack := function() # parameters: hom, cod, solutions
     local newelt, dom, rdom, f;
     if Size(hom)=N then  # when a solution is found
       Add(solutions, ShallowCopy(hom));
