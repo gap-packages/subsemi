@@ -1,5 +1,5 @@
 ##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "0.80-dev">
+##  <!ENTITY VERSION "0.80">
 ##  <!ENTITY COPYRIGHTYEARS "2013-2016">
 ##  <#/GAPDoc>
 
@@ -9,9 +9,9 @@ PackageName := "SubSemi",
 
 Subtitle := "Enumeration of subsemigroups",
 
-Version := "0.80-dev",
+Version := "0.80",
 
-Date := "18/05/2016",
+Date := "08/07/2016",
 
 Persons := [
   rec(
