@@ -67,10 +67,14 @@ end;
 
 # short string tag for groups
 GrpTag := function(G)
-  return JoinStringsWithSeparator([StructureDescription(G:short),
-                                   String(IdSmallGroup(G)[1]),
-                                   String(IdSmallGroup(G)[2])],
-                                  "_");
+  # todo: ID_AVAILABLE is undocumented in the small groups library
+  if ID_AVAILABLE(Size(G)) <> fail then
+    return JoinStringsWithSeparator([StructureDescription(G:short),
+                                     String(IdSmallGroup(G)[1]),
+                                     String(IdSmallGroup(G)[2])],
+                                    "_");
+  fi;
+  return JoinStringsWithSeparator(["g", String(Size(G))], "_");
 end;
 
 TagSgpsFromFile := function(infile, outfile, mt)
