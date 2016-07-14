@@ -2,9 +2,9 @@
 ##
 ## SubSemi
 ##
-## Deciding isomorphism and embedding of multiplication tables.
+## Constructing isomorphisms and embeddings of multiplication tables.
 ##
-## Copyright (C) 2013-2015  Attila Egri-Nagy
+## Copyright (C) 2013-2016  Attila Egri-Nagy
 ##
 
 DeclareGlobalFunction("MulTabEmbedding");

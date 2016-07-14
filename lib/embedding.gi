@@ -2,7 +2,7 @@
 ##
 ## SubSemi
 ##
-## Deciding embedding and isomorphism of multiplication tables.
+## Constructing embeddings and isomorphisms of multiplication tables.
 ##
 ## Copyright (C) 2013-16  Attila Egri-Nagy
 ##
