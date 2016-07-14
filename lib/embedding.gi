@@ -35,7 +35,7 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
       if not cod[newelt] then #is it really new? might be used already
         Add(hom,newelt); cod[newelt]:=true; # EXTEND hom by newelt
         dom := [1..Size(hom)];
-        f := function(x,y)
+        f := function(x,y) #function for checking for homomorphism
           local r,q;
           r := A[x][y]; # product in A
           q := B[hom[x]][hom[y]]; # product in B
