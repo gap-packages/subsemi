@@ -4,7 +4,7 @@
 ##
 ## General functions for finding classes by some equivalence relation.
 ##
-## Copyright (C) 2015  Attila Egri-Nagy
+## Copyright (C) 2015-2016  Attila Egri-Nagy
 ##
 
 #TODO OPTIMIZE as we put more and more load on this
@@ -30,7 +30,7 @@ GeneralEquivClassMap := function(elts, f, eq)
       Add(classes[pos],e);
     fi;
   od;
-  #TODO consider parallel sorting the data elements
+  # TODO parallel sorting causing some trouble elsewhere
   return rec(data:=data, classes:=classes);
 end;
 MakeReadOnlyGlobal("GeneralEquivClassMap");
