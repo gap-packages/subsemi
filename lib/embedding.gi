@@ -13,40 +13,40 @@
 
 # A backtrack algorithm to build an injective map from multiplication table A to
 # multiplication table B. The map is built in hom, such that i->hom[i].
-# A, B: matrices encoding multiplication tables
-# targetcls: lookup array
-# i, element of A -> class of elements of B that are possible images if i
+# A, B - matrices encoding multiplication tables, A source, B target
+# candidates - lookup array, element of A -> set of elements of B
+#              the possible choices for an image of an element in A
 # onlyfirst: shall we stop after the first solution is found?
 MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
   local hom, # the homomorphism from A to B in a list: i->hom[i]
         N, # the number of elements of A, the source size
         PartitionedBackTrack, # the embedded recursive backtrack function
-        cod, # keeping track of what elements we used when building up hom
+        cod, # keeping track of what elements are in hom (the codomain of hom)
         solutions; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
   PartitionedBackTrack := function() # parameters: hom, cod, solutions
-    local newelt, dom, rdom, f;
-    if Size(hom)=N then  # when a solution is found
+    local newelt, dom, f;
+    if Size(hom)=N then  # when a solution is found, store it
       Add(solutions, ShallowCopy(hom));
       Info(SubSemiInfoClass,2,Size(solutions)," ",solutions[Size(solutions)]);
-      return;
+      return; #cut the search
     fi;
     for newelt in candidates[Size(hom)+1] do
-      if not cod[newelt] then #is it really new?
-        Add(hom,newelt); cod[newelt]:=true; # EXTEND by newelt
+      if not cod[newelt] then #is it really new? might be used already
+        Add(hom,newelt); cod[newelt]:=true; # EXTEND hom by newelt
         dom := [1..Size(hom)];
         f := function(x,y)
           local r,q;
-          r := A[x][y];
-          q := B[hom[x]][hom[y]];
+          r := A[x][y]; # product in A
+          q := B[hom[x]][hom[y]]; # product in B
           if r in dom then
-            return hom[r] = q;
+            return hom[r] = q; #if product is defined in A, check homomorphism
           else
-            return not cod[q];
+            return not cod[q]; #otherwise, it should not be defined in B yet
           fi;
         end;
-        rdom := Reversed(dom); # to check the newly adjoined element first
-        if ForAll(rdom, x -> ForAll(dom, y -> f(x,y))) then
+        # to check the newly adjoined element first we reverse the domain
+        if ForAll(Reversed(dom), x -> ForAll(dom, y -> f(x,y))) then
           PartitionedBackTrack();
           if onlyfirst and not IsEmpty(solutions) then return; fi;
         fi;
