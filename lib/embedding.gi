@@ -65,10 +65,12 @@ MakeReadOnlyGlobal("MultiplicationTableEmbeddingSearch");
 ### PARTITIONING THE SEARCH SPACE ##############################################
 
 # calculating profiles of multiplication table elements for embeddings
+# we can only use the (index,period) pairs
 InstallGlobalFunction(EmbeddingProfiles,
         M -> List([1..Size(M)], x->AbstractIndexPeriod(M,x)));
 
 # ...for isomorphisms
+# full profile an element can be used
 InstallGlobalFunction(IsomorphismProfiles,
         M -> List([1..Size(M)],x->ElementProfile(M,x)));
 
@@ -79,11 +81,13 @@ CandidateLookup := function(Aprofs, Bprofs)
   local Acls, Bcls, # classifying elements of A and B by their profiles
         lookup, # the resulting lookup array
         N, # size of A and of the final lookup
-        elt; # an element of A
+        elt, # an element of A
+        f; #just a classification function
   N := Size(Aprofs);
   #classifying by the supplied profiles
-  Acls := GeneralEquivClassMap([1..N], x -> Aprofs[x], \=);
-  Bcls := GeneralEquivClassMap([1..Size(Bprofs)], x -> Bprofs[x], \=);
+  f := M -> GeneralEquivClassMap([1..Size(M)], x -> M[x], \=);
+  Acls := f(Aprofs);
+  Bcls := f(Bprofs);
   lookup := EmptyPlist(N);
   #bit of searching in order to avoid using hashtables
   for elt in [1..N] do
@@ -97,7 +101,9 @@ CandidateLookup := function(Aprofs, Bprofs)
   od;
   return lookup;
 end;
+MakeReadOnlyGlobal("CandidateLookup");
 
+# TODO this recalculates CandidateLookup - we should just use the lookup table
 SearchSpaceSize := function(Aprofs, Bprofs)
   local pairs, Acls, Bcls, f;
   #classifying by the supplied profiles (indices by content)
