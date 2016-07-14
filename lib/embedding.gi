@@ -103,6 +103,20 @@ CandidateLookup := function(Aprofs, Bprofs)
 end;
 MakeReadOnlyGlobal("CandidateLookup");
 
+# partialhom - a partial homomorphism from A to B (a homomorphism of a sub of A)
+# candidates - a lookup table produced by CandidateLookup
+RestrictCandidates := function(partialhom, candidates)
+  local partialcod;
+  partialcod := Set(partialhom);
+  return List([1..Size(candidates)],
+              function(x) if IsBound(partialhom[x]) then
+                            return [partialhom[x]];
+                          else
+                            return Difference(candidates[x], partialcod);
+                          fi;
+                        end);
+end;
+
 # TODO this recalculates CandidateLookup - we should just use the lookup table
 SearchSpaceSize := function(Aprofs, Bprofs)
   local pairs, Acls, Bcls, f;
@@ -124,7 +138,7 @@ end;
 EmbeddingsDispatcher := function(A,B,onlyfirst)
   local f, Aprofs, Bprofs,
   Aprofsset,Bprofsset;
-  if Size(A) > Size(B) then
+  if Size(A) > Size(B) then #no way to map the bigger onto the smaller
     return [];
   elif Size(A) = Size(B) then # isomorphism
     f := IsomorphismProfiles;
