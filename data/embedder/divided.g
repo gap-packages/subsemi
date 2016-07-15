@@ -5,13 +5,11 @@ Sing3 := SingularTransformationSemigroup(3);
 
 mtT4 := MulTab(T4);
 mtT3 := MulTab(T3);
-mtSing3 := MulTab(Sing3);
+mtSubT3 := MulTab(Semigroup([Transformation([2,3,1]), Transformation([2,2,3])]));
 
-m := MulTabEmbeddings(mtSing3, mtT4);
-m := List(Classify(m, Set, \=), x->x[1]);
-
-hom:=m[1];
-
+m := MulTabEmbeddings(mtSubT3, mtT4);
+cls := l -> List(Classify(l, Set, \=), x->x[1]);
+m := cls(m);
 
 phom := function(hom, mtsub, mt)
   local i, partialhom;
@@ -22,5 +20,5 @@ phom := function(hom, mtsub, mt)
   return partialhom;
 end;
 
-r := List(m, x->EmbeddingsDispatcher(Rows(mtT3), Rows(mtT4), phom(x,mtSing3,mtT3), false));
+r := List(m, x->EmbeddingsDispatcher(Rows(mtT3), Rows(mtT4), phom(x,mtSubT3,mtT3), false));
 
