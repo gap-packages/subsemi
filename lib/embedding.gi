@@ -136,7 +136,7 @@ end;
 # onlyfirst: Do we stop after first embedding found?
 # This dispatcher checks whether we have an embedding or isomorphism.
 EmbeddingsDispatcher := function(A,B,partialhom,onlyfirst)
-  local f, Aprofs, Bprofs,
+  local f, Aprofs, Bprofs, candidates,
   Aprofsset,Bprofsset;
   if Size(A) > Size(B) then #no way to map the bigger onto the smaller
     return [];
@@ -158,9 +158,13 @@ EmbeddingsDispatcher := function(A,B,partialhom,onlyfirst)
                     x-> Size(Positions(Aprofs,x))<=Size(Positions(Bprofs,x))))
        then return []; fi;
   fi;
+  candidates := CandidateLookup(Aprofs, Bprofs);
+  if not IsEmpty(partialhom) then
+    candidates := RestrictCandidates(partialhom, candidates);
+  fi;
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
   return MultiplicationTableEmbeddingSearch(A,B,
-                                            CandidateLookup(Aprofs, Bprofs),
+                                            candidates,
                                             onlyfirst);
 end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher");

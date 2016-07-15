@@ -11,8 +11,16 @@ m := MulTabEmbeddings(mtSing3, mtT4);
 m := List(Classify(m, Set, \=), x->x[1]);
 
 hom:=m[1];
-partialhom := [];
 
-for i in [1..Size(mtSing3)] do
-  partialhom[Position(Elts(mtT3), Elts(mtSing3)[i])] := hom[i];
-od;
+
+phom := function(hom, mtsub, mt)
+  local i, partialhom;
+  partialhom := [];  
+  for i in [1..Size(mtsub)] do
+    partialhom[Position(Elts(mt), Elts(mtsub)[i])] := hom[i];
+  od;
+  return partialhom;
+end;
+
+r := List(m, x->EmbeddingsDispatcher(Rows(mtT3), Rows(mtT4), phom(x,mtSing3,mtT3), false));
+
