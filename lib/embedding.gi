@@ -135,7 +135,7 @@ end;
 # A,B: matrices representing multiplication tables
 # onlyfirst: Do we stop after first embedding found?
 # This dispatcher checks whether we have an embedding or isomorphism.
-EmbeddingsDispatcher := function(A,B,onlyfirst)
+EmbeddingsDispatcher := function(A,B,partialhom,onlyfirst)
   local f, Aprofs, Bprofs,
   Aprofsset,Bprofsset;
   if Size(A) > Size(B) then #no way to map the bigger onto the smaller
@@ -166,13 +166,13 @@ end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher");
 
 InstallGlobalFunction(MulTabEmbeddings,
-function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),false);end);
+function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),[],false);end);
 
 #returns an empty list or mappings of an embedding in a list
 InstallGlobalFunction(MulTabEmbedding,
 function(mtA,mtB)
   local result;
-  result := EmbeddingsDispatcher(Rows(mtA),Rows(mtB),true);
+  result := EmbeddingsDispatcher(Rows(mtA),Rows(mtB),[],true);
   if IsEmpty(result) then
     return result;
   else
@@ -186,7 +186,7 @@ end);
 InstallGlobalFunction(IsomorphismMulTabs,
 function(mtA,mtB)
 local l;
-  l := EmbeddingsDispatcher(Rows(mtA),Rows(mtB),true);
+  l := EmbeddingsDispatcher(Rows(mtA),Rows(mtB),[],true);
   if IsEmpty(l) then
     return fail;
   else
