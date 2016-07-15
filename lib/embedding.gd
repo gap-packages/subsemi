@@ -9,6 +9,7 @@
 
 DeclareGlobalFunction("MulTabEmbedding");
 DeclareGlobalFunction("MulTabEmbeddings");
+DeclareGlobalFunction("MulTabEmbeddingsByPartialHoms");
 
 DeclareGlobalFunction("IsomorphismProfiles");
 DeclareGlobalFunction("EmbeddingProfiles");

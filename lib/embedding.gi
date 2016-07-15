@@ -172,6 +172,29 @@ MakeReadOnlyGlobal("EmbeddingsDispatcher");
 InstallGlobalFunction(MulTabEmbeddings,
 function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),[],false);end);
 
+InstallGlobalFunction(MulTabEmbeddingsByPartialHoms,
+function(mtSubA, mtA,mtB)
+local m, cls, phom;  
+  m := MulTabEmbeddings(mtSubA, mtB);
+  cls := l -> List(Classify(l, Set, \=), x->x[1]);
+  m := cls(m);
+  
+  phom := function(hom)
+    local i, partialhom;
+    partialhom := [];  
+    for i in [1..Size(mtSubA)] do
+      partialhom[Position(Elts(mtA), Elts(mtSubA)[i])] := hom[i];
+    od;
+    return partialhom;
+  end;
+  return cls(Concatenation(List(m,
+                                x->EmbeddingsDispatcher(Rows(mtA),
+                                                        Rows(mtB),
+                                                        phom(x),
+                                                        false))));
+end);
+
+
 #returns an empty list or mappings of an embedding in a list
 InstallGlobalFunction(MulTabEmbedding,
 function(mtA,mtB)
