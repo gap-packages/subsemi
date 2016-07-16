@@ -17,10 +17,10 @@
 # candidates - lookup array, element of A -> set of elements of B
 #              the possible choices for an image of an element in A
 # onlyfirst: shall we stop after the first solution is found?
-MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
-  local hom, # the homomorphism from A to B in a list: i->hom[i]
-        N, # the number of elements of A, the source size
-        PartitionedBackTrack, # the embedded recursive backtrack function
+# hom - partial solution the homomorphism from A to B in a list: i->hom[i]
+# N - the maximal size of the solutions we want
+MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst, hom, N)
+  local PartitionedBackTrack, # the embedded recursive backtrack function
         cod, # keeping track of what elements are in hom (the codomain of hom)
         solutions; # cumulative collection of solutions
   #-----------------------------------------------------------------------------
@@ -55,8 +55,7 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst)
     od;
   end;
   #-----------------------------------------------------------------------------
-  N := Size(A);
-  hom := []; solutions := []; cod := BlistList([1..Size(B)], []);
+  solutions := []; cod := BlistList([1..Size(B)], []);
   PartitionedBackTrack();
   return solutions;
 end;
@@ -165,7 +164,9 @@ EmbeddingsDispatcher := function(A,B,partialhom,onlyfirst)
   Info(SubSemiInfoClass,2," Embeddings seem possible.");
   return MultiplicationTableEmbeddingSearch(A,B,
                                             candidates,
-                                            onlyfirst);
+                                            onlyfirst,
+                                            [],
+                                            Size(A));
 end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher");
 
@@ -174,14 +175,14 @@ function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),[],false);end)
 
 InstallGlobalFunction(MulTabEmbeddingsByPartialHoms,
 function(mtSubA, mtA,mtB)
-local m, cls, phom;  
+local m, cls, phom;
   m := MulTabEmbeddings(mtSubA, mtB);
   cls := l -> List(Classify(l, Set, \=), x->x[1]);
   m := cls(m);
-  
+
   phom := function(hom)
     local i, partialhom;
-    partialhom := [];  
+    partialhom := [];
     for i in [1..Size(mtSubA)] do
       partialhom[Position(Elts(mtA), Elts(mtSubA)[i])] := hom[i];
     od;
