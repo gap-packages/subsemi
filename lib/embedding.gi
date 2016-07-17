@@ -55,7 +55,8 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst, hom,
     od;
   end;
   #-----------------------------------------------------------------------------
-  solutions := []; cod := BlistList([1..Size(B)], []);
+  solutions := [];
+  cod := BlistList([1..Size(B)], hom);
   PartitionedBackTrack();
   return solutions;
 end;
