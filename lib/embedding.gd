@@ -10,6 +10,7 @@
 DeclareGlobalFunction("MulTabEmbedding");
 DeclareGlobalFunction("MulTabEmbeddings");
 DeclareGlobalFunction("MulTabEmbeddingsByPartialHoms");
+DeclareGlobalFunction("MulTabEmbeddingsUpToConjugation");
 
 DeclareGlobalFunction("IsomorphismProfiles");
 DeclareGlobalFunction("EmbeddingProfiles");
