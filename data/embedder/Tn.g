@@ -1,3 +1,4 @@
+# Dependence: SubSemi v0.81
 Display("Number of embeddings of full transformation semigroups:");
 
 for i in [1,2,3,4,5] do

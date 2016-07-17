@@ -1,3 +1,5 @@
+0.81
+	Added MulTabEmbeddingsUpToConjugation and MulTabEmbeddingsUpToConjugation.
 0.80
 	Fixing GrpTag, not to fail when SmallGroupId is not available.
 0.79
