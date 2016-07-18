@@ -215,7 +215,9 @@ OnList := function(l,g) return List(l, x->x^g);end;
 MakeReadOnlyGlobal("OnList");
 #conjugacy class representative
 PosIntListConjRep := function(l,G) return Minimum(Set(G, x->OnList(l,x)));end;
-MakeReadOnlyGlobal("PosIntListConjRep"); #TODO can be improved a lot more
+# the following helps very little
+#PosIntListConjRep := function(l,Stab) return Concatenation(l{[1..Length(l)-1]}, [Minimum(Set(Stab, g->l[Length(l)]^g))]);end;
+MakeReadOnlyGlobal("PosIntListConjRep");
 
 InstallGlobalFunction(MulTabEmbeddingsUpToConjugation,
 function(mtS, mtT)
