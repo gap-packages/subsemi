@@ -226,23 +226,26 @@ local i, # number of mappings in a partial solution
       extended, # extended partial solutions
       newq, # the new queue
       p,q,  # (partial solution, stabilizer) pairs
+      search, # just a curried function for simplifying code
       sols,
       fixed; # psols that have trivial stabilizers
+  search := function(psol, limit)
+    return MultiplicationTableEmbeddingSearch(
+              Rows(mtS), Rows(mtT),
+              CandidateLookup(EmbeddingProfiles(Rows(mtS)),
+                              EmbeddingProfiles(Rows(mtT))),
+              false,
+              psol,
+              limit);
+  end;
   queue := [ rec(psol:=[], stab:=SymmetryGroup(mtT))];
   fixed := [];
   for i in [1..Size(mtS)] do
     Info(SubSemiInfoClass,2,"size:",i,", ",Size(queue)," waiting");
     newq := [];
     for p in queue do
-      extended := MultiplicationTableEmbeddingSearch(
-                          Rows(mtS),
-                          Rows(mtT),
-                          CandidateLookup(EmbeddingProfiles(Rows(mtS)),
-                                  EmbeddingProfiles(Rows(mtT))),
-                          false,
-                          p.psol,
-                          i);
-      extended := Set(extended, x-> PosIntListConjRep(x,p.stab));
+      extended := Set(search(p.psol, i),
+                      x-> PosIntListConjRep(x,p.stab));
       if Size(p.stab) = 1 then
         Append(fixed, extended);
       else
@@ -253,16 +256,9 @@ local i, # number of mappings in a partial solution
     od;
     queue := newq;
   od;
-  sols := Concatenation(List(fixed, x-> MultiplicationTableEmbeddingSearch(
-                                                                            Rows(mtS),
-                                                                            Rows(mtT),
-                                                                            CandidateLookup(EmbeddingProfiles(Rows(mtS)),
-                                                                                            EmbeddingProfiles(Rows(mtT))),
-                                                                            false,
-                                                                            x,
-                                                                            Size(mtS))));
+  sols := Concatenation(List(fixed, x-> search(x,Size(mtS))));
   Append(sols, List(newq, x->x.psol)); #forgetting stabilizers
-  return List(Classify(sols, 
+  return List(Classify(sols,
                  x->PosIntSetConjClassRep(Set(x),mtT), #conj rep of image as set
                  \=),
               x->Representative(x)); #taking representatives
