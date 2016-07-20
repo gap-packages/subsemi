@@ -225,8 +225,11 @@ local i, # number of mappings in a partial solution
       queue, # elements waiting to be processed
       extended, # extended partial solutions
       newq, # the new queue
-      p,q;  # (partial solution, stabilizer) pairs
+      p,q,  # (partial solution, stabilizer) pairs
+      sols,
+      fixed; # psols that have trivial stabilizers
   queue := [ rec(psol:=[], stab:=SymmetryGroup(mtT))];
+  fixed := [];
   for i in [1..Size(mtS)] do
     Info(SubSemiInfoClass,2,"size:",i,", ",Size(queue)," waiting");
     newq := [];
@@ -240,13 +243,26 @@ local i, # number of mappings in a partial solution
                           p.psol,
                           i);
       extended := Set(extended, x-> PosIntListConjRep(x,p.stab));
-      for q in extended do
-        Add(newq, rec(psol:=q, stab:=Stabilizer(p.stab,q,OnList)));
-      od;
+      if Size(p.stab) = 1 then
+        Append(fixed, extended);
+      else
+        for q in extended do
+          Add(newq, rec(psol:=q, stab:=Stabilizer(p.stab,q,OnList)));
+        od;
+      fi;
     od;
     queue := newq;
   od;
-  return List(Classify(List(newq, x->x.psol), #forgetting stabilizers
+  sols := Concatenation(List(fixed, x-> MultiplicationTableEmbeddingSearch(
+                                                                            Rows(mtS),
+                                                                            Rows(mtT),
+                                                                            CandidateLookup(EmbeddingProfiles(Rows(mtS)),
+                                                                                            EmbeddingProfiles(Rows(mtT))),
+                                                                            false,
+                                                                            x,
+                                                                            Size(mtS))));
+  Append(sols, List(newq, x->x.psol)); #forgetting stabilizers
+  return List(Classify(sols, 
                  x->PosIntSetConjClassRep(Set(x),mtT), #conj rep of image as set
                  \=),
               x->Representative(x)); #taking representatives
