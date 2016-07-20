@@ -1,3 +1,5 @@
+0.82
+	Significant speed up (2x for T4->T5) for MulTabEmbeddingsUpToConjugation.
 0.81
 	Added MulTabEmbeddingsUpToConjugation and MulTabEmbeddingsUpToConjugation.
 0.80
