@@ -225,7 +225,7 @@ local i, # number of mappings in a partial solution
       newq, # the new queue
       p,q,  # (partial solution, stabilizer) pairs
       search, # just a curried function for simplifying code
-      sols,
+      sols, # list of solutions (not up to conjugation)
       fixed; # psols that have trivial stabilizers
   search := function(psol, limit)
     return MultiplicationTableEmbeddingSearch(
