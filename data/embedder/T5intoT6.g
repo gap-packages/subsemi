@@ -1,3 +1,6 @@
+T5 := FullTransformationSemigroup(5);
+T6 := FullTransformationSemigroup(6);
+S6 := SymmetricGroup(IsPermGroup,6);
 mtT5 := MulTab(T5);
 Display(FormattedMemoryString(MemoryUsage(mtT5)));
 mtT6 := MulTab(T6);
