@@ -19,7 +19,7 @@
 # onlyfirst: shall we stop after the first solution is found?
 # hom - partial solution the homomorphism from A to B in a list: i->hom[i]
 # N - the maximal size of the solutions we want
-MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst, hom, N)
+MultiplicationTableEmbeddingSearch := function(A,B,candidates,onlyfirst,hom,N)
   local PartitionedBackTrack, # the embedded recursive backtrack function
         cod, # keeping track of what elements are in hom (the codomain of hom)
         solutions; # cumulative collection of solutions
@@ -233,13 +233,15 @@ EmbeddingSearchFunc := function(mtS, mtT)
   end;
 end;
 
+# searchfunc - an instance of EmbeddingSearchFunc
+# G - the symmetry group of the target semigroup
 PartialEmbeddingsUpToOrderedConjugacy := function(searchfunc,G)
 local i, # number of mappings in a partial solution
       queue, # elements waiting to be processed
       extended, # extended partial solutions
       newq, # the new queue
       p,q,  # (partial solution, stabilizer) pairs
-      fixed; # psols that have trivial stabilizers
+      fixed; # psols that have reached trivial stabilizers
   queue := [ rec(psol:=[], stab:=G)];
   fixed := [];
   for i in PositiveIntegers do
@@ -250,8 +252,7 @@ local i, # number of mappings in a partial solution
       if extended = fail then # we went over the size of source
         return Concatenation(fixed, List(queue, x->x.psol));
       fi;
-      extended := Set(extended,
-                      x-> PosIntListConjRep(x,p.stab));
+      extended := Set(extended, x-> PosIntListConjRep(x,p.stab));
       if Size(p.stab) = 1 then
         Append(fixed, extended);
       else
