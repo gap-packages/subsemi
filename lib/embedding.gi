@@ -217,32 +217,42 @@ MakeReadOnlyGlobal("OnList");
 PosIntListConjRep := function(l,G) return Minimum(Set(G, x->OnList(l,x)));end;
 MakeReadOnlyGlobal("PosIntListConjRep");
 
-InstallGlobalFunction(MulTabEmbeddingsUpToConjugation,
-function(mtS, mtT)
+EmbeddingSearchFunc := function(mtS, mtT)
+  return function(psol, limit)
+    if limit > Size(mtS) then
+      return fail;
+    else
+      return MultiplicationTableEmbeddingSearch(
+               Rows(mtS), Rows(mtT),
+               CandidateLookup(EmbeddingProfiles(Rows(mtS)),
+                               EmbeddingProfiles(Rows(mtT))),
+               false,
+               psol,
+               limit);
+    fi;
+  end;  
+end;
+
+PartialEmbeddingsUpToOrderedConjugacy := function(searchfunc,G)
 local i, # number of mappings in a partial solution
       queue, # elements waiting to be processed
       extended, # extended partial solutions
       newq, # the new queue
       p,q,  # (partial solution, stabilizer) pairs
-      search, # just a curried function for simplifying code
-      sols, # list of solutions (not up to conjugation)
       fixed; # psols that have trivial stabilizers
-  search := function(psol, limit)
-    return MultiplicationTableEmbeddingSearch(
-              Rows(mtS), Rows(mtT),
-              CandidateLookup(EmbeddingProfiles(Rows(mtS)),
-                              EmbeddingProfiles(Rows(mtT))),
-              false,
-              psol,
-              limit);
-  end;
-  queue := [ rec(psol:=[], stab:=SymmetryGroup(mtT))];
+  queue := [ rec(psol:=[], stab:=G)];
   fixed := [];
-  for i in [1..Size(mtS)] do
+  i := 1;
+  while true do
     Info(SubSemiInfoClass,2,"size:",i,", ",Size(queue)," waiting");
     newq := [];
     for p in queue do
-      extended := Set(search(p.psol, i),
+      extended := searchfunc(p.psol, i);
+      if extended = fail then # we went over the size of source
+        return Concatenation(fixed, List(queue, x->x.psol));
+      fi;
+
+      extended := Set(extended,
                       x-> PosIntListConjRep(x,p.stab));
       if Size(p.stab) = 1 then
         Append(fixed, extended);
@@ -252,15 +262,25 @@ local i, # number of mappings in a partial solution
         od;
       fi;
     od;
+    i := i + 1; 
     queue := newq;
   od;
-  sols := Concatenation(List(fixed, x-> search(x,Size(mtS))));
-  Append(sols, List(newq, x->x.psol)); #forgetting stabilizers
-  return List(Classify(sols,
-                 x->PosIntSetConjClassRep(Set(x),mtT), #conj rep of image as set
-                 \=),
-              x->Representative(x)); #taking representatives
-end);
+  return fail;
+end;
+
+InstallGlobalFunction(MulTabEmbeddingsUpToConjugation,
+function(mtS, mtT)
+  local searchfunc, # just a curried function for simplifying code
+        psols; # list of partial solutions
+  searchfunc := EmbeddingSearchFunc(mtS, mtT); 
+  
+  psols := Concatenation(List(, x-> searchfunc(x,Size(mtS))));
+                      Append(sols, ); #forgetting stabilizers
+                      return List(Classify(sols,
+                                           x->PosIntSetConjClassRep(Set(x),mtT), #conj rep of image as set
+                                           \=),
+                                  x->Representative(x)); #taking representatives
+);
 
 ### ISOMORPHISM ################################################################
 # returns a permutation that maps elements of mtA to mtB
