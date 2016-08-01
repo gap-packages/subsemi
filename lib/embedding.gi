@@ -28,7 +28,7 @@ MultiplicationTableEmbeddingSearch := function(A, B, candidates, onlyfirst, hom,
     local newelt, dom, f;
     if Size(hom)=N then  # when a solution is found, store it
       Add(solutions, ShallowCopy(hom));
-      Info(SubSemiInfoClass,2,Size(solutions)," ",solutions[Size(solutions)]);
+      Info(SubSemiInfoClass,3,Size(solutions)," ",solutions[Size(solutions)]);
       return; #cut the search
     fi;
     for newelt in candidates[Size(hom)+1] do
