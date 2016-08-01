@@ -230,7 +230,7 @@ EmbeddingSearchFunc := function(mtS, mtT)
                psol,
                limit);
     fi;
-  end;  
+  end;
 end;
 
 PartialEmbeddingsUpToOrderedConjugacy := function(searchfunc,G)
@@ -242,8 +242,7 @@ local i, # number of mappings in a partial solution
       fixed; # psols that have trivial stabilizers
   queue := [ rec(psol:=[], stab:=G)];
   fixed := [];
-  i := 1;
-  while true do
+  for i in PositiveIntegers do
     Info(SubSemiInfoClass,2,"size:",i,", ",Size(queue)," waiting");
     newq := [];
     for p in queue do
@@ -251,7 +250,6 @@ local i, # number of mappings in a partial solution
       if extended = fail then # we went over the size of source
         return Concatenation(fixed, List(queue, x->x.psol));
       fi;
-
       extended := Set(extended,
                       x-> PosIntListConjRep(x,p.stab));
       if Size(p.stab) = 1 then
@@ -262,25 +260,26 @@ local i, # number of mappings in a partial solution
         od;
       fi;
     od;
-    i := i + 1; 
     queue := newq;
+    if IsEmpty(queue) then return fixed; fi;
   od;
-  return fail;
 end;
 
 InstallGlobalFunction(MulTabEmbeddingsUpToConjugation,
 function(mtS, mtT)
   local searchfunc, # just a curried function for simplifying code
-        psols; # list of partial solutions
-  searchfunc := EmbeddingSearchFunc(mtS, mtT); 
-  
-  psols := Concatenation(List(, x-> searchfunc(x,Size(mtS))));
-                      Append(sols, ); #forgetting stabilizers
-                      return List(Classify(sols,
-                                           x->PosIntSetConjClassRep(Set(x),mtT), #conj rep of image as set
-                                           \=),
-                                  x->Representative(x)); #taking representatives
-);
+        psols, # list of partial solutions
+        sols; # solutions
+  searchfunc := EmbeddingSearchFunc(mtS, mtT);
+  psols := PartialEmbeddingsUpToOrderedConjugacy(searchfunc,SymmetryGroup(mtT));
+  sols := Concatenation(List(psols, x->searchfunc(x, Size(mtS))));
+  return List(
+           Classify(
+              sols,
+              x->PosIntSetConjClassRep(Set(x),mtT), #conj rep of image as set
+              \=),
+           x->Representative(x)); #taking representatives
+end);
 
 ### ISOMORPHISM ################################################################
 # returns a permutation that maps elements of mtA to mtB
