@@ -5,13 +5,17 @@ mtT5 := MulTab(T5);
 Display(FormattedMemoryString(MemoryUsage(mtT5)));
 mtT6 := MulTab(T6,S6);
 Display(FormattedMemoryString(MemoryUsage(mtT6)));
-SaveWorkSpace("T5intoT6multabs.ws");
+SaveWorkspace("T5intoT6multabs.ws");
 
 ef := EmbeddingSearchFunc(mtT5,mtT6);
 
-result := MulTabEmbeddingsUpToConjugation(mtT5,mtT6);
+#result := MulTabEmbeddingsUpToConjugation(mtT5,mtT6);
+SetInfoLevel(SubSemiInfoClass,2);
+psols := PartialEmbeddingsUpToOrderedConjugacy(ef, SymmetryGroup(mtT6));
 
-Display(Size(result));
+Display(Size(psols));
+Print(psols);
+
 mtT6 := 0;
 mtT5 := 0;
-SaveWorkSpace("T5intoT6result.ws");
+SaveWorkspace("T5intoT6result.ws");
