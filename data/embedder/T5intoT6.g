@@ -5,6 +5,9 @@ mtT5 := MulTab(T5);
 Display(FormattedMemoryString(MemoryUsage(mtT5)));
 mtT6 := MulTab(T6,S6);
 Display(FormattedMemoryString(MemoryUsage(mtT6)));
+SaveWorkSpace("T5intoT6multabs.ws");
+
+ef := EmbeddingSearchFunc(mtT5,mtT6);
 
 result := MulTabEmbeddingsUpToConjugation(mtT5,mtT6);
 
