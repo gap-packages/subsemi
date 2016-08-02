@@ -18,7 +18,7 @@
 #              the possible choices for an image of an element in A
 # onlyfirst: shall we stop after the first solution is found?
 # hom - partial solution the homomorphism from A to B in a list: i->hom[i]
-# N - the maximal size of the solutions we want
+# N - the maximal size of the solutions we want TODO what if N < Size(hom)?
 MultiplicationTableEmbeddingSearch := function(A,B,candidates,onlyfirst,hom,N)
   local PartitionedBackTrack, # the embedded recursive backtrack function
         cod, # keeping track of what elements are in hom (the codomain of hom)
@@ -103,6 +103,9 @@ CandidateLookup := function(Aprofs, Bprofs)
 end;
 MakeReadOnlyGlobal("CandidateLookup");
 
+# given a partial embedding we restrict the candidate lookup map to that:
+# if the image is known, then it is the only fixed choice; we also need to
+# remove fixed choices from all other sets of candidates
 # partialhom - a partial homomorphism from A to B (a homomorphism of a sub of A)
 # candidates - a lookup table produced by CandidateLookup
 RestrictCandidates := function(partialhom, candidates)
@@ -150,13 +153,12 @@ EmbeddingsDispatcher := function(A,B,partialhom,onlyfirst)
   #checking for the right set of target profile types
   Aprofsset := Set(Aprofs);
   Bprofsset := Set(Bprofs);
-  if Size(Aprofs) = Size(Bprofs) then
-    if not IsSubset(Set(Bprofs), Set(Aprofs)) then return []; fi;
-  else
-    if not (IsSubset(Bprofsset, Aprofsset)
-            and ForAll(Aprofs,
-                    x-> Size(Positions(Aprofs,x))<=Size(Positions(Bprofs,x))))
-       then return []; fi;
+  if not (IsSubset(Bprofsset, Aprofsset)
+          and
+          ForAll(Aprofs,
+                 x -> Size(Positions(Aprofs,x)) <= Size(Positions(Bprofs,x))))
+  then
+    return [];
   fi;
   candidates := CandidateLookup(Aprofs, Bprofs);
   if not IsEmpty(partialhom) then
