@@ -173,17 +173,20 @@ EmbeddingsDispatcher := function(A,B,partialhom,onlyfirst)
 end;
 MakeReadOnlyGlobal("EmbeddingsDispatcher");
 
+# all embeddings of mtA into mtB
 InstallGlobalFunction(MulTabEmbeddings,
-function(mtA,mtB) return EmbeddingsDispatcher(Rows(mtA),Rows(mtB),[],false);end);
+function(mtA,mtB)
+  return EmbeddingsDispatcher(Rows(mtA), Rows(mtB), [], false);
+end);
 
 InstallGlobalFunction(MulTabEmbeddingsByPartialHoms,
 function(mtSubA, mtA,mtB)
 local m, cls, phom;
+  # embeddings of SubA into B
   m := MulTabEmbeddings(mtSubA, mtB);
   cls := l -> List(Classify(l, Set, \=), x->x[1]);
-  m := cls(m);
-
-  phom := function(hom)
+  m := cls(m); # classified as sets (modding out by automorphisms)
+  phom := function(hom) # converting hom:SubA->B into phom:A->B
     local i, partialhom;
     partialhom := [];
     for i in [1..Size(mtSubA)] do
@@ -197,7 +200,6 @@ local m, cls, phom;
                                                         phom(x),
                                                         false))));
 end);
-
 
 #returns an empty list or mappings of an embedding in a list
 InstallGlobalFunction(MulTabEmbedding,
