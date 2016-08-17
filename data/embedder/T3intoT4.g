@@ -14,8 +14,9 @@ imgs := [];
 # embeddings modulo the automorphisms of S in Sub(T3)
 # and up to conjugacy in T4
 for i in [1..Length(T3subs)] do
-  imgs[i] := Set(MulTabEmbeddings(MulTab(T3subs[i]), mtT4),
-                 x->BlistConjClassRep(BlistList(Indices(mtT4),x),mtT4));
+#  imgs[i] := Set(MulTabEmbeddings(MulTab(T3subs[i]), mtT4),
+#                 x->BlistConjClassRep(BlistList(Indices(mtT4),x),mtT4));
+  imgs[i] := MulTabEmbeddingsUpToConjugation(MulTab(T3subs[i]), mtT4);
   Info(SubSemiInfoClass, 1,"sgp of size ",String(Size(T3subs[i])),
        " -> ", Size(imgs[i]), " copies");
 od;
