@@ -56,6 +56,7 @@ inc := function(mt, label, range)
     fi;
     Print("cleaning...\c");
     for j in [i+2..Size(mt)] do
+      Print(j," \c");
       prevfile := tmpfile(j);
       if IsExistingFile(prevfile) then
         cleaner(prevfile, mt);
