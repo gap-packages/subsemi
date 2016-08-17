@@ -8,8 +8,19 @@ mt := MulTab(FullTransformationSemigroup(3),SymmetricGroup(IsPermGroup,3));
 
 label := "T3_";
 
+cleaner := function(subsfile,mt)
+  local set;
+  set := [];
+  TextFileProcessor(subsfile,
+                   function(x) 
+                     AddSet(set, BlistConjClassRep(AsBlist(DecodeBitString(x)),mt)); 
+                     return true; 
+                   end);
+  SaveIndicatorFunctions(set,subsfile);
+end;
+
 inc := function(mt, label, range)
-  local finalfile, tmpfile, comparef, namef, storef,queuef,i,st,prevfile,subs;
+  local finalfile, tmpfile, comparef, namef, storef,queuef,i,st,prevfile,subs, j;
   
   finalfile := x->Concatenation(label,String(x),SUBS@SubSemi);
   tmpfile := x -> Concatenation("tmp",label, String(x));
@@ -43,6 +54,13 @@ inc := function(mt, label, range)
                                                           BlistStorage(2), [  ] );
              end);
     fi;
+    Print("cleaning...\c");
+    for j in [i+2..Size(mt)] do
+      prevfile := tmpfile(j);
+      if IsExistingFile(prevfile) then
+        cleaner(prevfile, mt);
+      fi;
+    od;
     Print("\n");
   od;
 end;
