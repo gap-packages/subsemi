@@ -8,6 +8,7 @@ mt := MulTab(FullTransformationSemigroup(3),SymmetricGroup(IsPermGroup,3));
 
 label := "T3_";
 
+#slow but ok with memory
 cleaner := function(subsfile,mt)
   local set;
   set := [];
@@ -18,6 +19,14 @@ cleaner := function(subsfile,mt)
                    end);
   SaveIndicatorFunctions(set,subsfile);
 end;
+
+#fast, but slurps thw whole file in
+fastcleaner := function(subsfile,mt)
+  SaveIndicatorFunctions(Set(LoadIndicatorFunctions(subsfile),
+                             x->BlistConjClassRep(x,mt)),
+                         subsfile);
+end;
+
 
 inc := function(mt, label, range)
   local finalfile, tmpfile, comparef, namef, storef,queuef,i,st,prevfile,subs, j;
@@ -61,7 +70,7 @@ inc := function(mt, label, range)
       prevfile := tmpfile(j);
       if IsExistingFile(prevfile) then
         Exec(Concatenation("uniq ",prevfile, " > tmp; mv tmp ", prevfile));
-        cleaner(prevfile, mt);
+        fastcleaner(prevfile, mt);
       fi;
     od;
     Print("\n");
