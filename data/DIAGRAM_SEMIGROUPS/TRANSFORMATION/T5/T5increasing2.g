@@ -4,9 +4,9 @@ SubSemiOptions.CHECKPOINTFREQ:=10000;
 SetInfoLevel(SubSemiInfoClass,0);
 
 
-mt := MulTab(FullTransformationSemigroup(5),SymmetricGroup(IsPermGroup,5));
+mt := MulTab(FullTransformationSemigroup(3),SymmetricGroup(IsPermGroup,3));
 
-label := "T5_";
+label := "T3_";
 
 finalfile := x->Concatenation(label,String(x),SUBS@SubSemi);
 tmpfile := x -> Concatenation("tmp",label, String(x));
@@ -20,11 +20,8 @@ queuef := n -> PriorityQueueLossless(comparef,
 
 SaveIndicatorFunctions([EmptySet(mt)], tmpfile(0));
 st := queuef(0);
-SaveIndicatorFunctions(SubSgpsByMinExtensionsParametrized( mt, EmptySet(mt),
-        DistinctGenerators( FullSet( mt ), mt ), st,
-        BlistStorage(2), [  ] ), finalfile(0));
 
-for i in [1..Size(mt)] do
+for i in [0..Size(mt)] do
   Print(i);
   st := queuef(i);
   prevfile:= tmpfile(i);
