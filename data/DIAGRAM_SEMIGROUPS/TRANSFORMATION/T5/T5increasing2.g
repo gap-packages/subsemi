@@ -4,9 +4,9 @@ SubSemiOptions.CHECKPOINTFREQ:=10000;
 SetInfoLevel(SubSemiInfoClass,0);
 
 
-mt := MulTab(FullTransformationSemigroup(3),SymmetricGroup(IsPermGroup,3));
+mt := MulTab(FullTransformationSemigroup(5),SymmetricGroup(IsPermGroup,5));
 
-label := "T3_";
+label := "T5_";
 
 #slow but ok with memory
 cleaner := function(subsfile,mt)
