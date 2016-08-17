@@ -41,6 +41,7 @@ inc := function(mt, label, range)
     prevfile:= tmpfile(i);
     if IsExistingFile(prevfile) then
       Print(" reading from ",prevfile);
+      Exec(Concatenation("uniq ",prevfile, " > tmp; mv tmp ", prevfile));
       subs := LoadIndicatorFunctions(prevfile);
       Print(" ",Size(subs), " subs,");
       subs := Set(List(subs, x->BlistConjClassRep(x,mt)));
@@ -59,6 +60,7 @@ inc := function(mt, label, range)
       Print(j," \c");
       prevfile := tmpfile(j);
       if IsExistingFile(prevfile) then
+        Exec(Concatenation("uniq ",prevfile, " > tmp; mv tmp ", prevfile));
         cleaner(prevfile, mt);
       fi;
     od;
