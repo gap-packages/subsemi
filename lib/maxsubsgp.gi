@@ -1,4 +1,5 @@
-# delegates the calculation to MaximalSubsemigroups
+#EXPERIMENTAL
+# delegates the calculation to MaximalSubsemigroups in Semigroups
 # converts back and forth
 # returns conjugacy class representatives according to symmetries in mt
 InstallGlobalFunction(MaximalSubsemigroups@,
@@ -35,15 +36,21 @@ end);
 
 # using MaximalSubsemigroups enumerating all subsgps in order
 # of decreasing size
+# SubSgpsInDecreasingOrder(MulTab(T4,S4), 234, function(x)Print(Size(x), " of size ", SizeBlist(x[1]),"\n");end);
 InstallGlobalFunction(SubSgpsInDecreasingOrder,
-function(mt)
+function(mt, lowerbound, processor)
   local f, st, next, result;
   f := function(A,B) return SizeBlist(A) < SizeBlist(B); end;
-  st := PriorityQueue(f, x->false);
+  if lowerbound < 1 then
+    st := PriorityQueue(f, x->false);
+  else
+    st := PriorityQueue(f, x->SizeBlist(x) < lowerbound);
+  fi;
   Store(st, FullSet(mt));
   result := [];
   repeat
     next := NextOrderClassSubSgps(st,mt);
+    if not IsEmpty(next) then processor(next); fi;
     Append(result,next);
   until IsEmpty(next);
   return result;
