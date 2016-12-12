@@ -33,7 +33,7 @@ AllDivs := function(S,T)
   #partitions of T with size not smaller than size of S
   partitions := Filtered(PartitionsSet([1..Size(T)]), x->Size(x)>=Size(S));
   L := Concatenation(List(partitions,
-            part -> Concatenation(List(List(Combinations(part, Size(S))),
+            part -> Concatenation(List(Combinations(part, Size(S)),
                                        z->PermutationsList(z)))));
   Info(SubSemiInfoClass,1, Size(L), " possible relmorphs");
   return Filtered(L, x->IsRelMorph(x,S,T));
