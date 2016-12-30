@@ -1,0 +1,4 @@
+LINEAR_NOTATION:=true;
+Read("~/GAP/pkg/SGPDEC/examples/namedgroups.g");
+Read("~/GAP/pkg/SGPDEC/examples/namedsemigroups.g");
+SgpDecFiniteSetDisplayOn();
