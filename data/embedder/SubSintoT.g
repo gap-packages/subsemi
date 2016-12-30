@@ -4,9 +4,9 @@ SubsintoT := function(subs, mtT)
                     Size(MulTabEmbeddingsUpToConjugation(MulTab(S), mtT))]);  
 end;
 
-EmbeddingsCalculator := function(infile, outfile, mtS, mtT)
+EmbeddingsCalculator := function(infile, mtS, mtT)
   local outf, f;
-  outf := OutputTextFile(outfile, false);
+  outf := OutputTextFile(Concatenation(infile,".out"), false);
   f := function(s)
     local S, bl;
     bl := AsBlist(DecodeBitString(s));
