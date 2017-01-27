@@ -1,3 +1,5 @@
+0.83
+        PriorityQueueLossless added for storing dropped items on disk. It enables enumerating semigroups by size. Refactoring the embedding search function. Revised and added search scripts.
 0.82
 	Significant speed up (2x for T4->T5) for MulTabEmbeddingsUpToConjugation.
 0.81

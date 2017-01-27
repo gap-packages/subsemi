@@ -1,5 +1,5 @@
 ##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "0.82">
+##  <!ENTITY VERSION "0.83">
 ##  <!ENTITY COPYRIGHTYEARS "2013-2016">
 ##  <#/GAPDoc>
 
@@ -9,9 +9,9 @@ PackageName := "SubSemi",
 
 Subtitle := "Enumeration of subsemigroups",
 
-Version := "0.82",
+Version := "0.83",
 
-Date := "20/07/2016",
+Date := "27/01/2017",
 
 Persons := [
   rec(
@@ -55,8 +55,8 @@ ArchiveURL     := Concatenation("https://github.com/gap-packages/subsemi/",
                    "releases/download/v", ~.Version,
                    "/subsemi-", ~.Version),
                    ArchiveFormats := ".tar.gz .tar.bz2",
-SourceRepository := rec( 
-  Type := "git", 
+SourceRepository := rec(
+  Type := "git",
   URL := "https://github.com/gap-packages/subsemi"
 ),
 IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
