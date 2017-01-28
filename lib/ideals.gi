@@ -5,11 +5,11 @@
 ## Distributing subsemigroup enumeration along the ideal structure
 ## using the minimal extension method.
 ##
-## Copyright (C) 2013-2016  Attila Egri-Nagy
+## Copyright (C) 2013-2017  Attila Egri-Nagy
 ##
 
 # calculating subs of S/I, convert them to uppertorsos, then extend them into
-# subsemigroups, plus the subsemigroups of the ideal itself
+# subsemigroups, plus the subsemigroups of the ideal itself (empty upper torso)
 InstallOtherMethod(SubSgpsByIdeal,
         "for a semigroup  ideal and its conjugacy stabilizer group",
         [IsSemigroupIdeal,IsPermGroup],
@@ -18,10 +18,10 @@ function(I,G)
   mt := MulTab(Parent(I),G);
   return Concatenation(
            SubSgpsByUpperTorsos(I,G,UpperTorsos(I,G)),
-           SubsOfSubInAmbientSgp(IndicatorFunction(AsList(I),Elts(mt)),
-                                 mt));
+           SubsOfSubInAmbientSgp(IndicatorFunction(AsList(I),Elts(mt)),mt));
 end);
 
+# trivial conjugacy
 InstallOtherMethod(SubSgpsByIdeal,"for a semigroup ideal", [IsSemigroupIdeal],
 function(I) return SubSgpsByIdeal(I,Group(()));end);
 
@@ -70,7 +70,7 @@ local rfh,mtSmodI,SmodIsubs,preimgs,elts,sgps,mtS;
   #zero has more preimgs - put the empty list there instead
   elts := List(preimgs, function(x) if Size(x)> 1 then return [];
                                    else return x;fi;end);
-  # we simply concatenate, so the empty set disappears
+  # we simply concatenate 1-element list preimages, so [] disappears
   sgps := Set(SmodIsubs, x->Set(Concatenation(SetByIndicatorFunction(x,elts))));
   mtS := MulTab(Parent(I),G);
   return List(Filtered(sgps, y->not IsEmpty(y)),

@@ -4,7 +4,7 @@
 ##
 ## Enumerating subsemigroups by recursively extending with a generator.
 ##
-## Copyright (C) 2013-2016  Attila Egri-Nagy
+## Copyright (C) 2013-2017  Attila Egri-Nagy
 ##
 
 # depth-first search of nonempty subsemigroups
@@ -37,7 +37,7 @@ end);
 # purpose: to minimize the need for recoding the results
 InstallGlobalFunction(SubsOfSubInAmbientSgp,
 function(sgp,mt)
-  #sanity check to that sgp is really a subsgp
+  #sanity check that sgp is really a sub (it doesn't generate anything bigger)
   if (SizeBlist(sgp) <> SizeBlist(SgpInMulTab(sgp,mt))) then return fail; fi;
   return SubSgpsByMinExtensionsParametrized(
                  mt,

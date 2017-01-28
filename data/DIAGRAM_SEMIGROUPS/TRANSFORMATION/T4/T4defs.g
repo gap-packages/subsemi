@@ -21,6 +21,7 @@ mtK42 := MulTab(K42,S4);
 # FUNCTIONS for the calculations in enumeration.sh #############################
 
 #1
+# subsemigroups of T4 that contain non-trivial permutations
 P_T4 := function()
   local subs;
   #we need to filter out the identity as well, simple size check is enough
