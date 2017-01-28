@@ -1,6 +1,8 @@
 LoadPackage("subsemi");
 
-SEMIGROUPS_DefaultOptionsRec.hashlen:=rec(L:=257,M:=257, S:=257);
+# We need to limit hashtable sizes since we only deal with semigroups smaller
+# than or equal to size 256, but we have lots of them.
+SEMIGROUPS_DefaultOptionsRec.hashlen:=rec(L:=263,M:=263, S:=263);
 
 # VARIABLES for T4 and its subs
 S4 := SymmetricGroup(IsPermGroup,4);
@@ -9,7 +11,7 @@ K43 := SemigroupIdeal(T4, [Transformation([1,2,3,3])]);
 SetName(K43,"K43");
 K42 := SemigroupIdeal(K43,[Transformation([1,2,2,2])]);
 SetName(K42,"K42");
-K41 := SemigroupIdeal(K42,[Transformation([2,2,2,2])]);
+K41 := SemigroupIdeal(K42,[Transformation([1,1,1,1])]);
 SetName(K41,"K41");
 mtT4 := MulTab(T4,S4);
 mtK43 := MulTab(K43,S4);
