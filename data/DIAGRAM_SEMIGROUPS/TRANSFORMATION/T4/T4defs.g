@@ -36,7 +36,7 @@ end;
 #2
 K42Subs := function()
   local subs;
-  subs := SubSgpsByIdeals(K41,S4);
+  subs := SubSgpsByIdeal(K41,S4);
   SaveIndicatorFunctions(List(subs, x-> RecodeIndicatorFunction(x,mtK42,mtT4)),
           Concatenation("K42",SUBS@SubSemi));
 end;
