@@ -2,19 +2,17 @@
 ##
 ## SubSemi
 ##
-## For a semigroup, constructing a tag (string) containing numerical values
-## describing its structure.
+## For a semigroup, constructing a tag (string) containing labeled numerical
+## values describing its structure.
 ##
-## Copyright (C) 2015  Attila Egri-Nagy
+## Copyright (C) 2015-2017  Attila Egri-Nagy
 ##
 
-################################################################################
-### TAGGING ####################################################################
-################################################################################
-# numbers of fixed length padded with zeros in the front
-PaddedNumString := function(n,ndigits)
+# to get a fixed number of digits, padding with leading zeroes
+InstallGlobalFunction(PaddedNumString,
+function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
-end;
+end);
 
 # TODO remove the next two functions once it is in digraphs properly
 # doing transitive&reflexive reduction here until digraphs stabilizes
