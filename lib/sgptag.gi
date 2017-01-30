@@ -14,29 +14,35 @@ function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
 end);
 
-# TODO remove the next two functions once it is in digraphs properly
-# doing transitive&reflexive reduction here until digraphs stabilizes
+
+# TODO find implementations in other packages for the next 3 functions 
+# reflexive reduction
 ReflexiveReduction := function(rel)
   return List([1..Length(rel)],
               x -> Filtered(rel[x], y -> not x = y));
 end;
+MakeReadOnlyGlobal("ReflexiveReduction");
 
-# BROKEN!!
+# calculate transitive reduction of a reflexively reduced relation
 TransitiveReduction := function(rel)
-  local transclosure;
-  transclosure := function(x, rel)
-    return Union(Set(rel[x]), Set(rel[x], y->transclosure(y,rel)));
+  local tcf; #transitive closure function
+  tcf := function(x, rel)
+    return Union(Set(rel[x]),
+                 Union(List(rel[x], y->tcf(y,rel))));
   end;
   return List([1..Length(rel)],
-              x -> Difference(transclosure(x,rel),
-                              Union(Concatenation((Set(rel[x], y-> transclosure(y,rel)))))));
+              x -> Difference(rel[x],
+                              Union(Set(rel[x], y-> tcf(y,rel)))));
 end;
+MakeReadOnlyGlobal("TransitiveReduction");
 
 NrEdgesInHasseDiagramOfDClasses := function(sgp)
   return Sum(List(TransitiveReduction(
-                 ReflexiveReduction(PartialOrderOfDClasses(sgp))),
-                 Length));
+                    ReflexiveReduction(
+                      PartialOrderOfDClasses(sgp))),
+                  Length));
 end;
+MakeReadOnlyGlobal("NrEdgesInHasseDiagramOfDClasses");
 
 # semigroup -> string containing green info
 # L - number of L-classes
@@ -62,6 +68,7 @@ GreenTag := function (sgp,ndigits)
                          ndigits),
                  "_G",s);
 end;
+MakeReadOnlyGlobal("GreenTag");
 
 # tagging semigroup by size and Greens
 # sgp - semigroup
