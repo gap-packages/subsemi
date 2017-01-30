@@ -17,12 +17,19 @@ end);
 # TODO remove the next two functions once it is in digraphs properly
 # doing transitive&reflexive reduction here until digraphs stabilizes
 ReflexiveReduction := function(rel)
-  return List([1..Length(rel)], x -> Filtered(rel[x], y -> not x = y));
+  return List([1..Length(rel)],
+              x -> Filtered(rel[x], y -> not x = y));
 end;
 
-# TODO is this correct?
+# BROKEN!!
 TransitiveReduction := function(rel)
-  return List([1..Length(rel)], x -> Difference(rel[x], Union(rel{rel[x]})));
+  local transclosure;
+  transclosure := function(x, rel)
+    return Union(Set(rel[x]), Set(rel[x], y->transclosure(y,rel)));
+  end;
+  return List([1..Length(rel)],
+              x -> Difference(transclosure(x,rel),
+                              Union(Concatenation((Set(rel[x], y-> transclosure(y,rel)))))));
 end;
 
 NrEdgesInHasseDiagramOfDClasses := function(sgp)
