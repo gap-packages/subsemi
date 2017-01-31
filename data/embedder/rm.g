@@ -1,6 +1,6 @@
 # brute-forcing morphic relations
 
-# cross-multiplication of sets A and B using multiplication table S
+# cross-multiplication of sets A and B using multiplication table M
 SetProd := function(A,B,M)
   return Set(EnumeratorOfCartesianProduct([A,B]), p -> M[ p[1] ][ p[2] ]);
 end;
@@ -32,6 +32,8 @@ AllDivs := function(S,T)
   local partitions, L;
   #partitions of T with size not smaller than size of S
   partitions := Filtered(PartitionsSet([1..Size(T)]), x->Size(x)>=Size(S));
+  #for each such partitions, take combinations of its elements of size |S|
+  #and produce all permutations of these
   L := Concatenation(List(partitions,
             part -> Concatenation(List(Combinations(part, Size(S)),
                                        z->PermutationsList(z)))));
