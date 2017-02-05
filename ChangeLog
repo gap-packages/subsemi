@@ -1,3 +1,5 @@
+0.84
+	Logging utility functions moved from SgpDec. Bugfix in NrEdgesInHasseDiagramOfDClasses.
 0.83
         PriorityQueueLossless added for storing dropped items on disk. It enables enumerating semigroups by size. Refactoring the embedding search function. Revised and added search scripts.
 0.82
