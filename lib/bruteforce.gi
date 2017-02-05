@@ -4,7 +4,7 @@
 ##
 ## Brute-force subsemigroup search functions
 ##
-## Copyright (C) 2013-2015  Attila Egri-Nagy
+## Copyright (C) 2013-2017  Attila Egri-Nagy
 ##
 
 #the set of elements  is a semigroup if they don't generate new elements
@@ -43,8 +43,7 @@ local trans, ssgs, bitlists, bl, elms,i, nonsgs, duplicates,n;
     fi;
     if InfoLevel(SubSemiInfoClass)>0
        and (i mod SubSemiOptions.LOGFREQ) = 0 then
-      Print("#", Size(ssgs)," at ",
-            FormattedBigNumberString(i), "\n\c");
+      Print("#", Size(ssgs)," at ", BigNumberString(i), "\n\c");
     fi;
   od;
   if InfoLevel(SubSemiInfoClass)>0 then

@@ -80,8 +80,8 @@ function(mt,seed,generators, waiting, db, result)
   #-----------------------------------------------------------------------------
   log := function() #put some information on the screen
     secs := TimeInSeconds();
-    Print("#", FormattedBigNumberString(counter)," #",Size(result)," ",
-          FormattedMemoryString(MemoryUsage(result))," ");
+    Print("#", BigNumberString(counter)," #",Size(result)," ",
+          MemoryString(MemoryUsage(result))," ");
     Print(Size(waiting), " ");
     if Size(waiting) > 0 then
       peeked := Peek(waiting);
@@ -90,7 +90,7 @@ function(mt,seed,generators, waiting, db, result)
       fi;
     fi;
     if (secs-prev_secs) > 0 then # printing speed only if it measurable
-      Print(FormattedFloat(Float((Size(result)-prev_subs)/(secs-prev_secs))),
+      Print(Float(Float((Size(result)-prev_subs)/(secs-prev_secs))),
             "/s\c\n");
     else
       Print("\c\n");
@@ -109,7 +109,7 @@ function(mt,seed,generators, waiting, db, result)
     SaveWorkspace(Concatenation("checkpoint",
             String(IO_gettimeofday().tv_sec),".ws"));
     Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved in ",
-            FormattedTimeString(TimeInSeconds()-prev_secs)));
+            TimeString(TimeInSeconds()-prev_secs)));
     prev_secs:=TimeInSeconds();#resetting the timer not to mess up speed gauge
   end;
   #-----------------------------------------------------------------------------

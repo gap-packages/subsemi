@@ -4,7 +4,7 @@
 ##
 ## Processing textfiles line by line.
 ##
-## Copyright (C) 2015  Attila Egri-Nagy
+## Copyright (C) 2015-2017  Attila Egri-Nagy
 ##
 
 #generic function for processing a textfile line by line
@@ -25,7 +25,7 @@ function(infile, processor)
     fi;
     if InfoLevel(SubSemiInfoClass)>0 ###########################################
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter)," of ",infile);
+      Info(SubSemiInfoClass,1,BigNumberString(counter)," of ",infile);
     fi; ########################################################################
     s := ReadLine(itf);
   until s=fail;

@@ -4,7 +4,7 @@
 ##
 ## Independent sets in groups and semigroups.
 ##
-## Copyright (C) 2015-2016  Attila Egri-Nagy
+## Copyright (C) 2015-2017  Attila Egri-Nagy
 ##
 
 #global checkpoint data structure is bound here
@@ -53,9 +53,9 @@ function(mt, potgens,db,candidates,result, isnew, store, filter)
     counter := counter + 1;
     if InfoLevel(SubSemiInfoClass)>0
        and (counter mod SubSemiOptions.LOGFREQ)=0 then
-      Info(SubSemiInfoClass,1,FormattedBigNumberString(counter),
+      Info(SubSemiInfoClass,1,BigNumberString(counter),
            " iss:", Size(result)," ~ ",
-           FormattedBigNumberString(Size(result)),
+           BigNumberString(Size(result)),
            " stack:",String(Size(candidates)),
            " ", Peek(candidates));
     fi;
@@ -69,7 +69,7 @@ function(mt, potgens,db,candidates,result, isnew, store, filter)
       SaveWorkspace(Concatenation("IScheckpoint",
               String(IO_gettimeofday().tv_sec),".ws"));
       Info(SubSemiInfoClass,1,Concatenation("Checkpoint saved after ",
-              FormattedBigNumberString(counter), " steps"));
+              BigNumberString(counter), " steps"));
     fi;
   od;
   ### FINAL LOG MESSAGE ########################################################
