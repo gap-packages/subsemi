@@ -3,90 +3,48 @@ LoadPackage("subsemi");
 # VARIABLES for I4 and its subs
 S4 := SymmetricGroup(IsPermGroup,4);
 I4 := SymmetricInverseMonoid(4);
-I43 := SemigroupIdealByGenerators(I4, [PartialPerm([0,1,2,3])]);
+I43 := SemigroupIdealByGenerators(I4, [PartialPerm([1,2,3,0])]);
 SetName(I43,"I43");
-I42 := SemigroupIdealByGenerators(I43,[PartialPerm([0,0,2,3])]);
+I42 := SemigroupIdealByGenerators(I43,[PartialPerm([1,2,0,0])]);
 SetName(I42,"I42");
+I41 := SemigroupIdealByGenerators(I42,[PartialPerm([1,0,0,0])]);
+SetName(I41,"I41");
+mtI4 := MulTab(I4,S4);
+mtI43 := MulTab(I43,S4);
+mtI42 := MulTab(I42,S4);
 
-# FUNCTIONS for the calculations
-# calculating all subsemigroups of the K_{4,2} ideal within K_{4,3} and I4
-I42SubReps := function()
-  local output, mtI4, mtI43, mtI42, reps, r;
-  mtI4 := MulTab(I4,S4);
-  mtI43 := MulTab(I43,S4);
-  mtI42 := MulTab(I42,S4);
-  reps := AsList(SubSgpsByMinExtensions(mtI42));
-  output := OutputTextFile("I42_I43.reps", false);
-  for r in List(reps,
-          x->ConjugacyClassRep(RecodeIndicatorFunction(x,mtI42,mtI43),mtI43)) do
-    AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
-  od;
-  CloseStream(output);
-  output := OutputTextFile("I42_I4.reps", false);
-  for r in List(reps,
-          x->ConjugacyClassRep(RecodeIndicatorFunction(x,mtI42,mtI4),mtI4)) do
-    AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
-  od;
-  CloseStream(output);
+################################################################################
+# FUNCTIONS for the calculations in enumeration.sh #############################
+
+#1
+# subsemigroups of I4 that contain non-trivial permutations
+P_I4 := function()
+  local subs;
+  #we need to filter out the identity as well, simple size check is enough
+  subs := SubSgpsByUpperTorsos(I43,
+                               S4,
+                               Filtered(UpperTorsos(I43,S4),x->SizeBlist(x)>1));
+  Add(subs,
+      BlistList(Indices(mtI4), [Position(Elts(mtI4),IdentityTransformation)]));
+  SaveIndicatorFunctions(subs, Concatenation("P_I4",SUBS@SubSemi));
 end;
 
-#takes couple of days, requires at least 4GB RAM
-#there are a few more reps than uppertorsos
+#2
+I42Subs := function()
+  local subs;
+  subs := SubSgpsByIdeal(I41,S4);
+  SaveIndicatorFunctions(List(subs, x-> RecodeIndicatorFunction(x,mtI42,mtI4)),
+                         Concatenation("I42",SUBS@SubSemi));
+end;
+
+#3
+#takes couple of days
 I43modI42subs := function()
-local rfh, T, mtT, reps,mtI43, preimgs, elts, itf, otf, s, indset, torso;
-  rfh := ReesFactorHomomorphism(I42);
-  T := Range(rfh);
-  SetName(T,"I43modI42");
-  mtT := MulTab(T,S4,rfh);
-  reps := SubSgpsByMinExtensions(mtT);
-  SaveIndicatorFunctions(reps, "I43modI42.reps");
-  mtI43 := MulTab(I43);
-  preimgs := List(SortedElements(mtT),x->PreImages(rfh,x));
-  elts := List(preimgs,
-               function(x) 
-                 if Size(x)> 1 then return fail;else return x[1];fi;end);
-  itf := InputTextFile("I43modI42.reps");
-  otf := OutputTextFile("I43modI42.uppertorsos",false);
-  s := ReadLine(itf);
-  repeat
-    NormalizeWhitespace(s);
-    indset := AsBlist(DecodeBitString(s));
-    torso := SetByIndicatorFunction(indset,elts);
-    if fail in torso then Remove(torso,Position(torso,fail));fi;
-    WriteLine(otf,EncodeBitString(AsBitString(
-            IndicatorFunction(torso,mtI43))));
-    s := ReadLine(itf);
-  until s=fail;
+  SaveIndicatorFunctions(UpperTorsos(I42,S4),
+                         Concatenation("I43modI42",SUBS@SubSemi) );
 end;
 
-I43SubsFromUpperTorsos := function(filename)
-  local U, result, mt, gens, time, torsos;
-  SetInfoLevel(SubSemiInfoClass,0);#because this is used in parallel
-  time := TimeInSeconds();
-  result := [];
-  mt := MulTab(I43,S4);
-  gens := IndicatorFunction(AsList(I42), SortedElements(mt));
-  torsos := LoadIndicatorFunctions(filename);
-  for U in torsos do
-    Append(result, AsList(
-            SubSgpsByMinExtensionsParametrized(mt, U, gens, Stack(),[])));
-  od;
-  SaveIndicatorFunctions(result,Concatenation(filename,"M"));;
-  PrintTo(Concatenation(filename,"F"),String(TimeInSeconds()-time));;
-end;
-
-I43sharp := function()
-local mtI43, mtI4, I43reps, I43_I4reps, id;
-  mtI43 := MulTab(I43);
-  mtI4 := MulTab(I4);
-  I43reps := LoadIndicatorFunctions("I43.reps");
-  I43_I4reps := List(I43reps, x->RecodeIndicatorFunction(x,mtI43,mtI4)); 
-  SaveIndicatorFunctions(I43_I4reps,"I43_I4.reps");
-  id := Position(SortedElements(mtI4), Identity(I4));
-  Perform(I43_I4reps, function(x) x[id]:=true;end);
-  SaveIndicatorFunctions(I43_I4reps,"I43sharp_I4.reps");
-end;
-
+#TODO review
 I43SubsOneShot := function()
   local mtI4, mtI43, reps, output, r;
   mtI4 := MulTab(I4,S4);
@@ -98,19 +56,4 @@ I43SubsOneShot := function()
     AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
   od;
   CloseStream(output);
-end;
-
-P_I4 := function()
-local mtI4, I, uts, id, result;
-  mtI4 := MulTab(I4,S4);
-  I := SemigroupIdealByGenerators(I4, [PartialPerm([1,2,3,0])]); #I43
-  uts := UpperTorsos(I,S4);
-  #remove emptyset
-  Remove(uts, Position(uts, EmptySet(mtI4)));
-  #remove trivial group
-  id := BlistList(Indices(mtI4), [Position(SortedElements(mtI4),Identity(I4))]);
-  Remove(uts, Position(uts, id));
-  result := SubSgpsByUpperTorsos(I,S4,uts);
-  Add(result,id);
-  SaveIndicatorFunctions(result,"P_I4.reps");
 end;
