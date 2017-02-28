@@ -3,7 +3,7 @@
 Extend3NilpotentSubSgp := function(sgp, mt)
   local extendedsgps;
   extendedsgps := Set(Difference(Indices(mt),ListBlist(Indices(mt),sgp)),
-                      x->ConjugacyClassRep(ClosureByIncrements(sgp,[x],mt),mt));
+                      x->BlistConjClassRep(ClosureByIncrements(sgp,x,mt),mt));
   return Filtered(extendedsgps,
                  x->Is3NilpotentInMulTab(ListBlist(Indices(mt),x),mt));
 end;
