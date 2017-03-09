@@ -86,7 +86,7 @@ function(mt,seed,generators, waiting, db, result)
     if Size(waiting) > 0 then
       peeked := Peek(waiting);
       if peeked <> fail then
-        Print(TrueValuePositionsBlistString(peeked));
+        Print(BlistString(peeked));
       fi;
     fi;
     if (secs-prev_secs) > 0 then # printing speed only if it measurable

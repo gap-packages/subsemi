@@ -159,3 +159,24 @@ function(indsets, filename)
   CloseStream(output);
   return true;
 end);
+
+InstallGlobalFunction(BlistString,
+function(bl)
+  local i,n,size,str;
+  n := 0;
+  size := SizeBlist(bl);
+  str:="{";
+  for i in [1..Size(bl)] do
+    if bl[i] then
+      str := Concatenation(str,String(i));
+      n := n + 1;
+      if n < size then
+        str := Concatenation(str,",");
+      else
+        break;
+      fi;
+    fi;
+  od;
+  str := Concatenation(str,"}");
+  return str;
+end);

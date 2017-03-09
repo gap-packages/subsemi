@@ -9,6 +9,8 @@
 
 DeclareGlobalFunction("OnBlist");
 
+DeclareGlobalFunction("BlistString");
+
 DeclareGlobalFunction("BlistStorage");
 DeclareGlobalFunction("StoreBlist");
 DeclareGlobalFunction("IsInBlistStorage");
