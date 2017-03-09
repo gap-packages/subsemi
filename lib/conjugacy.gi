@@ -41,7 +41,7 @@ PossibleRepConjugators:= function(set, mt)
 end;
 MakeReadOnlyGlobal("PossibleRepConjugators");
 
-###
+# returns the minimal element of the orbit of point by the operators
 InstallGlobalFunction(MinimumOfOrbit,
 function(point, operators, actionfunc)
   local  min, new, op;
@@ -55,6 +55,7 @@ function(point, operators, actionfunc)
   return min;
 end);
 
+# returns an operator that produce  the minimal element of the orbit of point
 InstallGlobalFunction(MinimumOfOrbitOp,
 function(point, operators, actionfunc)
   local  min,new,i,conjugator;
