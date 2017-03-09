@@ -4,8 +4,21 @@
 ##
 ## Extra functions for boolean lists. Indexing, encoding.
 ##
-## Copyright (C) 2013  Attila Egri-Nagy
+## Copyright (C) 2013-2017  Attila Egri-Nagy
 ##
+
+InstallGlobalFunction(OnBlist,
+function(A, t)
+  local result,i,n;
+  n := Size(A);
+  result := BlistList([1..n],[]);
+  for i in [1..n] do
+    if A[i] then
+      result[OnPoints(i,t)] := true;
+    fi;
+  od;
+  return result;
+end);
 
 InstallGlobalFunction(BlistStorage,
 function(n)

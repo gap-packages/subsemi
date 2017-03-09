@@ -138,7 +138,7 @@ function(mt,seed,generators, waiting, db, result)
       StoreBlist(db,bl);
       #REMAINDER elts for further extensions
       diff := ListBlist(Indices(mt),DifferenceBlist(generators, bl));
-      normalizer := Stabilizer(SymmetryGroup(mt), bl, OnFiniteSet);
+      normalizer := Stabilizer(SymmetryGroup(mt), bl, OnBlist);
       if Size(normalizer) > 1 then #do it only if it is nontrivial
         diff := List(Orbits(normalizer, diff, OnPoints ), x->x[1]);
       fi;

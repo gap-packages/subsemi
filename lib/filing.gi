@@ -5,7 +5,7 @@
 ## Functions for putting subsets, subsgps into separate files according to
 ## some classification.
 ##
-## Copyright (C) 2015-2016  Attila Egri-Nagy
+## Copyright (C) 2015-2017  Attila Egri-Nagy
 ##
 
 # filing - to separate bitlists into different classes based on the output
@@ -88,7 +88,7 @@ TagSgpsFromFile := function(infile, outfile, mt)
     WriteLine(outf,
             JoinStringsWithSeparator(
             [s, SgpTag(S,nrdigits), GrpTag(AutomorphismGroup(S)),
-             GrpTag(Stabilizer(SymmetryGroup(mt),bl,OnFiniteSet))],
+             GrpTag(Stabilizer(SymmetryGroup(mt),bl,OnBlist))],
                     " "));
     return true;
   end;

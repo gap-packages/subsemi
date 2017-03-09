@@ -4,7 +4,7 @@
 ##
 ## Conjugation for multab elements.
 ##
-## Copyright (C) 2013-2016 Attila Egri-Nagy
+## Copyright (C) 2013-2017 Attila Egri-Nagy
 ##
 
 ### MINIMAL CONJUGATORS ########################################################
@@ -104,5 +104,5 @@ end);
 
 InstallGlobalFunction(BlistConjClass,
 function(blist, mt)
-  return Set(Symmetries(mt), g -> OnFiniteSet(blist,g));
+  return Set(Symmetries(mt), g -> OnBlist(blist,g));
 end);
