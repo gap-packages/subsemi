@@ -31,6 +31,7 @@ P_I4 := function()
 end;
 
 #2
+# the smallest ideal calculated separately, 243 of them
 I41SubsOneShot := function()
   local reps, output, r;
   reps := AsList(SubSgpsByMinExtensions(mtI41));
@@ -43,11 +44,11 @@ I41SubsOneShot := function()
 end;
 
 #3
+# an order 73 semigroup 
 I42modI41subs := function()
   SaveIndicatorFunctions(UpperTorsos(I41,S4),
                          Concatenation("I42modI41",SUBS@SubSemi) );
 end;
-
 
 # not doable with 32G RAM
 I42Subs := function()
@@ -57,24 +58,8 @@ I42Subs := function()
                          Concatenation("I42",SUBS@SubSemi));
 end;
 
-
 #
-#takes couple of days
 I43modI42subs := function()
   SaveIndicatorFunctions(UpperTorsos(I42,S4),
                          Concatenation("I43modI42",SUBS@SubSemi) );
-end;
-
-#TODO review
-I43SubsOneShot := function()
-  local mtI4, mtI43, reps, output, r;
-  mtI4 := MulTab(I4,S4);
-  mtI43 := MulTab(I43,S4);
-  reps := AsList(SubSgpsByMinExtensions(mtI43));
-  output := OutputTextFile("I43_I4.reps", false);
-  for r in List(reps,
-          x->RecodeIndicatorFunction(x,mtI43,mtI4)) do
-    AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
-  od;
-  CloseStream(output);
 end;
