@@ -23,15 +23,15 @@ fi
 echo "P_I4 done"
 
 ################################################################################
-# 2. subs of K42 ###############################################################
-if [ ! -f I42.subs ]; then
-    echo $LOADER"I42Subs();" | gap -q -m $MAXMEM
+# 2. subs of K41 ###############################################################
+if [ ! -f I41.subs ]; then
+    echo $LOADER"I41SubsOneShot();" | gap -q -m $MAXMEM
 fi
-echo "I42 done"
+echo "I41 done"
 
 ################################################################################
-# 3. subs of I43 mod I42 (upper torsos) ########################################
-if [ ! -f I43modI42.subs ]; then
-    echo $LOADER"I43modI42subs();" | gap -q -m $MAXMEM
+# 3. subs of I42 mod I41 (upper torsos) ########################################
+if [ ! -f I42modI41.subs ]; then
+    echo $LOADER"I42modI41subs();" | gap -q -m $MAXMEM
 fi
-echo "I43modI42 done"
+echo "I42modI41 done"

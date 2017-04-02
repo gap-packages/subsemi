@@ -12,6 +12,7 @@ SetName(I41,"I41");
 mtI4 := MulTab(I4,S4);
 mtI43 := MulTab(I43,S4);
 mtI42 := MulTab(I42,S4);
+mtI41 := MulTab(I41,S4);
 
 ################################################################################
 # FUNCTIONS for the calculations in enumeration.sh #############################
@@ -30,6 +31,25 @@ P_I4 := function()
 end;
 
 #2
+I41SubsOneShot := function()
+  local reps, output, r;
+  reps := AsList(SubSgpsByMinExtensions(mtI41));
+  output := OutputTextFile("I41_I4.reps", false);
+  for r in List(reps,
+                x->RecodeIndicatorFunction(x,mtI41,mtI4)) do
+    AppendTo(output, EncodeBitString(AsBitString(r)),"\n");
+  od;
+  CloseStream(output);
+end;
+
+#3
+I42modI41subs := function()
+  SaveIndicatorFunctions(UpperTorsos(I41,S4),
+                         Concatenation("I42modI41",SUBS@SubSemi) );
+end;
+
+
+# not doable with 32G RAM
 I42Subs := function()
   local subs;
   subs := SubSgpsByIdeal(I41,S4);
@@ -37,7 +57,8 @@ I42Subs := function()
                          Concatenation("I42",SUBS@SubSemi));
 end;
 
-#3
+
+#
 #takes couple of days
 I43modI42subs := function()
   SaveIndicatorFunctions(UpperTorsos(I42,S4),
