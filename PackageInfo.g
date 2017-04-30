@@ -1,5 +1,5 @@
 ##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "0.85-dev">
+##  <!ENTITY VERSION "0.85-rc">
 ##  <!ENTITY COPYRIGHTYEARS "2013-2017">
 ##  <#/GAPDoc>
 
@@ -9,9 +9,9 @@ PackageName := "SubSemi",
 
 Subtitle := "Enumeration of subsemigroups",
 
-Version := "0.85-dev",
+Version := "0.85-rc",
 
-Date := "05/02/2017",
+Date := "30/04/2017",
 
 Persons := [
   rec(
@@ -22,19 +22,30 @@ Persons := [
     Email         := "attila@egri-nagy.hu",
     WWWHome       := "http://www.egri-nagy.hu",
     PostalAddress := Concatenation( [
-                       "University of Hertfordshire\n",
-                       "STRI\n",
-                       "College Lane\n",
-                       "AL10 9AB\n",
-                       "United Kingdom" ] ),
-    Place         := "Hatfield, Herts",
-    Institution   := "UH"
-  ),
+                       "Akita International University",
+                       "Yuwa, Akita-City 010-1292 Japan" ] ),
+    Place         := "Akita",
+    Institution   := "AIU"
+      ),
+
+  rec(
+       LastName      := "East",
+       FirstNames    := "James",
+       IsAuthor      := true,
+       IsMaintainer  := false,
+       Email         := "J.East@westernsydney.edu.au",
+       WWWHome       := "https://www.westernsydney.edu.au/staff_profiles/uws_profiles/doctor_james_east",
+       PostalAddress := Concatenation( ["Locked Bag 1797",
+                                        "Penrith NSW 2751"] ),
+       Place         := "Sydney",
+       Institution   := "WSU"
+      ),
+
   rec(
     LastName      := "Mitchell",
-    FirstNames    := "J. D.",
+    FirstNames    := "James D.",
     IsAuthor      := true,
-    IsMaintainer  := true,
+    IsMaintainer  := false,
     Email         := "jdm3@st-and.ac.uk",
     WWWHome       := "http://tinyurl.com/jdmitchell",
     PostalAddress := Concatenation( [
@@ -75,9 +86,8 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
- GAP := ">= 4.8.6",
- NeededOtherPackages := [["GAPDoc", ">=1.5"],
-                         ["semigroups", ">=2.8.0"]],
+ GAP := ">= 4.8.7",
+ NeededOtherPackages := [ ["semigroups", ">=2.8.0"] ],
  SuggestedOtherPackages := [],
  ExternalConditions := [ ]
 ),
