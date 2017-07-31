@@ -88,7 +88,7 @@ TagSgpsFromFile := function(infile, outfile, mt)
     WriteLine(outf,
             JoinStringsWithSeparator(
             [s, SgpTag(S,nrdigits), GrpTag(AutomorphismGroup(S)),
-             GrpTag(Stabilizer(SymmetryGroup(mt),bl,OnBlist))],
+             GrpTag(Stabilizer(SymmetryGroup(mt),bl,OnBlistByTransf))],
                     " "));
     return true;
   end;

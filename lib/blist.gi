@@ -7,22 +7,20 @@
 ## Copyright (C) 2013-2017  Attila Egri-Nagy
 ##
 
-if IsBound(OnBlist) then
-  #newer Semigroups!
-else
-  InstallGlobalFunction(OnBlist,
-                       function(A, t)
-                         local result,i,n;
-                         n := Size(A);
-                         result := BlistList([1..n],[]);
-                         for i in [1..n] do
-                           if A[i] then
-                             result[OnPoints(i,t)] := true;
-                           fi;
-                         od;
-                         return result;
-                       end);
-fi;
+# acting on a boolean list treated as a finite set by a transformation
+InstallGlobalFunction(OnBlistByTransf,
+function(A, t)
+  local result,i,n;
+  n := Size(A);
+  result := BlistList([1..n],[]);
+  for i in [1..n] do
+    if A[i] then
+      result[OnPoints(i,t)] := true;
+    fi;
+  od;
+  return result;
+end);
+
 
 InstallGlobalFunction(BlistStorage,
 function(n)

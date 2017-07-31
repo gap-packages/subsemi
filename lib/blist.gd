@@ -7,11 +7,7 @@
 ## Copyright (C) 2013-2017  Attila Egri-Nagy
 ##
 
-if IsBound(OnBlist) then
-  #newer Semigroups!
-  else
-    DeclareGlobalFunction("OnBlist");
-fi;
+DeclareGlobalFunction("OnBlistByTransf");
 
 DeclareGlobalFunction("BlistString");
 

@@ -105,5 +105,5 @@ end);
 
 InstallGlobalFunction(BlistConjClass,
 function(blist, mt)
-  return Set(Symmetries(mt), g -> OnBlist(blist,g));
+  return Set(Symmetries(mt), g -> OnBlistByTransf(blist,g));
 end);
