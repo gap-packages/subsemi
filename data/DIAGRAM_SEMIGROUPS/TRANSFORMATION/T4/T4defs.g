@@ -2,7 +2,7 @@ LoadPackage("subsemi");
 
 # We need to limit hashtable sizes since we only deal with semigroups smaller
 # than or equal to size 256, but we have lots of them.
-SEMIGROUPS_DefaultOptionsRec.hashlen:=rec(L:=263,M:=263, S:=263);
+# TODO: SEMIGROUPS_DefaultOptionsRec.hashlen:=rec(L:=263,M:=263, S:=263);
 
 # VARIABLES for T4 and its subs
 S4 := SymmetricGroup(IsPermGroup,4);
