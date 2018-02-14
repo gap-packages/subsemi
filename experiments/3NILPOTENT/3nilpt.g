@@ -1,5 +1,12 @@
 # enumerating 3-nilpotent subsemigroup of semigroup given by its multiplication
 # table
+
+LoadPackage("subsemi");
+
+# A naive search for 3-nilpotent subsemigroups: it extends a subsemigroup
+# (assumed to be 3-nilpotent) in multiplication table mt.
+# Extending is done by adding a new generator.
+# Better would be to have a closure function that checks for 3-nilpotency.
 Extend3NilpotentSubSgp := function(sgp, mt)
   local extendedsgps;
   extendedsgps := Set(Difference(Indices(mt),ListBlist(Indices(mt),sgp)),
@@ -8,6 +15,7 @@ Extend3NilpotentSubSgp := function(sgp, mt)
                  x->Is3NilpotentInMulTab(ListBlist(Indices(mt),x),mt));
 end;
 
+# searching by the number of generators
 ThreeNilpotentSubSgps := function(mt)
   local total, l;
   total := [];
