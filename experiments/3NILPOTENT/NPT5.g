@@ -1,3 +1,6 @@
+# finds the ?? distinct 3-nilpotent susbsemigroups of T5
+# computation time: ??
+
 Read("3nilpt.g");
 
 mt := MulTab(FullTransformationSemigroup(5),

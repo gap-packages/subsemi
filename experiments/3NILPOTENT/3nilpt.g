@@ -6,7 +6,9 @@ LoadPackage("subsemi");
 # A naive search for 3-nilpotent subsemigroups: it extends a subsemigroup
 # (assumed to be 3-nilpotent) in multiplication table mt.
 # Extending is done by adding a new generator.
+# To do improvements:
 # Better would be to have a closure function that checks for 3-nilpotency.
+# Also, not extending by elements that generate non-3-nilpotent subsgps.
 Extend3NilpotentSubSgp := function(sgp, mt)
   local extendedsgps;
   extendedsgps := Set(Difference(Indices(mt),ListBlist(Indices(mt),sgp)),
