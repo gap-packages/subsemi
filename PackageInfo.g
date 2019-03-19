@@ -11,7 +11,8 @@ Subtitle := "Enumeration of subsemigroups",
 
 Version := "0.54",
 
-Date := "20/12/2015",
+Date := "20/12/2015", # dd/mm/yyyy format
+License := "GPL-2.0-or-later",
 
 ArchiveURL := "https://bitbucket.org/dersu/subsemi",
 
