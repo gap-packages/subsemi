@@ -4,7 +4,7 @@
 ##
 ## General functions for finding classes by some equivalence relation.
 ##
-## Copyright (C) 2015-2016  Attila Egri-Nagy
+## Copyright (C) 2015-2019  Attila Egri-Nagy
 ##
 
 #TODO OPTIMIZE as we put more and more load on this
