@@ -96,7 +96,7 @@ AvailabilityTest := ReturnTrue,
 
 Autoload := false,
 
-TestFile := "tst/testinstall.tst",
+TestFile := "tst/testall.g",
 
 Keywords := ["subsemigroup",
              "multiplication table"]
