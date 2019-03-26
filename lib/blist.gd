@@ -4,7 +4,7 @@
 ##
 ## Extra functions for boolean lists. Indexing, encoding.
 ##
-## Copyright (C) 2013-2017  Attila Egri-Nagy
+## Copyright (C) 2013-2019  Attila Egri-Nagy
 ##
 
 DeclareGlobalFunction("OnBlistByTransf");

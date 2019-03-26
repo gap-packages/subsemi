@@ -15,6 +15,7 @@ comment:
 ignore:
   - "PackageInfo.g"
   - "makedoc.g"
+  - "config.g"
   - "init.g"
   - "read.g"
   - "tst/*"     # ignore test harness code
