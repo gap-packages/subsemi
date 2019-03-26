@@ -19,8 +19,9 @@ local test,infolevel;
   infolevel := InfoLevel(SubSemiInfoClass);
   SetInfoLevel(SubSemiInfoClass, 0);
   for test in [
-          "6packedbitstrings",
-          "indicatorfunction",
+          "util",
+          "ui",
+          "bruteforce",
           "indexperiod",
           "closures",
           "gensets",
