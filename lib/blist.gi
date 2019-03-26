@@ -4,7 +4,7 @@
 ##
 ## Extra functions for boolean lists. Indexing, encoding.
 ##
-## Copyright (C) 2013-2017  Attila Egri-Nagy
+## Copyright (C) 2013-2019  Attila Egri-Nagy
 ##
 
 # acting on a boolean list treated as a finite set by a transformation
@@ -21,7 +21,7 @@ function(A, t)
   return result;
 end);
 
-
+# load-balanced hashtables for blists
 InstallGlobalFunction(BlistStorage,
 function(n)
   local sample;
@@ -135,6 +135,7 @@ function(indset,src, dest)
   return IndicatorFunction(SetByIndicatorFunction(indset,src),dest);
 end);
 
+# loads blists from a file stored in 6pack format
 InstallGlobalFunction(LoadIndicatorFunctions,
 function(filename)
   local result,itf,s;
@@ -150,6 +151,7 @@ function(filename)
   return result;
 end);
 
+# saves blists to a test file, 6pack format, one blist per line
 InstallGlobalFunction(SaveIndicatorFunctions,
 function(indsets, filename)
   local output,r;
@@ -162,6 +164,7 @@ function(indsets, filename)
   return true;
 end);
 
+#TODO duplicate from SgpDec?
 InstallGlobalFunction(BlistString,
 function(bl)
   local i,n,size,str;
