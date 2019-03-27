@@ -21,6 +21,7 @@ local test,infolevel;
   for test in [
           "util",
           "ui",
+          "sgptag",
           "bruteforce",
           "indexperiod",
           "closures",
