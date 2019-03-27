@@ -22,6 +22,8 @@ gap> mtT3 := MulTab(T3);;
 gap> mtT4 := MulTab(T4,S4);;
 gap> Size(MulTabEmbeddingsUpToConjugation(mtT3,mtT4));
 4
+gap> Size(MulTabEmbeddingsByPartialHoms(MulTab(Semigroup(Transformation([2,3,1]))), mtT3, MulTab(T4)));
+24
 
 #
 gap> STOP_TEST( "SubSemi package: embedding.tst", 10000);
