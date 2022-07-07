@@ -1,6 +1,6 @@
 
 
-InstallOtherMethod(POW, "for a transformation collection and perm",
+InstallOtherMethod(\^, "for a transformation collection and perm",
 [IsTransformationCollection, IsPerm],
 function(coll, x)
   return Set(coll, y-> y^x);
@@ -28,7 +28,7 @@ ConjugateTransformations:=function(G, deg)
   p := Position(l,false,0);
   while p<>fail do  
     t := TransformationNumber(p, deg);
-    o := Orb(G, t, POW, rec(treehashsize:=hashlen));
+    o := Orb(G, t, OnPoints, rec(treehashsize:=hashlen));
     Enumerate(o, hashlen);
     for x in o do
       l[NumberTransformation(x, deg)]:=true;
