@@ -70,7 +70,6 @@ PackageDoc := rec(
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Subsemigroup Enumeration",
-  Autoload  := true
 ),
 
 
@@ -87,7 +86,6 @@ Dependencies := rec(
 
 AvailabilityTest := ReturnTrue,
 
-Autoload := false,
 
 TestFile := "tst/testinstall.tst",
 
