@@ -11,7 +11,8 @@ Subtitle := "Enumeration of subsemigroups",
 
 Version := "0.86",
 
-Date := "20/06/2025",
+Date := "20/06/2025", # dd/mm/yyyy format
+License := "GPL-2.0-or-later",
 
 Persons := [
   rec(
@@ -78,11 +79,10 @@ AbstractHTML := "<span class=\"pkgname\">SubSemi</span> is  a <span class=\
 PackageDoc := rec(
   BookName  := "SubSemi",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "Subsemigroup Enumeration",
-  Autoload  := true
 ),
 
 Dependencies := rec(
@@ -93,8 +93,6 @@ Dependencies := rec(
 ),
 
 AvailabilityTest := ReturnTrue,
-
-Autoload := false,
 
 TestFile := "tst/testall.g",
 
