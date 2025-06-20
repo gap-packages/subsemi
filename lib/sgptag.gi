@@ -5,7 +5,7 @@
 ## For a semigroup, constructing a tag (string) containing labeled numerical
 ## values describing its structure.
 ##
-## Copyright (C) 2015-2017  Attila Egri-Nagy
+## Copyright (C) 2015-2025  Attila Egri-Nagy
 ##
 
 # to get a fixed number of digits, padding with leading zeroes
@@ -13,36 +13,6 @@ InstallGlobalFunction(PaddedNumString,
 function(n,ndigits)
   return ReplacedString(String(n,ndigits)," ","0");
 end);
-
-
-# TODO find implementations in other packages for the next 3 functions 
-# reflexive reduction
-ReflexiveReduction := function(rel)
-  return List([1..Length(rel)],
-              x -> Filtered(rel[x], y -> not x = y));
-end;
-MakeReadOnlyGlobal("ReflexiveReduction");
-
-# calculate transitive reduction of a reflexively reduced relation
-TransitiveReduction := function(rel)
-  local tcf; #transitive closure function
-  tcf := function(x, rel)
-    return Union(Set(rel[x]),
-                 Union(List(rel[x], y->tcf(y,rel))));
-  end;
-  return List([1..Length(rel)],
-              x -> Difference(rel[x],
-                              Union(Set(rel[x], y-> tcf(y,rel)))));
-end;
-MakeReadOnlyGlobal("TransitiveReduction");
-
-NrEdgesInHasseDiagramOfDClasses := function(sgp)
-  return Sum(List(TransitiveReduction(
-                    ReflexiveReduction(
-                      PartialOrderOfDClasses(sgp))),
-                  Length));
-end;
-MakeReadOnlyGlobal("NrEdgesInHasseDiagramOfDClasses");
 
 # semigroup -> string containing green info
 # L - number of L-classes
@@ -64,7 +34,7 @@ GreenTag := function (sgp,ndigits)
                  "_D",PaddedNumString(NrDClasses(sgp),ndigits),
                  "_RD",PaddedNumString(NrRegularDClasses(sgp),ndigits),
                  "_M",PaddedNumString(Size(MaximalDClasses(sgp)),ndigits),
-                 "_E",PaddedNumString(NrEdgesInHasseDiagramOfDClasses(sgp),
+                 "_E",PaddedNumString(Length(DigraphEdges(PartialOrderOfDClasses(sgp))),
                          ndigits),
                  "_G",s);
 end;
