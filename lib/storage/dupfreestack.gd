@@ -7,7 +7,7 @@
 ## Stack implementation with no duplicates allowed in the stack.
 ##
 
-DeclareCategory("IsDuplicateFreeStack", IsStack);
+DeclareCategory("IsDuplicateFreeStack", IsStack@);
 DeclareRepresentation( "IsDuplicateFreeStackRep",
                        IsStackRep,
                        [ "set" ] );      #set (sorted list for lookup)

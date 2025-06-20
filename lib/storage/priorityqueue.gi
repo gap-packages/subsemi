@@ -39,7 +39,7 @@ local result, element;
 end);
 
 # constant fail since we cannot know the next element to be retrieved
-InstallMethod(Peek,"peeking to top element of a priority queue - constant fail",
+InstallMethod(Peek@,"peeking to top element of a priority queue - constant fail",
         [IsPriorityQueue and IsPriorityQueueRep],
 function(st)
   return st!.l[Size(st!.l)];

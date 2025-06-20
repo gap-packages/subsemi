@@ -30,7 +30,7 @@ local result, element;
 end);
 
 # constant fail since we cannot know the next element to be retrieved
-InstallMethod(Peek,"peeking to top element of a random set - constant fail",
+InstallMethod(Peek@,"peeking to top element of a random set - constant fail",
         [IsRandomSet and IsRandomSetRep],
 function(rndset)
   return fail;

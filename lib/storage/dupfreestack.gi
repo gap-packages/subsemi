@@ -32,7 +32,7 @@ local result, pointer;
   return result;
 end);
 
-InstallMethod(Peek,"peeking to top element of a stack",[IsDuplicateFreeStack and IsDuplicateFreeStackRep],
+InstallMethod(Peek@,"peeking to top element of a stack",[IsDuplicateFreeStack and IsDuplicateFreeStackRep],
 function(stack)
   if Size(stack!.l) = 0 then
     return fail;

@@ -1,7 +1,7 @@
 ReadPackage("SubSemi","/lib/classifier.gi");
 ReadPackage("SubSemi","/lib/textfileprocessor.gi");
 
-ReadPackage("SubSemi","/lib/storage/storage.gi");
+#ReadPackage("SubSemi","/lib/storage/storage.gi");
 ReadPackage("SubSemi","/lib/storage/stack.gi");
 ReadPackage("SubSemi","/lib/storage/dupfreestack.gi");
 ReadPackage("SubSemi","/lib/storage/queue.gi");

@@ -22,7 +22,7 @@ InstallGlobalFunction(NextOrderClassSubSgps,
 function(st, mt)
   local sgp, sub, result, n;
   if IsEmpty(st) then return []; fi;
-  n := SizeBlist(Peek(st));
+  n := SizeBlist(Peek@(st));
   result := [];
   repeat
     sgp := Retrieve(st);
@@ -30,7 +30,7 @@ function(st, mt)
     for sub in MaximalSubsemigroups@SubSemi(sgp,mt) do
       Store(st, sub);
     od;
-  until IsEmpty(st) or (n > SizeBlist(Peek(st)));
+  until IsEmpty(st) or (n > SizeBlist(Peek@(st)));
   return result;
 end);
 

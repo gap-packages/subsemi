@@ -7,17 +7,17 @@
 ## Simple queue implementation.
 ##
 
-InstallGlobalFunction(Queue,
+InstallGlobalFunction(Queue@,
 function() return Objectify(QueueType, rec(l:=[],nextfreeslot:=1));end);
 
 ##Storage methods ##############################################################
-InstallMethod(Store,"enqueue",[IsQueue and IsQueueRep,IsObject],
+InstallMethod(Store,"enqueue",[IsQueue@ and IsQueueRep,IsObject],
 function(queue, element)
   queue!.l[queue!.nextfreeslot] := element;
   queue!.nextfreeslot := queue!.nextfreeslot + 1;
 end);
 
-InstallMethod(Retrieve,"dequeue", [IsQueue and IsQueueRep],
+InstallMethod(Retrieve,"dequeue", [IsQueue@ and IsQueueRep],
 function(queue)
 local result;
   result := queue!.l[1];
@@ -26,18 +26,18 @@ local result;
   return result;
 end);
 
-InstallMethod(Peek,"peeking to top element of a queue",[IsQueue and IsQueueRep],
+InstallMethod(Peek@,"peeking to top element of a queue",[IsQueue@ and IsQueueRep],
 function(queue) return queue!.l[1];end);
 
 #More general methods ##########################################################
-InstallMethod(IsEmpty, "for queues", [IsQueue and IsQueueRep],
+InstallMethod(IsEmpty, "for queues", [IsQueue@ and IsQueueRep],
 function(queue) return queue!.nextfreeslot = 1; end);
 
-InstallMethod( Size,"for queue", [IsQueue and IsQueueRep],
+InstallMethod( Size,"for queue", [IsQueue@ and IsQueueRep],
 function( queue ) return queue!.nextfreeslot - 1;end);
 
-InstallMethod( ViewObj,"for queue",[IsQueue and IsQueueRep],
+InstallMethod( ViewObj,"for queue",[IsQueue@ and IsQueueRep],
 function( queue ) Print("Queue: ->", queue!.l);end);
 
-InstallMethod( Display,"for queue", [IsQueue and IsQueueRep],
+InstallMethod( Display,"for queue", [IsQueue@ and IsQueueRep],
 function( queue ) ViewObj(queue); Print("\n"); end);

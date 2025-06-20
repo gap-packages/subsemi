@@ -13,7 +13,7 @@ function(mt) return SubSgpsByMinExtensionsParametrized(
                             mt,
                             EmptySet(mt),
                             DistinctGenerators(FullSet(mt),mt),
-                            Stack(),
+                            Stack@(),
                             BlistStorage(Size(mt)),
                             []);
 end);
@@ -27,7 +27,7 @@ function(set,mt)
                  mt,
                  BlistConjClassRep(set,mt),
                  DistinctGenerators(FullSet(mt),mt),
-                 Stack(),
+                 Stack@(),
                  BlistStorage(Size(mt)),
                  []);
 end);
@@ -43,7 +43,7 @@ function(sgp,mt)
                  mt,
                  EmptySet(mt),
                  DistinctGenerators(sgp,mt),
-                 Stack(),
+                 Stack@(),
                  BlistStorage(SizeBlist(sgp)),
                  []);
 end);
@@ -84,7 +84,7 @@ function(mt,seed,generators, waiting, db, result)
           MemoryString(MemoryUsage(result))," ");
     Print(Size(waiting), " ");
     if Size(waiting) > 0 then
-      peeked := Peek(waiting);
+      peeked := Peek@(waiting);
       if peeked <> fail then
         Print(BlistString(peeked));
       fi;

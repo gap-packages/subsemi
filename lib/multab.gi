@@ -56,7 +56,9 @@ local mt,inds;
     SetSymmetries(mt,Set(G,
             g->AsPermutation(TransformationOp(g,Elts(mt),
                     function(p,t)
-                      return Image(hom,PreImagesRepresentative(hom,p)^t);
+                      # TODO: report that PreImagesRepresentative has no methods
+                      # return Image(hom,PreImagesRepresentative(hom,p)^t);
+                      return Image(hom,Representative(PreImages(hom,p))^t);
                     end))));
   fi;
   if  name <> fail then SetOriginalName(mt,name);fi;

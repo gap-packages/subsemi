@@ -192,7 +192,7 @@ FileSubsemigroupsInDecreasingOrder := function(mt)
       if IsEmpty(st) then
         nextsize := 0;
       else
-        nextsize := SizeBlist(Peek(st));
+        nextsize := SizeBlist(Peek@(st));
       fi;
       Info(SubSemiInfoClass, 1, Size(next), " of size ", size, ", ",
            Size(Filtered(AsList(st),x->nextsize=SizeBlist(x))), " next, ",

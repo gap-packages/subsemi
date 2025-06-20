@@ -94,7 +94,7 @@ function(I,G,uppertorsos)
                    SubSgpsByMinExtensionsParametrized(mt,
                                                       x,
                                                       Ielts,
-                                                      Stack(),
+                                                      Stack@(),
                                                       BlistStorage(Size(I)),
                                                       []));
          end);

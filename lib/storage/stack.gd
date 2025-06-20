@@ -7,16 +7,16 @@
 ## Simple stack implementation.
 ##
 
-DeclareCategory("IsStack", IsStorage);
+DeclareCategory("IsStack@", IsStorage);
 DeclareRepresentation( "IsStackRep",
                        IsComponentObjectRep,
                        [ "l",      #list containing the elements
                          "pointer" #pointing to the top of the stack
                          ] );
 
-StackType  := NewType(
-    NewFamily("StackFamily",IsStack),
-    IsStack and IsStackRep and IsMutable);
+StackType@  := NewType(
+    NewFamily("StackFamily@",IsStack@),
+    IsStack@ and IsStackRep and IsMutable);
 
 #############################################################################
 ## <#GAPDoc Label="Stack">
@@ -31,4 +31,4 @@ StackType  := NewType(
 ##   </Description>
 ##  </ManSection>
 ## <#/GAPDoc>
-DeclareGlobalFunction("Stack");
+DeclareGlobalFunction("Stack@");

@@ -57,7 +57,7 @@ function(mt, potgens,db,candidates,result, isnew, store, filter)
            " iss:", Size(result)," ~ ",
            BigNumberString(Size(result)),
            " stack:",String(Size(candidates)),
-           " ", Peek(candidates));
+           " ", Peek@(candidates));
     fi;
     ### CHECKPOINTING ##########################################################
     if (counter mod SubSemiOptions.CHECKPOINTFREQ)=0 then

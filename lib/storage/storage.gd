@@ -33,12 +33,12 @@ DeclareOperation("Store",[IsStorage,IsObject]);
 DeclareOperation("Retrieve",[IsStorage]);
 
 #############################################################################
-## <#GAPDoc Label="Peek">
+## <#GAPDoc Label="Peek@">
 ##  <ManSection><Heading>Peeking into a storage.</Heading>
-##   <Func Name="Peek" Arg="storage"/>
+##   <Func Name="Peek@" Arg="storage"/>
 ##    <Description>
 ##    Returns the next element but it is not removed from the storage, i.e. a dry-run of Retrieve.
 ##   </Description>
 ##  </ManSection>
 ## <#/GAPDoc>
-DeclareOperation("Peek",[IsStorage]);
+DeclareOperation("Peek@",[IsStorage]);

@@ -7,7 +7,7 @@
 ## Simple queue implementation.
 ##
 
-DeclareCategory("IsQueue", IsStorage);
+DeclareCategory("IsQueue@", IsStorage);
 DeclareRepresentation( "IsQueueRep",
                        IsComponentObjectRep,
                        [ "l",      #list containing the elements
@@ -15,8 +15,8 @@ DeclareRepresentation( "IsQueueRep",
                          ] );
 
 QueueType  := NewType(
-    NewFamily("QueueFamily",IsQueue),
-    IsQueue and IsQueueRep and IsMutable);
+    NewFamily("QueueFamily",IsQueue@),
+    IsQueue@ and IsQueueRep and IsMutable);
 
 #############################################################################
 ## <#GAPDoc Label="Queue">
@@ -31,4 +31,4 @@ QueueType  := NewType(
 ##   </Description>
 ##  </ManSection>
 ## <#/GAPDoc>
-DeclareGlobalFunction("Queue");
+DeclareGlobalFunction("Queue@");
