@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/gap-packages/subsemi.svg?branch=blist)](https://travis-ci.org/gap-packages/subsemi)
 [![Code Coverage](https://codecov.io/github/gap-packages/subsemi/coverage.svg?branch=blist&token=)](https://codecov.io/gh/gap-packages/subsemi)
 # SubSemi
 
