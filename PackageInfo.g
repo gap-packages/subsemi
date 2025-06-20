@@ -1,6 +1,6 @@
 ##  <#GAPDoc Label="PKGVERSIONDATA">
-##  <!ENTITY VERSION "0.85">
-##  <!ENTITY COPYRIGHTYEARS "2013-2017">
+##  <!ENTITY VERSION "0.86">
+##  <!ENTITY COPYRIGHTYEARS "2013-2025">
 ##  <#/GAPDoc>
 
 SetPackageInfo( rec(
@@ -9,9 +9,9 @@ PackageName := "SubSemi",
 
 Subtitle := "Enumeration of subsemigroups",
 
-Version := "0.85",
+Version := "0.86",
 
-Date := "26/03/2019",
+Date := "20/06/2025",
 
 Persons := [
   rec(
@@ -34,7 +34,7 @@ Persons := [
        IsAuthor      := true,
        IsMaintainer  := false,
        Email         := "J.East@westernsydney.edu.au",
-       WWWHome       := "https://www.westernsydney.edu.au/staff_profiles/uws_profiles/doctor_james_east",
+       WWWHome       := "https://staff.cdms.westernsydney.edu.au/~james/",
        PostalAddress := Concatenation( ["Locked Bag 1797",
                                         "Penrith NSW 2751"] ),
        Place         := "Sydney",
@@ -47,7 +47,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := false,
     Email         := "jdm3@st-and.ac.uk",
-    WWWHome       := "http://tinyurl.com/jdmitchell",
+    WWWHome       := "https://www.st-andrews.ac.uk/mathematics-statistics/people/jdm3/",
     PostalAddress := Concatenation( [
                        "Mathematical Institute,",
                        " North Haugh,", " St Andrews,", " Fife,", " KY16 9SS,",
@@ -86,8 +86,8 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
- GAP := ">= 4.10.0",
- NeededOtherPackages := [ ["semigroups", ">=3.0.20"] ],
+ GAP := ">= 4.14.0",
+ NeededOtherPackages := [ ["semigroups", ">=5.4.0"] ],
  SuggestedOtherPackages := [],
  ExternalConditions := [ ]
 ),
