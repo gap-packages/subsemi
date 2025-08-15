@@ -1,6 +1,6 @@
 #SubSemi v0.86
 
-#works up to n=5 as the multiplication needs to fit in memory
+#works up to n=5 as the multiplication table needs to fit in memory
 
 CountTnEmbeddings := function(n)
   local Tn,Sn,mtTm,mtTn,m;
