@@ -33,6 +33,7 @@ jobs:
       - uses: gap-actions/setup-gap@v2
         with:
           GAPBRANCH: ${{ matrix.gap-branch }}
+          GAP_PKGS_TO_BUILD: "io profiling semigroups datastructures digraphs orb"
       - uses: gap-actions/build-pkg@v1
       - uses: gap-actions/run-pkg-tests@v3
       - uses: gap-actions/run-pkg-tests@v3
