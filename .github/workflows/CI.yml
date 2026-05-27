@@ -33,15 +33,12 @@ jobs:
       - uses: gap-actions/setup-gap@v3
         with:
           gap-version: ${{ matrix.gap-version }}
-      - uses: gap-actions/build-pkg@v2
-      - run: |
-          cd $GAPROOT/pkg
-          ../bin/BuildPackages.sh --strict semigroups datastructures digraphs io orb
+      - uses: gap-actions/build-pkg@v3
       - uses: gap-actions/run-pkg-tests@v4
       - uses: gap-actions/run-pkg-tests@v4
         with:
           mode: onlyneeded
       - uses: gap-actions/process-coverage@v3
-      - uses: codecov/codecov-action@v5
+      - uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
